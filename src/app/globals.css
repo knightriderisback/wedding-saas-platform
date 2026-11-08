@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #FAF8F5;
+    color: #2C2218;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #FAF8F5;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #D4AF37;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #AA820A;
+  }
+}
+
+/* Luxury 24K Gold Gradient Text on Light Background */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #7D5F04 0%, #AA820A 20%, #D4AF37 45%, #AA820A 75%, #543F02 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+}
+
+.text-gold-light {
+  background: linear-gradient(135deg, #FAF4E3 0%, #F3E5AB 30%, #D4AF37 70%, #FAF4E3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Paper Deckle Edge and Soft Shadows */
+.paper-deckle {
+  background-color: #FDFBF7;
+  border: 1px solid #E8DFC8;
+  box-shadow: 
+    0 20px 50px -10px rgba(180, 140, 70, 0.15),
+    0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.paper-card-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.paper-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 25px 60px -10px rgba(180, 140, 70, 0.22),
+    0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Frosted Vellum Wrap */
+.vellum-wrap {
+  background: rgba(253, 251, 247, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+}
+
+/* Gold Foil Borders */
+.border-gold-foil {
+  border-image: linear-gradient(to right, #AA820A, #D4AF37, #F3E5AB, #D4AF37, #AA820A) 1;
+}
+
+/* Realistic Wax Seal Styles */
+.wax-seal-royal {
+  background: radial-gradient(circle at 32% 32%, #c92a40 0%, #9B1C2E 40%, #680d1b 80%, #3e040d 100%);
+  box-shadow: 
+    0 8px 25px rgba(155, 28, 46, 0.45),
+    0 2px 4px rgba(255, 255, 255, 0.4) inset,
+    0 -3px 6px rgba(0, 0, 0, 0.4) inset;
+}
+
+.wax-seal-gold {
+  background: radial-gradient(circle at 32% 32%, #fae69e 0%, #D4AF37 40%, #9e7514 80%, #5e4304 100%);
+  box-shadow: 
+    0 8px 25px rgba(212, 175, 55, 0.45),
+    0 2px 5px rgba(255, 255, 255, 0.6) inset,
+    0 -3px 6px rgba(0, 0, 0, 0.5) inset;
+}
+
+/* Subtle Cotton Linen Texture Simulation */
+.bg-cotton-paper {
+  background-color: #FAF8F5;
+  background-image: 
+    radial-gradient(rgba(212, 175, 55, 0.07) 1px, transparent 1px),
+    radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px, 40px 40px;
+  background-position: 0 0, 10px 10px;
+}
+
+/* Foil Sheen Reflection Animation */
+.foil-sheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.foil-sheen::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 60%
+  );
+  transform: rotate(35deg);
+  pointer-events: none;
+  transition: transform 0.8s ease;
+}
+
+.foil-sheen:hover::after {
+  transform: rotate(35deg) translate(30%, 30%);
+}
+
+/* Scratch Card */
+.scratch-canvas {
+  touch-action: none;
+  cursor: grab;
+}
+.scratch-canvas:active {
+  cursor: grabbing;
+}
