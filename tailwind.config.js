@@ -72,6 +72,9 @@ module.exports = {
         pinyon: ['Pinyon Script', 'cursive'],
         playfair: ['Playfair Display', 'serif'],
         greatvibes: ['Great Vibes', 'cursive'],
+        alex: ['Alex Brush', 'cursive'],
+        lora: ['Lora', 'serif'],
+        lato: ['Lato', 'sans-serif'],
         sans: ['Montserrat', 'system-ui', 'sans-serif'],
       },
       animation: {

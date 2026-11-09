@@ -7,6 +7,7 @@ import { WeddingProject, GuestContact, SongRequest, VoiceBlessing } from '@/type
 import { getWeddingProject, saveWeddingProject, uploadMediaFile, markWhatsAppSent } from '@/lib/firebase';
 import { exportDjPlaylistPdf } from '@/lib/djPdfGenerator';
 import { defaultWeddingProject } from '@/lib/mockData';
+import { TEMPLATE_LIST } from '@/lib/pressedLoveTemplates';
 import {
   Crown,
   Sparkles,
@@ -25,6 +26,8 @@ import {
   Sliders,
   Eye,
   Camera,
+  ExternalLink,
+  Copy,
 } from 'lucide-react';
 
 export default function ClientPortalPage() {
@@ -35,7 +38,7 @@ export default function ClientPortalPage() {
 
   const [project, setProject] = useState<WeddingProject | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'guests' | 'dj' | 'blessings' | 'editor' | 'media'>('guests');
+  const [activeTab, setActiveTab] = useState<'guests' | 'dj' | 'blessings' | 'templates' | 'editor' | 'media'>('guests');
 
   // Contact Picker & Guest Entry State
   const [showAddGuestModal, setShowAddGuestModal] = useState(false);
@@ -278,6 +281,7 @@ export default function ClientPortalPage() {
         <div className="max-w-6xl mx-auto flex gap-4 sm:gap-6 overflow-x-auto text-xs font-cinzel uppercase tracking-wider">
           {[
             { id: 'guests', label: 'Guest & Invite Hub', icon: Users, badge: project.guests.length },
+            { id: 'templates', label: 'Design Suites', icon: Sparkles, badge: TEMPLATE_LIST.length },
             { id: 'dj', label: 'DJ Playlist Manager', icon: Music, badge: project.djPlaylist.length },
             { id: 'blessings', label: 'Blessings Hub', icon: Heart, badge: project.blessings.length },
             { id: 'editor', label: 'Content Editor', icon: Sliders },
@@ -498,6 +502,115 @@ export default function ClientPortalPage() {
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* ==================== TAB 1.5: DESIGN SUITES (PRESSED LOVE ARCHITECTURE) ==================== */}
+        {activeTab === 'templates' && (
+          <div className="space-y-6 animate-fade-in">
+            <div className="bg-[#FDFBF7] paper-deckle rounded-2xl p-6 sm:p-8 shadow-sm border border-[#E8DFC8]">
+              <div className="max-w-2xl space-y-2">
+                <span className="font-cinzel text-[10px] uppercase tracking-widest text-[#AA820A] font-bold">
+                  Haute Couture Wedding Suites
+                </span>
+                <h3 className="font-serif text-2xl text-[#2C2218] font-medium">
+                  Select Your Wedding Microsite Design
+                </h3>
+                <p className="font-cormorant italic text-sm text-[#544230]">
+                  Switch between Pressed Love architectural designs and Udaipur palatial suites. Your guest data, RSVP form, and DJ playlist will render seamlessly in your chosen aesthetic.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {TEMPLATE_LIST.map((tmpl) => {
+                const origin = typeof window !== 'undefined' ? window.location.origin : '';
+                const inviteUrl = `${origin}/${project.slug}?template=${tmpl.id}#live`;
+
+                return (
+                  <div
+                    key={tmpl.id}
+                    className="bg-white rounded-2xl border border-[#E8DFC8] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                  >
+                    <div>
+                      {/* Thumbnail */}
+                      <div className="relative aspect-[16/10] overflow-hidden bg-[#FAF8F5] border-b border-[#E8DFC8]">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={tmpl.assets.venueImage}
+                          alt={tmpl.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[9px] font-cinzel uppercase font-bold tracking-wider bg-white/95 text-[#2C2218] border border-[#E8DFC8] shadow-sm">
+                          {tmpl.badge}
+                        </span>
+                        <div
+                          className="absolute bottom-3 right-3 w-8 h-8 rounded-full border border-white shadow flex items-center justify-center text-white font-cinzel text-[10px] font-bold"
+                          style={{ backgroundColor: tmpl.envelope.waxColor }}
+                        >
+                          {tmpl.envelope.waxMonogram}
+                        </div>
+                      </div>
+
+                      {/* Info */}
+                      <div className="p-5 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-serif text-lg font-medium text-[#2C2218]">{tmpl.name}</h4>
+                          <span className="font-mono text-[10px] text-[#AA820A] font-bold">
+                            {tmpl.theme.name}
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#544230] font-sans leading-relaxed line-clamp-2">
+                          {tmpl.tagline}
+                        </p>
+                        <div className="flex items-center gap-1.5 pt-2">
+                          <span
+                            className="w-4 h-4 rounded-full border border-black/10"
+                            style={{ backgroundColor: tmpl.theme.colors.primary }}
+                            title="Primary color"
+                          />
+                          <span
+                            className="w-4 h-4 rounded-full border border-black/10"
+                            style={{ backgroundColor: tmpl.theme.colors.accent }}
+                            title="Accent color"
+                          />
+                          <span
+                            className="w-4 h-4 rounded-full border border-black/10"
+                            style={{ backgroundColor: tmpl.theme.colors.secondary }}
+                            title="Secondary color"
+                          />
+                          <span className="text-[10px] text-neutral-400 font-mono ml-1">
+                            {tmpl.location.city}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="p-5 pt-0 border-t border-[#FAF8F5] flex items-center gap-2">
+                      <Link
+                        href={`/${project.slug}?template=${tmpl.id}#live`}
+                        target="_blank"
+                        className="flex-1 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black text-xs font-cinzel uppercase tracking-wider font-bold shadow text-center hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-1.5"
+                      >
+                        <Eye className="w-3.5 h-3.5" /> Preview Live
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(inviteUrl);
+                          showToast(`Invitation link for "${tmpl.name}" copied to clipboard!`);
+                        }}
+                        className="p-2 rounded-xl border border-[#E8DFC8] text-[#544230] hover:text-[#2C2218] hover:border-[#AA820A] transition-all"
+                        title="Copy Invitation Link"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 

@@ -14,6 +14,8 @@ import { DjSongRequestBox } from '@/components/guest/DjSongRequestBox';
 import { VoiceBlessingRecorder } from '@/components/guest/VoiceBlessingRecorder';
 import { GuestRsvpForm } from '@/components/guest/GuestRsvpForm';
 import { royalSitarAudio } from '@/lib/sitarSynth';
+import { PRESSED_LOVE_TEMPLATES } from '@/lib/pressedLoveTemplates';
+import { PressedLoveInvitation } from '@/components/pressedlove/PressedLoveInvitation';
 import {
   Calendar,
   Clock,
@@ -38,6 +40,23 @@ export default function LuxuryGuestMicrosite() {
   const searchParams = useSearchParams();
   const slug = (params?.weddingSlug as string) || 'rohit-weds-priya';
   const guestQuery = searchParams.get('guest') || 'Special Guest';
+
+  const requestedTemplate = searchParams.get('template');
+  const isPressedLove = slug.startsWith('wedding-invitation-') || !!requestedTemplate;
+
+  if (isPressedLove) {
+    const templateKey = slug.startsWith('wedding-invitation-')
+      ? slug.replace('wedding-invitation-', '')
+      : (requestedTemplate || 'the-venue');
+    const template = PRESSED_LOVE_TEMPLATES[templateKey] || PRESSED_LOVE_TEMPLATES['the-venue'];
+    return (
+      <PressedLoveInvitation
+        initialTemplate={template}
+        guestName={guestQuery}
+        autoOpen={true}
+      />
+    );
+  }
 
   const [project, setProject] = useState<WeddingProject | null>(null);
   const [envelopeOpened, setEnvelopeOpened] = useState(false);

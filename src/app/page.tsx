@@ -51,6 +51,12 @@ export default function RootLandingPage() {
 
         <div className="flex items-center gap-3">
           <Link
+            href="/templates"
+            className="hidden sm:inline-flex px-4 py-2 rounded-xl bg-[#FAF4E3] border border-[#D4AF37]/50 text-[#7D5F04] hover:bg-[#F3E5AB] text-xs font-cinzel tracking-wider uppercase items-center gap-1.5 transition-all shadow-sm font-bold"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#AA820A]" /> Templates & Designs
+          </Link>
+          <Link
             href="/portal/client-rohit-priya"
             className="hidden sm:inline-flex px-4 py-2 rounded-xl bg-white border border-[#E8DFC8] text-[#544230] hover:text-[#2C2218] hover:border-[#D4AF37] text-xs font-cinzel tracking-wider uppercase items-center gap-1.5 transition-all shadow-sm"
           >
@@ -89,18 +95,25 @@ export default function RootLandingPage() {
           {/* Quick CTA Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
             <Link
-              href="/rohit-weds-priya?guest=Aditya+Singhania"
-              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black font-cinzel text-xs font-bold uppercase tracking-widest shadow-[0_10px_25px_rgba(212,175,55,0.35)] hover:brightness-110 active:scale-95 transition-all flex items-center gap-2.5"
+              href="/wedding-invitation-the-venue#live"
+              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black font-cinzel text-xs font-bold uppercase tracking-widest shadow-[0_10px_25px_rgba(212,175,55,0.35)] hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
             >
-              <Smartphone className="w-4 h-4" /> Experience Guest Microsite
-              <ArrowRight className="w-4 h-4 ml-1" />
+              <Eye className="w-4 h-4" /> Live Demo: The Venue
+              <ArrowRight className="w-4 h-4 ml-0.5" />
             </Link>
 
             <Link
-              href="/portal/client-rohit-priya"
-              className="px-6 py-3.5 rounded-2xl bg-[#FDFBF7] border border-[#D4AF37]/60 text-[#2C2218] font-cinzel text-xs font-bold uppercase tracking-widest hover:bg-[#FAF4E3] active:scale-95 transition-all flex items-center gap-2.5 shadow-sm"
+              href="/wedding-invitation-floral#live"
+              className="px-6 py-3.5 rounded-2xl bg-[#FDFBF7] border border-[#D4AF37]/80 text-[#2C2218] font-cinzel text-xs font-bold uppercase tracking-widest hover:bg-[#FAF4E3] active:scale-95 transition-all flex items-center gap-2 shadow-sm"
             >
-              <Crown className="w-4 h-4 text-[#AA820A]" /> Client Management Portal
+              <Sparkles className="w-4 h-4 text-[#AA820A]" /> Live Demo: Floral
+            </Link>
+
+            <Link
+              href="/templates"
+              className="px-6 py-3.5 rounded-2xl bg-white border border-[#E8DFC8] text-[#544230] hover:text-[#2C2218] font-cinzel text-xs font-bold uppercase tracking-widest hover:border-[#AA820A] active:scale-95 transition-all flex items-center gap-2 shadow-sm"
+            >
+              <Smartphone className="w-4 h-4 text-[#7D5F04]" /> All 12 Templates
             </Link>
           </div>
         </div>
