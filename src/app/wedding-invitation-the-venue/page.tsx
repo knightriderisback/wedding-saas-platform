@@ -14,7 +14,7 @@ function TheVenueContent() {
     <PressedLoveInvitation
       initialTemplate={template}
       guestName={guestQuery}
-      autoOpen={true}
+      autoOpen={false}
     />
   );
 }

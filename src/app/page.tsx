@@ -95,7 +95,7 @@ export default function RootLandingPage() {
           {/* Quick CTA Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
             <Link
-              href="/wedding-invitation-the-venue#live"
+              href="/wedding-invitation-the-venue"
               className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black font-cinzel text-xs font-bold uppercase tracking-widest shadow-[0_10px_25px_rgba(212,175,55,0.35)] hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
             >
               <Eye className="w-4 h-4" /> Live Demo: The Venue
@@ -103,7 +103,7 @@ export default function RootLandingPage() {
             </Link>
 
             <Link
-              href="/wedding-invitation-floral#live"
+              href="/wedding-invitation-floral"
               className="px-6 py-3.5 rounded-2xl bg-[#FDFBF7] border border-[#D4AF37]/80 text-[#2C2218] font-cinzel text-xs font-bold uppercase tracking-widest hover:bg-[#FAF4E3] active:scale-95 transition-all flex items-center gap-2 shadow-sm"
             >
               <Sparkles className="w-4 h-4 text-[#AA820A]" /> Live Demo: Floral
@@ -113,7 +113,7 @@ export default function RootLandingPage() {
               href="/templates"
               className="px-6 py-3.5 rounded-2xl bg-white border border-[#E8DFC8] text-[#544230] hover:text-[#2C2218] font-cinzel text-xs font-bold uppercase tracking-widest hover:border-[#AA820A] active:scale-95 transition-all flex items-center gap-2 shadow-sm"
             >
-              <Smartphone className="w-4 h-4 text-[#7D5F04]" /> All 12 Templates
+              <Smartphone className="w-4 h-4 text-[#7D5F04]" /> All 13 Luxury Suites
             </Link>
           </div>
         </div>

@@ -9,6 +9,15 @@ import {
   PRESSED_LOVE_TEMPLATES,
   TEMPLATE_LIST,
 } from '@/lib/pressedLoveTemplates';
+import { GatefoldEnvelope } from '@/components/guest/GatefoldEnvelope';
+import { CanvasScratchCard } from '@/components/guest/CanvasScratchCard';
+import { RosePetalShower } from '@/components/guest/RosePetalShower';
+import { MilestoneSlider } from '@/components/guest/MilestoneSlider';
+import { CoupleTrivia } from '@/components/guest/CoupleTrivia';
+import { DjSongRequestBox } from '@/components/guest/DjSongRequestBox';
+import { VoiceBlessingRecorder } from '@/components/guest/VoiceBlessingRecorder';
+import { GuestRsvpForm } from '@/components/guest/GuestRsvpForm';
+import { StoryMilestone } from '@/types/wedding';
 import {
   Calendar,
   Clock,
@@ -29,6 +38,8 @@ import {
   ArrowRight,
   ShieldCheck,
   QrCode,
+  RotateCcw,
+  Mic,
 } from 'lucide-react';
 
 interface PressedLoveInvitationProps {
@@ -36,6 +47,45 @@ interface PressedLoveInvitationProps {
   guestName?: string;
   autoOpen?: boolean;
 }
+
+const defaultStoryMilestones: StoryMilestone[] = [
+  {
+    id: 'sm-1',
+    year: '2021',
+    title: 'First Glance at Marine Drive',
+    description:
+      'A chance collision over spilled filter coffee on a rainy Mumbai monsoon afternoon sparked a conversation that never ended.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'sm-2',
+    year: '2023',
+    title: 'The Florence Proposal',
+    description:
+      'Under the golden Tuscan sunset on the banks of River Arno, Rohit bent the knee and Priya whispered the easiest "Yes" of her life.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'sm-3',
+    year: '2025',
+    title: 'Roka & Family Blessings',
+    description:
+      'Surrounded by grandparents and cousins, two families became one over traditional sweets, dhol beats, and lifelong promises.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'sm-4',
+    year: '2027',
+    title: 'The Royal Vivah at Udaipur',
+    description:
+      'The beginning of forever amidst Lake Pichola, glowing oil lamps, and Vedic vows under the desert stars.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
+  },
+];
 
 export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
   initialTemplate,
@@ -52,7 +102,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
   const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
   const [guestPassQr, setGuestPassQr] = useState<string | null>(null);
 
-  // RSVP Form State
+  // RSVP Form State for Modal fallback
   const [rsvpAttendance, setRsvpAttendance] = useState<'attending' | 'declining'>('attending');
   const [rsvpName, setRsvpName] = useState(guestName !== 'Special Guest' ? guestName : '');
   const [rsvpDietary, setRsvpDietary] = useState('none');
@@ -69,22 +119,6 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
   });
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  // Listen for hashchange (#live)
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (window.location.hash === '#live') {
-        setIsOpened(true);
-      }
-      const handleHashChange = () => {
-        if (window.location.hash === '#live') {
-          setIsOpened(true);
-        }
-      };
-      window.addEventListener('hashchange', handleHashChange);
-      return () => window.removeEventListener('hashchange', handleHashChange);
-    }
-  }, []);
 
   // Update countdown
   useEffect(() => {
@@ -122,49 +156,6 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
     }
   };
 
-  // Open Envelope
-  const handleOpenEnvelope = () => {
-    setIsOpened(true);
-    if (typeof window !== 'undefined' && window.location.hash !== '#live') {
-      window.history.pushState(null, '', '#live');
-    }
-
-    // Try starting music
-    if (audioRef.current) {
-      audioRef.current.play().then(() => setIsPlayingMusic(true)).catch(() => {});
-    }
-
-    // Confetti
-    confetti({
-      particleCount: 50,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: [template.theme.colors.primary, template.theme.colors.accent, '#FAF8F5'],
-    });
-  };
-
-  // Copy IBAN
-  const handleCopyIban = () => {
-    navigator.clipboard.writeText(template.gifts.iban);
-    setCopiedIban(true);
-    setTimeout(() => setCopiedIban(false), 2500);
-  };
-
-  // Submit RSVP
-  const handleRsvpSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setRsvpSubmitted(true);
-    const passCode = `VIP-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-    setGuestPassQr(passCode);
-
-    confetti({
-      particleCount: 75,
-      spread: 80,
-      origin: { y: 0.5 },
-      colors: [template.theme.colors.primary, template.theme.colors.accent, '#FFFFFF'],
-    });
-  };
-
   // Switch Template
   const handleSelectTemplate = (newTmpl: PressedLoveTemplate) => {
     setTemplate(newTmpl);
@@ -174,8 +165,28 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
         audioRef.current.play().catch(() => {});
       }
     }
-    // Update browser URL smoothly without hard refresh
-    window.history.replaceState(null, '', `/${newTmpl.slug}#live`);
+  };
+
+  // Copy IBAN
+  const handleCopyIban = () => {
+    navigator.clipboard.writeText(template.gifts.iban);
+    setCopiedIban(true);
+    setTimeout(() => setCopiedIban(false), 2500);
+  };
+
+  // Submit RSVP in modal
+  const handleRsvpSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setRsvpSubmitted(true);
+    const passCode = `VIP-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    setGuestPassQr(passCode);
+
+    confetti({
+      particleCount: 70,
+      spread: 75,
+      origin: { y: 0.6 },
+      colors: [template.theme.colors.primary, template.theme.colors.accent, '#FAF8F5'],
+    });
   };
 
   const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
@@ -198,12 +209,39 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
       {/* Background Audio Tag */}
       <audio ref={audioRef} src={template.assets.backgroundMusic} loop preload="auto" />
 
-      {/* Floating Design / Template Switcher Bar (Always Available) */}
-      <aside aria-label="Template Designs" className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-full px-2 w-auto pointer-events-auto">
-        <div className="bg-white/90 backdrop-blur-md border border-[#E8DFC8] rounded-full p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex items-center gap-1 overflow-x-auto max-w-[94vw] sm:max-w-xl">
-          <span className="text-[10px] font-cinzel uppercase font-bold tracking-wider px-3 text-[#7D5F04] flex items-center gap-1 shrink-0">
-            <Sparkles className="w-3 h-3 text-[#AA820A]" /> Designs:
+      {/* Floating Rose Petals Shower Particle Canvas (Interactive) */}
+      <RosePetalShower />
+
+      {/* 3D ROYAL GATEFOLD BOXED ENVELOPE WITH WAX SEAL */}
+      <GatefoldEnvelope
+        guestName={guestName}
+        partner1={template.couple.partner1}
+        partner2={template.couple.partner2}
+        venueCity={template.location.city + ', ' + template.location.country}
+        isOpen={isOpened}
+        onOpened={() => {
+          setIsOpened(true);
+          if (audioRef.current) {
+            audioRef.current.play().then(() => setIsPlayingMusic(true)).catch(() => {});
+          }
+        }}
+      />
+
+      {/* Floating Design / Template Switcher Bar & Controls (Always Available) */}
+      <aside aria-label="Template Designs" className="fixed top-4 left-1/2 -translate-x-1/2 z-40 max-w-full px-2 w-auto pointer-events-auto">
+        <div className="bg-white/95 backdrop-blur-md border border-[#E8DFC8] rounded-full p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex items-center gap-1.5 overflow-x-auto max-w-[96vw] sm:max-w-2xl">
+          <button
+            onClick={() => setIsOpened(false)}
+            className="px-2.5 py-1 rounded-full text-[11px] font-cinzel font-bold tracking-wider text-[#7D5F04] bg-[#FAF4E3] hover:bg-[#F3E5AB] border border-[#D4AF37]/40 flex items-center gap-1 shrink-0 transition-colors"
+            title="Replay 3D Wax Seal Unboxing"
+          >
+            <RotateCcw className="w-3 h-3 text-[#AA820A]" /> Replay Seal
+          </button>
+
+          <span className="text-[10px] font-cinzel uppercase font-bold tracking-wider px-2 text-[#7D5F04] flex items-center gap-1 shrink-0 border-l border-[#E8DFC8]">
+            <Sparkles className="w-3 h-3 text-[#AA820A]" /> Suites:
           </span>
+
           {TEMPLATE_LIST.map((t) => {
             const isActive = t.id === template.id;
             return (
@@ -237,54 +275,6 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           )}
         </button>
       </aside>
-
-      {/* ENVELOPE UNBOXING INTRO OVERLAY */}
-      {!isOpened && (
-        <div className="fixed inset-0 z-50 bg-[#FAF7F2] flex items-center justify-center p-4">
-          <div className="max-w-sm sm:max-w-md w-full bg-white rounded-3xl p-8 shadow-2xl border border-[#E8DFC8] text-center space-y-6 relative overflow-hidden animate-fade-in">
-            {/* Soft decorative background glow */}
-            <div
-              className="absolute -top-12 -right-12 w-48 h-48 rounded-full blur-3xl opacity-20 pointer-events-none"
-              style={{ backgroundColor: template.theme.colors.primary }}
-            />
-
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-              {template.badge}
-            </span>
-
-            {/* Simulated Wax Seal on Envelope */}
-            <div className="relative mx-auto my-6 w-24 h-24 rounded-full flex items-center justify-center shadow-xl border-4 border-white cursor-pointer hover:scale-105 active:scale-95 transition-transform"
-              style={{ backgroundColor: template.envelope.waxColor }}
-              onClick={handleOpenEnvelope}
-            >
-              <div className="w-18 h-18 rounded-full border border-white/40 flex items-center justify-center text-white font-cinzel text-xl font-bold tracking-widest shadow-inner">
-                {template.envelope.waxMonogram}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <h1 className={`${template.theme.fonts.script} text-4xl sm:text-5xl text-[#2C2218]`}>
-                {template.couple.partner1} & {template.couple.partner2}
-              </h1>
-              <p className="font-cormorant italic text-sm text-[#7D5F04]">
-                A bespoke digital invitation for <span className="font-bold underline decoration-[#AA820A]">{guestName}</span>
-              </p>
-            </div>
-
-            <p className="text-xs text-[#544230] font-sans leading-relaxed">
-              {template.tagline}
-            </p>
-
-            <button
-              onClick={handleOpenEnvelope}
-              className="w-full py-3.5 rounded-2xl text-white font-cinzel text-xs uppercase tracking-widest font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2"
-              style={{ backgroundColor: template.theme.colors.primary }}
-            >
-              <Sparkles className="w-4 h-4" /> Open Invitation (Live Fullscreen)
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* FULL MICROSITE BODY */}
       <div className={`transition-opacity duration-1000 ${isOpened ? 'opacity-100' : 'opacity-0'}`}>
@@ -348,7 +338,11 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
             {/* Quick Actions */}
             <div className="flex flex-wrap items-center justify-center gap-4 pt-6">
               <button
-                onClick={() => setShowRsvpModal(true)}
+                onClick={() => {
+                  const el = document.getElementById('rsvp-section');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  else setShowRsvpModal(true);
+                }}
                 className="px-8 py-3.5 rounded-full text-black font-cinzel text-xs font-bold uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all bg-[#FAF8F5] hover:bg-white"
               >
                 RSVP Now
@@ -366,8 +360,27 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           </div>
         </section>
 
+        {/* AUSPICIOUS MUHURAT GOLD-FOIL SCRATCH CARD */}
+        <section className="max-w-2xl mx-auto px-6 py-12 text-center space-y-4">
+          <div className="space-y-1">
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold flex items-center justify-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#AA820A]" /> Auspicious Muhurat Scratch Card
+            </span>
+            <h3 className={`${template.theme.fonts.display} text-2xl sm:text-3xl text-[#2C2218]`}>
+              Scratch to Reveal the Sacred Date
+            </h3>
+            <p className="font-cormorant italic text-xs text-[#544230]">
+              Rub the 24K gold foil gently with your finger or cursor to unveil the wedding lagna muhurat & celebratory confetti!
+            </p>
+          </div>
+          <CanvasScratchCard
+            weddingDateStr={template.ceremony.displayDate + ' • ' + template.ceremony.displayTime}
+            venueStr={template.location.venueName + ', ' + template.location.city}
+          />
+        </section>
+
         {/* LIVE COUNTDOWN SECTION */}
-        <section className="max-w-4xl mx-auto px-6 py-16 text-center space-y-6">
+        <section className="max-w-4xl mx-auto px-6 py-10 text-center space-y-6">
           <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
             The Celebration Begins In
           </span>
@@ -458,119 +471,151 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               <div key={idx} className="relative group">
                 {/* Dot / Pin on timeline */}
                 <div
-                  className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-5 h-5 rounded-full border-2 border-white shadow-sm flex items-center justify-center text-[10px]"
+                  className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full border-2 border-white shadow-sm transition-transform group-hover:scale-125"
                   style={{ backgroundColor: template.theme.colors.primary }}
                 />
 
-                <div className="bg-white/80 p-5 rounded-2xl border border-[#E8DFC8] shadow-sm hover:border-[#AA820A] transition-all">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-mono text-xs font-bold text-[#AA820A]">{item.time}</span>
-                  </div>
-                  <h3 className="font-serif text-lg font-medium text-[#2C2218] mb-1">{item.title}</h3>
-                  <p className="font-sans text-xs text-[#544230] leading-relaxed">{item.description}</p>
+                <div className="space-y-1">
+                  <span className="text-xs font-cinzel font-bold tracking-wider text-[#AA820A] block">
+                    {item.time}
+                  </span>
+                  <h3 className="font-serif text-xl sm:text-2xl text-[#2C2218] font-medium">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-[#544230] leading-relaxed pt-1">
+                    {item.description}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* CURATED ACCOMMODATIONS */}
-        <section className="max-w-4xl mx-auto px-6 py-12">
-          <div
-            className="bg-white rounded-3xl p-8 sm:p-12 border shadow-sm space-y-6"
-            style={{ borderColor: template.theme.colors.border }}
-          >
-            <div className="text-center space-y-2">
-              <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-                Stay & Travel
-              </span>
-              <h2 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218] font-medium`}>
-                {template.accommodation.title}
-              </h2>
-              <p className="font-sans text-xs text-[#544230] max-w-lg mx-auto">
-                {template.accommodation.description}
-              </p>
-            </div>
+        {/* ROMANTIC MILESTONES SLIDER ("HOW WE MET") */}
+        <section className="max-w-4xl mx-auto px-6 py-14 space-y-6">
+          <div className="text-center space-y-1">
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
+              Our Journey
+            </span>
+            <h3 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218]`}>
+              How We Met & Milestones
+            </h3>
+            <p className="font-cormorant italic text-sm text-[#7D5F04]">
+              Every chapter written by destiny, celebrated with you
+            </p>
+          </div>
+          <MilestoneSlider milestones={defaultStoryMilestones} />
+        </section>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-              {template.accommodation.hotels.map((hotel, idx) => (
-                <div
-                  key={idx}
-                  className="p-5 rounded-2xl border border-[#E8DFC8] bg-[#FAF8F5]/60 hover:bg-[#FAF8F5] transition-all flex flex-col justify-between space-y-3"
-                >
-                  <div>
-                    <span className="text-[10px] font-cinzel uppercase text-[#AA820A] font-bold block mb-1">
-                      {hotel.distance}
-                    </span>
-                    <h3 className="font-serif text-base font-medium text-[#2C2218]">{hotel.name}</h3>
-                    <p className="text-xs text-[#544230] font-sans mt-0.5">{hotel.tier}</p>
-                  </div>
+        {/* COUPLE TRIVIA QUIZ */}
+        <section className="max-w-4xl mx-auto px-6 py-12 space-y-6">
+          <div className="text-center space-y-1">
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
+              Interactive Fun
+            </span>
+            <h3 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218]`}>
+              The Couple Trivia Challenge
+            </h3>
+            <p className="font-cormorant italic text-sm text-[#7D5F04]">
+              Test how well you know {template.couple.partner1} & {template.couple.partner2} before the party!
+            </p>
+          </div>
+          <CoupleTrivia coupleNames={`${template.couple.partner1} & ${template.couple.partner2}`} />
+        </section>
 
+        {/* PRE-WEDDING DJ SONG REQUEST BOX */}
+        <section className="max-w-4xl mx-auto px-6 py-12 space-y-6">
+          <div className="text-center space-y-1">
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold flex items-center justify-center gap-1.5">
+              <Music className="w-3.5 h-3.5 text-[#AA820A]" /> Sangeet Dance Floor Anthem
+            </span>
+            <h3 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218]`}>
+              Pre-Wedding DJ Song Request
+            </h3>
+            <p className="font-cormorant italic text-sm text-[#7D5F04]">
+              Submit your favorite dance track — directly routed to our DJ’s console and setlist!
+            </p>
+          </div>
+          <DjSongRequestBox weddingSlug={template.slug} />
+        </section>
+
+        {/* VOICE BLESSING AUDIO RECORDER */}
+        <section className="max-w-4xl mx-auto px-6 py-12 space-y-6">
+          <div className="text-center space-y-1">
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold flex items-center justify-center gap-1.5">
+              <Mic className="w-3.5 h-3.5 text-[#AA820A]" /> Audio Wishing Well
+            </span>
+            <h3 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218]`}>
+              Record a Voice Blessing
+            </h3>
+            <p className="font-cormorant italic text-sm text-[#7D5F04]">
+              Speak your heartfelt blessings with your phone or PC microphone for the bride and groom
+            </p>
+          </div>
+          <VoiceBlessingRecorder weddingSlug={template.slug} />
+        </section>
+
+        {/* ACCOMMODATIONS & TRAVEL RECOMMENDATIONS */}
+        <section className="max-w-4xl mx-auto px-6 py-12 space-y-8">
+          <div className="text-center space-y-2">
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
+              Guest Accommodations
+            </span>
+            <h2 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218] font-medium`}>
+              {template.accommodation.title}
+            </h2>
+            <p className="font-cormorant italic text-sm text-[#7D5F04]">
+              {template.accommodation.description}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {template.accommodation.hotels.map((hotel, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-3xl p-6 border shadow-sm flex flex-col justify-between"
+                style={{ borderColor: template.theme.colors.border }}
+              >
+                <div className="space-y-2">
+                  <span className="text-[10px] font-cinzel uppercase tracking-wider text-[#AA820A] font-bold block">
+                    {hotel.distance}
+                  </span>
+                  <h3 className="font-serif text-2xl text-[#2C2218] font-semibold">
+                    {hotel.name}
+                  </h3>
+                  <p className="text-xs text-[#544230] leading-relaxed">
+                    {hotel.tier}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-[#FAF4E3] mt-4 flex items-center justify-between">
+                  <span className="font-cinzel text-xs text-[#7D5F04] font-bold uppercase">
+                    Partner Hotel
+                  </span>
                   {hotel.bookingUrl && (
                     <a
                       href={hotel.bookingUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-cinzel uppercase tracking-wider text-[#7D5F04] font-bold hover:text-[#2C2218] flex items-center gap-1 pt-2 border-t border-[#E8DFC8]/60"
+                      className="px-4 py-2 rounded-full text-xs font-cinzel font-bold text-white uppercase tracking-wider flex items-center gap-1 hover:brightness-110 transition-all"
+                      style={{ backgroundColor: template.theme.colors.primary }}
                     >
-                      View Property <ArrowRight className="w-3.5 h-3.5" />
+                      View Map & Stay <ExternalLink className="w-3 h-3" />
                     </a>
                   )}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* GIFTS & HONEYMOON REGISTRY */}
-        <section className="max-w-2xl mx-auto px-6 py-12 text-center space-y-6">
-          <div
-            className="bg-white rounded-3xl p-8 border shadow-sm space-y-4"
-            style={{ borderColor: template.theme.colors.border }}
-          >
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-              Honeymoon Wishing Well
-            </span>
-            <h2 className={`${template.theme.fonts.display} text-3xl text-[#2C2218] font-medium`}>
-              Registry & Blessings
-            </h2>
-            <p className="font-cormorant italic text-base text-[#544230] leading-relaxed">
-              {template.gifts.message}
-            </p>
-
-            <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8DFC8] text-left space-y-2 mt-4">
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-[#7D5F04] font-sans">Bank:</span>
-                <span className="font-medium text-[#2C2218]">{template.gifts.bankName}</span>
-              </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-[#7D5F04] font-sans">Account:</span>
-                <span className="font-medium text-[#2C2218]">{template.gifts.accountHolder}</span>
-              </div>
-              <div className="flex justify-between items-center text-xs pt-1 border-t border-[#E8DFC8]/60">
-                <span className="text-[#7D5F04] font-sans">IBAN:</span>
-                <div className="flex items-center gap-2 font-mono text-xs font-bold text-[#2C2218]">
-                  <span>{template.gifts.iban}</span>
-                  <button
-                    onClick={handleCopyIban}
-                    className="p-1 rounded hover:bg-[#FAF4E3] text-[#AA820A]"
-                    title="Copy IBAN"
-                  >
-                    {copiedIban ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQS ACCORDION */}
-        <section className="max-w-3xl mx-auto px-6 py-12 space-y-6">
+        {/* FREQUENTLY ASKED QUESTIONS (ACCORDION) */}
+        <section className="max-w-3xl mx-auto px-6 py-12 space-y-8">
           <div className="text-center space-y-2">
             <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-              Questions & Details
+              Guest Information
             </span>
-            <h2 className={`${template.theme.fonts.display} text-3xl text-[#2C2218] font-medium`}>
+            <h2 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218] font-medium`}>
               Frequently Asked Questions
             </h2>
           </div>
@@ -581,21 +626,23 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               return (
                 <div
                   key={idx}
-                  className="bg-white rounded-2xl border border-[#E8DFC8] overflow-hidden transition-all shadow-sm"
+                  className="bg-white rounded-2xl border transition-all overflow-hidden"
+                  style={{ borderColor: template.theme.colors.border }}
                 >
                   <button
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full p-5 text-left flex items-center justify-between text-sm sm:text-base font-serif font-medium text-[#2C2218]"
+                    className="w-full px-6 py-4 text-left flex items-center justify-between font-serif text-base text-[#2C2218] font-medium"
                   >
                     <span>{faq.question}</span>
                     <ChevronDown
-                      className={`w-4 h-4 text-[#AA820A] transition-transform duration-300 ${
+                      className={`w-4 h-4 text-[#7D5F04] transition-transform duration-300 ${
                         isOpen ? 'rotate-180' : ''
                       }`}
                     />
                   </button>
+
                   {isOpen && (
-                    <div className="px-5 pb-5 pt-0 text-xs text-[#544230] leading-relaxed font-sans border-t border-[#FAF8F5]">
+                    <div className="px-6 pb-5 pt-1 text-xs text-[#544230] leading-relaxed border-t border-[#FAF8F5]">
                       {faq.answer}
                     </div>
                   )}
@@ -605,86 +652,105 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           </div>
         </section>
 
-        {/* BOTTOM RSVP CALLOUT */}
-        <section className="max-w-2xl mx-auto px-6 py-16 text-center space-y-6">
-          <h2 className={`${template.theme.fonts.script} text-5xl sm:text-6xl text-[#2C2218]`}>
-            Will you join us?
-          </h2>
-          <p className="font-cormorant italic text-lg text-[#7D5F04]">
-            Kindly respond by July 1st, 2026 to ensure your seat at the celebration
-          </p>
-          <button
-            onClick={() => setShowRsvpModal(true)}
-            className="px-10 py-4 rounded-full text-white font-cinzel text-xs font-bold uppercase tracking-widest shadow-xl hover:brightness-110 active:scale-95 transition-all"
-            style={{ backgroundColor: template.theme.colors.primary }}
+        {/* DIGITAL WISHING WELL & GIFTS */}
+        <section className="max-w-2xl mx-auto px-6 py-12 text-center space-y-6">
+          <div className="space-y-2">
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
+              With Gratitude
+            </span>
+            <h2 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218] font-medium`}>
+              Wedding Registry & Well Wishes
+            </h2>
+            <p className="font-cormorant italic text-sm text-[#544230] max-w-md mx-auto">
+              {template.gifts.message}
+            </p>
+          </div>
+
+          <div
+            className="bg-white rounded-3xl p-6 sm:p-8 border shadow-sm max-w-md mx-auto space-y-4"
+            style={{ borderColor: template.theme.colors.border }}
           >
-            Submit Your RSVP
-          </button>
+            <span className="text-[10px] font-cinzel uppercase tracking-wider text-[#7D5F04] font-bold block">
+              Digital Shagun / Registry IBAN
+            </span>
+
+            <div className="bg-[#FAF8F5] p-3 rounded-xl border border-[#E8DFC8] font-mono text-xs sm:text-sm text-[#2C2218] flex items-center justify-between">
+              <span className="truncate pr-2">{template.gifts.iban}</span>
+              <button
+                onClick={handleCopyIban}
+                className="p-1.5 rounded-lg bg-white border border-[#E8DFC8] text-[#7D5F04] hover:bg-[#FAF4E3] transition-colors shrink-0"
+                title="Copy IBAN"
+              >
+                {copiedIban ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+              </button>
+            </div>
+
+            <p className="text-[11px] text-neutral-400 font-sans">
+              Account Holder: {template.gifts.accountHolder}
+            </p>
+          </div>
+        </section>
+
+        {/* INTERACTIVE RSVP SECTION WITH VIP QR ENTRY PASS */}
+        <section id="rsvp-section" className="max-w-4xl mx-auto px-6 py-16 space-y-6">
+          <div className="text-center space-y-1">
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
+              Kindly Respond
+            </span>
+            <h3 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218]`}>
+              Reserve Your Royal Presence
+            </h3>
+            <p className="font-cormorant italic text-sm text-[#7D5F04]">
+              Confirm your attendance to receive your Instant VIP Digital Entry Pass & QR Code
+            </p>
+          </div>
+          <GuestRsvpForm
+            weddingSlug={template.slug}
+            defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
+          />
         </section>
 
         {/* FOOTER */}
-        <footer className="border-t border-[#E8DFC8] py-8 text-center text-xs font-serif text-[#7D5F04] space-y-2">
-          <p>
-            {template.couple.partner1} & {template.couple.partner2} • {template.ceremony.displayDate}
+        <footer className="border-t border-[#E8DFC8] py-12 text-center text-xs space-y-3 bg-white/40">
+          <p className="font-cinzel text-[11px] tracking-widest uppercase text-[#AA820A] font-bold">
+            {template.couple.partner1} & {template.couple.partner2}
           </p>
-          <p className="text-[10px] text-neutral-400">
-            Powered by ÉTERNITÉ Bespoke Wedding Invitation Engine
+          <p className="font-cormorant italic text-sm text-[#7D5F04]">
+            Forever Begins Under the Stars • {template.ceremony.displayDate}
+          </p>
+          <p className="text-[10px] text-neutral-400 font-sans">
+            Crafted with Ultra-Luxury Precision • PressedLove Couture Suite
           </p>
         </footer>
       </div>
 
-      {/* INTERACTIVE RSVP MODAL */}
+      {/* RSVP MODAL POPUP (SECONDARY ACCESS) */}
       {showRsvpModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-[#E8DFC8] shadow-2xl relative animate-fade-in my-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 relative border border-[#E8DFC8] shadow-2xl animate-fade-in max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setShowRsvpModal(false)}
-              className="absolute top-5 right-5 text-neutral-400 hover:text-black font-sans text-xl"
+              className="absolute top-5 right-5 text-neutral-400 hover:text-black font-bold text-lg"
             >
               ✕
             </button>
 
             {!rsvpSubmitted ? (
-              <form onSubmit={handleRsvpSubmit} className="space-y-5">
+              <form onSubmit={handleRsvpSubmit} className="space-y-4">
                 <div className="text-center space-y-1">
-                  <span className="font-cinzel text-[10px] uppercase tracking-widest text-[#AA820A] font-bold">
-                    RSVP Response
+                  <span className="font-cinzel text-[10px] uppercase tracking-widest text-[#7D5F04] font-bold block">
+                    RSVP Confirmation
                   </span>
-                  <h3 className="font-serif text-2xl text-[#2C2218]">
-                    {template.couple.partner1} & {template.couple.partner2}
-                  </h3>
+                  <h3 className="font-serif text-2xl text-[#2C2218]">Will You Join Us?</h3>
+                  <p className="text-xs text-[#544230] font-sans">
+                    Kindly respond before November 01, 2027
+                  </p>
                 </div>
 
-                {/* Attendance Buttons */}
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setRsvpAttendance('attending')}
-                    className={`p-3 rounded-2xl text-xs font-cinzel uppercase font-bold tracking-wider transition-all border ${
-                      rsvpAttendance === 'attending'
-                        ? 'bg-[#FAF4E3] border-[#AA820A] text-[#7D5F04] shadow-sm'
-                        : 'bg-white border-[#E8DFC8] text-neutral-500 hover:bg-[#FAF8F5]'
-                    }`}
-                  >
-                    Joyfully Accept
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRsvpAttendance('declining')}
-                    className={`p-3 rounded-2xl text-xs font-cinzel uppercase font-bold tracking-wider transition-all border ${
-                      rsvpAttendance === 'declining'
-                        ? 'bg-[#FDF2F4] border-[#B8283D] text-[#9B1C2E] shadow-sm'
-                        : 'bg-white border-[#E8DFC8] text-neutral-500 hover:bg-[#FAF8F5]'
-                    }`}
-                  >
-                    Regretfully Decline
-                  </button>
-                </div>
-
-                <div className="space-y-4 pt-2">
+                <div className="space-y-3 pt-2">
                   <div>
                     <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-bold mb-1">
-                      Full Name
+                      Your Full Name
                     </label>
                     <input
                       type="text"
@@ -694,6 +760,36 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                       placeholder="e.g. Aditya Singhania"
                       className="w-full px-4 py-2.5 rounded-xl border border-[#E8DFC8] text-sm focus:outline-none focus:border-[#AA820A]"
                     />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-bold mb-1">
+                      Attendance Status
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setRsvpAttendance('attending')}
+                        className={`py-2.5 rounded-xl text-xs font-cinzel font-bold uppercase transition-all ${
+                          rsvpAttendance === 'attending'
+                            ? 'bg-[#2C2218] text-white shadow-sm'
+                            : 'bg-[#FAF8F5] text-[#544230] border border-[#E8DFC8]'
+                        }`}
+                      >
+                        Accept with Joy
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setRsvpAttendance('declining')}
+                        className={`py-2.5 rounded-xl text-xs font-cinzel font-bold uppercase transition-all ${
+                          rsvpAttendance === 'declining'
+                            ? 'bg-[#2C2218] text-white shadow-sm'
+                            : 'bg-[#FAF8F5] text-[#544230] border border-[#E8DFC8]'
+                        }`}
+                      >
+                        Decline with Regret
+                      </button>
+                    </div>
                   </div>
 
                   {rsvpAttendance === 'attending' && (

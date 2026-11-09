@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { WeddingProject, EventScheduleItem } from '@/types/wedding';
 import { getWeddingProject } from '@/lib/firebase';
@@ -35,7 +35,7 @@ import {
   Navigation,
 } from 'lucide-react';
 
-export default function LuxuryGuestMicrosite() {
+function LuxuryGuestMicrositeContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const slug = (params?.weddingSlug as string) || 'rohit-weds-priya';
@@ -53,7 +53,7 @@ export default function LuxuryGuestMicrosite() {
       <PressedLoveInvitation
         initialTemplate={template}
         guestName={guestQuery}
-        autoOpen={true}
+        autoOpen={false}
       />
     );
   }
@@ -664,5 +664,20 @@ export default function LuxuryGuestMicrosite() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function LuxuryGuestMicrosite() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FAF8F5] text-[#7D5F04] flex items-center justify-center font-cinzel text-sm">
+          <Sparkles className="w-5 h-5 animate-spin mr-2 text-[#D4AF37]" />
+          Unfolding Auspicious Palace Suite...
+        </div>
+      }
+    >
+      <LuxuryGuestMicrositeContent />
+    </Suspense>
   );
 }

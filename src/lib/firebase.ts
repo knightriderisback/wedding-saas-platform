@@ -130,6 +130,25 @@ export async function saveWeddingProject(project: WeddingProject): Promise<void>
 }
 
 /**
+ * Delete a wedding project
+ */
+export async function deleteWeddingProject(slug: string): Promise<void> {
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.removeItem(LOCAL_STORAGE_KEY_PREFIX + slug);
+      const slugsJson = localStorage.getItem(ALL_PROJECTS_KEY);
+      if (slugsJson) {
+        const slugs: string[] = JSON.parse(slugsJson);
+        const filtered = slugs.filter((s) => s !== slug);
+        localStorage.setItem(ALL_PROJECTS_KEY, JSON.stringify(filtered));
+      }
+    } catch (e) {
+      console.error('Failed to remove local project', e);
+    }
+  }
+}
+
+/**
  * Fetch all wedding projects for Super Admin Panel
  */
 export async function getAllProjects(): Promise<WeddingProject[]> {
