@@ -42,22 +42,21 @@ function LuxuryGuestMicrositeContent() {
   const guestQuery = searchParams.get('guest') || 'Special Guest';
 
   const requestedTemplate = searchParams.get('template');
-  const isPressedLove = slug.startsWith('wedding-invitation-') || !!requestedTemplate;
-
-  if (isPressedLove) {
-    const templateKey = slug.startsWith('wedding-invitation-')
+  const templateKey = requestedTemplate || (
+    slug.startsWith('wedding-invitation-')
       ? slug.replace('wedding-invitation-', '')
-      : (requestedTemplate || 'the-venue');
-    const template = PRESSED_LOVE_TEMPLATES[templateKey] || PRESSED_LOVE_TEMPLATES['the-venue'];
-    return (
-      <PressedLoveInvitation
-        initialTemplate={template}
-        guestName={guestQuery}
-        autoOpen={false}
-        showCategorySwitcher={false}
-      />
-    );
-  }
+      : (slug === 'rohit-weds-priya' ? 'the-palace' : 'the-palace')
+  );
+  const selectedTemplate = PRESSED_LOVE_TEMPLATES[templateKey] || PRESSED_LOVE_TEMPLATES['the-palace'] || PRESSED_LOVE_TEMPLATES['the-venue'];
+
+  return (
+    <PressedLoveInvitation
+      initialTemplate={selectedTemplate}
+      guestName={guestQuery}
+      autoOpen={false}
+      showCategorySwitcher={false}
+    />
+  );
 
   const [project, setProject] = useState<WeddingProject | null>(null);
   const [envelopeOpened, setEnvelopeOpened] = useState(false);

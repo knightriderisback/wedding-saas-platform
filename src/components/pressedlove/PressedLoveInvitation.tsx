@@ -47,8 +47,9 @@ import {
   Mic,
   LayoutGrid,
   X,
-  Flame,
+  Languages,
 } from 'lucide-react';
+import { INVITATION_TRANSLATIONS, InvitationLanguage } from '@/lib/invitationI18n';
 
 interface PressedLoveInvitationProps {
   initialTemplate: PressedLoveTemplate;
@@ -70,27 +71,18 @@ const defaultStoryMilestones: StoryMilestone[] = [
   {
     id: 'sm-2',
     year: '2023',
-    title: 'The Florence Proposal',
+    title: 'A Spontaneous Trip to Udaipur',
     description:
-      'Under the golden Tuscan sunset on the banks of River Arno, Rohit bent the knee and Priya whispered the easiest "Yes" of her life.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'sm-3',
-    year: '2025',
-    title: 'Roka & Family Blessings',
-    description:
-      'Surrounded by grandparents and cousins, two families became one over traditional sweets, dhol beats, and lifelong promises.',
+      'Floating on Lake Pichola during twilight, Rohit made a quiet promise under the glowing City Palace lights.',
     imageUrl:
       'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
   },
   {
-    id: 'sm-4',
-    year: '2027',
-    title: 'The Royal Vivah at Udaipur',
+    id: 'sm-3',
+    year: '2026',
+    title: 'The Sacred Roka Ceremony',
     description:
-      'The beginning of forever amidst Lake Pichola, glowing oil lamps, and Vedic vows under the desert stars.',
+      'With both families uniting their hands and hearts with folded prayers, forever was sealed in presence of elders.',
     imageUrl:
       'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
   },
@@ -112,13 +104,15 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
   const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
   const [guestPassQr, setGuestPassQr] = useState<string | null>(null);
   const [showSuiteCatalogueModal, setShowSuiteCatalogueModal] = useState(false);
+  const [language, setLanguage] = useState<InvitationLanguage>('en');
+
+  const t = INVITATION_TRANSLATIONS[language];
 
   // RSVP Form State for Modal fallback
   const [rsvpAttendance, setRsvpAttendance] = useState<'attending' | 'declining'>('attending');
   const [rsvpName, setRsvpName] = useState(guestName !== 'Special Guest' ? guestName : '');
   const [rsvpDietary, setRsvpDietary] = useState('none');
   const [rsvpGuestsCount, setRsvpGuestsCount] = useState(1);
-  const [rsvpHotelChoice, setRsvpHotelChoice] = useState('');
   const [rsvpSongRequest, setRsvpSongRequest] = useState('');
 
   // Countdown timer state
@@ -158,7 +152,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
           hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+          minutes: Math.floor((difference % (1000 * 60)) / (1000 * 60)),
           seconds: Math.floor((difference % (1000 * 60)) / 1000),
         });
       } else {
@@ -171,7 +165,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
     return () => clearInterval(interval);
   }, [template]);
 
-  // Audio control - Unified silence fix
+  // Audio control
   const toggleMusic = () => {
     if (isPlayingMusic) {
       royalSitarAudio.stopAll();
@@ -267,6 +261,37 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
         }}
       />
 
+      {/* ROYAL DUAL LANGUAGE SWITCHER (EN | हिन्दी) */}
+      {isOpened && (
+        <aside aria-label="Language Selector" className="fixed top-4 right-4 z-40">
+          <div className="bg-[#FAF5E8]/95 backdrop-blur-md border border-[#D4AF37] rounded-full p-1 shadow-md flex items-center gap-1">
+            <span className="pl-2 pr-1 text-[#7A1423] text-xs">
+              <Languages className="w-3.5 h-3.5 inline" />
+            </span>
+            <button
+              onClick={() => setLanguage('en')}
+              className={`px-3 py-1 rounded-full text-xs font-serif font-bold transition-all cursor-pointer ${
+                language === 'en'
+                  ? 'bg-[#7A1423] text-white shadow-xs'
+                  : 'text-[#544230] hover:text-[#7A1423]'
+              }`}
+            >
+              English
+            </button>
+            <button
+              onClick={() => setLanguage('hi')}
+              className={`px-3 py-1 rounded-full text-xs font-serif font-bold transition-all cursor-pointer ${
+                language === 'hi'
+                  ? 'bg-[#7A1423] text-white shadow-xs'
+                  : 'text-[#544230] hover:text-[#7A1423]'
+              }`}
+            >
+              हिन्दी
+            </button>
+          </div>
+        </aside>
+      )}
+
       {/* OPTIONAL CATEGORY SWITCHER (ONLY FOR ADMIN / DESIGN PREVIEW - STRICTLY HIDDEN FOR GUESTS) */}
       {showCategorySwitcher && (
         <>
@@ -290,111 +315,26 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
 
               <div className="h-4 w-px bg-[#E8DFC8] shrink-0 mx-0.5" />
 
-              {TEMPLATE_LIST.map((t) => {
-                const isActive = t.id === template.id;
-                const meta = SUITE_CATEGORY_METAS[t.id];
+              {TEMPLATE_LIST.map((tItem) => {
+                const isActive = tItem.id === template.id;
+                const meta = SUITE_CATEGORY_METAS[tItem.id];
                 return (
                   <button
-                    key={t.id}
-                    onClick={() => handleSelectTemplate(t)}
+                    key={tItem.id}
+                    onClick={() => handleSelectTemplate(tItem)}
                     className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition cursor-pointer shrink-0 ${
                       isActive
-                        ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black shadow-2xs font-bold'
-                        : 'bg-[#FAF7F2] text-[#544230] hover:bg-[#FAF4E3] hover:text-[#2C2218] border border-[#E8DFC8]/60'
+                        ? 'bg-[#AA820A] text-white shadow-xs'
+                        : 'bg-[#FAF8F5] text-[#544230] hover:bg-[#FAF4E3] border border-[#E8DFC8]'
                     }`}
                   >
-                    <span className="text-xs leading-none">{meta?.icon || '✨'}</span>
-                    <span className="leading-none">{t.name}</span>
-                    {meta?.badge && (
-                      <span
-                        className={`text-[8px] uppercase tracking-wider px-1.5 py-0.2 rounded-full font-black ${
-                          isActive ? 'bg-black text-[#FAF4E3]' : 'bg-amber-100 text-amber-800'
-                        }`}
-                      >
-                        {meta.badge.split(' ')[0]}
-                      </span>
-                    )}
+                    <span>{meta?.icon || '📜'}</span>
+                    <span>{tItem.name}</span>
                   </button>
                 );
               })}
             </div>
           </aside>
-
-          {/* RAJHARA-STYLE SUITE CATALOGUE DRAWER MODAL */}
-          {showSuiteCatalogueModal && (
-            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-              <div className="bg-[#FAF8F5] border border-[#E8DFC8] rounded-3xl max-w-4xl w-full p-5 sm:p-7 max-h-[90vh] overflow-y-auto shadow-2xl relative">
-                <div className="flex items-center justify-between border-b border-[#E8DFC8] pb-4 mb-5">
-                  <div>
-                    <span className="text-[10px] font-cinzel font-bold text-[#AA820A] uppercase tracking-widest block">
-                      Rajhara Style Suite Showcase
-                    </span>
-                    <h3 className="font-serif text-xl sm:text-2xl text-[#2C2218] font-bold">
-                      All 13 Haute Couture Wedding Suites (सभी डिज़ाइन्स)
-                    </h3>
-                  </div>
-                  <button
-                    onClick={() => setShowSuiteCatalogueModal(false)}
-                    className="p-2 rounded-full hover:bg-gray-200 text-gray-700 cursor-pointer"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {SUITE_METAS_LIST.map((meta) => {
-                    const isCurrent = meta.id === template.id;
-                    return (
-                      <div
-                        key={meta.id}
-                        className={`rounded-2xl border p-4 bg-gradient-to-br ${meta.gradientBg} ${meta.borderColor} flex flex-col justify-between transition-all hover:shadow-md`}
-                      >
-                        <div>
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-2xl">{meta.icon}</span>
-                            <span className={`text-[9px] uppercase tracking-wider font-black px-2 py-0.5 rounded-full border ${meta.badgeColor}`}>
-                              {meta.badge}
-                            </span>
-                          </div>
-                          <h4 className="font-serif font-bold text-base text-[#2C2218]">
-                            {meta.name}
-                          </h4>
-                          <p className="text-[11px] font-cormorant italic text-[#7D5F04] mb-3">
-                            {meta.hindiName}
-                          </p>
-                          <ul className="space-y-1 mb-4">
-                            {meta.highlights.map((h, i) => (
-                              <li key={i} className="text-[10px] text-[#544230] flex items-center gap-1.5">
-                                <Check className="w-3 h-3 text-[#AA820A] shrink-0" />
-                                <span>{h}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <button
-                          onClick={() => {
-                            const targetTemplate = PRESSED_LOVE_TEMPLATES[meta.id];
-                            if (targetTemplate) {
-                              handleSelectTemplate(targetTemplate);
-                            }
-                            setShowSuiteCatalogueModal(false);
-                          }}
-                          className={`w-full py-2 rounded-xl text-xs font-cinzel font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                            isCurrent
-                              ? 'bg-[#AA820A] text-white shadow-xs'
-                              : 'bg-white hover:bg-[#FAF4E3] text-[#2C2218] border border-[#E8DFC8]'
-                          }`}
-                        >
-                          {isCurrent ? 'Active Suite' : 'Apply Suite'} <ArrowRight className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
         </>
       )}
 
@@ -402,7 +342,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
       <aside aria-label="Audio Controls" className="fixed bottom-6 right-6 z-40">
         <button
           onClick={toggleMusic}
-          className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-md border border-[#E8DFC8] shadow-lg flex items-center justify-center text-[#403030] hover:scale-105 active:scale-95 transition-transform"
+          className="w-12 h-12 rounded-full bg-[#FAF5E8]/95 backdrop-blur-md border border-[#D4AF37] shadow-lg flex items-center justify-center text-[#403030] hover:scale-105 active:scale-95 transition-transform cursor-pointer"
           title={isPlayingMusic ? 'Mute Music' : 'Play Classical Music'}
         >
           {isPlayingMusic ? (
@@ -421,8 +361,8 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
             : 'opacity-0 translate-y-8 blur-xs pointer-events-none max-h-screen overflow-hidden'
         }`}
       >
-        {/* ONE CONTINUOUS BESPOKE INDIAN WEDDING INVITATION CARD SHEET */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-12 py-10 sm:py-20 border-x border-[#D4AF37]/35 relative bg-wedding-card-paper shadow-[0_0_80px_rgba(212,175,55,0.06)]">
+        {/* ONE CONTINUOUS BESPOKE INDIAN WEDDING INVITATION CARD SHEET (FLAT ON PAPER, NO VERTICAL STRIP SHADOW) */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-12 py-10 sm:py-20 relative bg-wedding-card-paper">
           
           {/* Royal 24K Gold Foil Corner Filigree Accents */}
           <div className="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2 border-[#D4AF37]/70 pointer-events-none" />
@@ -430,7 +370,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           <div className="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2 border-[#D4AF37]/70 pointer-events-none" />
           <div className="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-[#D4AF37]/70 pointer-events-none" />
 
-          {/* HERO SECTION — AUTHENTIC HANDWRITTEN ROYAL VIVAH PROSE (NO DATE HERE!) */}
+          {/* HERO SECTION — AUTHENTIC ROYAL VIVAH PROSE (CLEAR, HIGH CONTRAST & READABLE) */}
           <section className="relative pt-8 sm:pt-14 pb-12 sm:pb-16 text-center border-b border-[#D4AF37]/30">
             {/* Auspicious Vedic Shloka Header */}
             <div className="text-center mb-6 space-y-1">
@@ -438,26 +378,26 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                 <span className="text-sm glitter-sparkle text-[#D4AF37]">✨</span>
                 <span className="h-px w-10 sm:w-20 bg-[#D4AF37]/60" />
                 <h3 className="font-serif text-base sm:text-xl font-bold tracking-[0.25em] text-[#7A1423] uppercase">
-                  ॥ ॐ श्री गणेशाय नमः ॥
+                  {t.shlokaHeader}
                 </h3>
                 <span className="h-px w-10 sm:w-20 bg-[#D4AF37]/60" />
                 <span className="text-sm glitter-sparkle-delayed text-[#D4AF37]">✨</span>
               </div>
-              <p className="font-cormorant italic text-xs sm:text-sm text-[#AA820A]">
-                वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥
+              <p className="font-serif italic text-xs sm:text-sm text-[#AA820A] font-medium">
+                {t.shlokaMantra}
               </p>
             </div>
 
-            {/* Handwritten Invitation Announcement */}
-            <p className="font-pinyon text-2xl sm:text-3xl text-[#544230] max-w-xl mx-auto leading-relaxed mb-4">
-              Together with the divine blessings of our ancestors, grandparents and parents, we cordially invite you to celebrate the holy wedding ceremonies of
+            {/* Clear, High-Contrast Invitation Announcement */}
+            <p className="font-serif text-base sm:text-2xl text-[#3D2817] max-w-2xl mx-auto leading-relaxed mb-6 font-medium">
+              {t.announcementProse}
             </p>
 
             {/* Couple Calligraphy with 24K Molten Gold Shimmer & Sparkles */}
             <div className="relative py-2 my-2">
               <span className="absolute -top-3 left-1/4 text-sm glitter-sparkle text-[#D4AF37]">✦</span>
               <span className="absolute -bottom-2 right-1/4 text-sm glitter-sparkle-delayed text-[#D4AF37]">✦</span>
-              <h1 className="font-pinyon text-6xl sm:text-8xl md:text-9xl text-gold-shimmer leading-none drop-shadow-md">
+              <h1 className="font-pinyon text-6xl sm:text-8xl md:text-9xl text-gold-shimmer leading-none drop-shadow-sm">
                 {template.couple.partner1} <br />
                 <span className="text-4xl sm:text-6xl italic font-serif text-[#7A1423]">&</span>{' '}
                 {template.couple.partner2}
@@ -465,25 +405,25 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
             </div>
 
             {/* Venue Location on Paper (STRICTLY NO DATE HERE - RESERVED FOR SCRATCH CARD!) */}
-            <div className="pt-3 flex items-center justify-center gap-2 text-sm sm:text-base font-cormorant italic text-[#544230]">
+            <div className="pt-3 flex items-center justify-center gap-2 text-base sm:text-lg font-serif text-[#544230]">
               <MapPin className="w-4 h-4 text-[#AA820A]" />
               <span className="font-serif font-bold text-[#3B2219]">
                 {template.location.venueName}
               </span>
               <span>•</span>
-              <span>{template.location.city}</span>
+              <span className="font-serif">{template.location.city}</span>
             </div>
 
             {/* Personalized Guest Inscription on Paper */}
-            <div className="mt-8 pt-5 border-t border-[#D4AF37]/25 max-w-md mx-auto">
-              <span className="font-cormorant italic text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block mb-1">
-                Specially Inscribed With Love For
+            <div className="mt-8 pt-5 border-t border-[#D4AF37]/30 max-w-lg mx-auto">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block mb-1">
+                {t.guestInscribedLabel}
               </span>
-              <p className="font-pinyon text-3xl sm:text-4xl text-[#2C2218] font-bold">
+              <p className="font-serif text-3xl sm:text-4xl text-[#2C1810] font-bold">
                 {guestName}
               </p>
-              <p className="font-pinyon text-xl sm:text-2xl text-[#AA820A] mt-2">
-                ✦ Scratch the sacred 24K gold foil below to unveil our auspicious wedding date & lagna muhurat ✦
+              <p className="font-serif italic text-base sm:text-lg text-[#8B6914] font-medium mt-2">
+                {t.scratchPrompt}
               </p>
             </div>
 
@@ -495,17 +435,17 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                   else setShowRsvpModal(true);
                 }}
-                className="px-7 py-2.5 rounded-full text-white font-cinzel text-xs font-bold uppercase tracking-widest shadow-md hover:brightness-110 active:scale-95 transition-all cursor-pointer bg-gradient-to-r from-[#9B1C2E] to-[#7A1423] border border-[#D4AF37]"
+                className="px-7 py-2.5 rounded-full text-white font-serif text-xs font-bold uppercase tracking-widest shadow-md hover:brightness-110 active:scale-95 transition-all cursor-pointer bg-gradient-to-r from-[#9B1C2E] to-[#7A1423] border border-[#D4AF37]"
               >
-                RSVP Response
+                {t.rsvpButton}
               </button>
               <a
                 href={calendarUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-2.5 rounded-full font-cinzel text-xs font-semibold uppercase tracking-wider border border-[#D4AF37]/70 hover:bg-[#FAF4E3] transition-all flex items-center gap-1.5 text-[#544230]"
+                className="px-6 py-2.5 rounded-full font-serif text-xs font-semibold uppercase tracking-wider border border-[#D4AF37]/70 hover:bg-[#FAF4E3] transition-all flex items-center gap-1.5 text-[#544230]"
               >
-                <Calendar className="w-3.5 h-3.5 text-[#AA820A]" /> Add to Calendar
+                <Calendar className="w-3.5 h-3.5 text-[#AA820A]" /> {t.calendarButton}
               </a>
             </div>
           </section>
@@ -516,50 +456,51 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               <div className="flex items-center justify-center gap-2">
                 <span className="text-sm glitter-sparkle text-[#D4AF37]">✨</span>
                 <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold">
-                  ॥ पवित्र लग्न मुहूर्त पत्रिका ॥
+                  {t.scratchSectionSubtitle}
                 </span>
                 <span className="text-sm glitter-sparkle-delayed text-[#D4AF37]">✨</span>
               </div>
-              <h3 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
-                Rub The 24K Gold Foil To Unveil The Sacred Date
+              <h3 className="font-serif text-2xl sm:text-4xl text-[#2C2218] font-bold">
+                {t.scratchSectionTitle}
               </h3>
-              <p className="font-pinyon text-xl sm:text-2xl text-[#544230] max-w-md mx-auto">
-                Gently glide your finger or cursor over the gold leaf to reveal our wedding muhurat & blessings
+              <p className="font-cormorant italic text-base sm:text-lg text-[#544230] max-w-md mx-auto">
+                {t.scratchSectionDescription}
               </p>
             </div>
 
             <CanvasScratchCard
               weddingDateStr={template.ceremony.displayDate}
               venueStr={template.location.venueName + ', ' + template.location.city}
+              language={language}
             />
           </section>
 
           {/* LIVE COUNTDOWN SECTION (ARCHIVAL LETTERPRESS NUMERALS ON CARD PAPER) */}
           <section className="py-10 text-center border-b border-[#D4AF37]/30">
-            <span className="font-pinyon text-2xl sm:text-3xl font-bold block text-[#7A1423] mb-3">
-              ✦ The Auspicious Celebrations Commence In ✦
+            <span className="font-serif text-lg sm:text-2xl font-bold block text-[#7A1423] mb-3">
+              {t.countdownTitle}
             </span>
 
-            <div className="flex items-center justify-center gap-5 sm:gap-10 flex-wrap">
+            <div className="flex items-center justify-center gap-6 sm:gap-12 flex-wrap">
               {[
-                { label: 'Days', value: timeLeft.days },
-                { label: 'Hours', value: timeLeft.hours },
-                { label: 'Minutes', value: timeLeft.minutes },
-                { label: 'Seconds', value: timeLeft.seconds },
+                { label: t.daysLabel, value: timeLeft.days },
+                { label: t.hoursLabel, value: timeLeft.hours },
+                { label: t.minutesLabel, value: timeLeft.minutes },
+                { label: t.secondsLabel, value: timeLeft.seconds },
               ].map((unit, idx) => (
                 <div key={idx} className="flex flex-col items-center">
-                  <span className="font-pinyon text-4xl sm:text-6xl font-bold text-[#2C2218] tracking-tight">
+                  <span className="font-serif text-4xl sm:text-6xl font-bold text-[#2C2218] tracking-tight">
                     {String(unit.value).padStart(2, '0')}
                   </span>
-                  <span className="text-[10px] font-cinzel uppercase tracking-[0.2em] font-bold text-[#AA820A]">
+                  <span className="text-[11px] font-serif uppercase tracking-[0.2em] font-bold text-[#AA820A]">
                     {unit.label}
                   </span>
                 </div>
               ))}
             </div>
 
-            <p className="font-pinyon text-lg text-[#7D5F04] pt-3">
-              Every ticking second brings us closer to the sacred Saat Phere and lifelong union
+            <p className="font-cormorant italic text-base sm:text-lg text-[#7D5F04] pt-3">
+              {t.countdownDescription}
             </p>
           </section>
 
@@ -567,18 +508,18 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           <section className="py-12 border-b border-[#D4AF37]/30">
             <div className="text-center space-y-1 mb-6">
               <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
-                ॥ शुभ विवाह स्थल एवं मंडप ॥
+                {t.venueSubtitle}
               </span>
-              <h2 className="font-pinyon text-4xl sm:text-6xl text-[#2C2218] font-bold text-gold-shimmer">
+              <h2 className="font-serif text-3xl sm:text-5xl text-[#2C2218] font-bold">
                 {template.location.venueName}
               </h2>
-              <p className="font-pinyon text-2xl text-[#7D5F04]">
+              <p className="font-cormorant italic text-lg sm:text-xl text-[#7D5F04]">
                 {template.location.city}, {template.location.country}
               </p>
             </div>
 
-            {/* Watercolor Venue Plate */}
-            <div className="relative border-2 border-[#D4AF37]/60 p-2 sm:p-4 bg-white/40 shadow-inner rounded-sm max-w-2xl mx-auto my-4">
+            {/* Watercolor Venue Plate (Flat on Paper - Zero Shadows, Zero White Card Box) */}
+            <div className="relative border-2 border-[#D4AF37]/60 p-2 sm:p-4 bg-transparent max-w-2xl mx-auto my-4">
               <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-[#AA820A]" />
               <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-[#AA820A]" />
               <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-[#AA820A]" />
@@ -588,17 +529,17 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               <img
                 src={template.assets.venueImage}
                 alt={template.location.venueName}
-                className="w-full h-auto max-h-[460px] object-contain rounded-xs mx-auto"
+                className="w-full h-auto max-h-[460px] object-contain mx-auto"
               />
 
               <div className="text-center pt-2">
-                <span className="font-pinyon text-lg text-[#7D5F04] block">
-                  Plate I — Architectural watercolor view of the estate and mandap grounds
+                <span className="font-cormorant italic text-sm sm:text-base text-[#7D5F04] block">
+                  {t.venuePlateLabel}
                 </span>
               </div>
             </div>
 
-            <p className="font-cormorant italic text-base sm:text-lg text-[#544230] leading-relaxed text-center max-w-2xl mx-auto pt-2">
+            <p className="font-serif text-base sm:text-lg text-[#3D2817] leading-relaxed text-center max-w-2xl mx-auto pt-2">
               {template.location.description}
             </p>
 
@@ -607,9 +548,9 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                 href={template.location.googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-2.5 rounded-full text-white font-cinzel text-xs uppercase tracking-wider font-bold shadow-md hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 bg-[#7A1423] border border-[#D4AF37]"
+                className="px-6 py-2.5 rounded-full text-white font-serif text-xs uppercase tracking-wider font-bold shadow-md hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 bg-[#7A1423] border border-[#D4AF37]"
               >
-                <Compass className="w-4 h-4" /> Open In Google Maps
+                <Compass className="w-4 h-4" /> {t.venueMapsButton}
                 <ExternalLink className="w-3.5 h-3.5 ml-1" />
               </a>
             </div>
@@ -626,32 +567,33 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           <section className="py-12 border-b border-[#D4AF37]/30 space-y-8">
             <div className="text-center space-y-1">
               <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
-                ॥ मांगलिक कार्यक्रम सारिणी ॥
+                {t.programSubtitle}
               </span>
-              <h2 className="font-pinyon text-4xl sm:text-6xl text-[#2C2218] font-bold text-gold-shimmer">
-                Schedule of Celebrations
+              <h2 className="font-serif text-3xl sm:text-5xl text-[#2C2218] font-bold">
+                {t.programTitle}
               </h2>
-              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
-                Auspicious Vedic rituals, royal feasts, and starlit Sangeet celebrations
+              <p className="font-cormorant italic text-base sm:text-xl text-[#7D5F04]">
+                {t.programDescription}
               </p>
             </div>
 
+            {/* Timeline Spine on Paper */}
             <div className="relative border-l-2 border-[#D4AF37]/50 ml-4 sm:ml-12 pl-6 sm:pl-10 space-y-8">
-              {template.program.map((item, idx) => (
+              {t.programItems.map((item, idx) => (
                 <div key={idx} className="relative group">
                   {/* Decorative Golden Kalash / Dot pin */}
                   <div
-                    className="absolute -left-[31px] sm:-left-[47px] top-1.5 w-4 h-4 rounded-full border-2 border-white shadow-sm transition-transform group-hover:scale-125 bg-[#7A1423]"
+                    className="absolute -left-[31px] sm:-left-[47px] top-1.5 w-4 h-4 rounded-full border-2 border-[#FAF5E8] shadow-sm transition-transform group-hover:scale-125 bg-[#7A1423]"
                   />
 
-                  <div className="space-y-0.5">
-                    <span className="text-xs font-cormorant italic font-bold tracking-wider text-[#AA820A] block">
+                  <div className="space-y-1">
+                    <span className="text-xs font-serif uppercase tracking-wider font-bold text-[#AA820A] block">
                       ✦ {item.time}
                     </span>
-                    <h3 className="font-pinyon text-2xl sm:text-4xl text-[#2C2218] font-bold">
+                    <h3 className="font-serif text-xl sm:text-3xl text-[#2C2218] font-bold">
                       {item.title}
                     </h3>
-                    <p className="font-cormorant italic text-sm text-[#544230] leading-relaxed pt-0.5">
+                    <p className="font-serif text-base text-[#3D2817] leading-relaxed pt-0.5">
                       {item.description}
                     </p>
                   </div>
@@ -671,110 +613,120 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           <section className="py-12 border-b border-[#D4AF37]/30 space-y-6">
             <div className="text-center space-y-1">
               <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
-                ॥ संग संग सातों जनम ॥
+                {language === 'en' ? '॥ HOW WE MET & MILESTONES ॥' : '॥ संग संग सातों जनम ॥'}
               </span>
-              <h3 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
-                How We Met & Milestones
+              <h3 className="font-serif text-2xl sm:text-4xl text-[#2C2218] font-bold">
+                {language === 'en' ? 'How We Met & Milestones' : 'प्रेम के पावन पड़ाव'}
               </h3>
-              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
-                Every chapter written by destiny, celebrated with your blessings
+              <p className="font-cormorant italic text-base sm:text-lg text-[#7D5F04]">
+                {language === 'en'
+                  ? 'Every chapter written by destiny, celebrated with your blessings'
+                  : 'भाग्य द्वारा रचित प्रत्येक सुंदर अध्याय, आपके शुभाशीष से परिपूर्ण'}
               </p>
             </div>
-            <MilestoneSlider milestones={defaultStoryMilestones} />
+            <MilestoneSlider milestones={defaultStoryMilestones} language={language} />
           </section>
 
           {/* COUPLE TRIVIA CHALLENGE */}
           <section className="py-12 border-b border-[#D4AF37]/30 space-y-6">
             <div className="text-center space-y-1">
               <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
-                ॥ हँसी-ख़ुशी के पल ॥
+                {language === 'en' ? '॥ COUPLE TRIVIA & BANTER ॥' : '॥ हँसी-ख़ुशी के पल ॥'}
               </span>
-              <h3 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
-                The Couple Trivia Challenge
+              <h3 className="font-serif text-2xl sm:text-4xl text-[#2C2218] font-bold">
+                {language === 'en' ? 'The Couple Trivia Challenge' : 'हँसी-खुशी प्रश्नोत्तरी'}
               </h3>
-              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
-                Test how well you know {template.couple.partner1} & {template.couple.partner2} before the party!
+              <p className="font-cormorant italic text-base sm:text-lg text-[#7D5F04]">
+                {language === 'en'
+                  ? `Test how well you know ${template.couple.partner1} & ${template.couple.partner2} before the party!`
+                  : `विवाह से पूर्व देखें आप ${template.couple.partner1} और ${template.couple.partner2} को कितना जानते हैं!`}
               </p>
             </div>
-            <CoupleTrivia coupleNames={`${template.couple.partner1} & ${template.couple.partner2}`} />
+            <CoupleTrivia coupleNames={`${template.couple.partner1} & ${template.couple.partner2}`} language={language} />
           </section>
 
           {/* SANGEET DJ DANCE FLOOR SONG REQUEST BOX */}
           <section className="py-12 border-b border-[#D4AF37]/30 space-y-6">
             <div className="text-center space-y-1">
               <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold flex items-center justify-center gap-1.5">
-                <Music className="w-3.5 h-3.5 text-[#AA820A]" /> संगीत डांस फ्लोर फरमाइश
+                <Music className="w-3.5 h-3.5 text-[#AA820A]" /> {t.djSubtitle}
               </span>
-              <h3 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
-                Pre-Wedding DJ Song Request
+              <h3 className="font-serif text-2xl sm:text-4xl text-[#2C2218] font-bold">
+                {t.djTitle}
               </h3>
-              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
-                Submit your favorite Bollywood or Bhangra track — routed directly to our DJ console!
+              <p className="font-cormorant italic text-base sm:text-lg text-[#7D5F04]">
+                {t.djDescription}
               </p>
             </div>
-            <DjSongRequestBox weddingSlug={template.slug} />
+            <DjSongRequestBox weddingSlug={template.slug} language={language} />
           </section>
 
           {/* AUDIO BLESSINGS & AASHIRWAD RECORDER */}
           <section className="py-12 border-b border-[#D4AF37]/30 space-y-6">
             <div className="text-center space-y-1">
               <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold flex items-center justify-center gap-1.5">
-                <Mic className="w-3.5 h-3.5 text-[#AA820A]" /> ऑडियो शुभकामनाएँ एवं आशीर्वाद
+                <Mic className="w-3.5 h-3.5 text-[#AA820A]" /> {t.voiceSubtitle}
               </span>
-              <h3 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
-                Record a Voice Blessing
+              <h3 className="font-serif text-2xl sm:text-4xl text-[#2C2218] font-bold">
+                {t.voiceTitle}
               </h3>
-              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
-                Inscribe your heartfelt voice blessings for the bride & groom to cherish for lifetimes
+              <p className="font-cormorant italic text-base sm:text-lg text-[#7D5F04]">
+                {t.voiceDescription}
               </p>
             </div>
-            <VoiceBlessingRecorder weddingSlug={template.slug} />
+            <VoiceBlessingRecorder weddingSlug={template.slug} language={language} />
           </section>
 
           {/* ACCOMMODATIONS & GUEST HOSPITALITY (शाही मेहमान नवाज़ी) */}
           <section className="py-12 border-b border-[#D4AF37]/30 space-y-8">
             <div className="text-center space-y-1">
               <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
-                ॥ शाही मेहमान नवाज़ी ॥
+                {t.accommodationSubtitle}
               </span>
-              <h2 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
-                {template.accommodation.title}
+              <h2 className="font-serif text-3xl sm:text-5xl text-[#2C2218] font-bold">
+                {t.accommodationTitle}
               </h2>
-              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
-                {template.accommodation.description}
+              <p className="font-cormorant italic text-base sm:text-lg text-[#7D5F04]">
+                {t.accommodationDescription}
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {template.accommodation.hotels.map((hotel, idx) => (
+              {t.hotels.map((hotel, idx) => (
                 <div
                   key={idx}
-                  className="p-6 border border-[#D4AF37]/40 bg-[#FAF4E3]/40 rounded-xl flex flex-col justify-between"
+                  className="p-6 border border-[#D4AF37]/50 bg-transparent flex flex-col justify-between relative"
                 >
+                  {/* Traditional Corner Accents */}
+                  <div className="absolute top-1.5 left-1.5 w-2.5 h-2.5 border-t border-l border-[#D4AF37]" />
+                  <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 border-t border-r border-[#D4AF37]" />
+                  <div className="absolute bottom-1.5 left-1.5 w-2.5 h-2.5 border-b border-l border-[#D4AF37]" />
+                  <div className="absolute bottom-1.5 right-1.5 w-2.5 h-2.5 border-b border-r border-[#D4AF37]" />
+
                   <div className="space-y-1">
-                    <span className="text-xs font-cormorant italic text-[#AA820A] font-bold block">
+                    <span className="text-xs font-serif uppercase tracking-wider text-[#AA820A] font-bold block">
                       ✦ {hotel.distance}
                     </span>
-                    <h3 className="font-pinyon text-2xl sm:text-3xl text-[#2C2218] font-bold">
+                    <h3 className="font-serif text-xl sm:text-2xl text-[#2C2218] font-bold">
                       {hotel.name}
                     </h3>
-                    <p className="text-xs text-[#544230] leading-relaxed font-cormorant italic">
+                    <p className="text-sm text-[#4A321E] font-serif leading-relaxed">
                       {hotel.tier}
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-[#D4AF37]/20 mt-4 flex items-center justify-between">
+                  <div className="pt-4 border-t border-[#D4AF37]/25 mt-4 flex items-center justify-between">
                     <span className="font-serif text-xs text-[#7A1423] font-bold uppercase">
-                      Reserved Quarters
+                      {t.accommodationReservedLabel}
                     </span>
                     {hotel.bookingUrl && (
                       <a
                         href={hotel.bookingUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-4 py-1.5 rounded-full text-xs font-cinzel font-bold text-white uppercase tracking-wider flex items-center gap-1 hover:brightness-110 transition-all cursor-pointer bg-[#7A1423]"
+                        className="px-4 py-1.5 rounded-full text-xs font-serif font-bold text-white uppercase tracking-wider flex items-center gap-1 hover:brightness-110 transition-all cursor-pointer bg-[#7A1423] border border-[#D4AF37]"
                       >
-                        View Stay <ExternalLink className="w-3 h-3" />
+                        {t.accommodationViewStayButton} <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
                   </div>
@@ -794,15 +746,15 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           <section className="py-12 border-b border-[#D4AF37]/30 space-y-6">
             <div className="text-center space-y-1">
               <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
-                ॥ विवाह संबंधी आवश्यक जानकारी ॥
+                {t.faqSubtitle}
               </span>
-              <h2 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
-                Frequently Asked Questions
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#2C2218] font-bold">
+                {t.faqTitle}
               </h2>
             </div>
 
             <div className="space-y-3">
-              {template.faqs.map((faq, idx) => {
+              {t.faqs.map((faq, idx) => {
                 const isOpen = activeFaq === idx;
                 return (
                   <div
@@ -811,7 +763,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                   >
                     <button
                       onClick={() => setActiveFaq(isOpen ? null : idx)}
-                      className="w-full py-4 text-left flex items-center justify-between font-pinyon text-2xl text-[#2C2218] font-bold cursor-pointer"
+                      className="w-full py-4 text-left flex items-center justify-between font-serif text-lg sm:text-xl text-[#2C2218] font-bold cursor-pointer"
                     >
                       <span>{faq.question}</span>
                       <ChevronDown
@@ -822,7 +774,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                     </button>
 
                     {isOpen && (
-                      <div className="pb-4 pt-1 text-sm text-[#544230] leading-relaxed font-cormorant italic">
+                      <div className="pb-4 pt-1 text-base text-[#4A321E] leading-relaxed font-serif">
                         {faq.answer}
                       </div>
                     )}
@@ -836,34 +788,40 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           <section className="py-12 border-b border-[#D4AF37]/30 text-center space-y-4">
             <div className="space-y-1">
               <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
-                ॥ शुभ शगुन एवं आशीर्वाद ॥
+                {t.shagunSubtitle}
               </span>
-              <h2 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
-                Wedding Registry & Shagun
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#2C2218] font-bold">
+                {t.shagunTitle}
               </h2>
-              <p className="font-pinyon text-xl sm:text-2xl text-[#544230] max-w-md mx-auto">
-                {template.gifts.message}
+              <p className="font-cormorant italic text-base sm:text-lg text-[#544230] max-w-lg mx-auto">
+                {t.shagunDescription}
               </p>
             </div>
 
-            <div className="p-6 border border-[#D4AF37]/50 max-w-md mx-auto space-y-3 bg-[#FAF4E3]/40 rounded-xl">
+            <div className="p-6 sm:p-8 border border-[#D4AF37]/60 max-w-lg mx-auto space-y-4 bg-transparent relative">
+              {/* Corner Filigrees */}
+              <div className="absolute top-1.5 left-1.5 w-3 h-3 border-t-2 border-l-2 border-[#D4AF37]" />
+              <div className="absolute top-1.5 right-1.5 w-3 h-3 border-t-2 border-r-2 border-[#D4AF37]" />
+              <div className="absolute bottom-1.5 left-1.5 w-3 h-3 border-b-2 border-l-2 border-[#D4AF37]" />
+              <div className="absolute bottom-1.5 right-1.5 w-3 h-3 border-b-2 border-r-2 border-[#D4AF37]" />
+
               <span className="text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold block">
-                Digital Shagun / Registry IBAN
+                {t.shagunIbanLabel}
               </span>
 
-              <div className="bg-white/80 p-3 rounded-lg border border-[#D4AF37]/40 font-mono text-xs sm:text-sm text-[#2C2218] flex items-center justify-between">
-                <span className="truncate pr-2">{template.gifts.iban}</span>
+              <div className="border border-[#D4AF37]/50 p-3 font-mono text-sm text-[#2C2218] flex items-center justify-between bg-transparent">
+                <span className="truncate pr-2 font-bold">{template.gifts.iban}</span>
                 <button
                   onClick={handleCopyIban}
-                  className="p-1.5 rounded-lg bg-[#FAF4E3] border border-[#D4AF37]/40 text-[#7D5F04] hover:bg-[#F3E5AB] transition-colors shrink-0 cursor-pointer"
-                  title="Copy IBAN"
+                  className="px-3 py-1 border border-[#D4AF37] text-xs font-serif uppercase font-bold text-[#7A1423] hover:bg-[#FAF4E3] transition-colors shrink-0 cursor-pointer"
+                  title="Copy IBAN / UPI"
                 >
-                  {copiedIban ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                  {copiedIban ? t.shagunCopiedButton : t.shagunCopyButton}
                 </button>
               </div>
 
-              <p className="text-xs text-[#7D5F04] font-cormorant italic">
-                Account Holder: {template.gifts.accountHolder}
+              <p className="text-xs text-[#7D5F04] font-serif italic">
+                {t.shagunAccountHolderLabel}: {template.gifts.accountHolder}
               </p>
             </div>
           </section>
@@ -872,31 +830,32 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           <section id="rsvp-section" className="py-14 space-y-6">
             <div className="text-center space-y-1">
               <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
-                ॥ विवाह आमंत्रण स्वीकृति ॥
+                {t.rsvpSubtitle}
               </span>
-              <h3 className="font-pinyon text-4xl sm:text-6xl text-[#2C2218] font-bold text-gold-shimmer">
-                Reserve Your Royal Presence
+              <h3 className="font-serif text-3xl sm:text-5xl text-[#2C2218] font-bold">
+                {t.rsvpTitle}
               </h3>
-              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
-                Confirm your attendance with folded hands to receive your VIP Digital Entry Pass
+              <p className="font-cormorant italic text-base sm:text-lg text-[#7D5F04]">
+                {t.rsvpDescription}
               </p>
             </div>
             <GuestRsvpForm
               weddingSlug={template.slug}
               defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
+              language={language}
             />
           </section>
 
           {/* FOOTER */}
           <footer className="border-t border-[#D4AF37]/30 pt-10 pb-6 text-center text-xs space-y-2">
             <p className="font-serif text-sm font-bold text-[#7A1423] tracking-widest uppercase">
-              ॥ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः ॥
+              {t.footerShloka}
             </p>
-            <p className="font-pinyon text-3xl sm:text-4xl text-[#2C2218] font-bold">
+            <p className="font-pinyon text-3xl sm:text-5xl text-[#2C2218] font-bold">
               {template.couple.partner1} & {template.couple.partner2}
             </p>
-            <p className="font-pinyon text-xl text-[#7D5F04]">
-              Forever Begins Under The Sacred Stars • With Love From Sharma & Mehra Families
+            <p className="font-serif text-sm text-[#7D5F04]">
+              {t.footerFamilies}
             </p>
           </footer>
         </div>
@@ -905,10 +864,10 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
       {/* RSVP MODAL POPUP (SECONDARY ACCESS) */}
       {showRsvpModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 relative border border-[#E8DFC8] shadow-2xl animate-fade-in max-h-[90vh] overflow-y-auto">
+          <div className="bg-[#FAF5E8] max-w-md w-full p-6 sm:p-8 space-y-6 relative border-2 border-[#D4AF37] animate-fade-in max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setShowRsvpModal(false)}
-              className="absolute top-5 right-5 text-neutral-400 hover:text-black font-bold text-lg"
+              className="absolute top-5 right-5 text-neutral-500 hover:text-black font-bold text-lg cursor-pointer"
             >
               ✕
             </button>
@@ -916,56 +875,56 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
             {!rsvpSubmitted ? (
               <form onSubmit={handleRsvpSubmit} className="space-y-4">
                 <div className="text-center space-y-1">
-                  <span className="font-cinzel text-[10px] uppercase tracking-widest text-[#7D5F04] font-bold block">
-                    RSVP Confirmation
+                  <span className="font-serif text-xs uppercase tracking-widest text-[#7A1423] font-bold block">
+                    {t.rsvpSubtitle}
                   </span>
-                  <h3 className="font-serif text-2xl text-[#2C2218]">Will You Join Us?</h3>
-                  <p className="text-xs text-[#544230] font-sans">
-                    Kindly respond before November 01, 2027
+                  <h3 className="font-serif text-2xl text-[#2C2218] font-bold">{t.rsvpTitle}</h3>
+                  <p className="text-xs text-[#544230] font-serif">
+                    {t.rsvpDescription}
                   </p>
                 </div>
 
                 <div className="space-y-3 pt-2">
                   <div>
-                    <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-bold mb-1">
-                      Your Full Name
+                    <label className="block text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold mb-1">
+                      {t.rsvpNameLabel}
                     </label>
                     <input
                       type="text"
                       required
                       value={rsvpName}
                       onChange={(e) => setRsvpName(e.target.value)}
-                      placeholder="e.g. Aditya Singhania"
-                      className="w-full px-4 py-2.5 rounded-xl border border-[#E8DFC8] text-sm focus:outline-none focus:border-[#AA820A]"
+                      placeholder={t.rsvpNamePlaceholder}
+                      className="w-full bg-transparent border-0 border-b-2 border-[#D4AF37]/60 py-2 px-1 text-sm font-serif text-[#2C1810] focus:outline-none focus:border-[#7A1423]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-bold mb-1">
-                      Attendance Status
+                    <label className="block text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold mb-1">
+                      {language === 'en' ? 'Attendance' : 'उपस्थिति स्थिति'}
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         type="button"
                         onClick={() => setRsvpAttendance('attending')}
-                        className={`py-2.5 rounded-xl text-xs font-cinzel font-bold uppercase transition-all ${
+                        className={`py-2 text-xs font-serif font-bold uppercase transition-all border cursor-pointer ${
                           rsvpAttendance === 'attending'
-                            ? 'bg-[#2C2218] text-white shadow-sm'
-                            : 'bg-[#FAF8F5] text-[#544230] border border-[#E8DFC8]'
+                            ? 'bg-[#7A1423] text-white border-[#7A1423]'
+                            : 'bg-transparent text-[#544230] border-[#D4AF37]/50'
                         }`}
                       >
-                        Accept with Joy
+                        {t.rsvpAttendingOption}
                       </button>
                       <button
                         type="button"
                         onClick={() => setRsvpAttendance('declining')}
-                        className={`py-2.5 rounded-xl text-xs font-cinzel font-bold uppercase transition-all ${
+                        className={`py-2 text-xs font-serif font-bold uppercase transition-all border cursor-pointer ${
                           rsvpAttendance === 'declining'
-                            ? 'bg-[#2C2218] text-white shadow-sm'
-                            : 'bg-[#FAF8F5] text-[#544230] border border-[#E8DFC8]'
+                            ? 'bg-[#7A1423] text-white border-[#7A1423]'
+                            : 'bg-transparent text-[#544230] border-[#D4AF37]/50'
                         }`}
                       >
-                        Decline with Regret
+                        {t.rsvpDecliningOption}
                       </button>
                     </div>
                   </div>
@@ -974,13 +933,13 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                     <>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-bold mb-1">
-                            Total Guests
+                          <label className="block text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold mb-1">
+                            {t.rsvpGuestCountLabel}
                           </label>
                           <select
                             value={rsvpGuestsCount}
                             onChange={(e) => setRsvpGuestsCount(Number(e.target.value))}
-                            className="w-full px-3 py-2.5 rounded-xl border border-[#E8DFC8] text-sm focus:outline-none"
+                            className="w-full bg-transparent border-0 border-b-2 border-[#D4AF37]/60 py-2 px-1 text-sm font-serif text-[#2C1810] focus:outline-none"
                           >
                             <option value={1}>1 Guest</option>
                             <option value={2}>2 Guests</option>
@@ -990,33 +949,31 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                         </div>
 
                         <div>
-                          <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-bold mb-1">
-                            Dietary Preference
+                          <label className="block text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold mb-1">
+                            {language === 'en' ? 'Dietary Choice' : 'खान-पान'}
                           </label>
                           <select
                             value={rsvpDietary}
                             onChange={(e) => setRsvpDietary(e.target.value)}
-                            className="w-full px-3 py-2.5 rounded-xl border border-[#E8DFC8] text-sm focus:outline-none"
+                            className="w-full bg-transparent border-0 border-b-2 border-[#D4AF37]/60 py-2 px-1 text-sm font-serif text-[#2C1810] focus:outline-none"
                           >
-                            <option value="none">No Restrictions</option>
-                            <option value="vegetarian">Vegetarian</option>
-                            <option value="vegan">Vegan</option>
-                            <option value="gluten-free">Gluten Free</option>
+                            <option value="none">Pure Vegetarian</option>
                             <option value="jain">Jain / No Root</option>
+                            <option value="vegan">Vegan</option>
                           </select>
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-bold mb-1">
-                          Song Request for Sangeet / DJ
+                        <label className="block text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold mb-1">
+                          {t.djSongTitleLabel}
                         </label>
                         <input
                           type="text"
                           value={rsvpSongRequest}
                           onChange={(e) => setRsvpSongRequest(e.target.value)}
-                          placeholder="e.g. Gallan Goodiyaan, Kesariya"
-                          className="w-full px-4 py-2.5 rounded-xl border border-[#E8DFC8] text-sm focus:outline-none focus:border-[#AA820A]"
+                          placeholder={t.djSongTitlePlaceholder}
+                          className="w-full bg-transparent border-0 border-b-2 border-[#D4AF37]/60 py-2 px-1 text-sm font-serif text-[#2C1810] focus:outline-none focus:border-[#7A1423]"
                         />
                       </div>
                     </>
@@ -1025,38 +982,37 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-2xl text-white font-cinzel text-xs uppercase tracking-widest font-bold shadow-lg hover:brightness-110 active:scale-95 transition-all mt-4"
-                  style={{ backgroundColor: template.theme.colors.primary }}
+                  className="w-full py-3 rounded-full text-white font-serif text-xs uppercase tracking-widest font-bold shadow-md hover:brightness-110 active:scale-95 transition-all mt-4 cursor-pointer bg-gradient-to-r from-[#9B1C2E] to-[#7A1423] border border-[#D4AF37]"
                 >
-                  Confirm & Generate Digital Pass
+                  {t.rsvpSubmitButton}
                 </button>
               </form>
             ) : (
-              <div className="text-center space-y-5 py-4">
-                <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-700 mx-auto flex items-center justify-center font-bold text-xl">
+              <div className="text-center space-y-4 py-4">
+                <div className="w-12 h-12 rounded-full border-2 border-[#D4AF37] text-[#7A1423] mx-auto flex items-center justify-center font-bold text-xl">
                   ✓
                 </div>
-                <h3 className="font-serif text-2xl text-[#2C2218]">RSVP Confirmed</h3>
-                <p className="text-xs text-[#544230] leading-relaxed font-sans">
-                  Thank you, <span className="font-bold">{rsvpName}</span>! Your response has been recorded directly. Here is your VIP Digital Entry Pass:
+                <h3 className="font-serif text-2xl text-[#2C2218] font-bold">{t.rsvpSuccessTitle}</h3>
+                <p className="text-sm text-[#544230] leading-relaxed font-serif">
+                  {t.rsvpSuccessSubtitle}
                 </p>
 
                 {/* VIP Boarding Pass Card */}
-                <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#E8DFC8] space-y-3 text-left">
-                  <div className="flex justify-between items-center border-b border-[#E8DFC8] pb-2">
-                    <span className="font-cinzel text-xs font-bold text-[#AA820A]">VIP ACCESS PASS</span>
-                    <span className="font-mono text-xs text-neutral-400">{guestPassQr}</span>
+                <div className="p-4 border border-[#D4AF37] space-y-2 text-left bg-[#FAF5E8]">
+                  <div className="flex justify-between items-center border-b border-[#D4AF37]/40 pb-2">
+                    <span className="font-serif text-xs font-bold text-[#7A1423]">VIP ACCESS PASS</span>
+                    <span className="font-mono text-xs text-[#7D5F04]">{guestPassQr}</span>
                   </div>
                   <div className="text-xs space-y-1">
                     <p className="font-serif font-bold text-base text-[#2C2218]">{rsvpName}</p>
-                    <p className="text-neutral-500 font-sans">{template.couple.formalTitle}</p>
-                    <p className="text-neutral-500 font-sans">{template.location.venueName} • {template.ceremony.displayDate}</p>
+                    <p className="text-[#544230] font-serif">{template.couple.formalTitle}</p>
+                    <p className="text-[#544230] font-serif">{template.location.venueName} • {template.ceremony.displayDate}</p>
                   </div>
                 </div>
 
                 <button
                   onClick={() => setShowRsvpModal(false)}
-                  className="px-6 py-2.5 rounded-full bg-[#2C2218] text-white font-cinzel text-xs uppercase tracking-wider font-bold"
+                  className="px-6 py-2 rounded-full bg-[#7A1423] text-white font-serif text-xs uppercase tracking-wider font-bold cursor-pointer"
                 >
                   Close
                 </button>

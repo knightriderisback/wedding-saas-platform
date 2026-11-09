@@ -1,30 +1,35 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { VoiceBlessing } from '@/types/wedding';
-import { uploadMediaFile, addVoiceBlessing } from '@/lib/firebase';
-import confetti from 'canvas-confetti';
 import { Mic, Square, Play, Pause, Send, Check } from 'lucide-react';
+import confetti from 'canvas-confetti';
+import { addVoiceBlessing } from '@/lib/firebase';
+import { INVITATION_TRANSLATIONS, InvitationLanguage } from '@/lib/invitationI18n';
 
 interface VoiceBlessingRecorderProps {
   weddingSlug: string;
   defaultGuestName?: string;
+  language?: InvitationLanguage;
 }
 
 export const VoiceBlessingRecorder: React.FC<VoiceBlessingRecorderProps> = ({
   weddingSlug,
   defaultGuestName = '',
+  language = 'en',
 }) => {
-  const [guestName, setGuestName] = useState(defaultGuestName);
   const [isRecording, setIsRecording] = useState(false);
-  const [recordSeconds, setRecordSeconds] = useState(0);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [recordSeconds, setRecordSeconds] = useState(0);
+  const [guestName, setGuestName] = useState(defaultGuestName);
   const [isUploading, setIsUploading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const t = INVITATION_TRANSLATIONS[language];
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<number | null>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
 
@@ -33,14 +38,14 @@ export const VoiceBlessingRecorder: React.FC<VoiceBlessingRecorderProps> = ({
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
-      const chunks: Blob[] = [];
+      audioChunksRef.current = [];
 
       mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) chunks.push(e.data);
+        if (e.data.size > 0) audioChunksRef.current.push(e.data);
       };
 
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'audio/webm' });
+        const blob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         setAudioBlob(blob);
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
@@ -55,7 +60,7 @@ export const VoiceBlessingRecorder: React.FC<VoiceBlessingRecorderProps> = ({
         setRecordSeconds((prev) => prev + 1);
       }, 1000);
     } catch {
-      alert('Microphone access is required to record your voice blessing.');
+      alert(language === 'en' ? 'Microphone access is required to record your voice blessing.' : 'कृपया मंगल आशीर्वाद रिकॉर्ड करने के लिए माइक्रोफोन की अनुमति दें।');
     }
   };
 
@@ -79,22 +84,17 @@ export const VoiceBlessingRecorder: React.FC<VoiceBlessingRecorderProps> = ({
   };
 
   const handleUploadBlessing = async () => {
-    if (!audioBlob) return;
+    if (!audioBlob && !audioUrl) return;
     setIsUploading(true);
 
     try {
-      const storagePath = `weddings/${weddingSlug}/blessings/blessing_${Date.now()}.webm`;
-      const uploadedUrl = await uploadMediaFile(audioBlob, storagePath);
-
-      const blessing: VoiceBlessing = {
-        id: `bless-${Date.now()}`,
-        guestName: guestName.trim() || 'Loving Family Member',
-        audioBlobUrl: uploadedUrl,
+      await addVoiceBlessing(weddingSlug, {
+        id: `v-${Date.now()}`,
+        guestName: guestName.trim() || (language === 'en' ? 'Honored Elder & Family' : 'आदरणीय परिजन'),
+        audioBlobUrl: audioUrl || '',
         durationSec: recordSeconds,
         timestamp: 'Just now',
-      };
-
-      await addVoiceBlessing(weddingSlug, blessing);
+      });
 
       setIsUploading(false);
       setIsSuccess(true);
@@ -110,83 +110,90 @@ export const VoiceBlessingRecorder: React.FC<VoiceBlessingRecorderProps> = ({
         setAudioBlob(null);
         setAudioUrl(null);
         setRecordSeconds(0);
-      }, 4000);
+      }, 5000);
     } catch {
       setIsUploading(false);
     }
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-[#FDFBF7] paper-deckle rounded-2xl p-6 sm:p-8 shadow-[0_15px_45px_rgba(180,140,70,0.14)]">
-      <div className="flex items-center justify-between border-b border-[#E8DFC8] pb-3 mb-4">
-        <span className="font-cinzel text-[10px] tracking-widest uppercase text-[#AA820A] font-bold flex items-center gap-1.5">
-          <Mic className="w-3.5 h-3.5 text-[#D4AF37]" />
-          Aashirwad Voice Recorder
+    <div className="max-w-xl mx-auto border border-[#D4AF37]/60 bg-transparent p-6 sm:p-8 relative">
+      {/* Traditional Indian Corner Filigrees */}
+      <div className="absolute top-1.5 left-1.5 w-3 h-3 border-t-2 border-l-2 border-[#D4AF37]" />
+      <div className="absolute top-1.5 right-1.5 w-3 h-3 border-t-2 border-r-2 border-[#D4AF37]" />
+      <div className="absolute bottom-1.5 left-1.5 w-3 h-3 border-b-2 border-l-2 border-[#D4AF37]" />
+      <div className="absolute bottom-1.5 right-1.5 w-3 h-3 border-b-2 border-r-2 border-[#D4AF37]" />
+
+      {/* Header Line on Paper */}
+      <div className="flex items-center justify-between border-b border-[#D4AF37]/30 pb-3 mb-4">
+        <span className="font-cinzel text-xs tracking-widest uppercase text-[#7A1423] font-bold flex items-center gap-1.5">
+          <Mic className="w-3.5 h-3.5 text-[#AA820A]" />
+          {t.voiceBadge}
         </span>
-        <span className="text-[10px] text-[#7D5F04] font-mono">
-          Vedic Spoken Vows
+        <span className="text-xs text-[#7D5F04] font-serif italic">
+          {language === 'en' ? 'Vedic Spoken Vows' : 'वाणी आशीर्वाद'}
         </span>
       </div>
 
-      <p className="font-cormorant italic text-sm text-[#544230] mb-4">
-        Leave a personal spoken voice message or Sanskrit mantra for Rohit & Priya’s forever wedding keepsake.
+      <p className="font-cormorant italic text-base text-[#3D2817] leading-relaxed mb-6">
+        {t.voiceDescription}
       </p>
 
       {isSuccess ? (
-        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-400 text-center space-y-1 animate-fade-in">
-          <Check className="w-6 h-6 text-emerald-600 mx-auto" />
-          <h5 className="font-serif text-base text-emerald-950 font-semibold">
-            Voice Blessing Preserved!
+        <div className="p-4 border border-emerald-600/40 text-center space-y-1 animate-fade-in bg-emerald-50/40">
+          <Check className="w-6 h-6 text-emerald-700 mx-auto" />
+          <h5 className="font-serif text-lg text-emerald-950 font-bold">
+            {t.voiceSuccessTitle}
           </h5>
-          <p className="text-xs text-emerald-800">
-            Your heartfelt words have been placed in the couple's royal memory vault.
+          <p className="text-xs text-emerald-900 font-cormorant italic">
+            {t.voiceSuccessText}
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div>
-            <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-semibold mb-1">
-              Your Name *
+            <label className="block text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold mb-1">
+              {language === 'en' ? 'Your Name & Family Designation *' : 'आपका शुभ नाम एवं परिचय *'}
             </label>
             <input
               type="text"
               value={guestName}
               onChange={(e) => setGuestName(e.target.value)}
-              placeholder="e.g. Dadi Shanti Sharma / Chacha Ji"
-              className="w-full bg-[#FAF8F5] border border-[#E8DFC8] rounded-xl py-2 px-3 text-xs text-[#2C2218] focus:outline-none focus:border-[#D4AF37]"
+              placeholder={t.voiceNamePlaceholder}
+              className="w-full bg-transparent border-0 border-b-2 border-[#D4AF37]/50 focus:border-[#7A1423] py-2 px-1 text-sm text-[#2C1810] font-serif placeholder:text-[#8C7A68] focus:outline-none transition-colors"
             />
           </div>
 
-          {/* Recording UI */}
-          <div className="bg-[#FAF8F5] border border-[#E8DFC8] rounded-xl p-6 text-center flex flex-col items-center justify-center space-y-3">
+          {/* Recording UI Frame on Paper */}
+          <div className="border border-[#D4AF37]/40 p-6 text-center flex flex-col items-center justify-center space-y-4">
             {!audioUrl ? (
               <>
                 <button
                   type="button"
                   onClick={isRecording ? stopRecording : startRecording}
-                  className={`w-16 h-16 rounded-full flex items-center justify-center transition-all ${
+                  className={`w-16 h-16 rounded-full flex items-center justify-center transition-all cursor-pointer ${
                     isRecording
-                      ? 'bg-[#9B1C2E] text-white animate-pulse shadow-[0_0_20px_rgba(155,28,46,0.6)]'
-                      : 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black hover:brightness-110 shadow-[0_5px_20px_rgba(212,175,55,0.4)]'
+                      ? 'bg-[#9B1C2E] text-white animate-pulse shadow-md border-2 border-[#D4AF37]'
+                      : 'bg-[#7A1423] text-white hover:brightness-110 border-2 border-[#D4AF37]'
                   }`}
                 >
-                  {isRecording ? <Square className="w-6 h-6 text-white" /> : <Mic className="w-7 h-7 text-black" />}
+                  {isRecording ? <Square className="w-6 h-6 text-white" /> : <Mic className="w-7 h-7 text-[#F3E5AB]" />}
                 </button>
 
-                <div className="text-xs font-mono text-[#544230]">
+                <div className="text-xs font-serif italic text-[#543F02]">
                   {isRecording ? (
                     <span className="text-[#9B1C2E] font-bold flex items-center gap-1.5 justify-center">
                       <span className="w-2 h-2 rounded-full bg-[#9B1C2E] animate-ping" />
-                      Recording... {recordSeconds}s (Tap square to stop)
+                      {language === 'en' ? `Recording... ${recordSeconds}s (Tap square to stop)` : `रिकॉर्डिंग जारी... ${recordSeconds} सेकंड (रोकने हेतु वर्ग छुएं)`}
                     </span>
                   ) : (
-                    'Tap microphone to speak your warm blessings'
+                    t.voiceInstructions
                   )}
                 </div>
               </>
             ) : (
               /* Review Recorded Audio */
-              <div className="w-full space-y-3">
+              <div className="w-full space-y-4">
                 <audio
                   ref={audioPlayerRef}
                   src={audioUrl}
@@ -198,18 +205,18 @@ export const VoiceBlessingRecorder: React.FC<VoiceBlessingRecorderProps> = ({
                   <button
                     type="button"
                     onClick={togglePlayback}
-                    className="w-12 h-12 rounded-full bg-[#FAF4E3] border border-[#D4AF37] text-[#7D5F04] flex items-center justify-center hover:bg-[#F3E5AB] transition-all shadow"
+                    className="w-12 h-12 rounded-full border border-[#D4AF37] text-[#7A1423] flex items-center justify-center hover:bg-[#FAF4E3] transition-all cursor-pointer"
                   >
                     {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
                   </button>
 
-                  <div className="text-left text-xs font-mono text-[#2C2218]">
-                    <p className="font-semibold">Voice Blessing Recorded</p>
-                    <p className="text-[#7D5F04]">{recordSeconds} seconds duration</p>
+                  <div className="text-left text-xs font-serif text-[#2C1810]">
+                    <p className="font-bold">{language === 'en' ? 'Voice Blessing Recorded' : 'मंगल आशीर्वाद रिकॉर्ड हो गया'}</p>
+                    <p className="text-[#7D5F04] font-cormorant italic">{recordSeconds} {language === 'en' ? 'seconds duration' : 'सेकंड अवधि'}</p>
                   </div>
                 </div>
 
-                <div className="flex gap-2 pt-2">
+                <div className="flex gap-3 pt-2">
                   <button
                     type="button"
                     onClick={() => {
@@ -217,18 +224,18 @@ export const VoiceBlessingRecorder: React.FC<VoiceBlessingRecorderProps> = ({
                       setAudioUrl(null);
                       setRecordSeconds(0);
                     }}
-                    className="flex-1 py-2 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8] text-[#544230] font-cinzel text-xs uppercase"
+                    className="flex-1 py-2.5 rounded-full border border-[#D4AF37]/60 text-[#543F02] font-serif text-xs uppercase tracking-wider hover:bg-[#FAF4E3] transition-all cursor-pointer"
                   >
-                    Re-Record
+                    {t.voiceReRecord}
                   </button>
                   <button
                     type="button"
                     onClick={handleUploadBlessing}
                     disabled={isUploading}
-                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black font-cinzel text-xs uppercase font-bold shadow hover:brightness-110 flex items-center justify-center gap-1.5"
+                    className="flex-1 py-2.5 rounded-full bg-gradient-to-r from-[#9B1C2E] to-[#7A1423] text-white font-serif text-xs uppercase font-bold tracking-wider hover:brightness-110 flex items-center justify-center gap-1.5 border border-[#D4AF37] cursor-pointer"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    {isUploading ? 'Preserving...' : 'Send Blessing'}
+                    {isUploading ? t.voiceSubmittingButton : t.voiceSubmitButton}
                   </button>
                 </div>
               </div>

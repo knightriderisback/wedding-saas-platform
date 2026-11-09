@@ -5,17 +5,20 @@ import { SongRequest } from '@/types/wedding';
 import { addDjSongRequest } from '@/lib/firebase';
 import confetti from 'canvas-confetti';
 import { Music, Send, Check } from 'lucide-react';
+import { INVITATION_TRANSLATIONS, InvitationLanguage } from '@/lib/invitationI18n';
 
 interface DjSongRequestBoxProps {
   weddingSlug: string;
   defaultGuestName?: string;
   existingSongs?: SongRequest[];
+  language?: InvitationLanguage;
 }
 
 export const DjSongRequestBox: React.FC<DjSongRequestBoxProps> = ({
   weddingSlug,
   defaultGuestName = '',
   existingSongs = [],
+  language = 'en',
 }) => {
   const [songTitle, setSongTitle] = useState('');
   const [artist, setArtist] = useState('');
@@ -24,6 +27,8 @@ export const DjSongRequestBox: React.FC<DjSongRequestBoxProps> = ({
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const t = INVITATION_TRANSLATIONS[language];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,127 +60,136 @@ export const DjSongRequestBox: React.FC<DjSongRequestBoxProps> = ({
     setArtist('');
     setNotes('');
 
-    setTimeout(() => setIsSuccess(false), 4000);
+    setTimeout(() => setIsSuccess(false), 5000);
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-[#FDFBF7] paper-deckle rounded-2xl p-6 sm:p-8 shadow-[0_15px_45px_rgba(180,140,70,0.14)]">
-      <div className="flex items-center justify-between border-b border-[#E8DFC8] pb-3 mb-4">
-        <span className="font-cinzel text-[10px] tracking-widest uppercase text-[#AA820A] font-bold flex items-center gap-1.5">
-          <Music className="w-3.5 h-3.5 text-[#D4AF37]" />
-          Sangeet Crowd Song Request
+    <div className="max-w-xl mx-auto border border-[#D4AF37]/60 bg-transparent p-6 sm:p-8 relative">
+      {/* Traditional Indian Corner Filigrees */}
+      <div className="absolute top-1.5 left-1.5 w-3 h-3 border-t-2 border-l-2 border-[#D4AF37]" />
+      <div className="absolute top-1.5 right-1.5 w-3 h-3 border-t-2 border-r-2 border-[#D4AF37]" />
+      <div className="absolute bottom-1.5 left-1.5 w-3 h-3 border-b-2 border-l-2 border-[#D4AF37]" />
+      <div className="absolute bottom-1.5 right-1.5 w-3 h-3 border-b-2 border-r-2 border-[#D4AF37]" />
+
+      {/* Header Line on Paper */}
+      <div className="flex items-center justify-between border-b border-[#D4AF37]/30 pb-3 mb-4">
+        <span className="font-cinzel text-xs tracking-widest uppercase text-[#7A1423] font-bold flex items-center gap-1.5">
+          <Music className="w-3.5 h-3.5 text-[#AA820A]" />
+          {t.djBadge}
         </span>
-        <span className="text-[10px] text-[#7D5F04] font-mono">
-          Direct to DJ Console
+        <span className="text-xs text-[#7D5F04] font-serif italic">
+          {t.djDirectConsole}
         </span>
       </div>
 
-      <p className="font-cormorant italic text-sm text-[#544230] mb-4">
-        What track will get you racing to the dance floor? Tell our official DJ in advance so your anthem is queued!
+      <p className="font-cormorant italic text-base text-[#3D2817] leading-relaxed mb-6">
+        {t.djDescription}
       </p>
 
       {isSuccess ? (
-        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-400 text-center space-y-1 animate-fade-in">
-          <Check className="w-6 h-6 text-emerald-600 mx-auto" />
-          <h5 className="font-serif text-base text-emerald-950 font-semibold">
-            Track Submitted to DJ Setlist!
+        <div className="p-4 border border-emerald-600/40 text-center space-y-1 animate-fade-in bg-emerald-50/40">
+          <Check className="w-6 h-6 text-emerald-700 mx-auto" />
+          <h5 className="font-serif text-lg text-emerald-950 font-bold">
+            {t.djSuccessTitle}
           </h5>
-          <p className="text-xs text-emerald-800">
-            Keep your dancing shoes ready for the Sangeet night at Udaivilas.
+          <p className="text-xs text-emerald-900 font-cormorant italic">
+            {t.djSuccessText}
           </p>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-semibold mb-1">
-              Song Title *
+            <label className="block text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold mb-1">
+              {t.djSongTitleLabel} *
             </label>
             <input
               type="text"
               required
               value={songTitle}
               onChange={(e) => setSongTitle(e.target.value)}
-              placeholder="e.g. London Thumakda / Kesariya / Kala Chashma"
-              className="w-full bg-[#FAF8F5] border border-[#E8DFC8] rounded-xl py-2 px-3 text-[#2C2218] placeholder:text-neutral-400 focus:outline-none focus:border-[#D4AF37]"
+              placeholder={t.djSongTitlePlaceholder}
+              className="w-full bg-transparent border-0 border-b-2 border-[#D4AF37]/50 focus:border-[#7A1423] py-2 px-1 text-sm text-[#2C1810] font-serif placeholder:text-[#8C7A68] focus:outline-none transition-colors"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-semibold mb-1">
-                Artist / Movie
+              <label className="block text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold mb-1">
+                {t.djArtistLabel}
               </label>
               <input
                 type="text"
                 value={artist}
                 onChange={(e) => setArtist(e.target.value)}
-                placeholder="e.g. Arijit Singh"
-                className="w-full bg-[#FAF8F5] border border-[#E8DFC8] rounded-xl py-2 px-3 text-[#2C2218] placeholder:text-neutral-400 focus:outline-none focus:border-[#D4AF37]"
+                placeholder={t.djArtistPlaceholder}
+                className="w-full bg-transparent border-0 border-b-2 border-[#D4AF37]/50 focus:border-[#7A1423] py-2 px-1 text-sm text-[#2C1810] font-serif placeholder:text-[#8C7A68] focus:outline-none transition-colors"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-semibold mb-1">
-                Your Name
+              <label className="block text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold mb-1">
+                {t.djNameLabel}
               </label>
               <input
                 type="text"
                 value={guestName}
                 onChange={(e) => setGuestName(e.target.value)}
-                placeholder="Your Name"
-                className="w-full bg-[#FAF8F5] border border-[#E8DFC8] rounded-xl py-2 px-3 text-[#2C2218] placeholder:text-neutral-400 focus:outline-none focus:border-[#D4AF37]"
+                placeholder={t.djNamePlaceholder}
+                className="w-full bg-transparent border-0 border-b-2 border-[#D4AF37]/50 focus:border-[#7A1423] py-2 px-1 text-sm text-[#2C1810] font-serif placeholder:text-[#8C7A68] focus:outline-none transition-colors"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-semibold mb-1">
-                Mobile (for dedications)
+              <label className="block text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold mb-1">
+                {t.djPhoneLabel}
               </label>
               <input
                 type="tel"
                 value={guestPhone}
                 onChange={(e) => setGuestPhone(e.target.value)}
-                placeholder="+91 98200 12345"
-                className="w-full bg-[#FAF8F5] border border-[#E8DFC8] rounded-xl py-2 px-3 text-[#2C2218] placeholder:text-neutral-400 focus:outline-none font-mono"
+                placeholder={t.djPhonePlaceholder}
+                className="w-full bg-transparent border-0 border-b-2 border-[#D4AF37]/50 focus:border-[#7A1423] py-2 px-1 text-sm text-[#2C1810] font-serif placeholder:text-[#8C7A68] focus:outline-none transition-colors"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-cinzel uppercase text-[#7D5F04] font-semibold mb-1">
-                Timing / Squad Note
+              <label className="block text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold mb-1">
+                {t.djNotesLabel}
               </label>
               <input
                 type="text"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="e.g. For Bride's entry"
-                className="w-full bg-[#FAF8F5] border border-[#E8DFC8] rounded-xl py-2 px-3 text-[#2C2218] placeholder:text-neutral-400 focus:outline-none"
+                placeholder={t.djNotesPlaceholder}
+                className="w-full bg-transparent border-0 border-b-2 border-[#D4AF37]/50 focus:border-[#7A1423] py-2 px-1 text-sm text-[#2C1810] font-serif placeholder:text-[#8C7A68] focus:outline-none transition-colors"
               />
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black font-cinzel text-xs uppercase font-bold shadow-md hover:brightness-110 flex items-center justify-center gap-1.5 transition-all"
-          >
-            <Send className="w-3.5 h-3.5" />
-            {isSubmitting ? 'Sending to DJ...' : 'Submit Track to Official DJ'}
-          </button>
+          <div className="pt-3">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-3 rounded-full bg-gradient-to-r from-[#9B1C2E] to-[#7A1423] text-white font-serif text-sm uppercase tracking-wider font-bold shadow-md hover:brightness-110 flex items-center justify-center gap-2 transition-all cursor-pointer border border-[#D4AF37]"
+            >
+              <Send className="w-3.5 h-3.5" />
+              {isSubmitting ? t.djSubmittingButton : t.djSubmitButton}
+            </button>
+          </div>
         </form>
       )}
 
-      {/* Recent requests snippet */}
+      {/* Recent requests */}
       {existingSongs.length > 0 && (
-        <div className="mt-4 pt-3 border-t border-[#E8DFC8]">
-          <span className="text-[10px] font-cinzel uppercase text-[#7D5F04] font-semibold block mb-2">
-            Recently Requested by Guests:
+        <div className="mt-6 pt-3 border-t border-[#D4AF37]/30">
+          <span className="text-xs font-serif uppercase tracking-wider text-[#7D5F04] font-bold block mb-2">
+            {language === 'en' ? 'Recent Sangeet Requests:' : 'अतिथियों द्वारा हाल ही में फरमाए गए गीत:'}
           </span>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2">
             {existingSongs.slice(0, 4).map((s) => (
               <span
                 key={s.id}
-                className="px-2.5 py-1 rounded-full bg-[#FAF4E3] border border-[#D4AF37]/30 text-[#543F02] text-[10px] font-sans"
+                className="px-3 py-1 border border-[#D4AF37]/40 text-[#4A321E] text-xs font-serif italic"
               >
                 🎵 {s.songTitle}
               </span>
