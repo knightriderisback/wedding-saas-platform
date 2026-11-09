@@ -217,11 +217,19 @@ function LuxuryGuestMicrositeContent() {
         }}
       />
 
-      {/* Floating Rose Petal Shower Button & Canvas */}
-      <RosePetalShower />
+      {/* FULL MICROSITE BODY (Strictly locked & hidden until 3D Wax Seal is broken) */}
+      <div
+        className={`transition-all duration-1000 ease-out ${
+          envelopeOpened
+            ? 'opacity-100 translate-y-0 filter-none pointer-events-auto'
+            : 'opacity-0 translate-y-8 blur-xs pointer-events-none max-h-screen overflow-hidden'
+        }`}
+      >
+        {/* Floating Rose Petal Shower Button & Canvas */}
+        <RosePetalShower />
 
-      {/* Sticky Top Luxury Bar */}
-      <nav className="sticky top-0 z-30 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#E8DFC8] px-4 py-3 shadow-sm">
+        {/* Sticky Top Luxury Bar */}
+        <nav className="sticky top-0 z-30 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#E8DFC8] px-4 py-3 shadow-sm">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#AA820A] via-[#D4AF37] to-[#FAF4E3] flex items-center justify-center text-black font-cinzel font-bold text-xs shadow-sm">
@@ -663,6 +671,7 @@ function LuxuryGuestMicrositeContent() {
           ))}
         </div>
       </section>
+      </div>
     </div>
   );
 }

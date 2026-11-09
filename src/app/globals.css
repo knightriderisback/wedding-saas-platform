@@ -26,6 +26,252 @@
   }
 }
 
+/* =========================================================================
+   AUTHENTIC KHADI & RAW COTTON LINEN FABRIC TEXTURES
+   ========================================================================= */
+
+/* Realistic Khadi Cloth Weave Pattern with Natural Thread Irregularities */
+.bg-khadi-fabric {
+  background-color: #FAF7F2;
+  background-image: 
+    linear-gradient(90deg, rgba(160, 120, 60, 0.035) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(160, 120, 60, 0.035) 1px, transparent 1px),
+    linear-gradient(45deg, rgba(212, 175, 55, 0.02) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, rgba(253, 251, 247, 0.9) 0%, rgba(250, 247, 242, 0.95) 100%);
+  background-size: 8px 8px, 8px 8px, 16px 16px, 100% 100%;
+}
+
+/* Soft Woven Linen Raw Texture */
+.bg-linen-raw {
+  background-color: #F8F5EE;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(180, 140, 80, 0.025) 0, rgba(180, 140, 80, 0.025) 1px, transparent 0, transparent 6px),
+    repeating-linear-gradient(-45deg, rgba(180, 140, 80, 0.025) 0, rgba(180, 140, 80, 0.025) 1px, transparent 0, transparent 6px);
+}
+
+/* =========================================================================
+   SOFT ACRYLIC GLASS & CHROMATIC PASTEL PANELS
+   ========================================================================= */
+
+/* Soft Acrylic Glass Base */
+.acrylic-glass {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 8px 32px 0 rgba(160, 120, 50, 0.07),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Soft Honey Amber Acrylic */
+.acrylic-amber {
+  background: linear-gradient(135deg, rgba(255, 248, 230, 0.88) 0%, rgba(253, 243, 215, 0.82) 100%);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(230, 195, 115, 0.45);
+  box-shadow: 
+    0 10px 30px -5px rgba(212, 175, 55, 0.12),
+    inset 0 1px 2px rgba(255, 255, 255, 0.85);
+}
+
+/* Soft Rose Quartz Acrylic */
+.acrylic-rose {
+  background: linear-gradient(135deg, rgba(254, 242, 244, 0.88) 0%, rgba(252, 230, 234, 0.82) 100%);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(235, 175, 185, 0.45);
+  box-shadow: 
+    0 10px 30px -5px rgba(184, 40, 61, 0.10),
+    inset 0 1px 2px rgba(255, 255, 255, 0.85);
+}
+
+/* Soft Sage Celadon Acrylic */
+.acrylic-sage {
+  background: linear-gradient(135deg, rgba(240, 246, 242, 0.88) 0%, rgba(228, 238, 231, 0.82) 100%);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(145, 180, 155, 0.45);
+  box-shadow: 
+    0 10px 30px -5px rgba(85, 122, 101, 0.10),
+    inset 0 1px 2px rgba(255, 255, 255, 0.85);
+}
+
+/* Soft Royal Lilac Acrylic */
+.acrylic-lilac {
+  background: linear-gradient(135deg, rgba(247, 243, 250, 0.88) 0%, rgba(238, 230, 245, 0.82) 100%);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(195, 175, 215, 0.45);
+  box-shadow: 
+    0 10px 30px -5px rgba(140, 100, 180, 0.10),
+    inset 0 1px 2px rgba(255, 255, 255, 0.85);
+}
+
+/* Soft Sky Azure Acrylic */
+.acrylic-azure {
+  background: linear-gradient(135deg, rgba(240, 246, 252, 0.88) 0%, rgba(225, 238, 248, 0.82) 100%);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(160, 195, 225, 0.45);
+  box-shadow: 
+    0 10px 30px -5px rgba(70, 120, 180, 0.10),
+    inset 0 1px 2px rgba(255, 255, 255, 0.85);
+}
+
+/* =========================================================================
+   3D CARDS WITH BEVEL, DEPTH & TACTILE SHADOWS
+   ========================================================================= */
+
+.card-3d {
+  position: relative;
+  border-radius: 1.25rem;
+  background-color: #FFFFFF;
+  border: 1px solid #E8DFC8;
+  box-shadow: 
+    0 1px 2px 0 rgba(0, 0, 0, 0.03),
+    0 8px 24px -4px rgba(180, 140, 60, 0.10),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-3d:hover {
+  transform: translateY(-3px) scale(1.006);
+  box-shadow: 
+    0 16px 36px -6px rgba(180, 140, 60, 0.16),
+    0 4px 12px 0 rgba(0, 0, 0, 0.04),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 1);
+}
+
+.card-3d-elevated {
+  position: relative;
+  border-radius: 1.5rem;
+  background: #FFFFFF;
+  border: 1px solid #E8DFC8;
+  box-shadow: 
+    0 18px 45px -8px rgba(160, 120, 40, 0.14),
+    0 4px 14px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* =========================================================================
+   3D FLOATING BUBBLES & GLASS ORBS
+   ========================================================================= */
+
+@keyframes floatOrbSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
+  33% {
+    transform: translateY(-16px) rotate(4deg) scale(1.03);
+  }
+  66% {
+    transform: translateY(8px) rotate(-3deg) scale(0.98);
+  }
+}
+
+@keyframes floatOrbFast {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-22px) scale(1.06);
+  }
+}
+
+.bubble-3d {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 245, 220, 0.45) 45%, rgba(212, 175, 55, 0.15) 75%, rgba(170, 130, 10, 0.25) 100%);
+  box-shadow: 
+    0 12px 30px rgba(180, 140, 50, 0.12),
+    inset 0 -6px 12px rgba(160, 120, 20, 0.15),
+    inset 0 4px 8px rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  animation: floatOrbSlow 12s ease-in-out infinite;
+}
+
+.bubble-3d-rose {
+  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 220, 228, 0.45) 45%, rgba(184, 40, 61, 0.15) 75%, rgba(155, 28, 46, 0.25) 100%);
+  box-shadow: 
+    0 12px 30px rgba(184, 40, 61, 0.12),
+    inset 0 -6px 12px rgba(155, 28, 46, 0.15),
+    inset 0 4px 8px rgba(255, 255, 255, 0.95);
+  animation: floatOrbFast 9s ease-in-out infinite;
+}
+
+.bubble-3d-sage {
+  background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.95) 0%, rgba(230, 245, 235, 0.45) 45%, rgba(85, 122, 101, 0.15) 75%, rgba(45, 74, 54, 0.25) 100%);
+  box-shadow: 
+    0 12px 30px rgba(85, 122, 101, 0.12),
+    inset 0 -6px 12px rgba(45, 74, 54, 0.15),
+    inset 0 4px 8px rgba(255, 255, 255, 0.95);
+  animation: floatOrbSlow 15s ease-in-out infinite;
+}
+
+/* =========================================================================
+   REALISTIC PHYSICAL 3D ENVELOPE STYLES & PERSPECTIVE
+   ========================================================================= */
+
+.perspective-envelope {
+  perspective: 1600px;
+  transform-style: preserve-3d;
+}
+
+.envelope-pocket-shadow {
+  box-shadow: 
+    0 35px 80px -15px rgba(150, 110, 40, 0.28),
+    0 10px 25px rgba(0, 0, 0, 0.05),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    inset 0 -15px 30px rgba(0, 0, 0, 0.06);
+}
+
+.envelope-crease-3d {
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.12));
+}
+
+/* Realistic 3D Melted Wax Seal */
+.wax-seal-3d-royal {
+  background: radial-gradient(circle at 36% 32%, #e0324c 0%, #b8283d 30%, #881223 70%, #4a0610 100%);
+  box-shadow: 
+    0 10px 30px rgba(155, 28, 46, 0.55),
+    0 2px 6px rgba(255, 255, 255, 0.5) inset,
+    0 -4px 8px rgba(0, 0, 0, 0.6) inset,
+    0 0 0 2px rgba(212, 175, 55, 0.35);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wax-seal-3d-royal:hover {
+  transform: scale(1.06) rotate(3deg);
+  box-shadow: 
+    0 15px 40px rgba(155, 28, 46, 0.65),
+    0 2px 8px rgba(255, 255, 255, 0.7) inset,
+    0 -4px 10px rgba(0, 0, 0, 0.7) inset,
+    0 0 0 3px rgba(212, 175, 55, 0.6);
+}
+
+.wax-seal-3d-gold {
+  background: radial-gradient(circle at 36% 32%, #fff0b8 0%, #E7D17D 25%, #AA820A 70%, #5e4304 100%);
+  box-shadow: 
+    0 10px 30px rgba(170, 130, 10, 0.5),
+    0 2px 6px rgba(255, 255, 255, 0.6) inset,
+    0 -4px 8px rgba(0, 0, 0, 0.5) inset;
+}
+
+/* Paper Deckle Edge and Soft Shadows */
+.paper-deckle {
+  background-color: #FDFBF7;
+  border: 1px solid #E8DFC8;
+  box-shadow: 
+    0 20px 50px -10px rgba(180, 140, 70, 0.15),
+    0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+/* Frosted Vellum Wrap */
+.vellum-wrap {
+  background: rgba(253, 251, 247, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 4px 20px rgba(180, 140, 60, 0.08);
+}
+
 /* Luxury 24K Gold Gradient Text on Light Background */
 .text-gold-gradient {
   background: linear-gradient(135deg, #7D5F04 0%, #AA820A 20%, #D4AF37 45%, #AA820A 75%, #543F02 100%);
@@ -38,92 +284,6 @@
   background: linear-gradient(135deg, #FAF4E3 0%, #F3E5AB 30%, #D4AF37 70%, #FAF4E3 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-/* Paper Deckle Edge and Soft Shadows */
-.paper-deckle {
-  background-color: #FDFBF7;
-  border: 1px solid #E8DFC8;
-  box-shadow: 
-    0 20px 50px -10px rgba(180, 140, 70, 0.15),
-    0 4px 15px rgba(0, 0, 0, 0.03);
-}
-
-.paper-card-hover {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.paper-card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 
-    0 25px 60px -10px rgba(180, 140, 70, 0.22),
-    0 8px 20px rgba(0, 0, 0, 0.05);
-}
-
-/* Frosted Vellum Wrap */
-.vellum-wrap {
-  background: rgba(253, 251, 247, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(212, 175, 55, 0.35);
-}
-
-/* Gold Foil Borders */
-.border-gold-foil {
-  border-image: linear-gradient(to right, #AA820A, #D4AF37, #F3E5AB, #D4AF37, #AA820A) 1;
-}
-
-/* Realistic Wax Seal Styles */
-.wax-seal-royal {
-  background: radial-gradient(circle at 32% 32%, #c92a40 0%, #9B1C2E 40%, #680d1b 80%, #3e040d 100%);
-  box-shadow: 
-    0 8px 25px rgba(155, 28, 46, 0.45),
-    0 2px 4px rgba(255, 255, 255, 0.4) inset,
-    0 -3px 6px rgba(0, 0, 0, 0.4) inset;
-}
-
-.wax-seal-gold {
-  background: radial-gradient(circle at 32% 32%, #fae69e 0%, #D4AF37 40%, #9e7514 80%, #5e4304 100%);
-  box-shadow: 
-    0 8px 25px rgba(212, 175, 55, 0.45),
-    0 2px 5px rgba(255, 255, 255, 0.6) inset,
-    0 -3px 6px rgba(0, 0, 0, 0.5) inset;
-}
-
-/* Subtle Cotton Linen Texture Simulation */
-.bg-cotton-paper {
-  background-color: #FAF8F5;
-  background-image: 
-    radial-gradient(rgba(212, 175, 55, 0.07) 1px, transparent 1px),
-    radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px);
-  background-size: 20px 20px, 40px 40px;
-  background-position: 0 0, 10px 10px;
-}
-
-/* Foil Sheen Reflection Animation */
-.foil-sheen {
-  position: relative;
-  overflow: hidden;
-}
-
-.foil-sheen::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    60deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.45) 50%,
-    transparent 60%
-  );
-  transform: rotate(35deg);
-  pointer-events: none;
-  transition: transform 0.8s ease;
-}
-
-.foil-sheen:hover::after {
-  transform: rotate(35deg) translate(30%, 30%);
 }
 
 /* Scratch Card */

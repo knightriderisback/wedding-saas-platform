@@ -20,6 +20,7 @@ import {
 import { exportDjPlaylistPdf } from '@/lib/djPdfGenerator';
 import { defaultWeddingProject } from '@/lib/mockData';
 import { TEMPLATE_LIST } from '@/lib/pressedLoveTemplates';
+import { AcrylicBackgroundOrbs } from '@/components/common/AcrylicBackgroundOrbs';
 import {
   Crown,
   Sparkles,
@@ -249,7 +250,7 @@ function ClientPortalContent() {
     { id: 'suites', icon: Palette, label: 'Suites' },
   ];
 
-  // Tab Config mapping
+  // Tab Config mapping with soft acrylic styling & high-contrast deep walnut typography
   const tabConfig = {
     overview: {
       title: 'Celebration Dashboard & Live Telemetry',
@@ -257,20 +258,21 @@ function ClientPortalContent() {
       icon: Crown,
       subtitle: `${project?.partner1 || 'Couple'} & ${project?.partner2 || ''} Wedding Portal`,
       badge: `${attendingCount} Attending`,
-      bgGradient: 'from-[#2C2218] via-[#4A3B2C] to-[#2C2218]',
-      border: 'border-[#AA820A]/60',
-      shadowGlow: 'shadow-[0_10px_30px_rgba(170,130,10,0.18)]',
-      iconBg: 'bg-[#FAF4E3]',
+      acrylicClass: 'acrylic-amber card-3d-elevated',
+      border: 'border-[#AA820A]/40',
+      shadowGlow: 'shadow-[0_12px_32px_rgba(170,130,10,0.12)]',
+      iconBg: 'bg-white/80 shadow-xs border border-[#AA820A]/30',
       iconColor: 'text-[#AA820A]',
-      breadcrumbColor: 'text-[#D4AF37]',
-      badgeBg: 'bg-[#FAF4E3]',
+      breadcrumbColor: 'text-[#7D5F04]',
+      badgeBg: 'bg-white/80',
       badgeText: 'text-[#7D5F04]',
       badgeBorder: 'border-[#AA820A]/40',
-      subtitleColor: 'text-[#FAF8F5]/90',
-      pillBg: 'bg-black/40',
-      pillBorder: 'border-[#AA820A]/40',
-      pillText: 'text-[#FAF8F5]',
-      highlightText: 'text-[#D4AF37]',
+      titleColor: 'text-[#2C2218]',
+      subtitleColor: 'text-[#544230]',
+      pillBg: 'bg-white/80 backdrop-blur-sm',
+      pillBorder: 'border-[#AA820A]/30',
+      pillText: 'text-[#544230]',
+      highlightText: 'text-[#7D5F04]',
     },
     guests: {
       title: 'Guest & Invitation Hub (Phone Import & 1-Click WhatsApp)',
@@ -278,20 +280,21 @@ function ClientPortalContent() {
       icon: Users,
       subtitle: 'Import phone contacts, dispatch wa.me invites, and monitor live RSVPs',
       badge: `${dispatchedCount}/${guests.length} Sent`,
-      bgGradient: 'from-[#3A281A] via-[#543C28] to-[#3A281A]',
-      border: 'border-[#D4AF37]/50',
-      shadowGlow: 'shadow-[0_10px_30px_rgba(212,175,55,0.15)]',
-      iconBg: 'bg-[#FDFBF7]',
+      acrylicClass: 'acrylic-rose card-3d-elevated',
+      border: 'border-[#D47A88]/40',
+      shadowGlow: 'shadow-[0_12px_32px_rgba(155,28,46,0.1)]',
+      iconBg: 'bg-white/80 shadow-xs border border-[#D47A88]/30',
       iconColor: 'text-[#9B1C2E]',
-      breadcrumbColor: 'text-[#F3E5AB]',
-      badgeBg: 'bg-[#FDF2F4]',
+      breadcrumbColor: 'text-[#9B1C2E]',
+      badgeBg: 'bg-white/80',
       badgeText: 'text-[#9B1C2E]',
-      badgeBorder: 'border-[#B8283D]/40',
-      subtitleColor: 'text-[#FAF8F5]/90',
-      pillBg: 'bg-black/40',
-      pillBorder: 'border-[#D4AF37]/40',
-      pillText: 'text-[#FAF8F5]',
-      highlightText: 'text-[#F3E5AB]',
+      badgeBorder: 'border-[#D47A88]/40',
+      titleColor: 'text-[#2C2218]',
+      subtitleColor: 'text-[#544230]',
+      pillBg: 'bg-white/80 backdrop-blur-sm',
+      pillBorder: 'border-[#D47A88]/30',
+      pillText: 'text-[#544230]',
+      highlightText: 'text-[#9B1C2E]',
     },
     dj: {
       title: 'Sangeet DJ Playlist Manager & 1-Click PDF Export',
@@ -299,20 +302,21 @@ function ClientPortalContent() {
       icon: Music,
       subtitle: 'Guest-submitted dance anthems with dedication notes and phone verification',
       badge: `${djPlaylist.length} Songs Queued`,
-      bgGradient: 'from-[#243328] via-[#354B3B] to-[#243328]',
-      border: 'border-[#849E7C]/60',
-      shadowGlow: 'shadow-[0_10px_30px_rgba(85,122,101,0.2)]',
-      iconBg: 'bg-[#F1F6F3]',
+      acrylicClass: 'acrylic-sage card-3d-elevated',
+      border: 'border-[#739B83]/40',
+      shadowGlow: 'shadow-[0_12px_32px_rgba(45,74,54,0.1)]',
+      iconBg: 'bg-white/80 shadow-xs border border-[#739B83]/30',
       iconColor: 'text-[#2D4A36]',
-      breadcrumbColor: 'text-[#A3C4B0]',
-      badgeBg: 'bg-[#E3EDE7]',
+      breadcrumbColor: 'text-[#2D4A36]',
+      badgeBg: 'bg-white/80',
       badgeText: 'text-[#2D4A36]',
-      badgeBorder: 'border-[#849E7C]/50',
-      subtitleColor: 'text-[#FAF8F5]/90',
-      pillBg: 'bg-black/40',
-      pillBorder: 'border-[#849E7C]/50',
-      pillText: 'text-[#FAF8F5]',
-      highlightText: 'text-[#A3C4B0]',
+      badgeBorder: 'border-[#739B83]/40',
+      titleColor: 'text-[#2C2218]',
+      subtitleColor: 'text-[#544230]',
+      pillBg: 'bg-white/80 backdrop-blur-sm',
+      pillBorder: 'border-[#739B83]/30',
+      pillText: 'text-[#544230]',
+      highlightText: 'text-[#2D4A36]',
     },
     blessings: {
       title: 'Voice Notes Audio Player & Blessings Hub',
@@ -320,20 +324,21 @@ function ClientPortalContent() {
       icon: Mic,
       subtitle: 'Personal microphone voice recordings left by family and cherished friends',
       badge: `${blessings.length} Recorded`,
-      bgGradient: 'from-[#422228] via-[#5B3038] to-[#422228]',
-      border: 'border-[#D4AF37]/50',
-      shadowGlow: 'shadow-[0_10px_30px_rgba(155,28,46,0.2)]',
-      iconBg: 'bg-[#FAF4E3]',
-      iconColor: 'text-[#AA820A]',
-      breadcrumbColor: 'text-[#F3E5AB]',
-      badgeBg: 'bg-[#FAF4E3]',
-      badgeText: 'text-[#7D5F04]',
-      badgeBorder: 'border-[#AA820A]/40',
-      subtitleColor: 'text-[#FAF8F5]/90',
-      pillBg: 'bg-black/40',
-      pillBorder: 'border-[#AA820A]/40',
-      pillText: 'text-[#FAF8F5]',
-      highlightText: 'text-[#F3E5AB]',
+      acrylicClass: 'acrylic-lilac card-3d-elevated',
+      border: 'border-[#A888B5]/40',
+      shadowGlow: 'shadow-[0_12px_32px_rgba(107,59,130,0.1)]',
+      iconBg: 'bg-white/80 shadow-xs border border-[#A888B5]/30',
+      iconColor: 'text-[#6B3B82]',
+      breadcrumbColor: 'text-[#6B3B82]',
+      badgeBg: 'bg-white/80',
+      badgeText: 'text-[#6B3B82]',
+      badgeBorder: 'border-[#A888B5]/40',
+      titleColor: 'text-[#2C2218]',
+      subtitleColor: 'text-[#544230]',
+      pillBg: 'bg-white/80 backdrop-blur-sm',
+      pillBorder: 'border-[#A888B5]/30',
+      pillText: 'text-[#544230]',
+      highlightText: 'text-[#6B3B82]',
     },
     content: {
       title: 'Event Schedule, Royal Menu & Story Editor',
@@ -341,20 +346,21 @@ function ClientPortalContent() {
       icon: Edit2,
       subtitle: 'Customise your couple names, wedding date, dress codes, and food dishes',
       badge: 'Live Editor',
-      bgGradient: 'from-[#332A15] via-[#4A3D1F] to-[#332A15]',
-      border: 'border-[#D4AF37]/60',
-      shadowGlow: 'shadow-[0_10px_30px_rgba(212,175,55,0.2)]',
-      iconBg: 'bg-[#FAF4E3]',
+      acrylicClass: 'acrylic-amber card-3d-elevated',
+      border: 'border-[#AA820A]/40',
+      shadowGlow: 'shadow-[0_12px_32px_rgba(170,130,10,0.12)]',
+      iconBg: 'bg-white/80 shadow-xs border border-[#AA820A]/30',
       iconColor: 'text-[#AA820A]',
-      breadcrumbColor: 'text-[#F3E5AB]',
-      badgeBg: 'bg-[#FAF4E3]',
+      breadcrumbColor: 'text-[#7D5F04]',
+      badgeBg: 'bg-white/80',
       badgeText: 'text-[#7D5F04]',
       badgeBorder: 'border-[#AA820A]/40',
-      subtitleColor: 'text-[#FAF8F5]/90',
-      pillBg: 'bg-black/40',
-      pillBorder: 'border-[#AA820A]/40',
-      pillText: 'text-[#FAF8F5]',
-      highlightText: 'text-[#D4AF37]',
+      titleColor: 'text-[#2C2218]',
+      subtitleColor: 'text-[#544230]',
+      pillBg: 'bg-white/80 backdrop-blur-sm',
+      pillBorder: 'border-[#AA820A]/30',
+      pillText: 'text-[#544230]',
+      highlightText: 'text-[#7D5F04]',
     },
     media: {
       title: 'Media Uploader & Cover Gallery',
@@ -362,20 +368,21 @@ function ClientPortalContent() {
       icon: Camera,
       subtitle: 'Upload couple portraits, background audio, and cover visuals to storage',
       badge: 'Cloud Storage',
-      bgGradient: 'from-[#242A36] via-[#353D4E] to-[#242A36]',
-      border: 'border-[#7D8FA9]/60',
-      shadowGlow: 'shadow-[0_10px_30px_rgba(70,85,115,0.2)]',
-      iconBg: 'bg-[#F2F5F8]',
-      iconColor: 'text-[#242A36]',
-      breadcrumbColor: 'text-[#B5C4D8]',
-      badgeBg: 'bg-[#E5ECF4]',
-      badgeText: 'text-[#242A36]',
-      badgeBorder: 'border-[#7D8FA9]/40',
-      subtitleColor: 'text-[#FAF8F5]/90',
-      pillBg: 'bg-black/40',
-      pillBorder: 'border-[#7D8FA9]/40',
-      pillText: 'text-[#FAF8F5]',
-      highlightText: 'text-[#B5C4D8]',
+      acrylicClass: 'acrylic-azure card-3d-elevated',
+      border: 'border-[#6B9AC4]/40',
+      shadowGlow: 'shadow-[0_12px_32px_rgba(30,63,102,0.1)]',
+      iconBg: 'bg-white/80 shadow-xs border border-[#6B9AC4]/30',
+      iconColor: 'text-[#1E3F66]',
+      breadcrumbColor: 'text-[#1E3F66]',
+      badgeBg: 'bg-white/80',
+      badgeText: 'text-[#1E3F66]',
+      badgeBorder: 'border-[#6B9AC4]/40',
+      titleColor: 'text-[#2C2218]',
+      subtitleColor: 'text-[#544230]',
+      pillBg: 'bg-white/80 backdrop-blur-sm',
+      pillBorder: 'border-[#6B9AC4]/30',
+      pillText: 'text-[#544230]',
+      highlightText: 'text-[#1E3F66]',
     },
     suites: {
       title: '13 Luxury Design Suites Switcher',
@@ -383,20 +390,21 @@ function ClientPortalContent() {
       icon: Palette,
       subtitle: 'Select any PressedLove or Royal Palace template for your wedding microsite',
       badge: '13 Suites',
-      bgGradient: 'from-[#2C2218] via-[#4A3B2C] to-[#2C2218]',
-      border: 'border-[#AA820A]/60',
-      shadowGlow: 'shadow-[0_10px_30px_rgba(170,130,10,0.18)]',
-      iconBg: 'bg-[#FAF4E3]',
-      iconColor: 'text-[#AA820A]',
-      breadcrumbColor: 'text-[#D4AF37]',
-      badgeBg: 'bg-[#FAF4E3]',
-      badgeText: 'text-[#7D5F04]',
-      badgeBorder: 'border-[#AA820A]/40',
-      subtitleColor: 'text-[#FAF8F5]/90',
-      pillBg: 'bg-black/40',
-      pillBorder: 'border-[#AA820A]/40',
-      pillText: 'text-[#FAF8F5]',
-      highlightText: 'text-[#D4AF37]',
+      acrylicClass: 'acrylic-azure card-3d-elevated',
+      border: 'border-[#6B9AC4]/40',
+      shadowGlow: 'shadow-[0_12px_32px_rgba(30,63,102,0.1)]',
+      iconBg: 'bg-white/80 shadow-xs border border-[#6B9AC4]/30',
+      iconColor: 'text-[#1E3F66]',
+      breadcrumbColor: 'text-[#1E3F66]',
+      badgeBg: 'bg-white/80',
+      badgeText: 'text-[#1E3F66]',
+      badgeBorder: 'border-[#6B9AC4]/40',
+      titleColor: 'text-[#2C2218]',
+      subtitleColor: 'text-[#544230]',
+      pillBg: 'bg-white/80 backdrop-blur-sm',
+      pillBorder: 'border-[#6B9AC4]/30',
+      pillText: 'text-[#544230]',
+      highlightText: 'text-[#1E3F66]',
     },
   };
 
@@ -413,7 +421,10 @@ function ClientPortalContent() {
   const CurrentTabIcon = currentTab.icon;
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] pb-24 text-[#2C2218] selection:bg-[#D4AF37]/30 selection:text-[#2C2218]">
+    <div className="min-h-screen bg-khadi-fabric relative overflow-hidden pb-24 text-[#2C2218] selection:bg-[#D4AF37]/30 selection:text-[#2C2218]">
+      {/* 3D Ambient Refractive Bubbles & Glass Orbs */}
+      <AcrylicBackgroundOrbs variant="multi" />
+
       {/* Toast Notification */}
       {toastMsg && (
         <div className="fixed top-3 right-3 z-50 bg-[#2C2218] text-[#FAF8F5] px-4 py-2 rounded-xl border border-[#AA820A] shadow-xl text-xs font-cinzel flex items-center gap-2 animate-in fade-in">
@@ -423,7 +434,7 @@ function ClientPortalContent() {
       )}
 
       {/* ULTRA-SLIM STICKY CLIENT HEADER (Rajhara Express Pattern in Luxury Gold/Ivory) */}
-      <header className="bg-[#2C2218] text-white sticky top-0 z-30 border-b border-[#AA820A]/40 shadow-xs">
+      <header className="bg-[#2C2218]/95 backdrop-blur-md text-white sticky top-0 z-30 border-b border-[#AA820A]/40 shadow-xs">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2">
           {/* Left: Store Link & Title */}
           <div className="flex items-center gap-2.5">
@@ -479,14 +490,14 @@ function ClientPortalContent() {
       </header>
 
       {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-2.5 sm:px-4 py-3 space-y-3">
-        {/* Dynamic Section Heading Banner */}
+      <main className="max-w-7xl mx-auto px-2.5 sm:px-4 py-3 space-y-3 relative z-10">
+        {/* Dynamic Section Heading Banner with soft acrylic styling */}
         <div
-          className={`bg-gradient-to-r ${currentTab.bgGradient} text-white rounded-2xl p-3 sm:p-4 shadow-md ${currentTab.shadowGlow} border ${currentTab.border} flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all duration-300`}
+          className={`${currentTab.acrylicClass} rounded-2xl p-3.5 sm:p-5 shadow-md ${currentTab.shadowGlow} border ${currentTab.border} flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all duration-300 relative overflow-hidden`}
         >
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-3 min-w-0 relative z-10">
             <div
-              className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl ${currentTab.iconBg} ${currentTab.iconColor} flex items-center justify-center shrink-0 shadow-md font-black`}
+              className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl ${currentTab.iconBg} ${currentTab.iconColor} flex items-center justify-center shrink-0 shadow-sm font-black`}
             >
               <CurrentTabIcon className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
@@ -498,12 +509,12 @@ function ClientPortalContent() {
                   Client Portal / {currentTab.shortTitle}
                 </span>
                 <span
-                  className={`text-[9px] ${currentTab.badgeBg} ${currentTab.badgeText} border ${currentTab.badgeBorder} px-2 py-0.5 rounded-full font-bold font-mono`}
+                  className={`text-[9px] ${currentTab.badgeBg} ${currentTab.badgeText} border ${currentTab.badgeBorder} px-2.5 py-0.5 rounded-full font-bold font-mono shadow-2xs`}
                 >
                   {currentTab.badge}
                 </span>
               </div>
-              <h1 className="text-sm sm:text-base font-cinzel font-black text-white tracking-tight leading-tight mt-0.5 truncate">
+              <h1 className={`text-sm sm:text-base font-cinzel font-black ${currentTab.titleColor} tracking-tight leading-tight mt-0.5 truncate`}>
                 {currentTab.title}
               </h1>
               <p className={`text-[10px] sm:text-[11px] ${currentTab.subtitleColor} mt-0.5 leading-snug font-sans`}>
@@ -513,10 +524,10 @@ function ClientPortalContent() {
           </div>
 
           <div
-            className={`flex items-center gap-2 self-start sm:self-auto shrink-0 ${currentTab.pillBg} px-3 py-1.5 rounded-xl border ${currentTab.pillBorder} text-[10px] ${currentTab.pillText}`}
+            className={`flex items-center gap-2 self-start sm:self-auto shrink-0 ${currentTab.pillBg} px-3 py-1.5 rounded-xl border ${currentTab.pillBorder} text-[10px] ${currentTab.pillText} shadow-2xs relative z-10`}
           >
-            <span>Active Option:</span>
-            <span className={`font-black ${currentTab.highlightText} bg-black/40 px-2 py-0.5 rounded-md`}>
+            <span className="font-medium">Active Tab:</span>
+            <span className={`font-black ${currentTab.highlightText} bg-white/90 border border-black/5 px-2 py-0.5 rounded-md shadow-2xs`}>
               {currentTab.shortTitle}
             </span>
           </div>
@@ -525,75 +536,75 @@ function ClientPortalContent() {
         {/* TAB 1: OVERVIEW */}
         {activeTab === 'overview' && (
           <div className="space-y-3">
-            {/* Metric Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
-                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase">Total Guests</div>
-                <div className="text-base sm:text-xl font-black text-[#2C2218]">{guests.length}</div>
-                <div className="text-[9px] text-[#7D5F04] font-medium mt-0.5">Invited in Registry</div>
+            {/* Metric Cards - 3D Soft Acrylic Cards with Bevel Highlights */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+              <div className="card-3d acrylic-amber p-3.5 sm:p-4 rounded-2xl border border-[#AA820A]/30 shadow-md">
+                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase tracking-wider">Total Guests</div>
+                <div className="text-lg sm:text-2xl font-black text-[#2C2218] mt-0.5">{guests.length}</div>
+                <div className="text-[10px] text-[#7D5F04] font-medium mt-0.5">Invited in Registry</div>
               </div>
 
-              <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
-                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase">Invites Sent</div>
-                <div className="text-base sm:text-xl font-black text-[#AA820A]">{dispatchedCount}</div>
-                <div className="text-[9px] text-emerald-700 font-medium mt-0.5">
+              <div className="card-3d acrylic-sage p-3.5 sm:p-4 rounded-2xl border border-[#739B83]/30 shadow-md">
+                <div className="text-[10px] font-cinzel font-bold text-[#2D4A36] uppercase tracking-wider">Invites Sent</div>
+                <div className="text-lg sm:text-2xl font-black text-[#2D4A36] mt-0.5">{dispatchedCount}</div>
+                <div className="text-[10px] text-[#2D4A36] font-medium mt-0.5">
                   {guests.length > 0 ? Math.round((dispatchedCount / guests.length) * 100) : 0}% WhatsApp coverage
                 </div>
               </div>
 
-              <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
-                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase">Attending Headcount</div>
-                <div className="text-base sm:text-xl font-black text-[#9B1C2E]">{totalAttendingHeadcount}</div>
-                <div className="text-[9px] text-[#9B1C2E] font-medium mt-0.5">{attendingCount} VIP RSVP Passes</div>
+              <div className="card-3d acrylic-rose p-3.5 sm:p-4 rounded-2xl border border-[#D47A88]/30 shadow-md">
+                <div className="text-[10px] font-cinzel font-bold text-[#9B1C2E] uppercase tracking-wider">Attending Headcount</div>
+                <div className="text-lg sm:text-2xl font-black text-[#9B1C2E] mt-0.5">{totalAttendingHeadcount}</div>
+                <div className="text-[10px] text-[#9B1C2E] font-medium mt-0.5">{attendingCount} VIP Passes</div>
               </div>
 
-              <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
-                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase">DJ Song Requests</div>
-                <div className="text-base sm:text-xl font-black text-[#557A65]">{djPlaylist.length}</div>
-                <div className="text-[9px] text-neutral-500 font-medium mt-0.5">Ready for Sangeet PDF</div>
+              <div className="card-3d acrylic-azure p-3.5 sm:p-4 rounded-2xl border border-[#6B9AC4]/30 shadow-md">
+                <div className="text-[10px] font-cinzel font-bold text-[#1E3F66] uppercase tracking-wider">DJ Song Requests</div>
+                <div className="text-lg sm:text-2xl font-black text-[#1E3F66] mt-0.5">{djPlaylist.length}</div>
+                <div className="text-[10px] text-[#1E3F66] font-medium mt-0.5">Ready for Sangeet PDF</div>
               </div>
             </div>
 
             {/* Quick Action Hub */}
-            <div className="bg-white p-4 rounded-2xl border border-[#E8DFC8] shadow-2xs space-y-3">
-              <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04] tracking-wider">
-                Quick Wedding Concierge Actions
+            <div className="acrylic-glass card-3d p-4 rounded-2xl border border-[#E8DFC8] shadow-md space-y-3">
+              <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04] tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#AA820A]" /> Quick Wedding Concierge Actions
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
                 <button
                   onClick={handleImportPhoneContacts}
-                  className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8] hover:border-[#AA820A] text-left transition flex flex-col justify-between cursor-pointer"
+                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#AA820A] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-3d shadow-xs hover:shadow-md"
                 >
                   <Phone className="w-4 h-4 text-[#AA820A] mb-1" />
                   <span className="font-bold text-[#2C2218]">Import Contacts</span>
-                  <span className="text-[10px] text-neutral-500">From Mobile Phone</span>
+                  <span className="text-[10px] text-[#544230]">From Mobile Phone</span>
                 </button>
 
                 <button
                   onClick={handleExportDjPdf}
-                  className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8] hover:border-[#AA820A] text-left transition flex flex-col justify-between cursor-pointer"
+                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#739B83] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-3d shadow-xs hover:shadow-md"
                 >
-                  <Download className="w-4 h-4 text-[#557A65] mb-1" />
+                  <Download className="w-4 h-4 text-[#2D4A36] mb-1" />
                   <span className="font-bold text-[#2C2218]">Export DJ PDF</span>
-                  <span className="text-[10px] text-neutral-500">1-Click Printable PDF</span>
+                  <span className="text-[10px] text-[#544230]">1-Click Printable PDF</span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('content')}
-                  className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8] hover:border-[#AA820A] text-left transition flex flex-col justify-between cursor-pointer"
+                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#D47A88] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-3d shadow-xs hover:shadow-md"
                 >
                   <Edit2 className="w-4 h-4 text-[#9B1C2E] mb-1" />
                   <span className="font-bold text-[#2C2218]">Edit Schedule</span>
-                  <span className="text-[10px] text-neutral-500">Haldi, Sangeet & Menu</span>
+                  <span className="text-[10px] text-[#544230]">Haldi, Sangeet & Menu</span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('suites')}
-                  className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8] hover:border-[#AA820A] text-left transition flex flex-col justify-between cursor-pointer"
+                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#6B9AC4] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-3d shadow-xs hover:shadow-md"
                 >
-                  <Palette className="w-4 h-4 text-[#7D5F04] mb-1" />
+                  <Palette className="w-4 h-4 text-[#1E3F66] mb-1" />
                   <span className="font-bold text-[#2C2218]">Switch Suite</span>
-                  <span className="text-[10px] text-neutral-500">13 Luxury Templates</span>
+                  <span className="text-[10px] text-[#544230]">13 Luxury Templates</span>
                 </button>
               </div>
             </div>
@@ -604,11 +615,11 @@ function ClientPortalContent() {
         {activeTab === 'guests' && (
           <div className="space-y-3">
             {/* Top Toolbar */}
-            <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="acrylic-glass card-3d p-3 sm:p-4 rounded-2xl border border-[#E8DFC8] shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleImportPhoneContacts}
-                  className="px-3 py-1.5 rounded-xl bg-[#FAF4E3] hover:bg-[#F3E5AB] text-[#7D5F04] border border-[#AA820A]/40 text-xs font-cinzel font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                  className="px-3.5 py-2 rounded-xl bg-white/80 hover:bg-white text-[#7D5F04] border border-[#AA820A]/40 text-xs font-cinzel font-bold flex items-center gap-1.5 cursor-pointer card-3d shadow-2xs hover:shadow-sm transition-all"
                   title="Import from Mobile Device Contacts via Web Contact Picker API"
                 >
                   <Phone className="w-3.5 h-3.5 text-[#AA820A]" />
@@ -617,7 +628,7 @@ function ClientPortalContent() {
 
                 <button
                   onClick={() => setShowAddGuestModal(true)}
-                  className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] text-xs font-cinzel font-bold flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                  className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] text-xs font-cinzel font-bold flex items-center gap-1.5 cursor-pointer shadow-md hover:brightness-105 active:scale-95 transition-all"
                 >
                   <Plus className="w-3.5 h-3.5 stroke-[3]" />
                   <span>+ Manual Guest</span>
@@ -631,13 +642,13 @@ function ClientPortalContent() {
                   value={guestSearch}
                   onChange={(e) => setGuestSearch(e.target.value)}
                   placeholder="Search guests by name or phone..."
-                  className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] focus:outline-none focus:border-[#AA820A]"
+                  className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-[#E8DFC8] bg-white/80 focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors shadow-2xs"
                 />
               </div>
             </div>
 
             {/* Filter Pills */}
-            <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
               {[
                 { id: 'all', label: `All Guests (${guests.length})` },
                 { id: 'sent', label: `WhatsApp Dispatched (${dispatchedCount})` },
@@ -648,10 +659,10 @@ function ClientPortalContent() {
                 <button
                   key={pill.id}
                   onClick={() => setGuestFilter(pill.id as typeof guestFilter)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-cinzel font-bold transition whitespace-nowrap cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-cinzel font-bold transition whitespace-nowrap cursor-pointer ${
                     guestFilter === pill.id
-                      ? 'bg-[#2C2218] text-[#FAF8F5] shadow-xs'
-                      : 'bg-white text-[#7D5F04] hover:bg-[#FAF4E3] border border-[#E8DFC8]'
+                      ? 'bg-[#2C2218] text-[#FAF8F5] shadow-sm'
+                      : 'bg-white/80 text-[#7D5F04] hover:bg-white border border-[#E8DFC8] shadow-2xs'
                   }`}
                 >
                   {pill.label}
@@ -660,57 +671,57 @@ function ClientPortalContent() {
             </div>
 
             {/* Guests Table */}
-            <div className="bg-white rounded-2xl border border-[#E8DFC8] shadow-2xs overflow-hidden">
+            <div className="acrylic-glass card-3d rounded-2xl border border-[#E8DFC8] shadow-md overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#FAF8F5] text-[10px] uppercase font-cinzel font-bold text-[#7D5F04] border-b border-[#E8DFC8]">
+                  <thead className="bg-[#FAF4E3]/70 text-[10px] uppercase font-cinzel font-bold text-[#7D5F04] border-b border-[#E8DFC8]">
                     <tr>
-                      <th className="py-2.5 px-3">Guest Name</th>
-                      <th className="py-2.5 px-3">Phone Number</th>
-                      <th className="py-2.5 px-3">WhatsApp Status</th>
-                      <th className="py-2.5 px-3">RSVP Status</th>
-                      <th className="py-2.5 px-3">Dietary / Notes</th>
-                      <th className="py-2.5 px-3 text-right">1-Click Dispatch</th>
+                      <th className="py-3 px-3.5">Guest Name</th>
+                      <th className="py-3 px-3.5">Phone Number</th>
+                      <th className="py-3 px-3.5">WhatsApp Status</th>
+                      <th className="py-3 px-3.5">RSVP Status</th>
+                      <th className="py-3 px-3.5">Dietary / Notes</th>
+                      <th className="py-3 px-3.5 text-right">1-Click Dispatch</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E8DFC8]/60">
                     {filteredGuests.map((guest) => {
                       return (
-                        <tr key={guest.id} className="hover:bg-[#FDFBF7]">
-                          <td className="py-3 px-3 font-semibold text-[#2C2218]">{guest.name}</td>
-                          <td className="py-3 px-3 font-mono text-[11px] text-[#544230]">{guest.phone}</td>
-                          <td className="py-3 px-3">
+                        <tr key={guest.id} className="hover:bg-white/60 transition-colors">
+                          <td className="py-3.5 px-3.5 font-semibold text-[#2C2218]">{guest.name}</td>
+                          <td className="py-3.5 px-3.5 font-mono text-[11px] text-[#544230]">{guest.phone}</td>
+                          <td className="py-3.5 px-3.5">
                             {guest.sentWhatsApp ? (
-                              <span className="inline-flex items-center gap-1 text-[10px] bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded-full font-bold">
+                              <span className="inline-flex items-center gap-1 text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-full font-bold">
                                 <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Dispatched
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1 text-[10px] bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full font-bold">
+                              <span className="inline-flex items-center gap-1 text-[10px] bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full font-bold">
                                 <Clock className="w-3 h-3 text-amber-600" /> Pending
                               </span>
                             )}
                           </td>
-                          <td className="py-3 px-3">
+                          <td className="py-3.5 px-3.5">
                             <span
                               className={`text-[10px] px-2 py-0.5 rounded-full font-bold font-mono ${
                                 guest.rsvpStatus === 'attending'
-                                  ? 'bg-emerald-100 text-emerald-800'
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                                   : guest.rsvpStatus === 'declined'
-                                  ? 'bg-rose-100 text-rose-800'
-                                  : 'bg-neutral-100 text-neutral-700'
+                                  ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                                  : 'bg-neutral-100 text-neutral-700 border border-neutral-300'
                               }`}
                             >
                               {guest.rsvpStatus?.toUpperCase() || 'AWAITING'}
                               {guest.attendingCount ? ` (${guest.attendingCount})` : ''}
                             </span>
                           </td>
-                          <td className="py-3 px-3 text-[11px] text-[#544230]">
+                          <td className="py-3.5 px-3.5 text-[11px] text-[#544230]">
                             {guest.dietaryChoice || 'Standard Royal Feast'}
                           </td>
-                          <td className="py-3 px-3 text-right">
+                          <td className="py-3.5 px-3.5 text-right">
                             <button
                               onClick={() => handleDispatchWhatsApp(guest)}
-                              className="px-2.5 py-1 rounded-lg bg-[#25D366] hover:bg-[#20ba59] text-white font-cinzel font-bold text-xs inline-flex items-center gap-1 shadow-2xs cursor-pointer"
+                              className="px-3 py-1.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-cinzel font-bold text-xs inline-flex items-center gap-1.5 shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
                               title="Open pre-filled wa.me invite with personalized link"
                             >
                               <MessageCircle className="w-3.5 h-3.5" />
@@ -730,7 +741,7 @@ function ClientPortalContent() {
         {/* TAB 3: DJ PLAYLIST MANAGER */}
         {activeTab === 'dj' && (
           <div className="space-y-3">
-            <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="acrylic-glass card-3d p-3.5 sm:p-4 rounded-2xl border border-[#E8DFC8] shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div>
                 <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04]">
                   Official Sangeet DJ Playlist Ledger
@@ -751,29 +762,29 @@ function ClientPortalContent() {
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-[#E8DFC8] shadow-2xs overflow-hidden">
+            <div className="acrylic-glass card-3d rounded-2xl border border-[#E8DFC8] shadow-md overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#FAF8F5] text-[10px] uppercase font-cinzel font-bold text-[#7D5F04] border-b border-[#E8DFC8]">
+                  <thead className="bg-[#FAF4E3]/70 text-[10px] uppercase font-cinzel font-bold text-[#7D5F04] border-b border-[#E8DFC8]">
                     <tr>
-                      <th className="py-2.5 px-3">#</th>
-                      <th className="py-2.5 px-3">Song Title & Artist</th>
-                      <th className="py-2.5 px-3">Requested By Guest</th>
-                      <th className="py-2.5 px-3">Guest WhatsApp Phone</th>
-                      <th className="py-2.5 px-3">Timing / Notes</th>
+                      <th className="py-3 px-3.5">#</th>
+                      <th className="py-3 px-3.5">Song Title & Artist</th>
+                      <th className="py-3 px-3.5">Requested By Guest</th>
+                      <th className="py-3 px-3.5">Guest WhatsApp Phone</th>
+                      <th className="py-3 px-3.5">Timing / Notes</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E8DFC8]/60">
                     {djPlaylist.map((song, idx) => (
-                      <tr key={song.id} className="hover:bg-[#FDFBF7]">
-                        <td className="py-3 px-3 font-mono font-bold text-[#AA820A]">{idx + 1}</td>
-                        <td className="py-3 px-3">
+                      <tr key={song.id} className="hover:bg-white/60 transition-colors">
+                        <td className="py-3.5 px-3.5 font-mono font-bold text-[#AA820A]">{idx + 1}</td>
+                        <td className="py-3.5 px-3.5">
                           <div className="font-serif font-bold text-sm text-[#2C2218]">{song.songTitle}</div>
                           <div className="text-[11px] text-[#7D5F04] italic">{song.artist || 'Bollywood Sangeet'}</div>
                         </td>
-                        <td className="py-3 px-3 font-semibold text-[#2C2218]">{song.requestedByGuest}</td>
-                        <td className="py-3 px-3 font-mono text-[11px] text-[#544230]">{song.guestPhone}</td>
-                        <td className="py-3 px-3 text-xs text-[#544230] italic">
+                        <td className="py-3.5 px-3.5 font-semibold text-[#2C2218]">{song.requestedByGuest}</td>
+                        <td className="py-3.5 px-3.5 font-mono text-[11px] text-[#544230]">{song.guestPhone}</td>
+                        <td className="py-3.5 px-3.5 text-xs text-[#544230] italic">
                           "{song.notes || 'Play during peak dance floor face-off!'}"
                         </td>
                       </tr>
@@ -788,7 +799,7 @@ function ClientPortalContent() {
         {/* TAB 4: BLESSINGS HUB */}
         {activeTab === 'blessings' && (
           <div className="space-y-3">
-            <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
+            <div className="acrylic-glass card-3d p-3.5 sm:p-4 rounded-2xl border border-[#E8DFC8] shadow-md">
               <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04]">
                 Audio Wishing Well & Voice Notes Hub
               </h3>
@@ -803,28 +814,28 @@ function ClientPortalContent() {
                 return (
                   <div
                     key={b.id}
-                    className="bg-white p-4 rounded-2xl border border-[#E8DFC8] shadow-2xs space-y-3"
+                    className="acrylic-lilac card-3d p-4 rounded-2xl border border-[#A888B5]/30 shadow-md space-y-3"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-[#FAF4E3] border border-[#AA820A]/40 flex items-center justify-center text-[#AA820A]">
+                        <div className="w-8 h-8 rounded-full bg-white/80 border border-[#A888B5]/40 flex items-center justify-center text-[#6B3B82] shadow-2xs">
                           <Mic className="w-4 h-4" />
                         </div>
                         <div>
                           <div className="font-serif font-bold text-sm text-[#2C2218]">{b.guestName}</div>
-                          <div className="text-[10px] text-neutral-400">{b.timestamp}</div>
+                          <div className="text-[10px] text-[#6B3B82]/70 font-mono">{b.timestamp}</div>
                         </div>
                       </div>
-                      <span className="text-xs font-mono text-[#7D5F04] font-bold">
+                      <span className="text-xs font-mono text-[#6B3B82] font-bold">
                         {b.durationSec}s audio
                       </span>
                     </div>
 
                     {/* Simulated Waveform & Play button */}
-                    <div className="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8] flex items-center gap-3">
+                    <div className="p-2.5 rounded-xl bg-white/70 border border-[#A888B5]/30 flex items-center gap-3">
                       <button
                         onClick={() => setPlayingBlessingId(isPlaying ? null : b.id)}
-                        className="w-8 h-8 rounded-full bg-[#2C2218] text-[#FAF8F5] flex items-center justify-center hover:scale-105 transition"
+                        className="w-8 h-8 rounded-full bg-[#2C2218] text-[#FAF8F5] flex items-center justify-center hover:scale-105 transition shadow-xs cursor-pointer"
                       >
                         {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
                       </button>
@@ -833,7 +844,7 @@ function ClientPortalContent() {
                           <div
                             key={i}
                             className={`flex-1 rounded-full transition-all ${
-                              isPlaying ? 'bg-[#AA820A] animate-pulse' : 'bg-[#E8DFC8]'
+                              isPlaying ? 'bg-[#6B3B82] animate-pulse' : 'bg-[#E8DFC8]'
                             }`}
                             style={{ height: `${h}%` }}
                           />
@@ -850,7 +861,7 @@ function ClientPortalContent() {
         {/* TAB 5: CONTENT EDITOR */}
         {activeTab === 'content' && (
           <div className="space-y-3">
-            <div className="bg-white p-4 rounded-2xl border border-[#E8DFC8] shadow-2xs space-y-4">
+            <div className="acrylic-glass card-3d p-4 sm:p-6 rounded-2xl border border-[#E8DFC8] shadow-md space-y-4">
               <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04] flex items-center gap-1.5">
                 <Edit2 className="w-4 h-4 text-[#AA820A]" /> Wedding Details & Schedule Editor
               </h3>
@@ -864,7 +875,7 @@ function ClientPortalContent() {
                     type="text"
                     value={project.partner1}
                     onChange={(e) => setProject({ ...project, partner1: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] focus:outline-none"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-white/80 focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
                   />
                 </div>
                 <div>
@@ -875,7 +886,7 @@ function ClientPortalContent() {
                     type="text"
                     value={project.partner2}
                     onChange={(e) => setProject({ ...project, partner2: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] focus:outline-none"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-white/80 focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
                   />
                 </div>
               </div>
@@ -893,7 +904,7 @@ function ClientPortalContent() {
                       venue: { ...project.venue, name: e.target.value },
                     })
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] focus:outline-none"
+                  className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-white/80 focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
                 />
               </div>
 
@@ -903,7 +914,7 @@ function ClientPortalContent() {
                     await saveWeddingProject(project);
                     showToast('Celebration changes saved successfully!');
                   }}
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] font-cinzel font-bold text-xs shadow-md"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] font-cinzel font-bold text-xs shadow-md hover:brightness-105 active:scale-95 transition-all cursor-pointer"
                 >
                   Save Celebration Content
                 </button>
@@ -915,7 +926,7 @@ function ClientPortalContent() {
         {/* TAB 6: SUITES SWITCHER */}
         {activeTab === 'suites' && (
           <div className="space-y-3">
-            <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
+            <div className="acrylic-glass card-3d p-3.5 sm:p-4 rounded-2xl border border-[#E8DFC8] shadow-md">
               <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04]">
                 Choose Your Active Invitation Suite
               </h3>
@@ -930,26 +941,26 @@ function ClientPortalContent() {
                 return (
                   <div
                     key={suite.id}
-                    className={`bg-white rounded-2xl border p-3.5 space-y-2 flex flex-col justify-between transition-all ${
+                    className={`acrylic-glass card-3d rounded-2xl border p-4 space-y-2 flex flex-col justify-between transition-all duration-200 hover:shadow-lg ${
                       isActive ? 'border-[#AA820A] ring-2 ring-[#AA820A]/40 shadow-md' : 'border-[#E8DFC8]'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-cinzel uppercase font-bold text-[#AA820A] bg-[#FAF4E3] px-2 py-0.5 rounded-md">
+                        <span className="text-[10px] font-cinzel uppercase font-bold text-[#AA820A] bg-white/80 border border-[#AA820A]/30 px-2 py-0.5 rounded-md shadow-2xs">
                           {suite.badge}
                         </span>
                         {isActive && (
-                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-2xs">
                             <Check className="w-3 h-3" /> Active
                           </span>
                         )}
                       </div>
-                      <h4 className="font-serif text-lg font-bold text-[#2C2218] mt-1">{suite.name}</h4>
+                      <h4 className="font-serif text-lg font-bold text-[#2C2218] mt-2">{suite.name}</h4>
                       <p className="text-xs text-[#544230] leading-snug">{suite.tagline}</p>
                     </div>
 
-                    <div className="pt-2 border-t border-[#FAF4E3] flex items-center justify-between">
+                    <div className="pt-3 border-t border-[#E8DFC8]/60 flex items-center justify-between">
                       <Link
                         href={`/wedding-invitation-${suite.id}`}
                         target="_blank"
@@ -960,10 +971,10 @@ function ClientPortalContent() {
                       <button
                         onClick={() => handleSwitchSuite(suite.slug)}
                         disabled={isActive}
-                        className={`px-3 py-1 rounded-lg text-xs font-cinzel font-bold ${
+                        className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all ${
                           isActive
-                            ? 'bg-neutral-100 text-neutral-400 cursor-default'
-                            : 'bg-[#2C2218] hover:bg-[#4A3B2C] text-white cursor-pointer'
+                            ? 'bg-neutral-200/80 text-neutral-500 cursor-default'
+                            : 'bg-[#2C2218] hover:bg-[#4A3B2C] text-white shadow-xs hover:shadow-md active:scale-95 cursor-pointer'
                         }`}
                       >
                         {isActive ? 'Current Suite' : 'Activate Suite'}

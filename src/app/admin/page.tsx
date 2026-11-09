@@ -7,6 +7,7 @@ import { WeddingProject, GuestContact } from '@/types/wedding';
 import { getAllProjects, saveWeddingProject, deleteWeddingProject } from '@/lib/firebase';
 import { defaultWeddingProject } from '@/lib/mockData';
 import { TEMPLATE_LIST, PRESSED_LOVE_TEMPLATES } from '@/lib/pressedLoveTemplates';
+import { AcrylicBackgroundOrbs } from '@/components/common/AcrylicBackgroundOrbs';
 import {
   ShieldCheck,
   Crown,
@@ -361,7 +362,10 @@ export default function SuperAdminPage() {
   const CurrentTabIcon = currentTab.icon;
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] pb-24 text-[#2C2218] selection:bg-[#D4AF37]/30 selection:text-[#2C2218]">
+    <div className="min-h-screen bg-khadi-fabric relative pb-24 text-[#2C2218] selection:bg-[#D4AF37]/30 selection:text-[#2C2218] overflow-x-hidden">
+      {/* 3D Floating Glass Bubbles & Refraction Orbs */}
+      <AcrylicBackgroundOrbs variant="multi" />
+
       {/* ULTRA-SLIM STICKY MERCHANT HEADER (Rajhara Express Pattern in Luxury Gold/Ivory) */}
       <header className="bg-[#2C2218] text-white sticky top-0 z-30 border-b border-[#AA820A]/40 shadow-xs">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2">
@@ -463,37 +467,37 @@ export default function SuperAdminPage() {
         {/* TAB 1: PROJECTS (Super-Admin Control & Shadow Access) */}
         {activeTab === 'projects' && (
           <div className="space-y-3">
-            {/* Metric Cards for Projects Tab */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
+            {/* Soft Acrylic 3D Metric Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div className="acrylic-amber card-3d p-3 rounded-2xl">
                 <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase">Total Projects</div>
-                <div className="text-base sm:text-xl font-black text-[#2C2218]">{projects.length}</div>
-                <div className="text-[9px] text-emerald-700 font-medium mt-0.5 flex items-center gap-0.5">
-                  <CheckCircle2 className="w-2.5 h-2.5" /> 100% Hosted
+                <div className="text-base sm:text-xl font-black text-[#2C2218] mt-0.5">{projects.length}</div>
+                <div className="text-[9px] text-emerald-800 font-semibold mt-1 flex items-center gap-0.5">
+                  <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" /> 100% Hosted
                 </div>
               </div>
 
-              <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
-                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase">Guests Onboarded</div>
-                <div className="text-base sm:text-xl font-black text-[#AA820A]">{totalGuests}</div>
-                <div className="text-[9px] text-amber-700 font-medium mt-0.5">Across all client hubs</div>
+              <div className="acrylic-rose card-3d p-3 rounded-2xl">
+                <div className="text-[10px] font-cinzel font-bold text-[#9B1C2E] uppercase">Guests Onboarded</div>
+                <div className="text-base sm:text-xl font-black text-[#AA820A] mt-0.5">{totalGuests}</div>
+                <div className="text-[9px] text-[#9B1C2E] font-medium mt-1">Across all client hubs</div>
               </div>
 
-              <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
-                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase">RSVPs Confirmed</div>
-                <div className="text-base sm:text-xl font-black text-[#9B1C2E]">{totalRsvps}</div>
-                <div className="text-[9px] text-emerald-700 font-medium mt-0.5">VIP QR Passes Issued</div>
+              <div className="acrylic-sage card-3d p-3 rounded-2xl">
+                <div className="text-[10px] font-cinzel font-bold text-[#2D4A36] uppercase">RSVPs Confirmed</div>
+                <div className="text-base sm:text-xl font-black text-[#9B1C2E] mt-0.5">{totalRsvps}</div>
+                <div className="text-[9px] text-[#2D4A36] font-medium mt-1">VIP QR Passes Issued</div>
               </div>
 
-              <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
-                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase">WhatsApp Invites</div>
-                <div className="text-base sm:text-xl font-black text-[#557A65]">{totalDispatched}</div>
-                <div className="text-[9px] text-[#557A65] font-medium mt-0.5">Dispatched via wa.me</div>
+              <div className="acrylic-azure card-3d p-3 rounded-2xl">
+                <div className="text-[10px] font-cinzel font-bold text-[#242A36] uppercase">WhatsApp Invites</div>
+                <div className="text-base sm:text-xl font-black text-[#1A365D] mt-0.5">{totalDispatched}</div>
+                <div className="text-[9px] text-emerald-700 font-medium mt-1">Dispatched via wa.me</div>
               </div>
             </div>
 
-            {/* Filter Pills and Search Bar */}
-            <div className="bg-white p-2.5 sm:p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs space-y-2">
+            {/* Filter Pills and Search Bar in Acrylic Glass */}
+            <div className="acrylic-glass card-3d p-3 sm:p-3.5 rounded-2xl space-y-2">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="relative flex-1">
                   <Search className="w-3.5 h-3.5 text-[#7D5F04] absolute left-3 top-1/2 -translate-y-1/2" />
@@ -537,8 +541,8 @@ export default function SuperAdminPage() {
               </div>
             </div>
 
-            {/* Client Wedding Projects Table */}
-            <div className="bg-white rounded-2xl border border-[#E8DFC8] shadow-2xs overflow-hidden">
+            {/* Client Wedding Projects Table in Acrylic Glass Card */}
+            <div className="acrylic-glass card-3d rounded-2xl overflow-hidden">
               <div className="p-3 border-b border-[#E8DFC8] flex items-center justify-between">
                 <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04] tracking-wider flex items-center gap-1.5">
                   <Crown className="w-4 h-4 text-[#AA820A]" /> Wedding Project Registry
@@ -716,21 +720,21 @@ export default function SuperAdminPage() {
         {/* TAB 2: GUESTS HUB */}
         {activeTab === 'guests' && (
           <div className="space-y-3">
-            <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs flex items-center justify-between">
+            <div className="acrylic-rose card-3d p-3.5 rounded-2xl flex items-center justify-between">
               <div>
-                <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04]">
+                <h3 className="font-cinzel text-xs font-bold uppercase text-[#9B1C2E]">
                   Consolidated Guest Telemetry
                 </h3>
                 <p className="text-[11px] text-[#544230]">
                   Track all attendee invitations, WhatsApp dispatch status, and dietary requests
                 </p>
               </div>
-              <span className="font-mono text-xs font-bold bg-[#FAF4E3] text-[#7D5F04] px-3 py-1 rounded-full border border-[#AA820A]/30">
+              <span className="font-mono text-xs font-bold bg-white text-[#9B1C2E] px-3 py-1 rounded-full border border-rose-200/80 shadow-2xs">
                 {allGuestsFlat.length} Total Guests Across Platform
               </span>
             </div>
 
-            <div className="bg-white rounded-2xl border border-[#E8DFC8] shadow-2xs overflow-hidden">
+            <div className="acrylic-glass card-3d rounded-2xl overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-[#FAF8F5] text-[10px] uppercase font-cinzel font-bold text-[#7D5F04] border-b border-[#E8DFC8]">
@@ -805,30 +809,30 @@ export default function SuperAdminPage() {
         {/* TAB 3: ANALYTICS & TELEMETRY */}
         {activeTab === 'analytics' && (
           <div className="space-y-3">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div className="acrylic-amber card-3d p-3 rounded-2xl text-center">
                 <span className="text-[10px] font-cinzel uppercase text-[#7D5F04] font-bold">Wax Seal Breaks</span>
                 <div className="text-2xl font-black text-[#AA820A] mt-1">94.8%</div>
-                <span className="text-[10px] text-emerald-700">Open rate verified</span>
+                <span className="text-[10px] text-emerald-800 font-semibold">Open rate verified</span>
               </div>
-              <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs text-center">
-                <span className="text-[10px] font-cinzel uppercase text-[#7D5F04] font-bold">Scratch Card Clears</span>
+              <div className="acrylic-rose card-3d p-3 rounded-2xl text-center">
+                <span className="text-[10px] font-cinzel uppercase text-[#9B1C2E] font-bold">Scratch Card Clears</span>
                 <div className="text-2xl font-black text-[#9B1C2E] mt-1">88.2%</div>
-                <span className="text-[10px] text-neutral-500">Gold foil revealed</span>
+                <span className="text-[10px] text-neutral-600">Gold foil revealed</span>
               </div>
-              <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs text-center">
-                <span className="text-[10px] font-cinzel uppercase text-[#7D5F04] font-bold">Sangeet Songs Queued</span>
-                <div className="text-2xl font-black text-[#557A65] mt-1">{totalDjSongs}</div>
-                <span className="text-[10px] text-neutral-500">Exported to DJ PDF</span>
+              <div className="acrylic-sage card-3d p-3 rounded-2xl text-center">
+                <span className="text-[10px] font-cinzel uppercase text-[#2D4A36] font-bold">Sangeet Songs Queued</span>
+                <div className="text-2xl font-black text-[#2D4A36] mt-1">{totalDjSongs}</div>
+                <span className="text-[10px] text-neutral-600">Exported to DJ PDF</span>
               </div>
-              <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs text-center">
-                <span className="text-[10px] font-cinzel uppercase text-[#7D5F04] font-bold">Avg Experience Time</span>
-                <div className="text-2xl font-black text-[#2C2218] mt-1">3m 42s</div>
-                <span className="text-[10px] text-emerald-700">High guest immersion</span>
+              <div className="acrylic-azure card-3d p-3 rounded-2xl text-center">
+                <span className="text-[10px] font-cinzel uppercase text-[#242A36] font-bold">Avg Experience Time</span>
+                <div className="text-2xl font-black text-[#1A365D] mt-1">3m 42s</div>
+                <span className="text-[10px] text-emerald-800 font-semibold">High guest immersion</span>
               </div>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-[#E8DFC8] shadow-2xs space-y-3">
+            <div className="acrylic-glass card-3d p-4 rounded-2xl space-y-3">
               <h4 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04]">
                 Device Breakdown & Traffic Source
               </h4>
@@ -859,7 +863,7 @@ export default function SuperAdminPage() {
         {/* TAB 4: 13 DESIGN SUITES CATALOG */}
         {activeTab === 'templates' && (
           <div className="space-y-3">
-            <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs flex items-center justify-between">
+            <div className="acrylic-lilac card-3d p-3.5 rounded-2xl flex items-center justify-between">
               <div>
                 <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04]">
                   13 Couture Wedding Invitation Suites
@@ -871,7 +875,7 @@ export default function SuperAdminPage() {
               <Link
                 href="/templates"
                 target="_blank"
-                className="px-3 py-1.5 rounded-lg bg-[#2C2218] text-[#FAF8F5] text-xs font-cinzel font-bold flex items-center gap-1"
+                className="px-3 py-1.5 rounded-lg bg-[#2C2218] text-[#FAF8F5] text-xs font-cinzel font-bold flex items-center gap-1 shadow-sm"
               >
                 Full Catalog <ExternalLink className="w-3 h-3 text-[#D4AF37]" />
               </Link>
@@ -881,9 +885,9 @@ export default function SuperAdminPage() {
               {TEMPLATE_LIST.map((suite) => (
                 <div
                   key={suite.id}
-                  className="bg-white rounded-2xl border border-[#E8DFC8] overflow-hidden shadow-2xs flex flex-col justify-between hover:border-[#AA820A] transition-all"
+                  className="acrylic-glass card-3d rounded-2xl overflow-hidden p-3.5 space-y-2 flex flex-col justify-between hover:border-[#AA820A] transition-all"
                 >
-                  <div className="p-3.5 space-y-2">
+                  <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-cinzel text-[10px] uppercase font-bold text-[#AA820A] bg-[#FAF4E3] px-2 py-0.5 rounded-md">
                         {suite.badge}
@@ -895,7 +899,7 @@ export default function SuperAdminPage() {
                     <p className="text-xs text-[#544230] leading-snug">{suite.tagline}</p>
                   </div>
 
-                  <div className="p-3.5 pt-0 border-t border-[#FAF4E3] flex items-center justify-between mt-2">
+                  <div className="pt-2 border-t border-[#FAF4E3] flex items-center justify-between mt-2">
                     <Link
                       href={`/wedding-invitation-${suite.id}`}
                       target="_blank"
@@ -922,30 +926,30 @@ export default function SuperAdminPage() {
         {/* TAB 5: FINANCIALS & BILLING */}
         {activeTab === 'financials' && (
           <div className="space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div className="acrylic-amber card-3d p-4 rounded-2xl">
                 <span className="text-[10px] font-cinzel uppercase text-[#7D5F04] font-bold">Gross Client Pipeline</span>
                 <div className="text-2xl font-black text-[#AA820A] mt-1">₹4,95,000</div>
-                <span className="text-[10px] text-neutral-500">6 Ultra-Luxury Retainers</span>
+                <span className="text-[10px] text-neutral-600">6 Ultra-Luxury Retainers</span>
               </div>
-              <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
-                <span className="text-[10px] font-cinzel uppercase text-[#7D5F04] font-bold">Average Project Fee</span>
+              <div className="acrylic-sage card-3d p-4 rounded-2xl">
+                <span className="text-[10px] font-cinzel uppercase text-[#2D4A36] font-bold">Average Project Fee</span>
                 <div className="text-2xl font-black text-[#2C2218] mt-1">₹82,500</div>
-                <span className="text-[10px] text-emerald-700">Custom Domain + Sitar Audio</span>
+                <span className="text-[10px] text-emerald-800 font-semibold">Custom Domain + Sitar Audio</span>
               </div>
-              <div className="bg-white p-3 rounded-2xl border border-[#E8DFC8] shadow-2xs">
-                <span className="text-[10px] font-cinzel uppercase text-[#7D5F04] font-bold">WhatsApp Dispatch Tier</span>
+              <div className="acrylic-azure card-3d p-4 rounded-2xl">
+                <span className="text-[10px] font-cinzel uppercase text-[#242A36] font-bold">WhatsApp Dispatch Tier</span>
                 <div className="text-2xl font-black text-emerald-700 mt-1">Active</div>
-                <span className="text-[10px] text-neutral-500">Unlimited Concierge Invites</span>
+                <span className="text-[10px] text-neutral-600">Unlimited Concierge Invites</span>
               </div>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-[#E8DFC8] shadow-2xs space-y-3">
+            <div className="acrylic-glass card-3d p-4 rounded-2xl space-y-3">
               <h4 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04]">
                 Recent Invoices & Retainers
               </h4>
               <div className="space-y-2 text-xs">
-                <div className="flex items-center justify-between p-2 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8]">
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-white/80 border border-[#E8DFC8]">
                   <div>
                     <div className="font-bold text-[#2C2218]">The Oberoi Udaivilas Celebration (Rohit & Priya)</div>
                     <div className="text-[10px] text-neutral-500">Royal Palace Bespoke Suite • Udaipur</div>
@@ -956,7 +960,7 @@ export default function SuperAdminPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-2 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8]">
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-white/80 border border-[#E8DFC8]">
                   <div>
                     <div className="font-bold text-[#2C2218]">Taj Lake Palace Union (Aditya & Ananya)</div>
                     <div className="text-[10px] text-neutral-500">Pressed Meadow Couture • Lake Pichola</div>
@@ -973,31 +977,31 @@ export default function SuperAdminPage() {
 
         {/* TAB 6: SECURITY & SETTINGS */}
         {activeTab === 'settings' && (
-          <div className="bg-white p-4 rounded-2xl border border-[#E8DFC8] shadow-2xs space-y-4">
-            <h4 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04] flex items-center gap-1.5">
+          <div className="acrylic-azure card-3d p-4 sm:p-5 rounded-2xl space-y-4">
+            <h4 className="font-cinzel text-xs font-bold uppercase text-[#242A36] flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-[#AA820A]" /> Platform Health & Infrastructure
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8] space-y-1">
+              <div className="p-3.5 rounded-xl bg-white/80 border border-[#E8DFC8] space-y-1">
                 <span className="text-[10px] font-cinzel uppercase font-bold text-[#7D5F04]">Database Storage</span>
                 <p className="font-semibold text-[#2C2218]">Firebase Firestore & Local Fallback</p>
                 <p className="text-[11px] text-neutral-500">Multi-region synchronised with offline cache.</p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8] space-y-1">
+              <div className="p-3.5 rounded-xl bg-white/80 border border-[#E8DFC8] space-y-1">
                 <span className="text-[10px] font-cinzel uppercase font-bold text-[#7D5F04]">Audio Synthesis Engine</span>
                 <p className="font-semibold text-[#2C2218]">Web Audio API Sitar & Bansuri Synthesizer</p>
                 <p className="text-[11px] text-neutral-500">Real-time dynamic drone, chime & wax crack sound.</p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8] space-y-1">
+              <div className="p-3.5 rounded-xl bg-white/80 border border-[#E8DFC8] space-y-1">
                 <span className="text-[10px] font-cinzel uppercase font-bold text-[#7D5F04]">WhatsApp Cloud Gateway</span>
                 <p className="font-semibold text-emerald-700">1-Click Direct WhatsApp API (wa.me)</p>
                 <p className="text-[11px] text-neutral-500">Auto-formatted invitation cards with instant status update.</p>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8DFC8] space-y-1">
+              <div className="p-3.5 rounded-xl bg-white/80 border border-[#E8DFC8] space-y-1">
                 <span className="text-[10px] font-cinzel uppercase font-bold text-[#7D5F04]">PDF Export Module</span>
                 <p className="font-semibold text-[#2C2218]">jsPDF Royal Gold Document Engine</p>
                 <p className="text-[11px] text-neutral-500">1-Click printable DJ setlist generator with phone numbers.</p>

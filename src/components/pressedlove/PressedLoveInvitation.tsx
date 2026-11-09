@@ -17,6 +17,9 @@ import { CoupleTrivia } from '@/components/guest/CoupleTrivia';
 import { DjSongRequestBox } from '@/components/guest/DjSongRequestBox';
 import { VoiceBlessingRecorder } from '@/components/guest/VoiceBlessingRecorder';
 import { GuestRsvpForm } from '@/components/guest/GuestRsvpForm';
+import { EstateBlueprintExplorer } from '@/components/guest/EstateBlueprintExplorer';
+import { BotanicalHerbariumPicker } from '@/components/guest/BotanicalHerbariumPicker';
+import { RivaBoatSchedule } from '@/components/guest/RivaBoatSchedule';
 import { StoryMilestone } from '@/types/wedding';
 import {
   Calendar,
@@ -219,6 +222,8 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
         partner2={template.couple.partner2}
         venueCity={template.location.city + ', ' + template.location.country}
         isOpen={isOpened}
+        themeStyle={template.id as any}
+        waxColor={template.envelope?.waxColor || '#9B1C2E'}
         onOpened={() => {
           setIsOpened(true);
           if (audioRef.current) {
@@ -276,8 +281,14 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
         </button>
       </aside>
 
-      {/* FULL MICROSITE BODY */}
-      <div className={`transition-opacity duration-1000 ${isOpened ? 'opacity-100' : 'opacity-0'}`}>
+      {/* FULL MICROSITE BODY (Strictly locked & hidden until 3D Wax Seal is broken) */}
+      <div
+        className={`transition-all duration-1000 ease-out ${
+          isOpened
+            ? 'opacity-100 translate-y-0 filter-none pointer-events-auto'
+            : 'opacity-0 translate-y-8 blur-xs pointer-events-none max-h-screen overflow-hidden'
+        }`}
+      >
         {/* HERO SECTION */}
         <section className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center text-center px-6 py-20 overflow-hidden">
           {/* Hero Video or Hero Image */}
@@ -455,6 +466,13 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           </div>
         </section>
 
+        {/* TEMPLATE-SPECIFIC EXCLUSIVE INTERACTION 1: ARCHITECTURAL BLUEPRINT (FOR THE VENUE) */}
+        {template.id === 'the-venue' && (
+          <section className="max-w-4xl mx-auto px-6 py-6">
+            <EstateBlueprintExplorer />
+          </section>
+        )}
+
         {/* SCHEDULE OF THE DAY (ITINERARY TIMELINE) */}
         <section className="max-w-3xl mx-auto px-6 py-12 space-y-8">
           <div className="text-center space-y-2">
@@ -490,6 +508,13 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
             ))}
           </div>
         </section>
+
+        {/* TEMPLATE-SPECIFIC EXCLUSIVE INTERACTION 2: BOTANICAL HERBARIUM PICKER (FOR FLORAL) */}
+        {template.id === 'floral' && (
+          <section className="max-w-4xl mx-auto px-6 py-6">
+            <BotanicalHerbariumPicker />
+          </section>
+        )}
 
         {/* ROMANTIC MILESTONES SLIDER ("HOW WE MET") */}
         <section className="max-w-4xl mx-auto px-6 py-14 space-y-6">
@@ -608,6 +633,13 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
             ))}
           </div>
         </section>
+
+        {/* TEMPLATE-SPECIFIC EXCLUSIVE INTERACTION 3: RIVA SPEEDBOAT LAKE TRANSFERS (FOR COMO) */}
+        {template.id === 'como' && (
+          <section className="max-w-4xl mx-auto px-6 py-6">
+            <RivaBoatSchedule />
+          </section>
+        )}
 
         {/* FREQUENTLY ASKED QUESTIONS (ACCORDION) */}
         <section className="max-w-3xl mx-auto px-6 py-12 space-y-8">
