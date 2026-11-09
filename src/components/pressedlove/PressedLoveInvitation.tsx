@@ -54,6 +54,7 @@ interface PressedLoveInvitationProps {
   initialTemplate: PressedLoveTemplate;
   guestName?: string;
   autoOpen?: boolean;
+  showCategorySwitcher?: boolean;
 }
 
 const defaultStoryMilestones: StoryMilestone[] = [
@@ -99,6 +100,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
   initialTemplate,
   guestName = 'Special Guest',
   autoOpen = false,
+  showCategorySwitcher = false,
 }) => {
   const router = useRouter();
   const [template, setTemplate] = useState<PressedLoveTemplate>(initialTemplate);
@@ -266,131 +268,135 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
         }}
       />
 
-      {/* RAJHARA-STYLE TOP CATEGORY BAR FOR WEDDING SUITES */}
-      <aside aria-label="Template Designs" className="fixed top-3 left-1/2 -translate-x-1/2 z-40 max-w-full px-2 w-auto pointer-events-auto">
-        <div className="bg-white/95 backdrop-blur-md border border-[#E8DFC8] rounded-full p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex items-center gap-1.5 overflow-x-auto max-w-[96vw] sm:max-w-4xl no-scrollbar">
-          <button
-            onClick={() => setIsOpened(false)}
-            className="px-2.5 py-1 rounded-full text-[11px] font-cinzel font-bold tracking-wider text-[#7D5F04] bg-[#FAF4E3] hover:bg-[#F3E5AB] border border-[#D4AF37]/40 flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
-            title="Replay 3D Wax Seal Unboxing"
-          >
-            <RotateCcw className="w-3 h-3 text-[#AA820A]" /> Replay Seal
-          </button>
-
-          <button
-            onClick={() => setShowSuiteCatalogueModal(true)}
-            className="px-2.5 py-1 rounded-full text-[11px] font-cinzel font-bold tracking-wider text-[#2C2218] bg-white hover:bg-[#FAF4E3] border border-[#E8DFC8] flex items-center gap-1 shrink-0 transition-colors shadow-2xs cursor-pointer"
-            title="Open All 13 Suites Catalogue"
-          >
-            <LayoutGrid className="w-3 h-3 text-[#AA820A]" /> Catalogue (13)
-          </button>
-
-          <div className="h-4 w-px bg-[#E8DFC8] shrink-0 mx-0.5" />
-
-          {TEMPLATE_LIST.map((t) => {
-            const isActive = t.id === template.id;
-            const meta = SUITE_CATEGORY_METAS[t.id];
-            return (
+      {/* OPTIONAL CATEGORY SWITCHER (ONLY FOR ADMIN / DESIGN PREVIEW - STRICTLY HIDDEN FOR GUESTS) */}
+      {showCategorySwitcher && (
+        <>
+          <aside aria-label="Template Designs" className="fixed top-3 left-1/2 -translate-x-1/2 z-40 max-w-full px-2 w-auto pointer-events-auto">
+            <div className="bg-white/95 backdrop-blur-md border border-[#E8DFC8] rounded-full p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex items-center gap-1.5 overflow-x-auto max-w-[96vw] sm:max-w-4xl no-scrollbar">
               <button
-                key={t.id}
-                onClick={() => handleSelectTemplate(t)}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition cursor-pointer shrink-0 ${
-                  isActive
-                    ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black shadow-2xs font-bold'
-                    : 'bg-[#FAF7F2] text-[#544230] hover:bg-[#FAF4E3] hover:text-[#2C2218] border border-[#E8DFC8]/60'
-                }`}
+                onClick={() => setIsOpened(false)}
+                className="px-2.5 py-1 rounded-full text-[11px] font-cinzel font-bold tracking-wider text-[#7D5F04] bg-[#FAF4E3] hover:bg-[#F3E5AB] border border-[#D4AF37]/40 flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
+                title="Replay 3D Wax Seal Unboxing"
               >
-                <span className="text-xs leading-none">{meta?.icon || '✨'}</span>
-                <span className="leading-none">{t.name}</span>
-                {meta?.badge && (
-                  <span
-                    className={`text-[8px] uppercase tracking-wider px-1.5 py-0.2 rounded-full font-black ${
-                      isActive ? 'bg-black text-[#FAF4E3]' : 'bg-amber-100 text-amber-800'
+                <RotateCcw className="w-3 h-3 text-[#AA820A]" /> Replay Seal
+              </button>
+
+              <button
+                onClick={() => setShowSuiteCatalogueModal(true)}
+                className="px-2.5 py-1 rounded-full text-[11px] font-cinzel font-bold tracking-wider text-[#2C2218] bg-white hover:bg-[#FAF4E3] border border-[#E8DFC8] flex items-center gap-1 shrink-0 transition-colors shadow-2xs cursor-pointer"
+                title="Open All 13 Suites Catalogue"
+              >
+                <LayoutGrid className="w-3 h-3 text-[#AA820A]" /> Catalogue (13)
+              </button>
+
+              <div className="h-4 w-px bg-[#E8DFC8] shrink-0 mx-0.5" />
+
+              {TEMPLATE_LIST.map((t) => {
+                const isActive = t.id === template.id;
+                const meta = SUITE_CATEGORY_METAS[t.id];
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => handleSelectTemplate(t)}
+                    className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition cursor-pointer shrink-0 ${
+                      isActive
+                        ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black shadow-2xs font-bold'
+                        : 'bg-[#FAF7F2] text-[#544230] hover:bg-[#FAF4E3] hover:text-[#2C2218] border border-[#E8DFC8]/60'
                     }`}
                   >
-                    {meta.badge.split(' ')[0]}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </aside>
-
-      {/* RAJHARA-STYLE SUITE CATALOGUE DRAWER MODAL */}
-      {showSuiteCatalogueModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-          <div className="bg-[#FAF8F5] border border-[#E8DFC8] rounded-3xl max-w-4xl w-full p-5 sm:p-7 max-h-[90vh] overflow-y-auto shadow-2xl relative">
-            <div className="flex items-center justify-between border-b border-[#E8DFC8] pb-4 mb-5">
-              <div>
-                <span className="text-[10px] font-cinzel font-bold text-[#AA820A] uppercase tracking-widest block">
-                  Rajhara Style Suite Showcase
-                </span>
-                <h3 className="font-serif text-xl sm:text-2xl text-[#2C2218] font-bold">
-                  All 13 Haute Couture Wedding Suites (सभी डिज़ाइन्स)
-                </h3>
-              </div>
-              <button
-                onClick={() => setShowSuiteCatalogueModal(false)}
-                className="p-2 rounded-full hover:bg-gray-200 text-gray-700 cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {SUITE_METAS_LIST.map((meta) => {
-                const isCurrent = meta.id === template.id;
-                return (
-                  <div
-                    key={meta.id}
-                    className={`rounded-2xl border p-4 bg-gradient-to-br ${meta.gradientBg} ${meta.borderColor} flex flex-col justify-between transition-all hover:shadow-md`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-2xl">{meta.icon}</span>
-                        <span className={`text-[9px] uppercase tracking-wider font-black px-2 py-0.5 rounded-full border ${meta.badgeColor}`}>
-                          {meta.badge}
-                        </span>
-                      </div>
-                      <h4 className="font-serif font-bold text-base text-[#2C2218]">
-                        {meta.name}
-                      </h4>
-                      <p className="text-[11px] font-cormorant italic text-[#7D5F04] mb-3">
-                        {meta.hindiName}
-                      </p>
-                      <ul className="space-y-1 mb-4">
-                        {meta.highlights.map((h, i) => (
-                          <li key={i} className="text-[10px] text-[#544230] flex items-center gap-1.5">
-                            <Check className="w-3 h-3 text-[#AA820A] shrink-0" />
-                            <span>{h}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        const targetTemplate = PRESSED_LOVE_TEMPLATES[meta.id];
-                        if (targetTemplate) {
-                          handleSelectTemplate(targetTemplate);
-                        }
-                        setShowSuiteCatalogueModal(false);
-                      }}
-                      className={`w-full py-2 rounded-xl text-xs font-cinzel font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                        isCurrent
-                          ? 'bg-[#AA820A] text-white shadow-xs'
-                          : 'bg-white hover:bg-[#FAF4E3] text-[#2C2218] border border-[#E8DFC8]'
-                      }`}
-                    >
-                      {isCurrent ? 'Active Suite' : 'Apply Suite'} <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                    <span className="text-xs leading-none">{meta?.icon || '✨'}</span>
+                    <span className="leading-none">{t.name}</span>
+                    {meta?.badge && (
+                      <span
+                        className={`text-[8px] uppercase tracking-wider px-1.5 py-0.2 rounded-full font-black ${
+                          isActive ? 'bg-black text-[#FAF4E3]' : 'bg-amber-100 text-amber-800'
+                        }`}
+                      >
+                        {meta.badge.split(' ')[0]}
+                      </span>
+                    )}
+                  </button>
                 );
               })}
             </div>
-          </div>
-        </div>
+          </aside>
+
+          {/* RAJHARA-STYLE SUITE CATALOGUE DRAWER MODAL */}
+          {showSuiteCatalogueModal && (
+            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+              <div className="bg-[#FAF8F5] border border-[#E8DFC8] rounded-3xl max-w-4xl w-full p-5 sm:p-7 max-h-[90vh] overflow-y-auto shadow-2xl relative">
+                <div className="flex items-center justify-between border-b border-[#E8DFC8] pb-4 mb-5">
+                  <div>
+                    <span className="text-[10px] font-cinzel font-bold text-[#AA820A] uppercase tracking-widest block">
+                      Rajhara Style Suite Showcase
+                    </span>
+                    <h3 className="font-serif text-xl sm:text-2xl text-[#2C2218] font-bold">
+                      All 13 Haute Couture Wedding Suites (सभी डिज़ाइन्स)
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => setShowSuiteCatalogueModal(false)}
+                    className="p-2 rounded-full hover:bg-gray-200 text-gray-700 cursor-pointer"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {SUITE_METAS_LIST.map((meta) => {
+                    const isCurrent = meta.id === template.id;
+                    return (
+                      <div
+                        key={meta.id}
+                        className={`rounded-2xl border p-4 bg-gradient-to-br ${meta.gradientBg} ${meta.borderColor} flex flex-col justify-between transition-all hover:shadow-md`}
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-2xl">{meta.icon}</span>
+                            <span className={`text-[9px] uppercase tracking-wider font-black px-2 py-0.5 rounded-full border ${meta.badgeColor}`}>
+                              {meta.badge}
+                            </span>
+                          </div>
+                          <h4 className="font-serif font-bold text-base text-[#2C2218]">
+                            {meta.name}
+                          </h4>
+                          <p className="text-[11px] font-cormorant italic text-[#7D5F04] mb-3">
+                            {meta.hindiName}
+                          </p>
+                          <ul className="space-y-1 mb-4">
+                            {meta.highlights.map((h, i) => (
+                              <li key={i} className="text-[10px] text-[#544230] flex items-center gap-1.5">
+                                <Check className="w-3 h-3 text-[#AA820A] shrink-0" />
+                                <span>{h}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <button
+                          onClick={() => {
+                            const targetTemplate = PRESSED_LOVE_TEMPLATES[meta.id];
+                            if (targetTemplate) {
+                              handleSelectTemplate(targetTemplate);
+                            }
+                            setShowSuiteCatalogueModal(false);
+                          }}
+                          className={`w-full py-2 rounded-xl text-xs font-cinzel font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                            isCurrent
+                              ? 'bg-[#AA820A] text-white shadow-xs'
+                              : 'bg-white hover:bg-[#FAF4E3] text-[#2C2218] border border-[#E8DFC8]'
+                          }`}
+                        >
+                          {isCurrent ? 'Active Suite' : 'Apply Suite'} <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       {/* Floating Audio Toggle Pill */}
@@ -410,93 +416,104 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
 
       {/* FULL MICROSITE BODY (Strictly locked & hidden until 3D Wax Seal is broken) */}
       <div
-        className={`transition-all duration-1000 ease-out ${
+        className={`transition-all duration-1000 ease-out py-6 sm:py-16 px-2 sm:px-6 ${
           isOpened
             ? 'opacity-100 translate-y-0 filter-none pointer-events-auto'
             : 'opacity-0 translate-y-8 blur-xs pointer-events-none max-h-screen overflow-hidden'
         }`}
       >
-        {/* HERO SECTION */}
-        <section className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center text-center px-6 py-20 overflow-hidden">
-          {/* Hero Video or Hero Image */}
-          {template.assets.heroVideo ? (
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster={template.assets.heroVideoPoster || template.assets.heroImage}
-              className="absolute inset-0 w-full h-full object-cover brightness-[0.72] scale-105 filter"
-            >
-              <source src={template.assets.heroVideo} type="video/mp4" />
-              <source src={template.assets.heroVideo} type="video/webm" />
-            </video>
-          ) : (
-            <div
-              className="absolute inset-0 bg-cover bg-center brightness-[0.75]"
-              style={{ backgroundImage: `url(${template.assets.heroImage || template.assets.venueImage})` }}
-            />
-          )}
+        {/* ONE CONTINUOUS BESPOKE HANDMADE COTTON PAPER STATIONERY SHEET */}
+        <main
+          className="stationery-sheet max-w-4xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_70px_rgba(0,0,0,0.12),0_4px_16px_rgba(0,0,0,0.04)] border border-[#E8DFC8]/75"
+          style={{
+            backgroundColor: template.envelope?.bgColor || template.theme.colors.background,
+            color: template.theme.colors.text,
+          }}
+        >
+          {/* HERO SECTION — AUTHENTIC HANDMADE COTTON PAPER LETTERPRESS PROSE */}
+          <section className="relative pt-16 sm:pt-24 pb-14 sm:pb-20 text-center px-4 sm:px-10 border-b border-[#D4AF37]/25">
+            {/* Top Auspicious Invocation or Suite Tag */}
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <span className="h-[1px] w-8 sm:w-16 bg-[#D4AF37]/50" />
+              <span
+                className="font-cinzel text-[10px] sm:text-xs uppercase tracking-[0.3em] font-bold"
+                style={{ color: template.theme.colors.accent }}
+              >
+                {template.couple.formalTitle || 'The Wedding Celebration'}
+              </span>
+              <span className="h-[1px] w-8 sm:w-16 bg-[#D4AF37]/50" />
+            </div>
 
-          {/* Frosted / Dark Gradient Vignette for Readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" />
-
-          {/* Hero Content */}
-          <div className="relative z-10 max-w-3xl mx-auto space-y-6 text-white px-4">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-xs font-cinzel uppercase tracking-[0.2em]">
-              Save The Date
-            </span>
-
-            <h1 className={`${template.theme.fonts.script} text-6xl sm:text-8xl md:text-9xl text-[#FAF8F5] leading-none drop-shadow-lg`}>
-              {template.couple.partner1} <br />
-              <span className="text-4xl sm:text-6xl italic font-serif">&</span> {template.couple.partner2}
-            </h1>
-
-            <p className="font-cormorant italic text-lg sm:text-2xl text-white/90 max-w-xl mx-auto leading-relaxed drop-shadow">
-              Together with their families, invite you to celebrate their wedding
+            <p className="font-cormorant italic text-base sm:text-xl text-[#544230] max-w-lg mx-auto leading-relaxed mb-4">
+              Together with their families, cordially invite you to celebrate the marriage of
             </p>
 
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs sm:text-sm font-cinzel uppercase tracking-wider text-white/95">
-              <span className="flex items-center gap-1.5">
-                <Calendar className="w-4 h-4 text-[#F3E5AB]" />
+            {/* Couple Calligraphy with Letterpress Foil */}
+            <h1
+              className={`${template.theme.fonts.script} text-5xl sm:text-7xl md:text-8xl leading-tight mb-4 letterpress-deboss`}
+              style={{ color: template.theme.colors.text }}
+            >
+              {template.couple.partner1} <br />
+              <span
+                className="text-3xl sm:text-5xl italic font-serif"
+                style={{ color: template.theme.colors.accent }}
+              >
+                &
+              </span>{' '}
+              {template.couple.partner2}
+            </h1>
+
+            {/* Ceremony Details Letterpressed on Cotton Paper */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm font-cinzel uppercase tracking-widest text-[#403030]">
+              <span className="flex items-center gap-1.5 font-semibold">
+                <Calendar className="w-3.5 h-3.5" style={{ color: template.theme.colors.accent }} />
                 {template.ceremony.displayDate}
               </span>
-              <span className="hidden sm:inline">•</span>
-              <span className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-[#F3E5AB]" />
+              <span className="hidden sm:inline text-[#D4AF37]">•</span>
+              <span className="flex items-center gap-1.5 font-semibold">
+                <Clock className="w-3.5 h-3.5" style={{ color: template.theme.colors.accent }} />
                 {template.ceremony.displayTime}
               </span>
-              <span className="hidden sm:inline">•</span>
-              <span className="flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-[#F3E5AB]" />
+              <span className="hidden sm:inline text-[#D4AF37]">•</span>
+              <span className="flex items-center gap-1.5 font-semibold">
+                <MapPin className="w-3.5 h-3.5" style={{ color: template.theme.colors.accent }} />
                 {template.location.venueName}
               </span>
             </div>
 
-            {/* Quick Actions */}
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-6">
+            {/* Personalized Guest Inscription on Paper */}
+            <div className="mt-8 pt-4 border-t border-[#D4AF37]/20 max-w-sm mx-auto">
+              <span className="text-[9px] font-cinzel uppercase tracking-[0.25em] text-[#7D5F04] font-bold block mb-0.5">
+                Specially Inscribed For
+              </span>
+              <p className="font-pinyon text-2xl sm:text-3xl text-[#2C2218]">
+                {guestName}
+              </p>
+            </div>
+
+            {/* Quick Stationery Action Links */}
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-6">
               <button
                 onClick={() => {
                   const el = document.getElementById('rsvp-section');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                   else setShowRsvpModal(true);
                 }}
-                className="px-8 py-3.5 rounded-full text-black font-cinzel text-xs font-bold uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all bg-[#FAF8F5] hover:bg-white"
+                className="px-6 py-2.5 rounded-full text-white font-cinzel text-xs font-bold uppercase tracking-widest shadow-md hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                style={{ backgroundColor: template.theme.colors.primary }}
               >
-                RSVP Now
+                RSVP Response
               </button>
-
               <a
                 href={calendarUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3.5 rounded-full text-white font-cinzel text-xs font-semibold uppercase tracking-wider border border-white/50 backdrop-blur-md hover:bg-white/20 transition-all flex items-center gap-2"
+                className="px-5 py-2.5 rounded-full font-cinzel text-xs font-semibold uppercase tracking-wider border border-[#D4AF37]/50 hover:bg-[#FAF4E3] transition-all flex items-center gap-1.5 text-[#544230]"
               >
                 <Calendar className="w-3.5 h-3.5" /> Add to Calendar
               </a>
             </div>
-          </div>
-        </section>
+          </section>
 
         {/* AUSPICIOUS MUHURAT GOLD-FOIL SCRATCH CARD */}
         <section className="max-w-2xl mx-auto px-6 py-12 text-center space-y-4">
@@ -877,17 +894,18 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
         </section>
 
         {/* FOOTER */}
-        <footer className="border-t border-[#E8DFC8] py-12 text-center text-xs space-y-3 bg-white/40">
+        <footer className="border-t border-[#D4AF37]/25 py-12 text-center text-xs space-y-3 bg-black/[0.02]">
           <p className="font-cinzel text-[11px] tracking-widest uppercase text-[#AA820A] font-bold">
             {template.couple.partner1} & {template.couple.partner2}
           </p>
           <p className="font-cormorant italic text-sm text-[#7D5F04]">
             Forever Begins Under the Stars • {template.ceremony.displayDate}
           </p>
-          <p className="text-[10px] text-neutral-400 font-sans">
-            Crafted with Ultra-Luxury Precision • PressedLove Couture Suite
+          <p className="text-[10px] text-[#544230]/60 font-sans tracking-wider uppercase">
+            Haute Couture Bespoke Stationery Suite
           </p>
         </footer>
+        </main>
       </div>
 
       {/* RSVP MODAL POPUP (SECONDARY ACCESS) */}

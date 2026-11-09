@@ -263,6 +263,102 @@
     0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
+/* =========================================================================
+   STATIONERY LETTERPRESS & DEBOSSED PAPER EFFECTS
+   ========================================================================= */
+
+/* True Letterpress Deboss (Light from top-left pressing into cotton paper) */
+.letterpress-deboss {
+  text-shadow: 
+    0 1px 1px rgba(255, 255, 255, 0.85),
+    0 -1px 1px rgba(0, 0, 0, 0.20);
+}
+
+/* 24K Gold Foil Stamping on Cotton Paper */
+.letterpress-foil {
+  background: linear-gradient(135deg, #7D5F04 0%, #AA820A 20%, #D4AF37 50%, #AA820A 80%, #543F02 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.7));
+}
+
+/* Continuous Handmade Cotton Paper Stationery Sheet */
+.stationery-sheet {
+  position: relative;
+  background-color: #FAF6F0;
+  border-left: 1px solid rgba(216, 206, 189, 0.45);
+  border-right: 1px solid rgba(216, 206, 189, 0.45);
+  box-shadow: 
+    0 0 60px rgba(0, 0, 0, 0.06),
+    0 30px 90px rgba(140, 110, 60, 0.09);
+}
+
+/* Tipped-In Bespoke Response / RSVP Slip */
+.tipped-in-slip {
+  background-color: #FFFDF9;
+  border: 1px dashed rgba(180, 150, 110, 0.55);
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 0, 0, 0.06),
+    0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* PressedLove Motion Intro Video Styles */
+.motion-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.motion-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+@media (max-width: 768px) {
+  .motion-media {
+    object-fit: cover;
+  }
+}
+
+.motion-video-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.motion-skip {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 50;
+  padding: 0.45rem 0.95rem;
+  border-radius: 9999px;
+  background: rgba(30, 25, 20, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFDF9;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.motion-skip:hover {
+  background: rgba(30, 25, 20, 0.92);
+  border-color: rgba(212, 175, 55, 0.6);
+  color: #D4AF37;
+}
+
 /* Frosted Vellum Wrap */
 .vellum-wrap {
   background: rgba(253, 251, 247, 0.88);

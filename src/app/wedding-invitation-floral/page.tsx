@@ -15,6 +15,7 @@ function FloralContent() {
       initialTemplate={template}
       guestName={guestQuery}
       autoOpen={false}
+      showCategorySwitcher={false}
     />
   );
 }

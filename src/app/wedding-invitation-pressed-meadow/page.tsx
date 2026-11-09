@@ -15,6 +15,7 @@ function PressedMeadowContent() {
       initialTemplate={template}
       guestName={guestQuery}
       autoOpen={false}
+      showCategorySwitcher={false}
     />
   );
 }
