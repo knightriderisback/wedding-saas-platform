@@ -27,26 +27,95 @@
 }
 
 /* =========================================================================
-   AUTHENTIC KHADI & RAW COTTON LINEN FABRIC TEXTURES
+   AUTHENTIC INDIAN WEDDING CARD PAPER (ZERO CHECKS, NATURAL PULP & GOLD SPECKS)
    ========================================================================= */
 
-/* Realistic Khadi Cloth Weave Pattern with Natural Thread Irregularities */
+/* Pure Indian Wedding Card Handmade Paper — Smooth warm ivory pulp with gold flecks, ZERO checks */
+.bg-wedding-card-paper,
 .bg-khadi-fabric {
-  background-color: #FAF7F2;
+  background-color: #FAF5E8;
   background-image: 
-    linear-gradient(90deg, rgba(160, 120, 60, 0.035) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(160, 120, 60, 0.035) 1px, transparent 1px),
-    linear-gradient(45deg, rgba(212, 175, 55, 0.02) 1px, transparent 1px),
-    radial-gradient(circle at 50% 50%, rgba(253, 251, 247, 0.9) 0%, rgba(250, 247, 242, 0.95) 100%);
-  background-size: 8px 8px, 8px 8px, 16px 16px, 100% 100%;
+    radial-gradient(circle at 18% 22%, rgba(212, 175, 55, 0.05) 0%, transparent 35%),
+    radial-gradient(circle at 82% 28%, rgba(155, 28, 46, 0.035) 0%, transparent 40%),
+    radial-gradient(circle at 50% 68%, rgba(212, 175, 55, 0.04) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, #FCF9F2 0%, #F6ECE0 100%);
 }
 
-/* Soft Woven Linen Raw Texture */
+/* Soft Woven Linen Raw Texture (No grids/checks) */
 .bg-linen-raw {
-  background-color: #F8F5EE;
+  background-color: #FAF5E8;
   background-image:
-    repeating-linear-gradient(45deg, rgba(180, 140, 80, 0.025) 0, rgba(180, 140, 80, 0.025) 1px, transparent 0, transparent 6px),
-    repeating-linear-gradient(-45deg, rgba(180, 140, 80, 0.025) 0, rgba(180, 140, 80, 0.025) 1px, transparent 0, transparent 6px);
+    radial-gradient(circle at 50% 50%, #FCF9F2 0%, #F6ECE0 100%);
+}
+
+/* Gold Glitter & Sparkle Animation */
+@keyframes goldGlitterTwinkle {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.9) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15) rotate(180deg);
+  }
+}
+
+.glitter-sparkle {
+  animation: goldGlitterTwinkle 3s ease-in-out infinite;
+}
+
+.glitter-sparkle-delayed {
+  animation: goldGlitterTwinkle 4s ease-in-out 1.5s infinite;
+}
+
+/* 24K Molten Gold Shimmer Text */
+.text-gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    #AA820A 0%,
+    #D4AF37 25%,
+    #FFF4D0 50%,
+    #D4AF37 75%,
+    #AA820A 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerGold 4s linear infinite;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.8));
+}
+
+@keyframes shimmerGold {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Royal Indian Wedding Gilded Border & Corner Ticks */
+.indian-card-frame {
+  position: relative;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  outline: 1px solid rgba(170, 130, 10, 0.25);
+  outline-offset: -7px;
+}
+
+/* Dip Pen Fountain Ink Lettering */
+.ink-handwritten {
+  font-family: 'Pinyon Script', cursive;
+  color: #3C2415;
+  text-shadow: 0 0.5px 1px rgba(255, 255, 255, 0.6);
+}
+
+.ink-kumkum {
+  font-family: 'Pinyon Script', cursive;
+  color: #7A1423;
+  text-shadow: 0 0.5px 1px rgba(255, 255, 255, 0.6);
+}
+
+.ink-gold {
+  font-family: 'Pinyon Script', cursive;
+  color: #8C6406;
+  text-shadow: 0 0.5px 1px rgba(255, 255, 255, 0.7);
 }
 
 /* =========================================================================

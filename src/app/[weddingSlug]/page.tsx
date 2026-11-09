@@ -204,7 +204,7 @@ function LuxuryGuestMicrositeContent() {
   };
 
   return (
-    <div className="relative min-h-screen bg-cotton-paper text-[#2C2218] pb-28 selection:bg-[#D4AF37]/30 selection:text-[#2C2218]">
+    <div className="relative min-h-screen bg-wedding-card-paper text-[#2C2218] pb-28 selection:bg-[#D4AF37]/30 selection:text-[#2C2218]">
       {/* 3D Royal Boxed Envelope Unboxing Experience */}
       <GatefoldEnvelope
         guestName={guestQuery}

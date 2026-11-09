@@ -236,10 +236,9 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
 
   return (
     <div
-      className="min-h-screen transition-colors duration-700 relative selection:bg-[#d4a574]/30 bg-khadi-fabric"
+      className="min-h-screen transition-colors duration-700 relative selection:bg-[#d4a574]/30 bg-wedding-card-paper text-[#2C2218]"
       style={{
-        backgroundColor: template.envelope?.bgColor || template.theme.colors.background,
-        color: template.theme.colors.text,
+        backgroundColor: '#FAF5E8',
       }}
     >
       {/* Background Audio Tag */}
@@ -414,84 +413,81 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
         </button>
       </aside>
 
-      {/* FULL MICROSITE BODY (Strictly locked & hidden until 3D Wax Seal is broken) */}
+      {/* FULL MICROSITE BODY — PURE AUTHENTIC INDIAN WEDDING CARD PAPER (ZERO CHECKS, ZERO FLOATING BOXES) */}
       <div
-        className={`transition-all duration-1000 ease-out py-6 sm:py-16 px-2 sm:px-6 ${
+        className={`transition-all duration-1000 ease-out ${
           isOpened
             ? 'opacity-100 translate-y-0 filter-none pointer-events-auto'
             : 'opacity-0 translate-y-8 blur-xs pointer-events-none max-h-screen overflow-hidden'
         }`}
       >
-        {/* ONE CONTINUOUS BESPOKE HANDMADE COTTON PAPER STATIONERY SHEET */}
-        <main
-          className="stationery-sheet max-w-4xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_70px_rgba(0,0,0,0.12),0_4px_16px_rgba(0,0,0,0.04)] border border-[#E8DFC8]/75"
-          style={{
-            backgroundColor: template.envelope?.bgColor || template.theme.colors.background,
-            color: template.theme.colors.text,
-          }}
-        >
-          {/* HERO SECTION — AUTHENTIC HANDMADE COTTON PAPER LETTERPRESS PROSE */}
-          <section className="relative pt-16 sm:pt-24 pb-14 sm:pb-20 text-center px-4 sm:px-10 border-b border-[#D4AF37]/25">
-            {/* Top Auspicious Invocation or Suite Tag */}
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <span className="h-[1px] w-8 sm:w-16 bg-[#D4AF37]/50" />
-              <span
-                className="font-cinzel text-[10px] sm:text-xs uppercase tracking-[0.3em] font-bold"
-                style={{ color: template.theme.colors.accent }}
-              >
-                {template.couple.formalTitle || 'The Wedding Celebration'}
-              </span>
-              <span className="h-[1px] w-8 sm:w-16 bg-[#D4AF37]/50" />
-            </div>
+        {/* ONE CONTINUOUS BESPOKE INDIAN WEDDING INVITATION CARD SHEET */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-12 py-10 sm:py-20 border-x border-[#D4AF37]/35 relative bg-wedding-card-paper shadow-[0_0_80px_rgba(212,175,55,0.06)]">
+          
+          {/* Royal 24K Gold Foil Corner Filigree Accents */}
+          <div className="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2 border-[#D4AF37]/70 pointer-events-none" />
+          <div className="absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2 border-[#D4AF37]/70 pointer-events-none" />
+          <div className="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2 border-[#D4AF37]/70 pointer-events-none" />
+          <div className="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-[#D4AF37]/70 pointer-events-none" />
 
-            <p className="font-cormorant italic text-base sm:text-xl text-[#544230] max-w-lg mx-auto leading-relaxed mb-4">
-              Together with their families, cordially invite you to celebrate the marriage of
-            </p>
-
-            {/* Couple Calligraphy with Letterpress Foil */}
-            <h1
-              className={`${template.theme.fonts.script} text-5xl sm:text-7xl md:text-8xl leading-tight mb-4 letterpress-deboss`}
-              style={{ color: template.theme.colors.text }}
-            >
-              {template.couple.partner1} <br />
-              <span
-                className="text-3xl sm:text-5xl italic font-serif"
-                style={{ color: template.theme.colors.accent }}
-              >
-                &
-              </span>{' '}
-              {template.couple.partner2}
-            </h1>
-
-            {/* Ceremony Details Letterpressed on Cotton Paper */}
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm font-cinzel uppercase tracking-widest text-[#403030]">
-              <span className="flex items-center gap-1.5 font-semibold">
-                <Calendar className="w-3.5 h-3.5" style={{ color: template.theme.colors.accent }} />
-                {template.ceremony.displayDate}
-              </span>
-              <span className="hidden sm:inline text-[#D4AF37]">•</span>
-              <span className="flex items-center gap-1.5 font-semibold">
-                <Clock className="w-3.5 h-3.5" style={{ color: template.theme.colors.accent }} />
-                {template.ceremony.displayTime}
-              </span>
-              <span className="hidden sm:inline text-[#D4AF37]">•</span>
-              <span className="flex items-center gap-1.5 font-semibold">
-                <MapPin className="w-3.5 h-3.5" style={{ color: template.theme.colors.accent }} />
-                {template.location.venueName}
-              </span>
-            </div>
-
-            {/* Personalized Guest Inscription on Paper */}
-            <div className="mt-8 pt-4 border-t border-[#D4AF37]/20 max-w-sm mx-auto">
-              <span className="text-[9px] font-cinzel uppercase tracking-[0.25em] text-[#7D5F04] font-bold block mb-0.5">
-                Specially Inscribed For
-              </span>
-              <p className="font-pinyon text-2xl sm:text-3xl text-[#2C2218]">
-                {guestName}
+          {/* HERO SECTION — AUTHENTIC HANDWRITTEN ROYAL VIVAH PROSE (NO DATE HERE!) */}
+          <section className="relative pt-8 sm:pt-14 pb-12 sm:pb-16 text-center border-b border-[#D4AF37]/30">
+            {/* Auspicious Vedic Shloka Header */}
+            <div className="text-center mb-6 space-y-1">
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-sm glitter-sparkle text-[#D4AF37]">✨</span>
+                <span className="h-px w-10 sm:w-20 bg-[#D4AF37]/60" />
+                <h3 className="font-serif text-base sm:text-xl font-bold tracking-[0.25em] text-[#7A1423] uppercase">
+                  ॥ ॐ श्री गणेशाय नमः ॥
+                </h3>
+                <span className="h-px w-10 sm:w-20 bg-[#D4AF37]/60" />
+                <span className="text-sm glitter-sparkle-delayed text-[#D4AF37]">✨</span>
+              </div>
+              <p className="font-cormorant italic text-xs sm:text-sm text-[#AA820A]">
+                वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥
               </p>
             </div>
 
-            {/* Quick Stationery Action Links */}
+            {/* Handwritten Invitation Announcement */}
+            <p className="font-pinyon text-2xl sm:text-3xl text-[#544230] max-w-xl mx-auto leading-relaxed mb-4">
+              Together with the divine blessings of our ancestors, grandparents and parents, we cordially invite you to celebrate the holy wedding ceremonies of
+            </p>
+
+            {/* Couple Calligraphy with 24K Molten Gold Shimmer & Sparkles */}
+            <div className="relative py-2 my-2">
+              <span className="absolute -top-3 left-1/4 text-sm glitter-sparkle text-[#D4AF37]">✦</span>
+              <span className="absolute -bottom-2 right-1/4 text-sm glitter-sparkle-delayed text-[#D4AF37]">✦</span>
+              <h1 className="font-pinyon text-6xl sm:text-8xl md:text-9xl text-gold-shimmer leading-none drop-shadow-md">
+                {template.couple.partner1} <br />
+                <span className="text-4xl sm:text-6xl italic font-serif text-[#7A1423]">&</span>{' '}
+                {template.couple.partner2}
+              </h1>
+            </div>
+
+            {/* Venue Location on Paper (STRICTLY NO DATE HERE - RESERVED FOR SCRATCH CARD!) */}
+            <div className="pt-3 flex items-center justify-center gap-2 text-sm sm:text-base font-cormorant italic text-[#544230]">
+              <MapPin className="w-4 h-4 text-[#AA820A]" />
+              <span className="font-serif font-bold text-[#3B2219]">
+                {template.location.venueName}
+              </span>
+              <span>•</span>
+              <span>{template.location.city}</span>
+            </div>
+
+            {/* Personalized Guest Inscription on Paper */}
+            <div className="mt-8 pt-5 border-t border-[#D4AF37]/25 max-w-md mx-auto">
+              <span className="font-cormorant italic text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block mb-1">
+                Specially Inscribed With Love For
+              </span>
+              <p className="font-pinyon text-3xl sm:text-4xl text-[#2C2218] font-bold">
+                {guestName}
+              </p>
+              <p className="font-pinyon text-xl sm:text-2xl text-[#AA820A] mt-2">
+                ✦ Scratch the sacred 24K gold foil below to unveil our auspicious wedding date & lagna muhurat ✦
+              </p>
+            </div>
+
+            {/* Quick Action Links */}
             <div className="flex flex-wrap items-center justify-center gap-3 pt-6">
               <button
                 onClick={() => {
@@ -499,8 +495,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                   else setShowRsvpModal(true);
                 }}
-                className="px-6 py-2.5 rounded-full text-white font-cinzel text-xs font-bold uppercase tracking-widest shadow-md hover:brightness-110 active:scale-95 transition-all cursor-pointer"
-                style={{ backgroundColor: template.theme.colors.primary }}
+                className="px-7 py-2.5 rounded-full text-white font-cinzel text-xs font-bold uppercase tracking-widest shadow-md hover:brightness-110 active:scale-95 transition-all cursor-pointer bg-gradient-to-r from-[#9B1C2E] to-[#7A1423] border border-[#D4AF37]"
               >
                 RSVP Response
               </button>
@@ -508,40 +503,44 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                 href={calendarUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-full font-cinzel text-xs font-semibold uppercase tracking-wider border border-[#D4AF37]/50 hover:bg-[#FAF4E3] transition-all flex items-center gap-1.5 text-[#544230]"
+                className="px-6 py-2.5 rounded-full font-cinzel text-xs font-semibold uppercase tracking-wider border border-[#D4AF37]/70 hover:bg-[#FAF4E3] transition-all flex items-center gap-1.5 text-[#544230]"
               >
-                <Calendar className="w-3.5 h-3.5" /> Add to Calendar
+                <Calendar className="w-3.5 h-3.5 text-[#AA820A]" /> Add to Calendar
               </a>
             </div>
           </section>
 
-        {/* AUSPICIOUS MUHURAT GOLD-FOIL SCRATCH CARD */}
-        <section className="max-w-2xl mx-auto px-6 py-12 text-center space-y-4">
-          <div className="space-y-1">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold flex items-center justify-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#AA820A]" /> Auspicious Muhurat Scratch Card
-            </span>
-            <h3 className={`${template.theme.fonts.display} text-2xl sm:text-3xl text-[#2C2218]`}>
-              Scratch to Reveal the Sacred Date
-            </h3>
-            <p className="font-cormorant italic text-xs text-[#544230]">
-              Rub the 24K gold foil gently with your finger or cursor to unveil the wedding lagna muhurat & celebratory confetti!
-            </p>
-          </div>
-          <CanvasScratchCard
-            weddingDateStr={template.ceremony.displayDate + ' • ' + template.ceremony.displayTime}
-            venueStr={template.location.venueName + ', ' + template.location.city}
-          />
-        </section>
+          {/* GRAND ROYAL JHAROKHA 24K GOLD FOIL SCRATCH CARD (THE STAR OF THE SACRED REVEAL) */}
+          <section className="py-12 sm:py-16 text-center border-b border-[#D4AF37]/30">
+            <div className="space-y-1 mb-4">
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-sm glitter-sparkle text-[#D4AF37]">✨</span>
+                <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold">
+                  ॥ पवित्र लग्न मुहूर्त पत्रिका ॥
+                </span>
+                <span className="text-sm glitter-sparkle-delayed text-[#D4AF37]">✨</span>
+              </div>
+              <h3 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
+                Rub The 24K Gold Foil To Unveil The Sacred Date
+              </h3>
+              <p className="font-pinyon text-xl sm:text-2xl text-[#544230] max-w-md mx-auto">
+                Gently glide your finger or cursor over the gold leaf to reveal our wedding muhurat & blessings
+              </p>
+            </div>
 
-        {/* LIVE COUNTDOWN SECTION (ARCHIVAL LETTERPRESS TYPOGRAPHY ON PAPER) */}
-        <section className="max-w-3xl mx-auto px-6 py-10 text-center">
-          <div className="border-y border-[#D4AF37]/35 py-6 space-y-3">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.3em] font-bold block" style={{ color: template.theme.colors.accent }}>
-              ✦ The Celebration Commences In ✦
+            <CanvasScratchCard
+              weddingDateStr={template.ceremony.displayDate}
+              venueStr={template.location.venueName + ', ' + template.location.city}
+            />
+          </section>
+
+          {/* LIVE COUNTDOWN SECTION (ARCHIVAL LETTERPRESS NUMERALS ON CARD PAPER) */}
+          <section className="py-10 text-center border-b border-[#D4AF37]/30">
+            <span className="font-pinyon text-2xl sm:text-3xl font-bold block text-[#7A1423] mb-3">
+              ✦ The Auspicious Celebrations Commence In ✦
             </span>
 
-            <div className="flex items-center justify-center gap-4 sm:gap-8 flex-wrap">
+            <div className="flex items-center justify-center gap-5 sm:gap-10 flex-wrap">
               {[
                 { label: 'Days', value: timeLeft.days },
                 { label: 'Hours', value: timeLeft.hours },
@@ -549,39 +548,37 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                 { label: 'Seconds', value: timeLeft.seconds },
               ].map((unit, idx) => (
                 <div key={idx} className="flex flex-col items-center">
-                  <span className="font-serif text-3xl sm:text-5xl font-light text-[#2C2218] tracking-tight">
+                  <span className="font-pinyon text-4xl sm:text-6xl font-bold text-[#2C2218] tracking-tight">
                     {String(unit.value).padStart(2, '0')}
                   </span>
-                  <span className="text-[9px] font-cinzel uppercase tracking-[0.2em] font-bold mt-1 text-[#7D5F04]/80">
+                  <span className="text-[10px] font-cinzel uppercase tracking-[0.2em] font-bold text-[#AA820A]">
                     {unit.label}
                   </span>
                 </div>
               ))}
             </div>
 
-            <p className="font-cormorant italic text-xs text-[#7D5F04]/80 pt-1">
-              Every ticking second brings us closer to vows and lifelong celebration
+            <p className="font-pinyon text-lg text-[#7D5F04] pt-3">
+              Every ticking second brings us closer to the sacred Saat Phere and lifelong union
             </p>
-          </div>
-        </section>
+          </section>
 
-        {/* THE PLACE / VENUE SECTION (ARCHITECTURAL WATERCOLOR PLATE ON PAPER) */}
-        <section className="max-w-4xl mx-auto px-6 py-12">
-          <div className="border-t border-b border-[#D4AF37]/30 py-10 space-y-8">
-            <div className="text-center space-y-2">
-              <span className="font-cinzel text-[10px] uppercase tracking-[0.3em] font-bold block" style={{ color: template.theme.colors.accent }}>
-                ✦ Destination Sanctuary ✦
+          {/* DESTINATION SANCTUARY / VENUE (ARCHIVAL WATERCOLOR PLATE ON CARD PAPER) */}
+          <section className="py-12 border-b border-[#D4AF37]/30">
+            <div className="text-center space-y-1 mb-6">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
+                ॥ शुभ विवाह स्थल एवं मंडप ॥
               </span>
-              <h2 className={`${template.theme.fonts.display} text-3xl sm:text-5xl text-[#2C2218] font-medium`}>
+              <h2 className="font-pinyon text-4xl sm:text-6xl text-[#2C2218] font-bold text-gold-shimmer">
                 {template.location.venueName}
               </h2>
-              <p className="font-cormorant italic text-base text-[#7D5F04]">
+              <p className="font-pinyon text-2xl text-[#7D5F04]">
                 {template.location.city}, {template.location.country}
               </p>
             </div>
 
-            {/* Hand-drawn / Watercolor Venue Painting Plate */}
-            <div className="relative border border-[#D4AF37]/40 p-2 sm:p-4 bg-white/40 shadow-inner rounded-sm max-w-2xl mx-auto">
+            {/* Watercolor Venue Plate */}
+            <div className="relative border-2 border-[#D4AF37]/60 p-2 sm:p-4 bg-white/40 shadow-inner rounded-sm max-w-2xl mx-auto my-4">
               <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-[#AA820A]" />
               <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-[#AA820A]" />
               <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-[#AA820A]" />
@@ -595,317 +592,314 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               />
 
               <div className="text-center pt-2">
-                <span className="font-cormorant italic text-[11px] text-[#7D5F04]/80 block">
-                  Plate I — Architectural watercolor view of the estate and grounds
+                <span className="font-pinyon text-lg text-[#7D5F04] block">
+                  Plate I — Architectural watercolor view of the estate and mandap grounds
                 </span>
               </div>
             </div>
 
-            <p className="font-cormorant italic text-base sm:text-lg text-[#544230] leading-relaxed text-center max-w-2xl mx-auto">
+            <p className="font-cormorant italic text-base sm:text-lg text-[#544230] leading-relaxed text-center max-w-2xl mx-auto pt-2">
               {template.location.description}
             </p>
 
-            <div className="flex items-center justify-center pt-2">
+            <div className="flex items-center justify-center pt-5">
               <a
                 href={template.location.googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 rounded-full text-white font-cinzel text-xs uppercase tracking-wider font-bold shadow-md hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
-                style={{ backgroundColor: template.theme.colors.primary }}
+                className="px-6 py-2.5 rounded-full text-white font-cinzel text-xs uppercase tracking-wider font-bold shadow-md hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 bg-[#7A1423] border border-[#D4AF37]"
               >
                 <Compass className="w-4 h-4" /> Open In Google Maps
                 <ExternalLink className="w-3.5 h-3.5 ml-1" />
               </a>
             </div>
-          </div>
-        </section>
-
-        {/* TEMPLATE-SPECIFIC EXCLUSIVE INTERACTION 1: ARCHITECTURAL BLUEPRINT (FOR THE VENUE) */}
-        {template.id === 'the-venue' && (
-          <section className="max-w-4xl mx-auto px-6 py-6">
-            <EstateBlueprintExplorer />
           </section>
-        )}
 
-        {/* SCHEDULE OF THE DAY (ITINERARY TIMELINE) */}
-        <section className="max-w-3xl mx-auto px-6 py-12 space-y-8">
-          <div className="text-center space-y-2">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-              Day Programme
-            </span>
-            <h2 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218] font-medium`}>
-              Schedule of Celebrations
-            </h2>
-          </div>
+          {/* TEMPLATE-SPECIFIC EXCLUSIVE INTERACTION: BLUEPRINT (FOR THE VENUE) */}
+          {template.id === 'the-venue' && (
+            <section className="py-8 border-b border-[#D4AF37]/30">
+              <EstateBlueprintExplorer />
+            </section>
+          )}
 
-          <div className="relative border-l-2 border-[#E8DFC8] ml-4 sm:ml-8 pl-6 sm:pl-8 space-y-8">
-            {template.program.map((item, idx) => (
-              <div key={idx} className="relative group">
-                {/* Dot / Pin on timeline */}
-                <div
-                  className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full border-2 border-white shadow-sm transition-transform group-hover:scale-125"
-                  style={{ backgroundColor: template.theme.colors.primary }}
-                />
-
-                <div className="space-y-1">
-                  <span className="text-xs font-cinzel font-bold tracking-wider text-[#AA820A] block">
-                    {item.time}
-                  </span>
-                  <h3 className="font-serif text-xl sm:text-2xl text-[#2C2218] font-medium">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-[#544230] leading-relaxed pt-1">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* TEMPLATE-SPECIFIC EXCLUSIVE INTERACTION 2: BOTANICAL HERBARIUM PICKER (FOR FLORAL) */}
-        {template.id === 'floral' && (
-          <section className="max-w-4xl mx-auto px-6 py-6">
-            <BotanicalHerbariumPicker />
-          </section>
-        )}
-
-        {/* ROMANTIC MILESTONES SLIDER ("HOW WE MET") */}
-        <section className="max-w-4xl mx-auto px-6 py-14 space-y-6">
-          <div className="text-center space-y-1">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-              Our Journey
-            </span>
-            <h3 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218]`}>
-              How We Met & Milestones
-            </h3>
-            <p className="font-cormorant italic text-sm text-[#7D5F04]">
-              Every chapter written by destiny, celebrated with you
-            </p>
-          </div>
-          <MilestoneSlider milestones={defaultStoryMilestones} />
-        </section>
-
-        {/* COUPLE TRIVIA QUIZ */}
-        <section className="max-w-4xl mx-auto px-6 py-12 space-y-6">
-          <div className="text-center space-y-1">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-              Interactive Fun
-            </span>
-            <h3 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218]`}>
-              The Couple Trivia Challenge
-            </h3>
-            <p className="font-cormorant italic text-sm text-[#7D5F04]">
-              Test how well you know {template.couple.partner1} & {template.couple.partner2} before the party!
-            </p>
-          </div>
-          <CoupleTrivia coupleNames={`${template.couple.partner1} & ${template.couple.partner2}`} />
-        </section>
-
-        {/* PRE-WEDDING DJ SONG REQUEST BOX */}
-        <section className="max-w-4xl mx-auto px-6 py-12 space-y-6">
-          <div className="text-center space-y-1">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold flex items-center justify-center gap-1.5">
-              <Music className="w-3.5 h-3.5 text-[#AA820A]" /> Sangeet Dance Floor Anthem
-            </span>
-            <h3 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218]`}>
-              Pre-Wedding DJ Song Request
-            </h3>
-            <p className="font-cormorant italic text-sm text-[#7D5F04]">
-              Submit your favorite dance track — directly routed to our DJ’s console and setlist!
-            </p>
-          </div>
-          <DjSongRequestBox weddingSlug={template.slug} />
-        </section>
-
-        {/* VOICE BLESSING AUDIO RECORDER */}
-        <section className="max-w-4xl mx-auto px-6 py-12 space-y-6">
-          <div className="text-center space-y-1">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold flex items-center justify-center gap-1.5">
-              <Mic className="w-3.5 h-3.5 text-[#AA820A]" /> Audio Wishing Well
-            </span>
-            <h3 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218]`}>
-              Record a Voice Blessing
-            </h3>
-            <p className="font-cormorant italic text-sm text-[#7D5F04]">
-              Speak your heartfelt blessings with your phone or PC microphone for the bride and groom
-            </p>
-          </div>
-          <VoiceBlessingRecorder weddingSlug={template.slug} />
-        </section>
-
-        {/* ACCOMMODATIONS & TRAVEL RECOMMENDATIONS (ON STATIONERY PAPER) */}
-        <section className="max-w-4xl mx-auto px-6 py-12 space-y-8">
-          <div className="text-center space-y-2">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.3em] font-bold block" style={{ color: template.theme.colors.accent }}>
-              ✦ Guest Hospitality & Quarters ✦
-            </span>
-            <h2 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218] font-medium`}>
-              {template.accommodation.title}
-            </h2>
-            <p className="font-cormorant italic text-sm text-[#7D5F04]">
-              {template.accommodation.description}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {template.accommodation.hotels.map((hotel, idx) => (
-              <div
-                key={idx}
-                className="p-6 border-y border-[#D4AF37]/35 bg-white/30 backdrop-blur-xs flex flex-col justify-between"
-              >
-                <div className="space-y-1.5">
-                  <span className="text-[10px] font-cinzel uppercase tracking-wider text-[#AA820A] font-bold block">
-                    {hotel.distance}
-                  </span>
-                  <h3 className="font-serif text-2xl text-[#2C2218] font-semibold">
-                    {hotel.name}
-                  </h3>
-                  <p className="text-xs text-[#544230] leading-relaxed font-cormorant italic">
-                    {hotel.tier}
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-[#D4AF37]/20 mt-4 flex items-center justify-between">
-                  <span className="font-cinzel text-xs text-[#7D5F04] font-bold uppercase">
-                    Reserved Quarters
-                  </span>
-                  {hotel.bookingUrl && (
-                    <a
-                      href={hotel.bookingUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 rounded-full text-xs font-cinzel font-bold text-white uppercase tracking-wider flex items-center gap-1 hover:brightness-110 transition-all cursor-pointer"
-                      style={{ backgroundColor: template.theme.colors.primary }}
-                    >
-                      View Map & Stay <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* TEMPLATE-SPECIFIC EXCLUSIVE INTERACTION 3: RIVA SPEEDBOAT LAKE TRANSFERS (FOR COMO) */}
-        {template.id === 'como' && (
-          <section className="max-w-4xl mx-auto px-6 py-6">
-            <RivaBoatSchedule />
-          </section>
-        )}
-
-        {/* FREQUENTLY ASKED QUESTIONS (ON STATIONERY PAPER) */}
-        <section className="max-w-3xl mx-auto px-6 py-12 space-y-8">
-          <div className="text-center space-y-2">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.3em] font-bold block" style={{ color: template.theme.colors.accent }}>
-              ✦ Guest Details ✦
-            </span>
-            <h2 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218] font-medium`}>
-              Frequently Asked Questions
-            </h2>
-          </div>
-
-          <div className="space-y-3">
-            {template.faqs.map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div
-                  key={idx}
-                  className="border-b border-[#D4AF37]/30 transition-colors"
-                >
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full py-4 text-left flex items-center justify-between font-serif text-base text-[#2C2218] font-medium cursor-pointer"
-                  >
-                    <span>{faq.question}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 text-[#AA820A] shrink-0 transition-transform duration-300 ${
-                        isOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-
-                  {isOpen && (
-                    <div className="pb-4 pt-1 text-xs text-[#544230] leading-relaxed font-cormorant italic text-sm">
-                      {faq.answer}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* DIGITAL WISHING WELL & GIFTS (STATIONERY INSCRIBED) */}
-        <section className="max-w-2xl mx-auto px-6 py-12 text-center space-y-6">
-          <div className="space-y-2">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.3em] font-bold block" style={{ color: template.theme.colors.accent }}>
-              ✦ With Humble Gratitude ✦
-            </span>
-            <h2 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218] font-medium`}>
-              Wedding Registry & Well Wishes
-            </h2>
-            <p className="font-cormorant italic text-sm text-[#544230] max-w-md mx-auto">
-              {template.gifts.message}
-            </p>
-          </div>
-
-          <div
-            className="p-6 border-y border-[#D4AF37]/40 max-w-md mx-auto space-y-4 bg-white/30 backdrop-blur-xs"
-          >
-            <span className="text-[10px] font-cinzel uppercase tracking-wider text-[#7D5F04] font-bold block">
-              Digital Shagun / Registry IBAN
-            </span>
-
-            <div className="bg-white/60 p-3 rounded-lg border border-[#E8DFC8] font-mono text-xs sm:text-sm text-[#2C2218] flex items-center justify-between">
-              <span className="truncate pr-2">{template.gifts.iban}</span>
-              <button
-                onClick={handleCopyIban}
-                className="p-1.5 rounded-lg bg-white border border-[#E8DFC8] text-[#7D5F04] hover:bg-[#FAF4E3] transition-colors shrink-0 cursor-pointer"
-                title="Copy IBAN"
-              >
-                {copiedIban ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
-              </button>
+          {/* SHUBH VIVAH KARYAKRAM / SCHEDULE OF CELEBRATIONS */}
+          <section className="py-12 border-b border-[#D4AF37]/30 space-y-8">
+            <div className="text-center space-y-1">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
+                ॥ मांगलिक कार्यक्रम सारिणी ॥
+              </span>
+              <h2 className="font-pinyon text-4xl sm:text-6xl text-[#2C2218] font-bold text-gold-shimmer">
+                Schedule of Celebrations
+              </h2>
+              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
+                Auspicious Vedic rituals, royal feasts, and starlit Sangeet celebrations
+              </p>
             </div>
 
-            <p className="text-[11px] text-[#7D5F04]/80 font-cormorant italic">
-              Account Holder: {template.gifts.accountHolder}
-            </p>
-          </div>
-        </section>
+            <div className="relative border-l-2 border-[#D4AF37]/50 ml-4 sm:ml-12 pl-6 sm:pl-10 space-y-8">
+              {template.program.map((item, idx) => (
+                <div key={idx} className="relative group">
+                  {/* Decorative Golden Kalash / Dot pin */}
+                  <div
+                    className="absolute -left-[31px] sm:-left-[47px] top-1.5 w-4 h-4 rounded-full border-2 border-white shadow-sm transition-transform group-hover:scale-125 bg-[#7A1423]"
+                  />
 
-        {/* INTERACTIVE RSVP SECTION WITH VIP QR ENTRY PASS */}
-        <section id="rsvp-section" className="max-w-4xl mx-auto px-6 py-16 space-y-6">
-          <div className="text-center space-y-1">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-              Kindly Respond
-            </span>
-            <h3 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218]`}>
-              Reserve Your Royal Presence
-            </h3>
-            <p className="font-cormorant italic text-sm text-[#7D5F04]">
-              Confirm your attendance to receive your Instant VIP Digital Entry Pass & QR Code
-            </p>
-          </div>
-          <GuestRsvpForm
-            weddingSlug={template.slug}
-            defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
-          />
-        </section>
+                  <div className="space-y-0.5">
+                    <span className="text-xs font-cormorant italic font-bold tracking-wider text-[#AA820A] block">
+                      ✦ {item.time}
+                    </span>
+                    <h3 className="font-pinyon text-2xl sm:text-4xl text-[#2C2218] font-bold">
+                      {item.title}
+                    </h3>
+                    <p className="font-cormorant italic text-sm text-[#544230] leading-relaxed pt-0.5">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
 
-        {/* FOOTER */}
-        <footer className="border-t border-[#D4AF37]/25 py-12 text-center text-xs space-y-3 bg-black/[0.02]">
-          <p className="font-cinzel text-[11px] tracking-widest uppercase text-[#AA820A] font-bold">
-            {template.couple.partner1} & {template.couple.partner2}
-          </p>
-          <p className="font-cormorant italic text-sm text-[#7D5F04]">
-            Forever Begins Under the Stars • {template.ceremony.displayDate}
-          </p>
-          <p className="text-[10px] text-[#544230]/60 font-sans tracking-wider uppercase">
-            Haute Couture Bespoke Stationery Suite
-          </p>
-        </footer>
-        </main>
+          {/* TEMPLATE-SPECIFIC EXCLUSIVE INTERACTION: BOTANICAL HERBARIUM (FOR FLORAL) */}
+          {template.id === 'floral' && (
+            <section className="py-8 border-b border-[#D4AF37]/30">
+              <BotanicalHerbariumPicker />
+            </section>
+          )}
+
+          {/* ROMANTIC MILESTONES SLIDER ("HOW WE MET") */}
+          <section className="py-12 border-b border-[#D4AF37]/30 space-y-6">
+            <div className="text-center space-y-1">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
+                ॥ संग संग सातों जनम ॥
+              </span>
+              <h3 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
+                How We Met & Milestones
+              </h3>
+              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
+                Every chapter written by destiny, celebrated with your blessings
+              </p>
+            </div>
+            <MilestoneSlider milestones={defaultStoryMilestones} />
+          </section>
+
+          {/* COUPLE TRIVIA CHALLENGE */}
+          <section className="py-12 border-b border-[#D4AF37]/30 space-y-6">
+            <div className="text-center space-y-1">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
+                ॥ हँसी-ख़ुशी के पल ॥
+              </span>
+              <h3 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
+                The Couple Trivia Challenge
+              </h3>
+              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
+                Test how well you know {template.couple.partner1} & {template.couple.partner2} before the party!
+              </p>
+            </div>
+            <CoupleTrivia coupleNames={`${template.couple.partner1} & ${template.couple.partner2}`} />
+          </section>
+
+          {/* SANGEET DJ DANCE FLOOR SONG REQUEST BOX */}
+          <section className="py-12 border-b border-[#D4AF37]/30 space-y-6">
+            <div className="text-center space-y-1">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold flex items-center justify-center gap-1.5">
+                <Music className="w-3.5 h-3.5 text-[#AA820A]" /> संगीत डांस फ्लोर फरमाइश
+              </span>
+              <h3 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
+                Pre-Wedding DJ Song Request
+              </h3>
+              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
+                Submit your favorite Bollywood or Bhangra track — routed directly to our DJ console!
+              </p>
+            </div>
+            <DjSongRequestBox weddingSlug={template.slug} />
+          </section>
+
+          {/* AUDIO BLESSINGS & AASHIRWAD RECORDER */}
+          <section className="py-12 border-b border-[#D4AF37]/30 space-y-6">
+            <div className="text-center space-y-1">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold flex items-center justify-center gap-1.5">
+                <Mic className="w-3.5 h-3.5 text-[#AA820A]" /> ऑडियो शुभकामनाएँ एवं आशीर्वाद
+              </span>
+              <h3 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
+                Record a Voice Blessing
+              </h3>
+              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
+                Inscribe your heartfelt voice blessings for the bride & groom to cherish for lifetimes
+              </p>
+            </div>
+            <VoiceBlessingRecorder weddingSlug={template.slug} />
+          </section>
+
+          {/* ACCOMMODATIONS & GUEST HOSPITALITY (शाही मेहमान नवाज़ी) */}
+          <section className="py-12 border-b border-[#D4AF37]/30 space-y-8">
+            <div className="text-center space-y-1">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
+                ॥ शाही मेहमान नवाज़ी ॥
+              </span>
+              <h2 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
+                {template.accommodation.title}
+              </h2>
+              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
+                {template.accommodation.description}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {template.accommodation.hotels.map((hotel, idx) => (
+                <div
+                  key={idx}
+                  className="p-6 border border-[#D4AF37]/40 bg-[#FAF4E3]/40 rounded-xl flex flex-col justify-between"
+                >
+                  <div className="space-y-1">
+                    <span className="text-xs font-cormorant italic text-[#AA820A] font-bold block">
+                      ✦ {hotel.distance}
+                    </span>
+                    <h3 className="font-pinyon text-2xl sm:text-3xl text-[#2C2218] font-bold">
+                      {hotel.name}
+                    </h3>
+                    <p className="text-xs text-[#544230] leading-relaxed font-cormorant italic">
+                      {hotel.tier}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-[#D4AF37]/20 mt-4 flex items-center justify-between">
+                    <span className="font-serif text-xs text-[#7A1423] font-bold uppercase">
+                      Reserved Quarters
+                    </span>
+                    {hotel.bookingUrl && (
+                      <a
+                        href={hotel.bookingUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-1.5 rounded-full text-xs font-cinzel font-bold text-white uppercase tracking-wider flex items-center gap-1 hover:brightness-110 transition-all cursor-pointer bg-[#7A1423]"
+                      >
+                        View Stay <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* TEMPLATE-SPECIFIC EXCLUSIVE INTERACTION: RIVA SPEEDBOAT (FOR COMO) */}
+          {template.id === 'como' && (
+            <section className="py-8 border-b border-[#D4AF37]/30">
+              <RivaBoatSchedule />
+            </section>
+          )}
+
+          {/* FREQUENTLY ASKED QUESTIONS */}
+          <section className="py-12 border-b border-[#D4AF37]/30 space-y-6">
+            <div className="text-center space-y-1">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
+                ॥ विवाह संबंधी आवश्यक जानकारी ॥
+              </span>
+              <h2 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
+                Frequently Asked Questions
+              </h2>
+            </div>
+
+            <div className="space-y-3">
+              {template.faqs.map((faq, idx) => {
+                const isOpen = activeFaq === idx;
+                return (
+                  <div
+                    key={idx}
+                    className="border-b border-[#D4AF37]/30 transition-colors"
+                  >
+                    <button
+                      onClick={() => setActiveFaq(isOpen ? null : idx)}
+                      className="w-full py-4 text-left flex items-center justify-between font-pinyon text-2xl text-[#2C2218] font-bold cursor-pointer"
+                    >
+                      <span>{faq.question}</span>
+                      <ChevronDown
+                        className={`w-4 h-4 text-[#AA820A] shrink-0 transition-transform duration-300 ${
+                          isOpen ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+
+                    {isOpen && (
+                      <div className="pb-4 pt-1 text-sm text-[#544230] leading-relaxed font-cormorant italic">
+                        {faq.answer}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* DIGITAL SHAGUN & WELL WISHES */}
+          <section className="py-12 border-b border-[#D4AF37]/30 text-center space-y-4">
+            <div className="space-y-1">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
+                ॥ शुभ शगुन एवं आशीर्वाद ॥
+              </span>
+              <h2 className="font-pinyon text-4xl sm:text-5xl text-[#2C2218] font-bold text-gold-shimmer">
+                Wedding Registry & Shagun
+              </h2>
+              <p className="font-pinyon text-xl sm:text-2xl text-[#544230] max-w-md mx-auto">
+                {template.gifts.message}
+              </p>
+            </div>
+
+            <div className="p-6 border border-[#D4AF37]/50 max-w-md mx-auto space-y-3 bg-[#FAF4E3]/40 rounded-xl">
+              <span className="text-xs font-serif uppercase tracking-wider text-[#7A1423] font-bold block">
+                Digital Shagun / Registry IBAN
+              </span>
+
+              <div className="bg-white/80 p-3 rounded-lg border border-[#D4AF37]/40 font-mono text-xs sm:text-sm text-[#2C2218] flex items-center justify-between">
+                <span className="truncate pr-2">{template.gifts.iban}</span>
+                <button
+                  onClick={handleCopyIban}
+                  className="p-1.5 rounded-lg bg-[#FAF4E3] border border-[#D4AF37]/40 text-[#7D5F04] hover:bg-[#F3E5AB] transition-colors shrink-0 cursor-pointer"
+                  title="Copy IBAN"
+                >
+                  {copiedIban ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                </button>
+              </div>
+
+              <p className="text-xs text-[#7D5F04] font-cormorant italic">
+                Account Holder: {template.gifts.accountHolder}
+              </p>
+            </div>
+          </section>
+
+          {/* INTERACTIVE RSVP SECTION (विवाह आमंत्रण स्वीकृति) */}
+          <section id="rsvp-section" className="py-14 space-y-6">
+            <div className="text-center space-y-1">
+              <span className="font-serif text-xs uppercase tracking-[0.25em] text-[#7A1423] font-bold block">
+                ॥ विवाह आमंत्रण स्वीकृति ॥
+              </span>
+              <h3 className="font-pinyon text-4xl sm:text-6xl text-[#2C2218] font-bold text-gold-shimmer">
+                Reserve Your Royal Presence
+              </h3>
+              <p className="font-pinyon text-xl sm:text-2xl text-[#7D5F04]">
+                Confirm your attendance with folded hands to receive your VIP Digital Entry Pass
+              </p>
+            </div>
+            <GuestRsvpForm
+              weddingSlug={template.slug}
+              defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
+            />
+          </section>
+
+          {/* FOOTER */}
+          <footer className="border-t border-[#D4AF37]/30 pt-10 pb-6 text-center text-xs space-y-2">
+            <p className="font-serif text-sm font-bold text-[#7A1423] tracking-widest uppercase">
+              ॥ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः ॥
+            </p>
+            <p className="font-pinyon text-3xl sm:text-4xl text-[#2C2218] font-bold">
+              {template.couple.partner1} & {template.couple.partner2}
+            </p>
+            <p className="font-pinyon text-xl text-[#7D5F04]">
+              Forever Begins Under The Sacred Stars • With Love From Sharma & Mehra Families
+            </p>
+          </footer>
+        </div>
       </div>
 
       {/* RSVP MODAL POPUP (SECONDARY ACCESS) */}
