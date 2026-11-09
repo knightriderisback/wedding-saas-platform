@@ -234,9 +234,9 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
 
   return (
     <div
-      className="min-h-screen text-[#403030] transition-colors duration-700 relative selection:bg-[#d4a574]/30"
+      className="min-h-screen transition-colors duration-700 relative selection:bg-[#d4a574]/30 bg-khadi-fabric"
       style={{
-        backgroundColor: template.theme.colors.background,
+        backgroundColor: template.envelope?.bgColor || template.theme.colors.background,
         color: template.theme.colors.text,
       }}
     >
@@ -517,44 +517,43 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           />
         </section>
 
-        {/* LIVE COUNTDOWN SECTION */}
-        <section className="max-w-4xl mx-auto px-6 py-10 text-center space-y-6">
-          <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-            The Celebration Begins In
-          </span>
+        {/* LIVE COUNTDOWN SECTION (ARCHIVAL LETTERPRESS TYPOGRAPHY ON PAPER) */}
+        <section className="max-w-3xl mx-auto px-6 py-10 text-center">
+          <div className="border-y border-[#D4AF37]/35 py-6 space-y-3">
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.3em] font-bold block" style={{ color: template.theme.colors.accent }}>
+              ✦ The Celebration Commences In ✦
+            </span>
 
-          <div className="grid grid-cols-4 gap-3 sm:gap-6 max-w-lg mx-auto">
-            {[
-              { label: 'Days', value: timeLeft.days },
-              { label: 'Hours', value: timeLeft.hours },
-              { label: 'Minutes', value: timeLeft.minutes },
-              { label: 'Seconds', value: timeLeft.seconds },
-            ].map((unit, idx) => (
-              <div
-                key={idx}
-                className="bg-white/80 rounded-2xl p-4 sm:p-5 border shadow-sm flex flex-col items-center justify-center"
-                style={{ borderColor: template.theme.colors.border }}
-              >
-                <span className="font-serif text-3xl sm:text-5xl font-light text-[#2C2218]">
-                  {String(unit.value).padStart(2, '0')}
-                </span>
-                <span className="text-[10px] font-cinzel uppercase tracking-wider text-[#7D5F04] mt-1 font-bold">
-                  {unit.label}
-                </span>
-              </div>
-            ))}
+            <div className="flex items-center justify-center gap-4 sm:gap-8 flex-wrap">
+              {[
+                { label: 'Days', value: timeLeft.days },
+                { label: 'Hours', value: timeLeft.hours },
+                { label: 'Minutes', value: timeLeft.minutes },
+                { label: 'Seconds', value: timeLeft.seconds },
+              ].map((unit, idx) => (
+                <div key={idx} className="flex flex-col items-center">
+                  <span className="font-serif text-3xl sm:text-5xl font-light text-[#2C2218] tracking-tight">
+                    {String(unit.value).padStart(2, '0')}
+                  </span>
+                  <span className="text-[9px] font-cinzel uppercase tracking-[0.2em] font-bold mt-1 text-[#7D5F04]/80">
+                    {unit.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <p className="font-cormorant italic text-xs text-[#7D5F04]/80 pt-1">
+              Every ticking second brings us closer to vows and lifelong celebration
+            </p>
           </div>
         </section>
 
-        {/* THE PLACE / VENUE SECTION (ARCHITECTURAL WATERCOLOR PAINTING) */}
+        {/* THE PLACE / VENUE SECTION (ARCHITECTURAL WATERCOLOR PLATE ON PAPER) */}
         <section className="max-w-4xl mx-auto px-6 py-12">
-          <div
-            className="bg-white rounded-3xl p-8 sm:p-12 border shadow-[0_15px_50px_rgba(0,0,0,0.04)] space-y-8"
-            style={{ borderColor: template.theme.colors.border }}
-          >
+          <div className="border-t border-b border-[#D4AF37]/30 py-10 space-y-8">
             <div className="text-center space-y-2">
-              <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-                The Destination
+              <span className="font-cinzel text-[10px] uppercase tracking-[0.3em] font-bold block" style={{ color: template.theme.colors.accent }}>
+                ✦ Destination Sanctuary ✦
               </span>
               <h2 className={`${template.theme.fonts.display} text-3xl sm:text-5xl text-[#2C2218] font-medium`}>
                 {template.location.venueName}
@@ -564,21 +563,32 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               </p>
             </div>
 
-            {/* Hand-drawn / Watercolor Venue Painting */}
-            <div className="relative rounded-2xl overflow-hidden border border-[#E8DFC8] bg-[#FAF8F5] p-3 shadow-inner">
+            {/* Hand-drawn / Watercolor Venue Painting Plate */}
+            <div className="relative border border-[#D4AF37]/40 p-2 sm:p-4 bg-white/40 shadow-inner rounded-sm max-w-2xl mx-auto">
+              <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-[#AA820A]" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-[#AA820A]" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-[#AA820A]" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-[#AA820A]" />
+
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={template.assets.venueImage}
                 alt={template.location.venueName}
-                className="w-full h-auto max-h-[460px] object-contain rounded-xl mx-auto transition-transform duration-700 hover:scale-102"
+                className="w-full h-auto max-h-[460px] object-contain rounded-xs mx-auto"
               />
+
+              <div className="text-center pt-2">
+                <span className="font-cormorant italic text-[11px] text-[#7D5F04]/80 block">
+                  Plate I — Architectural watercolor view of the estate and grounds
+                </span>
+              </div>
             </div>
 
             <p className="font-cormorant italic text-base sm:text-lg text-[#544230] leading-relaxed text-center max-w-2xl mx-auto">
               {template.location.description}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+            <div className="flex items-center justify-center pt-2">
               <a
                 href={template.location.googleMapsUrl}
                 target="_blank"
@@ -586,7 +596,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                 className="px-6 py-3 rounded-full text-white font-cinzel text-xs uppercase tracking-wider font-bold shadow-md hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
                 style={{ backgroundColor: template.theme.colors.primary }}
               >
-                <Compass className="w-4 h-4" /> Open in Google Maps
+                <Compass className="w-4 h-4" /> Open In Google Maps
                 <ExternalLink className="w-3.5 h-3.5 ml-1" />
               </a>
             </div>
@@ -707,11 +717,11 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           <VoiceBlessingRecorder weddingSlug={template.slug} />
         </section>
 
-        {/* ACCOMMODATIONS & TRAVEL RECOMMENDATIONS */}
+        {/* ACCOMMODATIONS & TRAVEL RECOMMENDATIONS (ON STATIONERY PAPER) */}
         <section className="max-w-4xl mx-auto px-6 py-12 space-y-8">
           <div className="text-center space-y-2">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-              Guest Accommodations
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.3em] font-bold block" style={{ color: template.theme.colors.accent }}>
+              ✦ Guest Hospitality & Quarters ✦
             </span>
             <h2 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218] font-medium`}>
               {template.accommodation.title}
@@ -725,31 +735,30 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
             {template.accommodation.hotels.map((hotel, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-3xl p-6 border shadow-sm flex flex-col justify-between"
-                style={{ borderColor: template.theme.colors.border }}
+                className="p-6 border-y border-[#D4AF37]/35 bg-white/30 backdrop-blur-xs flex flex-col justify-between"
               >
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <span className="text-[10px] font-cinzel uppercase tracking-wider text-[#AA820A] font-bold block">
                     {hotel.distance}
                   </span>
                   <h3 className="font-serif text-2xl text-[#2C2218] font-semibold">
                     {hotel.name}
                   </h3>
-                  <p className="text-xs text-[#544230] leading-relaxed">
+                  <p className="text-xs text-[#544230] leading-relaxed font-cormorant italic">
                     {hotel.tier}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-[#FAF4E3] mt-4 flex items-center justify-between">
+                <div className="pt-4 border-t border-[#D4AF37]/20 mt-4 flex items-center justify-between">
                   <span className="font-cinzel text-xs text-[#7D5F04] font-bold uppercase">
-                    Partner Hotel
+                    Reserved Quarters
                   </span>
                   {hotel.bookingUrl && (
                     <a
                       href={hotel.bookingUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 rounded-full text-xs font-cinzel font-bold text-white uppercase tracking-wider flex items-center gap-1 hover:brightness-110 transition-all"
+                      className="px-4 py-2 rounded-full text-xs font-cinzel font-bold text-white uppercase tracking-wider flex items-center gap-1 hover:brightness-110 transition-all cursor-pointer"
                       style={{ backgroundColor: template.theme.colors.primary }}
                     >
                       View Map & Stay <ExternalLink className="w-3 h-3" />
@@ -768,11 +777,11 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           </section>
         )}
 
-        {/* FREQUENTLY ASKED QUESTIONS (ACCORDION) */}
+        {/* FREQUENTLY ASKED QUESTIONS (ON STATIONERY PAPER) */}
         <section className="max-w-3xl mx-auto px-6 py-12 space-y-8">
           <div className="text-center space-y-2">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-              Guest Information
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.3em] font-bold block" style={{ color: template.theme.colors.accent }}>
+              ✦ Guest Details ✦
             </span>
             <h2 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218] font-medium`}>
               Frequently Asked Questions
@@ -785,23 +794,22 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               return (
                 <div
                   key={idx}
-                  className="bg-white rounded-2xl border transition-all overflow-hidden"
-                  style={{ borderColor: template.theme.colors.border }}
+                  className="border-b border-[#D4AF37]/30 transition-colors"
                 >
                   <button
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full px-6 py-4 text-left flex items-center justify-between font-serif text-base text-[#2C2218] font-medium"
+                    className="w-full py-4 text-left flex items-center justify-between font-serif text-base text-[#2C2218] font-medium cursor-pointer"
                   >
                     <span>{faq.question}</span>
                     <ChevronDown
-                      className={`w-4 h-4 text-[#7D5F04] transition-transform duration-300 ${
+                      className={`w-4 h-4 text-[#AA820A] shrink-0 transition-transform duration-300 ${
                         isOpen ? 'rotate-180' : ''
                       }`}
                     />
                   </button>
 
                   {isOpen && (
-                    <div className="px-6 pb-5 pt-1 text-xs text-[#544230] leading-relaxed border-t border-[#FAF8F5]">
+                    <div className="pb-4 pt-1 text-xs text-[#544230] leading-relaxed font-cormorant italic text-sm">
                       {faq.answer}
                     </div>
                   )}
@@ -811,11 +819,11 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           </div>
         </section>
 
-        {/* DIGITAL WISHING WELL & GIFTS */}
+        {/* DIGITAL WISHING WELL & GIFTS (STATIONERY INSCRIBED) */}
         <section className="max-w-2xl mx-auto px-6 py-12 text-center space-y-6">
           <div className="space-y-2">
-            <span className="font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#7D5F04] font-bold block">
-              With Gratitude
+            <span className="font-cinzel text-[10px] uppercase tracking-[0.3em] font-bold block" style={{ color: template.theme.colors.accent }}>
+              ✦ With Humble Gratitude ✦
             </span>
             <h2 className={`${template.theme.fonts.display} text-3xl sm:text-4xl text-[#2C2218] font-medium`}>
               Wedding Registry & Well Wishes
@@ -826,25 +834,24 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
           </div>
 
           <div
-            className="bg-white rounded-3xl p-6 sm:p-8 border shadow-sm max-w-md mx-auto space-y-4"
-            style={{ borderColor: template.theme.colors.border }}
+            className="p-6 border-y border-[#D4AF37]/40 max-w-md mx-auto space-y-4 bg-white/30 backdrop-blur-xs"
           >
             <span className="text-[10px] font-cinzel uppercase tracking-wider text-[#7D5F04] font-bold block">
               Digital Shagun / Registry IBAN
             </span>
 
-            <div className="bg-[#FAF8F5] p-3 rounded-xl border border-[#E8DFC8] font-mono text-xs sm:text-sm text-[#2C2218] flex items-center justify-between">
+            <div className="bg-white/60 p-3 rounded-lg border border-[#E8DFC8] font-mono text-xs sm:text-sm text-[#2C2218] flex items-center justify-between">
               <span className="truncate pr-2">{template.gifts.iban}</span>
               <button
                 onClick={handleCopyIban}
-                className="p-1.5 rounded-lg bg-white border border-[#E8DFC8] text-[#7D5F04] hover:bg-[#FAF4E3] transition-colors shrink-0"
+                className="p-1.5 rounded-lg bg-white border border-[#E8DFC8] text-[#7D5F04] hover:bg-[#FAF4E3] transition-colors shrink-0 cursor-pointer"
                 title="Copy IBAN"
               >
                 {copiedIban ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
 
-            <p className="text-[11px] text-neutral-400 font-sans">
+            <p className="text-[11px] text-[#7D5F04]/80 font-cormorant italic">
               Account Holder: {template.gifts.accountHolder}
             </p>
           </div>
