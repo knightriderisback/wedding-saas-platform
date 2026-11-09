@@ -1,6 +1,7 @@
 /**
- * Royal Sitar & Bansuri Flute Synthesizer for Ultra-Luxury Indian Wedding Invitations
+ * Royal Sitar & Bansuri Flute Synthesizer & Unified Wedding Audio Manager
  * Employs Web Audio API to create authentic sitar resonance, sympathetic strings, and bansuri harmonics.
+ * Provides unified master control to ensure no rogue audio plays in the background when muted.
  */
 
 class RoyalSitarFluteEngine {
@@ -9,24 +10,34 @@ class RoyalSitarFluteEngine {
   private loopTimer: number | null = null;
   private masterGain: GainNode | null = null;
   private volume = 0.45;
+  private htmlAudioEl: HTMLAudioElement | null = null;
 
   private init() {
+    if (typeof window === 'undefined') return;
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
       this.ctx = new AudioCtx();
       this.masterGain = this.ctx.createGain();
       this.masterGain.gain.setValueAtTime(this.volume, this.ctx.currentTime);
       this.masterGain.connect(this.ctx.destination);
     }
-    if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
     }
+  }
+
+  public registerHtmlAudio(el: HTMLAudioElement | null) {
+    this.htmlAudioEl = el;
   }
 
   public setVolume(val: number) {
     this.volume = Math.max(0, Math.min(1, val));
     if (this.masterGain && this.ctx) {
       this.masterGain.gain.setValueAtTime(this.volume, this.ctx.currentTime);
+    }
+    if (this.htmlAudioEl) {
+      this.htmlAudioEl.volume = this.volume;
     }
   }
 
@@ -35,70 +46,78 @@ class RoyalSitarFluteEngine {
   }
 
   public isMusicPlaying(): boolean {
-    return this.isPlaying;
+    return this.isPlaying || Boolean(this.htmlAudioEl && !this.htmlAudioEl.paused);
   }
 
   /**
    * Synthesize a plucked Sitar stroke (Jawari buzzing timbre with microtonal meend glide)
    */
   public playSitarNote(freq: number, startTime: number, duration: number = 2.5) {
-    if (!this.ctx || !this.masterGain) return;
+    if (!this.ctx || !this.masterGain || !this.isPlaying) return;
 
-    // Carrier oscillator with saw-triangle rich harmonics
-    const osc = this.ctx.createOscillator();
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(freq, startTime);
-    // Subtle Sitar Meend (glide)
-    osc.frequency.exponentialRampToValueAtTime(freq * 1.015, startTime + 0.3);
+    try {
+      // Carrier oscillator with saw-triangle rich harmonics
+      const osc = this.ctx.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(freq, startTime);
+      // Subtle Sitar Meend (glide)
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.015, startTime + 0.3);
 
-    // Jawari bridge filter (gives that unmistakable metallic buzz)
-    const jawariFilter = this.ctx.createBiquadFilter();
-    jawariFilter.type = 'bandpass';
-    jawariFilter.frequency.setValueAtTime(freq * 3.5, startTime);
-    jawariFilter.Q.setValueAtTime(4.0, startTime);
+      // Jawari bridge filter (gives that unmistakable metallic buzz)
+      const jawariFilter = this.ctx.createBiquadFilter();
+      jawariFilter.type = 'bandpass';
+      jawariFilter.frequency.setValueAtTime(freq * 3.5, startTime);
+      jawariFilter.Q.setValueAtTime(4.0, startTime);
 
-    const gain = this.ctx.createGain();
-    gain.gain.setValueAtTime(0, startTime);
-    gain.gain.linearRampToValueAtTime(0.22, startTime + 0.015);
-    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(0.22, startTime + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
-    osc.connect(jawariFilter);
-    jawariFilter.connect(gain);
-    gain.connect(this.masterGain);
+      osc.connect(jawariFilter);
+      jawariFilter.connect(gain);
+      gain.connect(this.masterGain);
 
-    osc.start(startTime);
-    osc.stop(startTime + duration);
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+    } catch {
+      // Ignore if context closed
+    }
   }
 
   /**
    * Synthesize gentle Bansuri (Bamboo Flute) note with breathy vibrato
    */
   public playBansuriNote(freq: number, startTime: number, duration: number = 3.0) {
-    if (!this.ctx || !this.masterGain) return;
+    if (!this.ctx || !this.masterGain || !this.isPlaying) return;
 
-    const osc = this.ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(freq, startTime);
+    try {
+      const osc = this.ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
 
-    // Vibrato LFO
-    const vibrato = this.ctx.createOscillator();
-    const vibratoGain = this.ctx.createGain();
-    vibrato.frequency.setValueAtTime(5.2, startTime); // 5.2 Hz Indian flute vibrato
-    vibratoGain.gain.setValueAtTime(4.0, startTime);
-    vibrato.connect(osc.frequency);
-    vibrato.start(startTime);
-    vibrato.stop(startTime + duration);
+      // Vibrato LFO
+      const vibrato = this.ctx.createOscillator();
+      const vibratoGain = this.ctx.createGain();
+      vibrato.frequency.setValueAtTime(5.2, startTime); // 5.2 Hz Indian flute vibrato
+      vibratoGain.gain.setValueAtTime(4.0, startTime);
+      vibrato.connect(osc.frequency);
+      vibrato.start(startTime);
+      vibrato.stop(startTime + duration);
 
-    const gain = this.ctx.createGain();
-    gain.gain.setValueAtTime(0, startTime);
-    gain.gain.linearRampToValueAtTime(0.14, startTime + 0.2);
-    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(0.14, startTime + 0.2);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
-    osc.connect(gain);
-    gain.connect(this.masterGain);
+      osc.connect(gain);
+      gain.connect(this.masterGain);
 
-    osc.start(startTime);
-    osc.stop(startTime + duration);
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+    } catch {
+      // Ignore
+    }
   }
 
   /**
@@ -106,6 +125,14 @@ class RoyalSitarFluteEngine {
    */
   public startAmbient() {
     this.init();
+    if (this.masterGain && this.ctx) {
+      this.masterGain.gain.cancelScheduledValues(this.ctx.currentTime);
+      this.masterGain.gain.setValueAtTime(this.volume, this.ctx.currentTime);
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume().catch(() => {});
+    }
+
     if (this.isPlaying) return;
     this.isPlaying = true;
 
@@ -153,20 +180,52 @@ class RoyalSitarFluteEngine {
     playCycle();
   }
 
+  /**
+   * Strictly stop all synth sounds and suspend audio context
+   */
   public stopAmbient() {
     this.isPlaying = false;
     if (this.loopTimer) {
       window.clearTimeout(this.loopTimer);
       this.loopTimer = null;
     }
+    if (this.masterGain && this.ctx) {
+      try {
+        this.masterGain.gain.cancelScheduledValues(this.ctx.currentTime);
+        this.masterGain.gain.setValueAtTime(0, this.ctx.currentTime);
+      } catch {}
+    }
+    if (this.ctx && this.ctx.state === 'running') {
+      this.ctx.suspend().catch(() => {});
+    }
+  }
+
+  /**
+   * Master Silence: Stop both Web Audio API synth AND HTML5 audio completely!
+   */
+  public stopAll() {
+    this.stopAmbient();
+    if (this.htmlAudioEl) {
+      try {
+        this.htmlAudioEl.pause();
+        this.htmlAudioEl.currentTime = 0;
+      } catch {}
+    }
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('wedding-audio-mute-all'));
+    }
   }
 
   public toggle(): boolean {
-    if (this.isPlaying) {
-      this.stopAmbient();
+    if (this.isMusicPlaying()) {
+      this.stopAll();
       return false;
     } else {
-      this.startAmbient();
+      if (this.htmlAudioEl) {
+        this.htmlAudioEl.play().catch(() => {});
+      } else {
+        this.startAmbient();
+      }
       return true;
     }
   }

@@ -433,26 +433,26 @@ function ClientPortalContent() {
         </div>
       )}
 
-      {/* ULTRA-SLIM STICKY CLIENT HEADER (Rajhara Express Pattern in Luxury Gold/Ivory) */}
-      <header className="bg-[#2C2218]/95 backdrop-blur-md text-white sticky top-0 z-30 border-b border-[#AA820A]/40 shadow-xs">
+      {/* ULTRA-SLIM STICKY CLIENT HEADER (Rajhara Express Pattern in Luxury Soft Gold/Alabaster) */}
+      <header className="bg-white/90 backdrop-blur-md text-[#2C2218] sticky top-0 z-30 border-b border-[#E8DFC8] shadow-xs">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2">
           {/* Left: Store Link & Title */}
           <div className="flex items-center gap-2.5">
             <Link
               href="/admin"
-              className="p-1.5 rounded-lg bg-[#3E3022] hover:bg-[#523F2D] text-[#D4AF37] transition"
+              className="p-1.5 rounded-lg bg-[#FAF4E3] hover:bg-[#F3E5AB] text-[#7D5F04] border border-[#AA820A]/30 transition shadow-2xs"
               title="Return to Master Admin"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#AA820A] via-[#D4AF37] to-[#FAF4E3] flex items-center justify-center text-black font-cinzel font-bold text-xs shadow-xs">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#AA820A] via-[#D4AF37] to-[#FAF4E3] flex items-center justify-center text-white font-cinzel font-bold text-xs shadow-xs">
               {project.partner1[0]}&{project.partner2[0]}
             </div>
             <div className="leading-tight">
-              <span className="font-cinzel font-black text-xs sm:text-sm tracking-tight text-[#FAF8F5]">
+              <span className="font-cinzel font-black text-xs sm:text-sm tracking-tight text-[#2C2218]">
                 {project.partner1.split(' ')[0]} & {project.partner2.split(' ')[0]} Wedding Studio
               </span>
-              <span className="text-[10px] text-[#D4AF37] font-serif ml-1.5 hidden sm:inline">
+              <span className="text-[10px] text-[#7D5F04] font-serif ml-1.5 hidden sm:inline">
                 • {project.venue.city}
               </span>
             </div>
@@ -463,10 +463,10 @@ function ClientPortalContent() {
             <Link
               href={`/${project.slug}`}
               target="_blank"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#3E3022] hover:bg-[#523F2D] text-[#FAF4E3] text-xs font-cinzel font-bold transition shadow-xs border border-[#AA820A]/40"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#FAF4E3] hover:bg-[#F3E5AB] text-[#7D5F04] text-xs font-cinzel font-bold transition shadow-2xs border border-[#AA820A]/40"
               title="Preview Live Wedding Microsite"
             >
-              <Eye className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
+              <Eye className="w-3.5 h-3.5 text-[#AA820A] shrink-0" />
               <span className="hidden sm:inline">Live Microsite</span>
             </Link>
 
@@ -480,8 +480,8 @@ function ClientPortalContent() {
             </button>
 
             {isShadowAdmin && (
-              <div className="p-1.5 rounded-lg bg-amber-500/20 text-[#D4AF37] text-xs font-mono font-bold flex items-center gap-1 border border-amber-500/40">
-                <Crown className="w-3.5 h-3.5 text-amber-400" />
+              <div className="p-1.5 rounded-lg bg-amber-50 text-amber-900 text-xs font-mono font-bold flex items-center gap-1 border border-amber-300 shadow-2xs">
+                <Crown className="w-3.5 h-3.5 text-amber-600" />
                 <span className="hidden md:inline text-[10px]">Shadow Mode (Super Admin)</span>
               </div>
             )}
@@ -614,6 +614,31 @@ function ClientPortalContent() {
         {/* TAB 2: GUEST & INVITATION HUB */}
         {activeTab === 'guests' && (
           <div className="space-y-3">
+            {/* Top Colorful Telemetry Card (Rose Theme) */}
+            <div className="acrylic-rose card-3d-elevated p-3.5 sm:p-4 rounded-2xl border border-[#D47A88]/40 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#D47A88]/30 flex items-center justify-center text-[#9B1C2E] shadow-2xs shrink-0">
+                  <Users className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-cinzel text-xs font-bold uppercase text-[#9B1C2E]">
+                    Guest Dispatch & Live RSVP Telemetry
+                  </h3>
+                  <p className="text-[11px] text-[#544230]">
+                    1-Click WhatsApp invites via wa.me, mobile contacts import, and real-time attendance
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="font-mono text-xs font-bold bg-white/90 text-[#9B1C2E] px-3 py-1 rounded-xl border border-rose-200 shadow-2xs">
+                  {dispatchedCount}/{guests.length} Dispatched
+                </span>
+                <span className="font-mono text-xs font-bold bg-white/90 text-emerald-800 px-3 py-1 rounded-xl border border-emerald-200 shadow-2xs">
+                  {attendingCount} Attending
+                </span>
+              </div>
+            </div>
+
             {/* Top Toolbar */}
             <div className="acrylic-glass card-3d p-3 sm:p-4 rounded-2xl border border-[#E8DFC8] shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div className="flex items-center gap-2">
@@ -741,23 +766,31 @@ function ClientPortalContent() {
         {/* TAB 3: DJ PLAYLIST MANAGER */}
         {activeTab === 'dj' && (
           <div className="space-y-3">
-            <div className="acrylic-glass card-3d p-3.5 sm:p-4 rounded-2xl border border-[#E8DFC8] shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-              <div>
-                <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04]">
-                  Official Sangeet DJ Playlist Ledger
-                </h3>
-                <p className="text-[11px] text-[#544230]">
-                  Songs requested by guests via their digital invitation forms, mapped with phone numbers
-                </p>
+            <div className="acrylic-sage card-3d-elevated p-3.5 sm:p-4 rounded-2xl border border-[#739B83]/40 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#739B83]/30 flex items-center justify-center text-[#2D4A36] shadow-2xs shrink-0">
+                  <Music className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-cinzel text-xs font-bold uppercase text-[#2D4A36]">
+                    Official Sangeet DJ Playlist Ledger
+                  </h3>
+                  <p className="text-[11px] text-[#544230]">
+                    Guest-submitted dance anthems mapped with phone numbers & dedication notes
+                  </p>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="font-mono text-xs font-bold bg-white/90 text-[#2D4A36] px-3 py-1 rounded-xl border border-[#739B83]/30 shadow-2xs">
+                  {djPlaylist.length} Songs Queued
+                </span>
                 <button
                   onClick={handleExportDjPdf}
                   className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] text-xs font-cinzel font-bold flex items-center gap-1.5 shadow-md hover:brightness-105 active:scale-95 cursor-pointer"
                 >
                   <Download className="w-4 h-4 stroke-[2.5]" />
-                  <span>1-Click Export DJ PDF</span>
+                  <span>Export DJ PDF</span>
                 </button>
               </div>
             </div>
@@ -799,13 +832,23 @@ function ClientPortalContent() {
         {/* TAB 4: BLESSINGS HUB */}
         {activeTab === 'blessings' && (
           <div className="space-y-3">
-            <div className="acrylic-glass card-3d p-3.5 sm:p-4 rounded-2xl border border-[#E8DFC8] shadow-md">
-              <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04]">
-                Audio Wishing Well & Voice Notes Hub
-              </h3>
-              <p className="text-[11px] text-[#544230]">
-                Spoken blessings recorded by family members directly through their digital invitation
-              </p>
+            <div className="acrylic-lilac card-3d-elevated p-3.5 sm:p-4 rounded-2xl border border-[#A888B5]/40 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#A888B5]/30 flex items-center justify-center text-[#6B3B82] shadow-2xs shrink-0">
+                  <Mic className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-cinzel text-xs font-bold uppercase text-[#6B3B82]">
+                    Audio Wishing Well & Spoken Voice Notes
+                  </h3>
+                  <p className="text-[11px] text-[#544230]">
+                    Personal microphone voice recordings left by family and cherished friends
+                  </p>
+                </div>
+              </div>
+              <span className="font-mono text-xs font-bold bg-white/90 text-[#6B3B82] px-3 py-1 rounded-xl border border-[#A888B5]/30 shadow-2xs shrink-0">
+                {blessings.length} Voice Recordings
+              </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -926,13 +969,23 @@ function ClientPortalContent() {
         {/* TAB 6: SUITES SWITCHER */}
         {activeTab === 'suites' && (
           <div className="space-y-3">
-            <div className="acrylic-glass card-3d p-3.5 sm:p-4 rounded-2xl border border-[#E8DFC8] shadow-md">
-              <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04]">
-                Choose Your Active Invitation Suite
-              </h3>
-              <p className="text-[11px] text-[#544230]">
-                Switch instantly between all 13 luxury templates without losing any guest RSVPs or DJ requests
-              </p>
+            <div className="acrylic-azure card-3d-elevated p-3.5 sm:p-4 rounded-2xl border border-[#6B9AC4]/40 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#6B9AC4]/30 flex items-center justify-center text-[#1E3F66] shadow-2xs shrink-0">
+                  <Palette className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-cinzel text-xs font-bold uppercase text-[#1E3F66]">
+                    Choose Your Active Invitation Suite
+                  </h3>
+                  <p className="text-[11px] text-[#544230]">
+                    Switch instantly between all 13 luxury templates without losing any guest RSVPs or DJ requests
+                  </p>
+                </div>
+              </div>
+              <span className="font-mono text-xs font-bold bg-white/90 text-[#1E3F66] px-3 py-1 rounded-xl border border-[#6B9AC4]/30 shadow-2xs shrink-0">
+                13 Couture Suites
+              </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -988,8 +1041,8 @@ function ClientPortalContent() {
         )}
       </main>
 
-      {/* ULTRA-SLIM BOTTOM FLOATING ICON NAVIGATION BAR (Rajhara Express Pattern) */}
-      <nav className="fixed bottom-2 left-2 right-2 sm:left-1/2 sm:-translate-x-1/2 sm:max-w-md z-40 bg-[#2C2218]/95 backdrop-blur-md border border-[#AA820A]/50 rounded-2xl p-1.5 shadow-2xl flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
+      {/* ULTRA-SLIM BOTTOM FLOATING ICON NAVIGATION BAR (Soft Acrylic Luxury Glass) */}
+      <nav className="fixed bottom-3 left-2 right-2 sm:left-1/2 sm:-translate-x-1/2 sm:max-w-md z-40 bg-white/90 backdrop-blur-xl border border-[#AA820A]/40 rounded-2xl p-1.5 shadow-[0_12px_40px_rgba(170,130,10,0.14)] flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -1000,7 +1053,7 @@ function ClientPortalContent() {
               className={`p-2 rounded-xl transition duration-200 flex items-center justify-center shrink-0 cursor-pointer ${
                 isActive
                   ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] shadow-md scale-105 font-bold'
-                  : 'text-[#FAF4E3]/80 hover:text-white hover:bg-[#3E3022]'
+                  : 'text-[#7D5F04] hover:text-[#2C2218] hover:bg-[#FAF4E3]'
               }`}
               title={item.label}
               aria-label={item.label}
@@ -1013,15 +1066,15 @@ function ClientPortalContent() {
 
       {/* MODAL: ADD GUEST MANUALLY */}
       {showAddGuestModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/60 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/50 backdrop-blur-xs">
           <div className="bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-[#E8DFC8] animate-in zoom-in-95">
-            <div className="bg-[#2C2218] text-white p-3.5 flex items-center justify-between border-b border-[#AA820A]/40">
-              <h3 className="font-cinzel font-black text-xs uppercase tracking-wider">
+            <div className="bg-gradient-to-r from-[#FAF4E3] to-[#F3E5AB] text-[#2C2218] p-3.5 flex items-center justify-between border-b border-[#AA820A]/30">
+              <h3 className="font-cinzel font-black text-xs uppercase tracking-wider text-[#2C2218]">
                 Add Wedding Guest
               </h3>
               <button
                 onClick={() => setShowAddGuestModal(false)}
-                className="p-1 rounded-full hover:bg-[#3E3022] text-[#FAF4E3] transition"
+                className="p-1 rounded-full hover:bg-white/80 text-[#7D5F04] transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>

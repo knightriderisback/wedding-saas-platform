@@ -9,6 +9,8 @@ import {
   PRESSED_LOVE_TEMPLATES,
   TEMPLATE_LIST,
 } from '@/lib/pressedLoveTemplates';
+import { royalSitarAudio } from '@/lib/sitarSynth';
+import { SUITE_CATEGORY_METAS, SUITE_METAS_LIST } from '@/lib/suiteCategoryMetas';
 import { GatefoldEnvelope } from '@/components/guest/GatefoldEnvelope';
 import { CanvasScratchCard } from '@/components/guest/CanvasScratchCard';
 import { RosePetalShower } from '@/components/guest/RosePetalShower';
@@ -43,6 +45,9 @@ import {
   QrCode,
   RotateCcw,
   Mic,
+  LayoutGrid,
+  X,
+  Flame,
 } from 'lucide-react';
 
 interface PressedLoveInvitationProps {
@@ -104,6 +109,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
   const [showRsvpModal, setShowRsvpModal] = useState(false);
   const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
   const [guestPassQr, setGuestPassQr] = useState<string | null>(null);
+  const [showSuiteCatalogueModal, setShowSuiteCatalogueModal] = useState(false);
 
   // RSVP Form State for Modal fallback
   const [rsvpAttendance, setRsvpAttendance] = useState<'attending' | 'declining'>('attending');
@@ -122,6 +128,21 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
   });
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Register HTML audio with royalSitarAudio and listen for global mute
+  useEffect(() => {
+    if (audioRef.current) {
+      royalSitarAudio.registerHtmlAudio(audioRef.current);
+    }
+    const onMuteAll = () => {
+      setIsPlayingMusic(false);
+    };
+    window.addEventListener('wedding-audio-mute-all', onMuteAll);
+    return () => {
+      window.removeEventListener('wedding-audio-mute-all', onMuteAll);
+      royalSitarAudio.stopAll();
+    };
+  }, []);
 
   // Update countdown
   useEffect(() => {
@@ -148,24 +169,34 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
     return () => clearInterval(interval);
   }, [template]);
 
-  // Audio control
+  // Audio control - Unified silence fix
   const toggleMusic = () => {
-    if (!audioRef.current) return;
     if (isPlayingMusic) {
-      audioRef.current.pause();
+      royalSitarAudio.stopAll();
       setIsPlayingMusic(false);
     } else {
-      audioRef.current.play().then(() => setIsPlayingMusic(true)).catch(() => {});
+      if (audioRef.current) {
+        audioRef.current.play().then(() => setIsPlayingMusic(true)).catch(() => {});
+      } else {
+        royalSitarAudio.startAmbient();
+        setIsPlayingMusic(true);
+      }
     }
   };
 
-  // Switch Template
+  // Switch Template with clean audio cutoff
   const handleSelectTemplate = (newTmpl: PressedLoveTemplate) => {
+    const wasPlaying = isPlayingMusic;
+    royalSitarAudio.stopAll();
     setTemplate(newTmpl);
     if (audioRef.current) {
       audioRef.current.src = newTmpl.assets.backgroundMusic;
-      if (isPlayingMusic) {
-        audioRef.current.play().catch(() => {});
+      if (wasPlaying) {
+        setTimeout(() => {
+          if (audioRef.current) {
+            audioRef.current.play().then(() => setIsPlayingMusic(true)).catch(() => {});
+          }
+        }, 150);
       }
     }
   };
@@ -222,8 +253,11 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
         partner2={template.couple.partner2}
         venueCity={template.location.city + ', ' + template.location.country}
         isOpen={isOpened}
-        themeStyle={template.id as any}
+        themeStyle={template.id}
         waxColor={template.envelope?.waxColor || '#9B1C2E'}
+        waxMonogram={template.envelope?.waxMonogram || template.couple.initials}
+        introVideo={template.assets.introVideo}
+        introVideoPoster={template.assets.introVideoPoster}
         onOpened={() => {
           setIsOpened(true);
           if (audioRef.current) {
@@ -232,39 +266,132 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
         }}
       />
 
-      {/* Floating Design / Template Switcher Bar & Controls (Always Available) */}
-      <aside aria-label="Template Designs" className="fixed top-4 left-1/2 -translate-x-1/2 z-40 max-w-full px-2 w-auto pointer-events-auto">
-        <div className="bg-white/95 backdrop-blur-md border border-[#E8DFC8] rounded-full p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex items-center gap-1.5 overflow-x-auto max-w-[96vw] sm:max-w-2xl">
+      {/* RAJHARA-STYLE TOP CATEGORY BAR FOR WEDDING SUITES */}
+      <aside aria-label="Template Designs" className="fixed top-3 left-1/2 -translate-x-1/2 z-40 max-w-full px-2 w-auto pointer-events-auto">
+        <div className="bg-white/95 backdrop-blur-md border border-[#E8DFC8] rounded-full p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex items-center gap-1.5 overflow-x-auto max-w-[96vw] sm:max-w-4xl no-scrollbar">
           <button
             onClick={() => setIsOpened(false)}
-            className="px-2.5 py-1 rounded-full text-[11px] font-cinzel font-bold tracking-wider text-[#7D5F04] bg-[#FAF4E3] hover:bg-[#F3E5AB] border border-[#D4AF37]/40 flex items-center gap-1 shrink-0 transition-colors"
+            className="px-2.5 py-1 rounded-full text-[11px] font-cinzel font-bold tracking-wider text-[#7D5F04] bg-[#FAF4E3] hover:bg-[#F3E5AB] border border-[#D4AF37]/40 flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
             title="Replay 3D Wax Seal Unboxing"
           >
             <RotateCcw className="w-3 h-3 text-[#AA820A]" /> Replay Seal
           </button>
 
-          <span className="text-[10px] font-cinzel uppercase font-bold tracking-wider px-2 text-[#7D5F04] flex items-center gap-1 shrink-0 border-l border-[#E8DFC8]">
-            <Sparkles className="w-3 h-3 text-[#AA820A]" /> Suites:
-          </span>
+          <button
+            onClick={() => setShowSuiteCatalogueModal(true)}
+            className="px-2.5 py-1 rounded-full text-[11px] font-cinzel font-bold tracking-wider text-[#2C2218] bg-white hover:bg-[#FAF4E3] border border-[#E8DFC8] flex items-center gap-1 shrink-0 transition-colors shadow-2xs cursor-pointer"
+            title="Open All 13 Suites Catalogue"
+          >
+            <LayoutGrid className="w-3 h-3 text-[#AA820A]" /> Catalogue (13)
+          </button>
+
+          <div className="h-4 w-px bg-[#E8DFC8] shrink-0 mx-0.5" />
 
           {TEMPLATE_LIST.map((t) => {
             const isActive = t.id === template.id;
+            const meta = SUITE_CATEGORY_METAS[t.id];
             return (
               <button
                 key={t.id}
                 onClick={() => handleSelectTemplate(t)}
-                className={`px-3 py-1 rounded-full text-xs transition-all shrink-0 font-medium ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition cursor-pointer shrink-0 ${
                   isActive
-                    ? 'bg-[#2C2218] text-[#FAF8F5] shadow-sm font-semibold'
-                    : 'text-[#544230] hover:bg-[#FAF4E3] hover:text-[#2C2218]'
+                    ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black shadow-2xs font-bold'
+                    : 'bg-[#FAF7F2] text-[#544230] hover:bg-[#FAF4E3] hover:text-[#2C2218] border border-[#E8DFC8]/60'
                 }`}
               >
-                {t.name}
+                <span className="text-xs leading-none">{meta?.icon || '✨'}</span>
+                <span className="leading-none">{t.name}</span>
+                {meta?.badge && (
+                  <span
+                    className={`text-[8px] uppercase tracking-wider px-1.5 py-0.2 rounded-full font-black ${
+                      isActive ? 'bg-black text-[#FAF4E3]' : 'bg-amber-100 text-amber-800'
+                    }`}
+                  >
+                    {meta.badge.split(' ')[0]}
+                  </span>
+                )}
               </button>
             );
           })}
         </div>
       </aside>
+
+      {/* RAJHARA-STYLE SUITE CATALOGUE DRAWER MODAL */}
+      {showSuiteCatalogueModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+          <div className="bg-[#FAF8F5] border border-[#E8DFC8] rounded-3xl max-w-4xl w-full p-5 sm:p-7 max-h-[90vh] overflow-y-auto shadow-2xl relative">
+            <div className="flex items-center justify-between border-b border-[#E8DFC8] pb-4 mb-5">
+              <div>
+                <span className="text-[10px] font-cinzel font-bold text-[#AA820A] uppercase tracking-widest block">
+                  Rajhara Style Suite Showcase
+                </span>
+                <h3 className="font-serif text-xl sm:text-2xl text-[#2C2218] font-bold">
+                  All 13 Haute Couture Wedding Suites (सभी डिज़ाइन्स)
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowSuiteCatalogueModal(false)}
+                className="p-2 rounded-full hover:bg-gray-200 text-gray-700 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {SUITE_METAS_LIST.map((meta) => {
+                const isCurrent = meta.id === template.id;
+                return (
+                  <div
+                    key={meta.id}
+                    className={`rounded-2xl border p-4 bg-gradient-to-br ${meta.gradientBg} ${meta.borderColor} flex flex-col justify-between transition-all hover:shadow-md`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-2xl">{meta.icon}</span>
+                        <span className={`text-[9px] uppercase tracking-wider font-black px-2 py-0.5 rounded-full border ${meta.badgeColor}`}>
+                          {meta.badge}
+                        </span>
+                      </div>
+                      <h4 className="font-serif font-bold text-base text-[#2C2218]">
+                        {meta.name}
+                      </h4>
+                      <p className="text-[11px] font-cormorant italic text-[#7D5F04] mb-3">
+                        {meta.hindiName}
+                      </p>
+                      <ul className="space-y-1 mb-4">
+                        {meta.highlights.map((h, i) => (
+                          <li key={i} className="text-[10px] text-[#544230] flex items-center gap-1.5">
+                            <Check className="w-3 h-3 text-[#AA820A] shrink-0" />
+                            <span>{h}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        const targetTemplate = PRESSED_LOVE_TEMPLATES[meta.id];
+                        if (targetTemplate) {
+                          handleSelectTemplate(targetTemplate);
+                        }
+                        setShowSuiteCatalogueModal(false);
+                      }}
+                      className={`w-full py-2 rounded-xl text-xs font-cinzel font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                        isCurrent
+                          ? 'bg-[#AA820A] text-white shadow-xs'
+                          : 'bg-white hover:bg-[#FAF4E3] text-[#2C2218] border border-[#E8DFC8]'
+                      }`}
+                    >
+                      {isCurrent ? 'Active Suite' : 'Apply Suite'} <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Floating Audio Toggle Pill */}
       <aside aria-label="Audio Controls" className="fixed bottom-6 right-6 z-40">

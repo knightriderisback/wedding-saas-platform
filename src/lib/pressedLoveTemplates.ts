@@ -767,6 +767,130 @@ export const PRESSED_LOVE_TEMPLATES: Record<string, PressedLoveTemplate> = {
     },
   },
 
+  'pressed-meadow': {
+    id: 'pressed-meadow',
+    slug: 'wedding-invitation-pressed-meadow',
+    name: 'Pressed Meadow',
+    subtitle: 'Torn-Edge Cotton Paper & Wildflower Herbarium',
+    tagline: 'A small ivory seal with pastel daisies opens onto torn-edge cotton paper and pressed wildflowers that sway softly.',
+    badge: 'Pressed Flower & Meadow',
+    couple: {
+      partner1: 'Clara',
+      partner2: 'Julian',
+      formalTitle: 'The Wedding Celebration of Clara & Julian',
+      initials: 'C & J',
+    },
+    ceremony: {
+      date: '2027-06-19',
+      time: '16:30',
+      displayDate: 'Saturday, June 19, 2027',
+      displayTime: '4:30 PM CEST',
+      timeZone: 'Europe/Paris',
+    },
+    theme: {
+      name: 'theme-meadow',
+      colors: {
+        primary: '#6b7f5e', // French Meadow Herbarium Green
+        secondary: '#f7f4ed',
+        accent: '#d9a786', // Soft Terracotta Ochre
+        text: '#3c352d', // Walnut Bark
+        background: '#F8F5EE', // Raw Cotton Paper
+        surface: '#FFFFFF',
+        border: '#E6DECE',
+      },
+      fonts: {
+        display: 'font-cormorant',
+        script: 'font-alex',
+        body: 'font-lora',
+      },
+    },
+    location: {
+      venueName: 'Domaine de Primard',
+      address: 'Route de Breuilpont, 28260 Guainville',
+      city: 'Normandy / Île-de-France',
+      country: 'France',
+      googleMapsUrl: 'https://maps.google.com/?q=Domaine+de+Primard+Guainville',
+      description:
+        'A romantic 18th-century directoire château surrounded by centuries-old rose gardens, weeping willows, and winding waterways along the Eure river.',
+    },
+    assets: {
+      introVideo: 'https://pressedlove.com/demo-media/motion-2026-10/pressed-meadow/opening.mp4',
+      introVideoPoster: 'https://pressedlove.com/demo-media/motion-2026-10/pressed-meadow/poster.webp',
+      backgroundMusic: 'https://pressedlove.com/demo-media/shared/intro-music-S2szIoUv.mp3',
+      heroVideo: 'https://pressedlove.com/demo-media/motion-2026-10/pressed-meadow/showcase.mp4',
+      heroVideoPoster: 'https://pressedlove.com/demo-media/motion-2026-10/pressed-meadow/hero.webp',
+      heroImage: 'https://pressedlove.com/demo-media/motion-2026-10/pressed-meadow/hero.webp',
+      venueImage: 'https://pressedlove.com/template-assets/heirloom-press/cotton-paper.webp',
+      rsvpConfirmation: 'https://pressedlove.com/demo-media/shared/rsvp-confirmation-DYbKwzwP.webm',
+    },
+    program: [
+      {
+        time: '16:30',
+        title: 'Garden Ceremony',
+        description: 'Vows beside the water meadow under the weeping willows',
+        iconType: 'church',
+      },
+      {
+        time: '17:45',
+        title: 'Cocktail Champêtre',
+        description: 'Wildflower champagne flutes, Normandy cider & artisan canapés',
+        iconType: 'wine',
+      },
+      {
+        time: '19:45',
+        title: 'The Farmhouse Banquet',
+        description: 'Organic seasonal farm-to-table dinner under the glass greenhouse marquee',
+        iconType: 'utensils',
+      },
+      {
+        time: '22:30',
+        title: 'Starlight Dance & Soirée',
+        description: 'Acoustic jazz quartet transitioning into midnight DJ anthems',
+        iconType: 'party',
+      },
+    ],
+    accommodation: {
+      title: 'Château Accommodations & Country Stays',
+      description: 'Charming country manor rooms and boutique lodges reserved for wedding guests:',
+      hotels: [
+        {
+          name: 'Domaine de Primard Relais & Châteaux',
+          tier: '5-Star Historic Estate',
+          distance: 'On site grounds',
+          bookingUrl: 'https://maps.google.com/?q=Domaine+de+Primard',
+        },
+        {
+          name: 'Château de Tilly',
+          tier: '16th Century Norman Manor',
+          distance: '12 mins drive (Shuttle service provided)',
+          bookingUrl: 'https://maps.google.com/?q=Chateau+de+Tilly',
+        },
+      ],
+    },
+    faqs: [
+      {
+        question: 'What is the dress code?',
+        answer: 'Pastel Garden Chic / Summer Elegant. Soft floral prints, linen suits, and comfortable footwear suitable for garden lawns.',
+      },
+      {
+        question: 'Is transportation provided?',
+        answer: 'Yes, private shuttles will connect Paris Charles de Gaulle & Gare de Lyon directly to Domaine de Primard.',
+      },
+    ],
+    gifts: {
+      message: 'Your love and presence on our wedding day in the French countryside is all we wish for.',
+      bankName: 'BNP Paribas Private Banking Paris',
+      accountHolder: 'Clara Delacroix & Julian Vance',
+      iban: 'FR76 3000 4001 2345 6789 0123 456',
+      bicSwift: 'BNPAFRPPXXX',
+    },
+    envelope: {
+      waxColor: '#F7F2E7',
+      waxMonogram: 'C&J',
+      bgColor: '#F4EFE6',
+    },
+  },
+
   'the-palace': {
     id: 'the-palace',
     slug: 'wedding-invitation-the-palace',

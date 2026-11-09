@@ -366,26 +366,26 @@ export default function SuperAdminPage() {
       {/* 3D Floating Glass Bubbles & Refraction Orbs */}
       <AcrylicBackgroundOrbs variant="multi" />
 
-      {/* ULTRA-SLIM STICKY MERCHANT HEADER (Rajhara Express Pattern in Luxury Gold/Ivory) */}
-      <header className="bg-[#2C2218] text-white sticky top-0 z-30 border-b border-[#AA820A]/40 shadow-xs">
+      {/* ULTRA-SLIM STICKY MERCHANT HEADER (Rajhara Express Pattern in Luxury Soft Gold/Alabaster) */}
+      <header className="bg-white/90 backdrop-blur-md text-[#2C2218] sticky top-0 z-30 border-b border-[#E8DFC8] shadow-xs">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2">
           {/* Left: Home / Store Link & Clean Minimal Title */}
           <div className="flex items-center gap-2.5">
             <Link
               href="/"
-              className="p-1.5 rounded-lg bg-[#3E3022] hover:bg-[#523F2D] text-[#D4AF37] transition"
+              className="p-1.5 rounded-lg bg-[#FAF4E3] hover:bg-[#F3E5AB] text-[#7D5F04] border border-[#AA820A]/30 transition shadow-2xs"
               title="Return to Welcome Showcase"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#AA820A] via-[#D4AF37] to-[#FAF4E3] flex items-center justify-center text-black font-cinzel font-bold text-xs shadow-xs">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#AA820A] via-[#D4AF37] to-[#FAF4E3] flex items-center justify-center text-white font-cinzel font-bold text-xs shadow-xs">
               👑
             </div>
             <div className="leading-tight">
-              <span className="font-cinzel font-black text-xs sm:text-sm tracking-tight text-[#FAF8F5]">
+              <span className="font-cinzel font-black text-xs sm:text-sm tracking-tight text-[#2C2218]">
                 Super-Admin Control Panel
               </span>
-              <span className="text-[10px] text-[#D4AF37] font-serif ml-1.5 hidden sm:inline">
+              <span className="text-[10px] text-[#7D5F04] font-serif ml-1.5 hidden sm:inline">
                 • Royal Concierge Master SaaS
               </span>
             </div>
@@ -396,10 +396,10 @@ export default function SuperAdminPage() {
             <Link
               href="/templates"
               target="_blank"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#3E3022] hover:bg-[#523F2D] text-[#FAF4E3] text-xs font-cinzel font-bold transition shadow-xs border border-[#AA820A]/40"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#FAF4E3] hover:bg-[#F3E5AB] text-[#7D5F04] text-xs font-cinzel font-bold transition shadow-2xs border border-[#AA820A]/40"
               title="Open 13 Luxury Design Suites in new tab"
             >
-              <Palette className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
+              <Palette className="w-3.5 h-3.5 text-[#AA820A] shrink-0" />
               <span className="hidden sm:inline">13 Suites Gallery</span>
             </Link>
 
@@ -412,8 +412,8 @@ export default function SuperAdminPage() {
               <span className="hidden sm:inline">New Client</span>
             </button>
 
-            <div className="p-1.5 rounded-lg bg-[#3E3022] text-[#D4AF37] text-xs font-mono font-bold flex items-center gap-1 border border-[#AA820A]/30">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="p-1.5 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-mono font-bold flex items-center gap-1 border border-emerald-300 shadow-2xs">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
               <span className="hidden md:inline text-[10px]">Super Admin Active</span>
             </div>
           </div>
@@ -1011,8 +1011,8 @@ export default function SuperAdminPage() {
         )}
       </main>
 
-      {/* ULTRA-SLIM BOTTOM FLOATING ICON NAVIGATION BAR (Rajhara Express Pattern) */}
-      <nav className="fixed bottom-2 left-2 right-2 sm:left-1/2 sm:-translate-x-1/2 sm:max-w-md z-40 bg-[#2C2218]/95 backdrop-blur-md border border-[#AA820A]/50 rounded-2xl p-1.5 shadow-2xl flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
+      {/* ULTRA-SLIM BOTTOM FLOATING ICON NAVIGATION BAR (Soft Acrylic Luxury Glass) */}
+      <nav className="fixed bottom-3 left-2 right-2 sm:left-1/2 sm:-translate-x-1/2 sm:max-w-md z-40 bg-white/90 backdrop-blur-xl border border-[#AA820A]/40 rounded-2xl p-1.5 shadow-[0_12px_40px_rgba(170,130,10,0.14)] flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -1023,7 +1023,7 @@ export default function SuperAdminPage() {
               className={`p-2 rounded-xl transition duration-200 flex items-center justify-center shrink-0 cursor-pointer ${
                 isActive
                   ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] shadow-md scale-105 font-bold'
-                  : 'text-[#FAF4E3]/80 hover:text-white hover:bg-[#3E3022]'
+                  : 'text-[#7D5F04] hover:text-[#2C2218] hover:bg-[#FAF4E3]'
               }`}
               title={item.label}
               aria-label={item.label}
@@ -1036,18 +1036,18 @@ export default function SuperAdminPage() {
 
       {/* MODAL: ONBOARD NEW WEDDING CLIENT */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/60 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/50 backdrop-blur-xs">
           <div className="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-[#E8DFC8] animate-in zoom-in-95">
-            <div className="bg-[#2C2218] text-white p-3.5 flex items-center justify-between border-b border-[#AA820A]/40">
+            <div className="bg-gradient-to-r from-[#FAF4E3] to-[#F3E5AB] text-[#2C2218] p-3.5 flex items-center justify-between border-b border-[#AA820A]/30">
               <div className="flex items-center gap-2">
-                <Crown className="w-4 h-4 text-[#D4AF37]" />
-                <h3 className="font-cinzel font-black text-xs uppercase tracking-wider">
+                <Crown className="w-4 h-4 text-[#AA820A]" />
+                <h3 className="font-cinzel font-black text-xs uppercase tracking-wider text-[#2C2218]">
                   Onboard Wedding Client
                 </h3>
               </div>
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="p-1 rounded-full hover:bg-[#3E3022] text-[#FAF4E3] transition"
+                className="p-1 rounded-full hover:bg-white/80 text-[#7D5F04] transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>

@@ -1,0 +1,176 @@
+export interface SuiteCategoryMeta {
+  id: string;
+  name: string;
+  hindiName: string;
+  icon: string;
+  badge: string;
+  badgeColor: string;
+  gradientBg: string;
+  borderColor: string;
+  accentColor: string;
+  highlights: string[];
+  route: string;
+  coverImage: string;
+  description: string;
+  coupleDisplay: string;
+  cityDisplay: string;
+}
+
+export const SUITE_CATEGORY_METAS: Record<string, SuiteCategoryMeta> = {
+  'pressed-meadow': {
+    id: 'pressed-meadow',
+    name: 'Pressed Meadow',
+    hindiName: 'प्रेस्ड मीडो व वाइल्डफ्लावर',
+    icon: '🌸',
+    badge: 'NEW TRENDING',
+    badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    gradientBg: 'from-emerald-50/90 via-stone-50/50 to-amber-50/80',
+    borderColor: 'border-emerald-200/80 hover:border-emerald-400',
+    accentColor: 'text-emerald-800',
+    highlights: [
+      'Authentic Ivory Wax Seal Video Unboxing',
+      'Torn-Edge Raw Cotton Deckle Paper',
+      'Wildflower Herbarium Interactive Gallery',
+      'Normandy 18th-Century Directoire Château',
+    ],
+    route: '/wedding-invitation-pressed-meadow',
+    coverImage: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
+    description: 'An ivory seal with pastel daisies opens onto torn-edge cotton paper and pressed wildflowers that sway softly in the French breeze.',
+    coupleDisplay: 'Clara & Julian',
+    cityDisplay: 'Domaine de Primard, France',
+  },
+  'the-venue': {
+    id: 'the-venue',
+    name: 'The Venue',
+    hindiName: 'कैसल व वाइनयार्ड आर्किटेक्चर',
+    icon: '🏰',
+    badge: 'POPULAR SUITE',
+    badgeColor: 'bg-sky-100 text-sky-800 border-sky-200',
+    gradientBg: 'from-sky-50/90 via-cyan-50/50 to-stone-50/80',
+    borderColor: 'border-sky-200/80 hover:border-sky-400',
+    accentColor: 'text-sky-800',
+    highlights: [
+      'Hand-Drawn Architectural Castle Sketch',
+      'Interactive Estate Blueprint Explorer',
+      'Vineyard Wine & Dine Schedule',
+      'Château de Villette Luxury Concierge',
+    ],
+    route: '/wedding-invitation-the-venue',
+    coverImage: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80',
+    description: 'Showcasing the historical sanctuary that holds the wedding with hand-drawn estate architecture and wine tasting tours.',
+    coupleDisplay: 'Charlotte & James',
+    cityDisplay: 'Château de Villette, France',
+  },
+  'floral': {
+    id: 'floral',
+    name: 'Botanical Floral',
+    hindiName: 'इंग्लिश गार्डन फ्लोरल हरबेरियम',
+    icon: '🌺',
+    badge: 'HERBARIUM',
+    badgeColor: 'bg-rose-100 text-rose-800 border-rose-200',
+    gradientBg: 'from-rose-50/90 via-pink-50/50 to-amber-50/80',
+    borderColor: 'border-rose-200/80 hover:border-rose-400',
+    accentColor: 'text-rose-800',
+    highlights: [
+      'Floating Rose Petal Interactive Canvas',
+      'Delicate Archival Botany Calligraphy',
+      'Botanical Herbarium Specimen Picker',
+      'Walled Garden Afternoon Tea Itinerary',
+    ],
+    route: '/wedding-invitation-floral',
+    coverImage: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
+    description: 'Delicate pressed wildflowers, archival typography, and romantic English garden celebrations with botanical elegance.',
+    coupleDisplay: 'Elena & Marcus',
+    cityDisplay: 'Cotswolds Garden, England',
+  },
+  'como': {
+    id: 'como',
+    name: 'Lake Como Villa',
+    hindiName: 'लेक कोमो रीवा स्पीडबोट',
+    icon: '⛵',
+    badge: 'RIVA LUXURY',
+    badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+    gradientBg: 'from-blue-50/90 via-sky-50/50 to-indigo-50/80',
+    borderColor: 'border-blue-200/80 hover:border-blue-400',
+    accentColor: 'text-blue-800',
+    highlights: [
+      'Private Riva Mahogany Speedboat Ferry Table',
+      'Villa del Balbianello Historic Terrace',
+      'Cobalt Blue Lake Reflections & Jazz Audio',
+      'Italian Gelato & Espresso Reception',
+    ],
+    route: '/wedding-invitation-como',
+    coverImage: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80',
+    description: 'Sun-drenched terraces over azure waters, cypress trees, and bespoke Riva boat charters on Italy’s most iconic lake.',
+    coupleDisplay: 'Sophia & Leonardo',
+    cityDisplay: 'Villa Balbianello, Italy',
+  },
+  'heirloom-press': {
+    id: 'heirloom-press',
+    name: 'Heirloom Press',
+    hindiName: '24K गोल्ड लेटरप्रेस व डीबॉस',
+    icon: '📜',
+    badge: 'LETTERPRESS',
+    badgeColor: 'bg-amber-100 text-amber-900 border-amber-300',
+    gradientBg: 'from-amber-50/90 via-yellow-50/50 to-stone-50/80',
+    borderColor: 'border-amber-200/80 hover:border-amber-400',
+    accentColor: 'text-amber-800',
+    highlights: [
+      'Blind Deboss Letterpress Paper Texture',
+      '24K Raised Gold Foil Typography',
+      'Deckle-Edge 600gsm Heavy Cardstock',
+      'Old World Calligraphy Monogram Seal',
+    ],
+    route: '/wedding-invitation-heirloom-press',
+    coverImage: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+    description: 'Heavy cotton cards deeply pressed with custom metal dies and dusted with molten gold leaf for timeless sophistication.',
+    coupleDisplay: 'Aria & Sebastian',
+    cityDisplay: 'Kew Royal Palaces, London',
+  },
+  'afterglow': {
+    id: 'afterglow',
+    name: 'Afterglow Nocturne',
+    hindiName: 'कैंडललाइट व वेलवेट ट्वाइलाइट',
+    icon: '🕯️',
+    badge: 'VELVET NIGHT',
+    badgeColor: 'bg-purple-100 text-purple-900 border-purple-200',
+    gradientBg: 'from-purple-50/90 via-stone-50/50 to-pink-50/80',
+    borderColor: 'border-purple-200/80 hover:border-purple-400',
+    accentColor: 'text-purple-800',
+    highlights: [
+      'Moody Velvet & Candlelit Visual Palette',
+      'Nocturne Classical Violin & Cello Score',
+      'Midnight Bonfire, Cognac & DJ Playlist',
+      'Stargazing & Fireworks Itinerary',
+    ],
+    route: '/wedding-invitation-afterglow',
+    coverImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
+    description: 'A dark, romantic chateau affair lit solely by hundreds of flickering beeswax tapers and starlight.',
+    coupleDisplay: 'Chloe & Tristan',
+    cityDisplay: 'Bordeaux Estate, France',
+  },
+  'the-palace': {
+    id: 'the-palace',
+    name: 'Royal Vivah Palace',
+    hindiName: 'शुभ विवाह • उदयपुर लेक पैलेस',
+    icon: '🪷',
+    badge: '100% SHUDDH',
+    badgeColor: 'bg-amber-100 text-amber-900 border-amber-300',
+    gradientBg: 'from-amber-50/90 via-yellow-50/50 to-rose-50/80',
+    borderColor: 'border-amber-300/80 hover:border-amber-500',
+    accentColor: 'text-amber-900',
+    highlights: [
+      'Vedic Ganesha Shloka & Royal Sitar Synth',
+      '3D Origami Gatefold Flap & Wax Crack',
+      'Canvas Scratch-to-Reveal Gold Card',
+      'Voice Blessing Recorder & DJ Requests',
+    ],
+    route: '/rohit-weds-priya?guest=Aditya+Singhania',
+    coverImage: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
+    description: 'The crowning jewel of Udaipur palatial vivah — glowing oil lamps on Lake Pichola, Vedic hymns, and bespoke guest hospitality.',
+    coupleDisplay: 'Priya & Rohit',
+    cityDisplay: 'Lake Palace, Udaipur, India',
+  },
+};
+
+export const SUITE_METAS_LIST = Object.values(SUITE_CATEGORY_METAS);
