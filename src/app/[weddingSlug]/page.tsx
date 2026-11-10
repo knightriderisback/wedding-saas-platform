@@ -16,6 +16,7 @@ import { GuestRsvpForm } from '@/components/guest/GuestRsvpForm';
 import { royalSitarAudio } from '@/lib/sitarSynth';
 import { PRESSED_LOVE_TEMPLATES } from '@/lib/pressedLoveTemplates';
 import { PressedLoveInvitation } from '@/components/pressedlove/PressedLoveInvitation';
+import { ZareqiaWeddingInvitation } from '@/components/zareqia/ZareqiaWeddingInvitation';
 import {
   Calendar,
   Clock,
@@ -48,6 +49,10 @@ function LuxuryGuestMicrositeContent() {
       : (slug === 'rohit-weds-priya' ? 'the-palace' : 'the-palace')
   );
   const selectedTemplate = PRESSED_LOVE_TEMPLATES[templateKey] || PRESSED_LOVE_TEMPLATES['the-palace'] || PRESSED_LOVE_TEMPLATES['the-venue'];
+
+  if (templateKey === 'zareqia-emerald' || slug === 'wedding-invitation-zareqia-emerald') {
+    return <ZareqiaWeddingInvitation guestName={guestQuery} autoOpen={false} />;
+  }
 
   return (
     <PressedLoveInvitation

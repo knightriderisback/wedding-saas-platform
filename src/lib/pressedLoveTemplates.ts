@@ -1015,6 +1015,111 @@ export const PRESSED_LOVE_TEMPLATES: Record<string, PressedLoveTemplate> = {
       bgColor: '#FAF8F5',
     },
   },
+
+  'zareqia-emerald': {
+    id: 'zareqia-emerald',
+    slug: 'wedding-invitation-zareqia-emerald',
+    name: 'Zareqia Sage Emerald',
+    subtitle: 'Luxury Gatefold & Classical Courtyard Suite',
+    tagline: 'Embossed sage leaf gatefold, scalloped Tap-To-Open seal, silk drapes reveal, and interactive emerald heart scratch card.',
+    badge: 'Viral Luxury Instagram Suite',
+    couple: {
+      partner1: 'Zayn',
+      partner2: 'Nora',
+      formalTitle: "We're getting married: Zayn & Nora",
+      initials: 'Z & N',
+    },
+    ceremony: {
+      date: '2026-11-30',
+      time: '18:00',
+      displayDate: 'Monday, November 30, 2026',
+      displayTime: '6:00 PM',
+      timeZone: 'Europe/London',
+    },
+    theme: {
+      name: 'theme-zareqia-emerald',
+      colors: {
+        primary: '#364531',
+        secondary: '#5C7153',
+        accent: '#C4A265',
+        text: '#24201D',
+        background: '#FAF7F2',
+        surface: '#FFFFFF',
+        border: '#D9D0C3',
+      },
+      fonts: {
+        display: 'font-cinzel',
+        script: 'font-pinyon',
+        body: 'font-cormorant',
+      },
+    },
+    location: {
+      venueName: 'Grand Palace Hall',
+      address: 'City centre',
+      city: 'London',
+      country: 'United Kingdom',
+      googleMapsUrl: 'https://maps.google.com/?q=Grand+Palace+Hall+City+centre+London',
+      description: 'Classical architecture, majestic chandeliers, and manicured terrace courtyard in central London.',
+    },
+    assets: {
+      introVideo: '',
+      introVideoPoster: '/templates/zareqia/hero-courtyard.jpg',
+      backgroundMusic: '/audio/zareqia-saathiyaa.mp3',
+      heroImage: '/templates/zareqia/hero-courtyard.jpg',
+      venueImage: '/templates/zareqia/carousel-1.jpg',
+      rsvpConfirmation: '',
+    },
+    program: [
+      {
+        time: '10:00 AM',
+        title: 'Guest Arrival',
+        description: 'We welcome you with open arms and joyful hearts.',
+        iconType: 'wine',
+      },
+      {
+        time: '10:30 AM',
+        title: 'Wedding Ceremony',
+        description: 'Exchange of vows under the grand floral pavilion.',
+        iconType: 'ring',
+      },
+      {
+        time: '7:30 PM',
+        title: 'Reception',
+        description: 'Dinner, toasts, live orchestra and dancing.',
+        iconType: 'party',
+      },
+    ],
+    accommodation: {
+      title: 'Accommodation',
+      description: 'Special rates at The Grand Palace Hotel (5 min from venue). Use code WEDDING2026 when booking.',
+      hotels: [
+        {
+          name: 'The Grand Palace Hotel',
+          tier: '5-Star Luxury',
+          distance: '5 mins from venue',
+          bookingUrl: 'https://maps.google.com/?q=Grand+Palace+Hotel+London',
+        },
+      ],
+    },
+    faqs: [
+      {
+        question: 'Is transportation provided to the venue?',
+        answer: 'Yes, shuttle service will be available from central station at 3:30 PM.',
+      },
+    ],
+    gifts: {
+      message: 'Your love, blessings and presence are the greatest gifts we could ever ask for.',
+      bankName: 'Barclays Private Banking',
+      accountHolder: 'Zayn Malik & Nora Nasser',
+      iban: 'GB29 BUKB 6016 1331 9268 19',
+      bicSwift: 'BUKBGB22',
+    },
+    envelope: {
+      waxColor: '#364531',
+      waxMonogram: 'Z&N',
+      bgColor: '#5C7153',
+    },
+  },
 };
 
 export const TEMPLATE_LIST = Object.values(PRESSED_LOVE_TEMPLATES);
