@@ -42,105 +42,70 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
 
     ctx.save();
 
-    // Heart Path
-    ctx.beginPath();
-    const topCurveHeight = height * 0.3;
-    ctx.moveTo(width / 2, height * 0.86);
-    // Left curve
-    ctx.bezierCurveTo(
-      width * 0.08,
-      height * 0.55,
-      width * 0.02,
-      topCurveHeight,
-      width * 0.25,
-      topCurveHeight * 0.58
+    // Use identical SVG Heart Path so canvas matches revealed container 100% pixel-perfect
+    const heartPath = new Path2D(
+      'M140,240 C40,160 0,110 0,60 C0,25 25,0 65,0 C95,0 125,25 140,48 C155,25 185,0 215,0 C255,0 280,25 280,60 C280,110 240,160 140,240 Z'
     );
-    ctx.bezierCurveTo(
-      width * 0.38,
-      topCurveHeight * 0.25,
-      width * 0.48,
-      topCurveHeight * 0.65,
-      width / 2,
-      height * 0.28
-    );
-    // Right curve
-    ctx.bezierCurveTo(
-      width * 0.52,
-      topCurveHeight * 0.65,
-      width * 0.62,
-      topCurveHeight * 0.25,
-      width * 0.75,
-      topCurveHeight * 0.58
-    );
-    ctx.bezierCurveTo(
-      width * 0.98,
-      topCurveHeight,
-      width * 0.92,
-      height * 0.55,
-      width / 2,
-      height * 0.86
-    );
-    ctx.closePath();
-    ctx.clip();
+    ctx.clip(heartPath);
 
-    // Base Emerald Green gradient with deep beveled edges
+    // Soft luminous Sage Green radial gradient matching video f_0025.jpg
     const grad = ctx.createRadialGradient(
-      width * 0.45,
+      width * 0.46,
       height * 0.38,
-      15,
+      12,
       width / 2,
       height / 2,
       width * 0.52
     );
-    grad.addColorStop(0, '#5E8F6C');
-    grad.addColorStop(0.35, '#3F6F4C');
-    grad.addColorStop(0.75, '#285035');
-    grad.addColorStop(1, '#1A3B25');
+    grad.addColorStop(0, '#B2C6AA');
+    grad.addColorStop(0.28, '#91A888');
+    grad.addColorStop(0.68, '#6B8362');
+    grad.addColorStop(1, '#4A6142');
 
     ctx.fillStyle = grad;
-    ctx.fill();
+    ctx.fill(heartPath);
 
-    // Thousands of glistening metallic & gold glitter flecks
+    // Thousands of glistening metallic & champagne gold glitter flecks
     const rng = (seed: number) => {
       const x = Math.sin(seed++) * 10000;
       return x - Math.floor(x);
     };
 
-    let seed = 42;
-    for (let i = 0; i < 3000; i++) {
+    let seed = 77;
+    for (let i = 0; i < 3600; i++) {
       const gx = rng(seed++) * width;
       const gy = rng(seed++) * height;
-      const gSize = rng(seed++) * 2.2 + 0.4;
+      const gSize = rng(seed++) * 2.0 + 0.3;
       const alpha = rng(seed++) * 0.85 + 0.15;
       const isGold = rng(seed++) > 0.45;
 
       ctx.fillStyle = isGold
-        ? `rgba(255, 230, 150, ${alpha})`
-        : `rgba(165, 240, 185, ${alpha})`;
+        ? `rgba(255, 235, 175, ${alpha})`
+        : `rgba(225, 245, 230, ${alpha})`;
       ctx.beginPath();
       ctx.arc(gx, gy, gSize, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // Top-Center Specular White Highlight Dome (Exact match to video f_0026.jpg)
+    // Top-Center Specular Soft Dome Highlight (Exact match to video f_0025.jpg)
     const specGrad = ctx.createRadialGradient(
-      width * 0.48,
-      height * 0.38,
-      5,
-      width * 0.48,
-      height * 0.38,
-      width * 0.32
+      width * 0.46,
+      height * 0.36,
+      8,
+      width * 0.46,
+      height * 0.36,
+      width * 0.35
     );
     specGrad.addColorStop(0, 'rgba(255, 255, 255, 0.75)');
-    specGrad.addColorStop(0.4, 'rgba(255, 255, 255, 0.28)');
+    specGrad.addColorStop(0.35, 'rgba(255, 255, 255, 0.32)');
     specGrad.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
     ctx.fillStyle = specGrad;
-    ctx.fill();
+    ctx.fill(heartPath);
 
-    // Outer subtle gold bevel ring
-    ctx.strokeStyle = 'rgba(218, 185, 110, 0.6)';
-    ctx.lineWidth = 2.5;
-    ctx.stroke();
+    // Soft bevel contour stroke on heart edge
+    ctx.strokeStyle = 'rgba(220, 205, 155, 0.55)';
+    ctx.lineWidth = 1.8;
+    ctx.stroke(heartPath);
 
     ctx.restore();
   }, []);
@@ -308,8 +273,20 @@ END:VCALENDAR`;
       ref={containerRef}
       className="flex flex-col items-center justify-center py-6 px-4 text-center select-none"
     >
+      {/* Welcome Blessing Intro Text (Matching Video f_0025.jpg) */}
+      <div className="max-w-[320px] mx-auto px-2 mb-4 text-center">
+        <p className="font-['Cormorant_Garamond',serif] italic text-[15px] sm:text-[16px] leading-relaxed text-[#4B5845]">
+          {isArabic
+            ? 'يشرفنا أن نرحب بكم في حفل زفاف زين ونورا. ومع بداية رحلتهما معاً في الإيمان والمحبة، نشكركم لكونكم جزءاً من هذه المناسبة المباركة.'
+            : 'We are honored to welcome you to the Wedding ceremony of Zayn & Nora. As they begin their journey together in faith and love, we thank you for being part of this blessed occasion.'}
+        </p>
+        <div className="flex items-center justify-center gap-1.5 mt-2 text-[#7C9172]">
+          <span className="text-xs">♥</span>
+        </div>
+      </div>
+
       {/* Section Title */}
-      <div className="mb-3 transition-all duration-700">
+      <div className="mb-4 transition-all duration-700">
         <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide">
           {isRevealed
             ? isArabic
@@ -320,90 +297,84 @@ END:VCALENDAR`;
             : 'Scratch to Reveal'}
         </h3>
         {/* Subtle Diamond Divider */}
-        <div className="flex items-center justify-center gap-2 mt-1 opacity-70">
+        <div className="flex items-center justify-center gap-2 mt-1.5 opacity-70">
           <div className="w-8 h-[1px] bg-[#B59A57]" />
           <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
           <div className="w-8 h-[1px] bg-[#B59A57]" />
         </div>
       </div>
 
-      {/* Recessed 3D Cardstock Debossed Frame (Matching video f_0026.jpg) */}
-      <div
-        className="relative p-2.5 rounded-full flex items-center justify-center"
-        style={{
-          boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.14), inset 0 1px 3px rgba(0,0,0,0.1), 0 1px 0 rgba(255,255,255,0.9)',
-          background: 'linear-gradient(180deg, #ECE5D8 0%, #F5F0E6 100%)',
-        }}
-      >
-        {/* Heart Container */}
-        <div className="relative w-[280px] h-[260px] md:w-[310px] md:h-[280px] flex items-center justify-center">
-          {/* Revealed Content (Underneath) */}
-          <div
-            className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-700 ${
-              isRevealed ? 'opacity-100 scale-100' : 'opacity-90 scale-95'
-            }`}
-            style={{
-              clipPath:
-                'path("M140,240 C40,160 0,110 0,60 C0,25 25,0 65,0 C95,0 125,25 140,48 C155,25 185,0 215,0 C255,0 280,25 280,60 C280,110 240,160 140,240 Z")',
-              background: 'radial-gradient(circle, #FAF8F2 0%, #F1EAE0 100%)',
-            }}
+      {/* 3D Emerad Heart Scratch Container (Directly on Luxury Paper, No Circle Frame Matching f_0025.jpg) */}
+      <div className="relative w-[280px] h-[260px] flex items-center justify-center my-2">
+        {/* Revealed Content (Underneath) */}
+        <div
+          className={`absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-700 ${
+            isRevealed ? 'opacity-100' : 'opacity-95'
+          }`}
+          style={{
+            clipPath:
+              'path("M140,240 C40,160 0,110 0,60 C0,25 25,0 65,0 C95,0 125,25 140,48 C155,25 185,0 215,0 C255,0 280,25 280,60 C280,110 240,160 140,240 Z")',
+            background: 'radial-gradient(circle, #FCFAF6 0%, #F5F1E8 100%)',
+          }}
+        >
+          {/* Delicate Thin Heart Contour Border Matching Video f_0035.jpg */}
+          <svg
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            viewBox="0 0 280 260"
+            fill="none"
           >
-            {/* Heart Inner Border */}
-            <svg
-              className="absolute inset-0 w-full h-full pointer-events-none"
-              viewBox="0 0 280 260"
+            <path
+              d="M140,234 C43,156 5,108 5,60 C5,27 28,5 65,5 C93,5 122,28 140,48 C158,28 187,5 215,5 C252,5 275,27 275,60 C275,108 237,156 140,234 Z"
+              stroke="#B3985A"
+              strokeWidth="1.2"
               fill="none"
-            >
-              <path
-                d="M140,234 C43,156 5,108 5,60 C5,27 28,5 65,5 C93,5 122,28 140,48 C158,28 187,5 215,5 C252,5 275,27 275,60 C275,108 237,156 140,234 Z"
-                stroke="#C4A265"
-                strokeWidth="1.2"
-                strokeDasharray="4 2"
-                fill="none"
-              />
-            </svg>
+              opacity="0.8"
+            />
+          </svg>
 
-            {/* Text Content Inside Heart (Matching exact video lines) */}
-            <div className="relative z-10 flex flex-col items-center px-4 pt-4">
-              <span className="font-['Alex_Brush','Pinyon_Script',cursive] text-lg text-[#5A4C32] mb-0.5">
-                {isArabic ? 'يسعدنا حضوركم!' : "You're Invited!"}
-              </span>
-              <span className="font-['Playfair_Display',serif] text-xl md:text-2xl font-bold text-[#242A20] tracking-tight">
-                {isArabic ? '٣٠ نوفمبر ٢٠٢٦' : weddingDate}
-              </span>
-              <span className="font-['Cormorant_Garamond',serif] text-sm text-[#4E5C46] font-medium mt-0.5">
-                {isArabic ? 'الاثنين' : weddingDay}
-              </span>
-              <span className="font-['Cinzel',serif] text-[11px] tracking-wider text-[#685A42] font-semibold mt-0.5">
-                {isArabic ? '١٠:٠٠ صباحاً' : weddingTime}
-              </span>
-            </div>
+          {/* Text Content Inside Heart (Matching exact video lines in f_0035.jpg) */}
+          <div className="relative z-10 flex flex-col items-center px-4 pt-4">
+            <span className="font-['Alex_Brush','Pinyon_Script',cursive] text-lg text-[#5A4C32] mb-0.5">
+              {isArabic ? 'يسعدنا حضوركم!' : "You're Invited!"}
+            </span>
+            <span className="font-['Playfair_Display',serif] text-xl md:text-2xl font-bold text-[#242A20] tracking-tight">
+              {isArabic ? '٣٠ نوفمبر ٢٠٢٦' : weddingDate}
+            </span>
+            <span className="font-['Cormorant_Garamond',serif] text-sm text-[#4E5C46] font-medium mt-0.5">
+              {isArabic ? 'الاثنين' : weddingDay}
+            </span>
+            <span className="font-['Cinzel',serif] text-[11px] tracking-wider text-[#685A42] font-semibold mt-0.5">
+              {isArabic ? '١٠:٠٠ صباحاً' : weddingTime}
+            </span>
           </div>
-
-          {/* Scratch Canvas (Top Layer) */}
-          <canvas
-            ref={canvasRef}
-            width={280}
-            height={260}
-            className={`absolute inset-0 z-20 cursor-grab active:cursor-grabbing touch-none transition-opacity duration-700 ${
-              isRevealed ? 'opacity-0 pointer-events-none' : 'opacity-100'
-            }`}
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-            onMouseLeave={onMouseUp}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-          />
         </div>
+
+        {/* Scratch Canvas (Top Layer: 3D Domed Emerald Metallic Glitter Heart) */}
+        <canvas
+          ref={canvasRef}
+          width={280}
+          height={260}
+          className={`absolute inset-0 z-20 cursor-grab active:cursor-grabbing touch-none transition-opacity duration-700 ${
+            isRevealed ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          }`}
+          style={{
+            filter: 'drop-shadow(0 10px 20px rgba(40,65,45,0.35)) drop-shadow(0 2px 5px rgba(0,0,0,0.2))',
+          }}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseUp}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        />
       </div>
 
-      {/* Save The Date Pill Button (ALWAYS VISIBLE BELOW HEART like video f_0026.jpg) */}
+      {/* Save The Date Pill Button (Matching exact video f_0035.jpg) */}
       <div className="mt-4 transition-all duration-700">
         <button
           onClick={handleSaveTheDate}
-          className="group relative inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[#2E3C29] text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-widest uppercase shadow-md hover:bg-[#232F1F] active:scale-95 transition-all border border-[#B59A57]/30"
+          className="group relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#273822] text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-widest uppercase shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/30"
         >
           {calendarSaved ? (
             <>
@@ -412,7 +383,7 @@ END:VCALENDAR`;
             </>
           ) : (
             <>
-              <Calendar className="w-3.5 h-3.5 text-[#C4A265] group-hover:scale-110 transition-transform" />
+              <Calendar className="w-3.5 h-3.5 text-[#E6D197] group-hover:scale-110 transition-transform" />
               <span>{isArabic ? 'احفظ التاريخ في التقويم' : 'SAVE THE DATE'}</span>
             </>
           )}

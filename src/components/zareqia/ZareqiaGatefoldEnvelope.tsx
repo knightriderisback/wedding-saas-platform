@@ -139,7 +139,7 @@ export const ZareqiaGatefoldEnvelope: React.FC<ZareqiaGatefoldEnvelopeProps> = (
       </div>
 
       {/* ========================================================
-          STAGE 1 LAYER: 3D EMBOSSED SAGE GREEN GATEFOLD DOORS
+          STAGE 1 LAYER: 3D EMBOSSED LIGHT SAGE GATEFOLD DOORS
           ======================================================== */}
       {/* LEFT SAGE DOOR */}
       <div
@@ -147,100 +147,92 @@ export const ZareqiaGatefoldEnvelope: React.FC<ZareqiaGatefoldEnvelopeProps> = (
         className="absolute top-0 left-0 w-1/2 h-full z-30 cursor-pointer overflow-hidden transition-transform duration-[1150ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{
           transform: doorsOpen ? 'translateX(-100%)' : 'translateX(0)',
-          boxShadow: '16px 0 40px rgba(0,0,0,0.55)',
+          boxShadow: '16px 0 40px rgba(0,0,0,0.45)',
         }}
       >
-        {/* Sage Green Base with Embossed Botanical Branches */}
-        <div className="absolute inset-0 bg-[#596A4F] overflow-hidden">
+        {/* Soft Sage Green Base with Embossed Botanical Foliage */}
+        <div className="absolute inset-0 bg-[#869B77] overflow-hidden">
           <Image
             src="/templates/zareqia/embossed-botanical-doors.svg"
             alt="Sage Leaf Gatefold Left"
             fill
             unoptimized
-            className="object-cover object-right"
+            className="object-cover object-left"
             priority
           />
         </div>
 
         {/* Ambient lighting gradient */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/45 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/15 via-transparent to-black/25 pointer-events-none" />
 
-        {/* Vertical Gold Ribbon / Cord Running Down Center Seam */}
-        <div className="absolute top-0 right-0 w-[2px] h-full bg-gradient-to-b from-[#DFC07C] via-[#F3E5AB] to-[#997938] z-10 shadow-sm pointer-events-none" />
+        {/* Ultra-Fine Gold Hairline Cord on Center Seam (Matching Video f_0004.jpg) */}
+        <div className="absolute top-0 right-0 w-[1.5px] h-full bg-gradient-to-b from-[#DFC07C] via-[#F3E5AB] to-[#997938] z-10 shadow-[0_0_1px_rgba(0,0,0,0.4)] pointer-events-none" />
 
-        {/* Golden Beaded Trim on Right Edge */}
-        <div className="absolute top-0 right-0 w-[12px] h-full pointer-events-none flex flex-col items-center justify-between py-1 z-10">
-          <div className="absolute right-[5px] top-0 bottom-0 w-[1.5px] bg-gradient-to-b from-[#C4A265] via-[#E8D389] to-[#997938]" />
-          {Array.from({ length: 75 }).map((_, i) => (
-            <div
-              key={i}
-              className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-[#FFE89E] via-[#D4AF37] to-[#8C6D23] shadow-[0_1px_2px_rgba(0,0,0,0.5)] my-[1.5px] relative z-10"
-              style={{
-                boxShadow: '0 0.5px 1px rgba(0,0,0,0.4), inset 0 0.5px 0.5px rgba(255,255,255,0.7)',
-              }}
+        {/* ========================================================
+            LEFT HALF OF SPLIT BAROQUE CARTOUCHE SEAL
+            Glides smoothly to the left when doors open!
+            (Matching exact video physics in f_0008.jpg)
+            ======================================================== */}
+        <div
+          onClick={handleOpen}
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-[90px] h-[240px] overflow-hidden z-20 cursor-pointer pointer-events-auto"
+        >
+          <div className="relative w-[180px] h-[240px] left-0 drop-shadow-[0_12px_24px_rgba(0,0,0,0.4)]">
+            <Image
+              src="/templates/zareqia/seal-cartouche-ultra.svg"
+              alt="Seal Left Half"
+              fill
+              unoptimized
+              className="object-contain"
+              priority
             />
-          ))}
+          </div>
         </div>
       </div>
 
-      {/* RIGHT SAGE DOOR (overflow-visible allows centered seal to extend across seam) */}
+      {/* RIGHT SAGE DOOR */}
       <div
         onClick={handleOpen}
-        className="absolute top-0 right-0 w-1/2 h-full z-30 cursor-pointer overflow-visible transition-transform duration-[1150ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="absolute top-0 right-0 w-1/2 h-full z-30 cursor-pointer overflow-hidden transition-transform duration-[1150ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{
           transform: doorsOpen ? 'translateX(100%)' : 'translateX(0)',
-          boxShadow: '-16px 0 40px rgba(0,0,0,0.55)',
+          boxShadow: '-16px 0 40px rgba(0,0,0,0.45)',
         }}
       >
-        {/* Sage Green Base with Embossed Botanical Branches (Mirrored) */}
-        <div className="absolute inset-0 bg-[#596A4F] overflow-hidden scale-x-[-1]">
+        {/* Soft Sage Green Base with Embossed Botanical Foliage (Mirrored) */}
+        <div className="absolute inset-0 bg-[#869B77] overflow-hidden scale-x-[-1]">
           <Image
             src="/templates/zareqia/embossed-botanical-doors.svg"
             alt="Sage Leaf Gatefold Right"
             fill
             unoptimized
-            className="object-cover object-right"
+            className="object-cover object-left"
             priority
           />
         </div>
 
         {/* Ambient lighting gradient */}
-        <div className="absolute inset-0 bg-gradient-to-l from-black/25 via-transparent to-black/45 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-l from-black/15 via-transparent to-black/25 pointer-events-none" />
 
-        {/* Vertical Gold Ribbon / Cord Running Down Center Seam */}
-        <div className="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-[#DFC07C] via-[#F3E5AB] to-[#997938] z-10 shadow-sm pointer-events-none" />
-
-        {/* Golden Beaded Trim on Left Edge */}
-        <div className="absolute top-0 left-0 w-[12px] h-full pointer-events-none flex flex-col items-center justify-between py-1 z-10">
-          <div className="absolute left-[5px] top-0 bottom-0 w-[1.5px] bg-gradient-to-b from-[#C4A265] via-[#E8D389] to-[#997938]" />
-          {Array.from({ length: 75 }).map((_, i) => (
-            <div
-              key={i}
-              className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-[#FFE89E] via-[#D4AF37] to-[#8C6D23] shadow-[0_1px_2px_rgba(0,0,0,0.5)] my-[1.5px] relative z-10"
-              style={{
-                boxShadow: '0 0.5px 1px rgba(0,0,0,0.4), inset 0 0.5px 0.5px rgba(255,255,255,0.7)',
-              }}
-            />
-          ))}
-        </div>
+        {/* Ultra-Fine Gold Hairline Cord on Center Seam (Matching Video f_0004.jpg) */}
+        <div className="absolute top-0 left-0 w-[1.5px] h-full bg-gradient-to-b from-[#DFC07C] via-[#F3E5AB] to-[#997938] z-10 shadow-[0_0_1px_rgba(0,0,0,0.4)] pointer-events-none" />
 
         {/* ========================================================
-            BAROQUE CARTOUCHE SEAL (Affixed to Right Door)
-            When right door slides open, the seal smoothly glides with it!
-            (Matching exact video behavior in f_0006.jpg & f_0007.jpg)
+            RIGHT HALF OF SPLIT BAROQUE CARTOUCHE SEAL
+            Glides smoothly to the right when doors open!
+            (Matching exact video physics in f_0008.jpg)
             ======================================================== */}
         <div
           onClick={handleOpen}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-40 pointer-events-auto cursor-pointer"
-          style={{ width: '180px', height: '240px' }}
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-[90px] h-[240px] overflow-hidden z-20 cursor-pointer pointer-events-auto"
         >
-          <div className="relative w-full h-full transform hover:scale-105 active:scale-95 transition-transform duration-300">
+          <div className="relative w-[180px] h-[240px] -left-[90px] drop-shadow-[0_12px_24px_rgba(0,0,0,0.4)]">
             <Image
               src="/templates/zareqia/seal-cartouche-ultra.svg"
-              alt="Baroque Cartouche Seal - Tap To Open"
+              alt="Seal Right Half"
               fill
               unoptimized
-              className="object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.55)]"
+              className="object-contain"
               priority
             />
           </div>
