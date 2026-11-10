@@ -16,11 +16,15 @@ import {
   ChevronDown,
   Navigation,
   CheckCircle2,
+  PartyPopper,
+  Shirt,
+  UserCheck,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { ZareqiaGatefoldEnvelope } from './ZareqiaGatefoldEnvelope';
 import { ZareqiaHeartScratch } from './ZareqiaHeartScratch';
 import { ZareqiaPhotoCarousel } from './ZareqiaPhotoCarousel';
+import { royalSitarAudio } from '@/lib/sitarSynth';
 
 interface ZareqiaWeddingInvitationProps {
   guestName?: string;
@@ -34,6 +38,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
   const [isArabic, setIsArabic] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(autoOpen);
+  const [heroTextVisible, setHeroTextVisible] = useState(autoOpen);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // RSVP state
@@ -55,7 +60,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
 
   // Calculate live countdown to Nov 30, 2026
   useEffect(() => {
-    const targetDate = new Date('2026-11-30T18:00:00Z').getTime();
+    const targetDate = new Date('2026-11-30T10:00:00Z').getTime();
 
     const updateCountdown = () => {
       const now = new Date().getTime();
@@ -75,42 +80,63 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
     return () => clearInterval(timer);
   }, []);
 
-  // Audio handling
+  // Indian Wedding Instrumental Audio
   useEffect(() => {
-    const audio = new Audio('/audio/zareqia-saathiyaa.mp3');
+    const audio = new Audio('/audio/indian-wedding-instrumental.mp3');
     audio.loop = true;
-    audio.volume = 0.75;
+    audio.volume = 0.65;
     audioRef.current = audio;
 
     return () => {
       audio.pause();
       audio.currentTime = 0;
+      royalSitarAudio.stopAmbient();
     };
   }, []);
 
   const toggleAudio = () => {
-    if (!audioRef.current) return;
     if (isAudioPlaying) {
-      audioRef.current.pause();
+      if (audioRef.current) audioRef.current.pause();
+      royalSitarAudio.stopAmbient();
       setIsAudioPlaying(false);
     } else {
-      audioRef.current
-        .play()
-        .then(() => setIsAudioPlaying(true))
-        .catch(() => {
-          // Autoplay policy fallback
-          setIsAudioPlaying(false);
-        });
+      if (audioRef.current) {
+        audioRef.current
+          .play()
+          .then(() => setIsAudioPlaying(true))
+          .catch(() => {
+            // Fallback to Web Audio API synthesized royal sitar flute
+            royalSitarAudio.startAmbient();
+            setIsAudioPlaying(true);
+          });
+      } else {
+        royalSitarAudio.startAmbient();
+        setIsAudioPlaying(true);
+      }
     }
   };
 
   const handleEnvelopeOpen = () => {
     setIsEnvelopeOpen(true);
-    if (audioRef.current && !isAudioPlaying) {
-      audioRef.current
-        .play()
-        .then(() => setIsAudioPlaying(true))
-        .catch(() => {});
+    // Reveal hero text right after curtains finish opening
+    setTimeout(() => {
+      setHeroTextVisible(true);
+    }, 400);
+
+    // Start Indian wedding instrumental audio
+    if (!isAudioPlaying) {
+      if (audioRef.current) {
+        audioRef.current
+          .play()
+          .then(() => setIsAudioPlaying(true))
+          .catch(() => {
+            royalSitarAudio.startAmbient();
+            setIsAudioPlaying(true);
+          });
+      } else {
+        royalSitarAudio.startAmbient();
+        setIsAudioPlaying(true);
+      }
     }
   };
 
@@ -124,13 +150,13 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
       setRsvpSubmitted(true);
       try {
         confetti({
-          particleCount: 100,
+          particleCount: 90,
           spread: 70,
           origin: { y: 0.7 },
           colors: ['#3A5A3F', '#D4AF37', '#FAF7F0', '#E5C07B'],
         });
       } catch {}
-    }, 700);
+    }, 600);
   };
 
   return (
@@ -138,31 +164,31 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
       dir={isArabic ? 'rtl' : 'ltr'}
       className="min-h-screen bg-[#F7F4EE] text-[#24201D] font-['Cormorant_Garamond',serif] antialiased overflow-x-hidden selection:bg-[#B59A57]/30"
     >
-      {/* 1. GATEFOLD 3D DOORS ENVELOPE (TOP-LEVEL OVERLAY) */}
+      {/* 1. GATEFOLD 3D DOORS ENVELOPE (TOP-LEVEL OVERLAY WITH TWO-STAGE CURTAIN REVEAL) */}
       {!isEnvelopeOpen && (
         <ZareqiaGatefoldEnvelope
           onOpenComplete={handleEnvelopeOpen}
           isArabic={isArabic}
           onToggleLanguage={() => setIsArabic(!isArabic)}
-          audioSrc="/audio/zareqia-saathiyaa.mp3"
+          audioSrc="/audio/indian-wedding-instrumental.mp3"
           isAudioPlaying={isAudioPlaying}
           onToggleAudio={toggleAudio}
         />
       )}
 
       {/* 2. FLOATING FIXED CONTROLS */}
-      {/* Sound Toggle (Top Right) */}
+      {/* Sound Toggle (Top-Right Frosted Glass Button) */}
       <button
         onClick={toggleAudio}
         aria-label="Toggle Audio"
-        className="fixed top-4 right-4 z-40 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/75 backdrop-blur-md text-[#2A3825] text-xs font-['Cinzel',serif] tracking-wider uppercase border border-[#B59A57]/40 hover:bg-white transition-all shadow-md active:scale-95"
+        className="fixed top-4 right-4 z-40 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/75 backdrop-blur-md text-[#2A3825] text-xs font-['Cinzel',serif] tracking-wider uppercase border border-[#B59A57]/40 hover:bg-white transition-all shadow-md active:scale-95"
       >
         {isAudioPlaying ? (
           <>
-            <div className="flex items-end gap-[2px] h-3.5">
-              <span className="w-1 bg-[#3A5A3F] h-full animate-[pulse_0.6s_ease-in-out_infinite]" />
-              <span className="w-1 bg-[#3A5A3F] h-2/3 animate-[pulse_0.8s_ease-in-out_infinite_0.2s]" />
-              <span className="w-1 bg-[#3A5A3F] h-4/5 animate-[pulse_0.7s_ease-in-out_infinite_0.4s]" />
+            <div className="flex items-end gap-[2px] h-3">
+              <span className="w-0.5 bg-[#3A5A3F] h-full animate-[pulse_0.6s_ease-in-out_infinite]" />
+              <span className="w-0.5 bg-[#3A5A3F] h-2/3 animate-[pulse_0.8s_ease-in-out_infinite_0.2s]" />
+              <span className="w-0.5 bg-[#3A5A3F] h-4/5 animate-[pulse_0.7s_ease-in-out_infinite_0.4s]" />
             </div>
             <Volume2 className="w-3.5 h-3.5 text-[#3A5A3F]" />
           </>
@@ -174,28 +200,28 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
         )}
       </button>
 
-      {/* Language Switcher (Bottom Left) */}
+      {/* Language Switcher (Bottom-Left Frosted Glass Button) */}
       <button
         onClick={() => setIsArabic(!isArabic)}
         aria-label="Toggle Language"
         className="fixed bottom-5 left-5 z-40 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 backdrop-blur-md text-[#2A3825] text-xs font-['Cinzel',serif] tracking-widest uppercase border border-[#B59A57]/40 hover:bg-white transition-all shadow-lg active:scale-95"
       >
         <Globe className="w-3.5 h-3.5 text-[#B59A57]" />
-        <span>{isArabic ? 'English' : 'العربية'}</span>
+        <span>{isArabic ? 'English' : 'Arabic'}</span>
       </button>
 
       {/* "Use this Design" Floating Pill Button (Bottom Right) */}
       <Link
         href="/customer?template=zareqia-emerald"
-        className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#2E3C29]/90 backdrop-blur-md text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-wider uppercase border border-[#C4A265]/40 hover:bg-[#232F1F] transition-all shadow-xl active:scale-95 hover:scale-105"
+        className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#2E3C29]/90 backdrop-blur-md text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-wider uppercase border border-[#C4A265]/40 hover:bg-[#232F1F] transition-all shadow-xl active:scale-95 hover:scale-105"
       >
-        <Sparkles className="w-3.5 h-3.5 text-[#E8D389]" />
+        <Sparkles className="w-3 h-3 text-[#E8D389]" />
         <span>{isArabic ? 'استخدم هذا التصميم' : 'Use this Design'}</span>
       </Link>
 
-      {/* 3. MAIN MOBILE CONTAINER (Centered Luxury 9:16 Canvas) */}
+      {/* 3. MAIN MOBILE CONTAINER (9:16 Canvas matching exact video screen) */}
       <main className="max-w-[480px] mx-auto min-h-screen bg-[#F7F4EE] shadow-2xl relative overflow-hidden pb-24">
-        {/* Subtle Paper Texture Background */}
+        {/* Paper Texture Background */}
         <div
           className="absolute inset-0 pointer-events-none opacity-40"
           style={{
@@ -207,7 +233,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
         />
 
         {/* ========================================================
-            HERO SECTION: Curtains, Zayn & Nora Announcement, Courtyard Fountain
+            SECTION 1: HERO (Curtains, Zayn & Nora, Courtyard Fountain)
             ======================================================== */}
         <section className="relative min-h-[92vh] flex flex-col items-center justify-between pt-10 pb-6 px-6 text-center overflow-hidden">
           {/* Background Courtyard Illustration with Curtains & Fountain */}
@@ -219,12 +245,15 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
               className="object-cover object-center"
               priority
             />
-            {/* Subtle soft gradient over canvas to keep text ultra-crisp */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#F5EFE6]/30 via-[#F5EFE6]/10 to-[#F5EFE6]/40" />
           </div>
 
-          {/* Top Silk Valance & Heart */}
-          <div className="relative z-10 pt-4 flex flex-col items-center">
+          {/* Top Silk Valance & Heart & Text Announcement */}
+          <div
+            className={`relative z-10 pt-4 flex flex-col items-center transition-all duration-1000 ${
+              heroTextVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
+          >
             {/* Small Romantic Heart Icon */}
             <div className="text-[#3A4A33] text-sm mb-2 opacity-90 drop-shadow">♥</div>
 
@@ -233,7 +262,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
               {isArabic ? 'يسرنا دعوتكم لحضور حفل زفافنا' : "We're getting married"}
             </h2>
 
-            {/* Decorative Divider */}
+            {/* Decorative Divider with Center Diamond */}
             <div className="flex items-center justify-center gap-2 mt-2 mb-4 opacity-80">
               <div className="w-12 h-[1px] bg-[#B59A57]" />
               <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
@@ -254,7 +283,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
               </div>
             </div>
 
-            {/* Romantic Ampersand */}
+            {/* Ampersand */}
             <div className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#B59A57] my-1">
               &
             </div>
@@ -274,7 +303,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
             </div>
           </div>
 
-          {/* Bottom Courtyard Space & Scroll Down Indicator */}
+          {/* Bottom Courtyard Space & Scroll Down Chevron Indicator */}
           <div className="relative z-10 flex flex-col items-center pt-24 pb-2">
             <span className="text-[11px] font-['Cinzel',serif] tracking-[0.25em] text-[#607358] uppercase mb-1 opacity-90">
               {isArabic ? 'انتقل للأسفل' : 'Scroll'}
@@ -284,23 +313,22 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
         </section>
 
         {/* ========================================================
-            SECTION 2: SCRATCH TO REVEAL (Interactive Emerald Glitter Heart)
+            SECTION 2: SCRATCH TO REVEAL (3D Recessed Emerald Glitter Heart)
             ======================================================== */}
         <section className="relative z-10 py-8 bg-[#F7F4EE]/90 backdrop-blur-sm border-t border-[#E8DFC8]/60">
           <ZareqiaHeartScratch
             coupleNames={isArabic ? 'زين & نورا' : 'Zayn & Nora'}
             weddingDate={isArabic ? '٣٠ نوفمبر ٢٠٢٦' : 'November 30, 2026'}
             weddingDay={isArabic ? 'الاثنين' : 'Monday'}
-            weddingTime={isArabic ? '٦:٠٠ مساءً' : '6:00 PM'}
+            weddingTime={isArabic ? '١٠:٠٠ صباحاً' : '10:00 AM'}
             isArabic={isArabic}
           />
         </section>
 
         {/* ========================================================
-            SECTION 3: PHOTO CAROUSEL (Aesthetic Wedding Photography)
+            SECTION 3: PHOTO CAROUSEL (Frameless with Floating Dots Inside)
             ======================================================== */}
         <section className="relative z-10 py-6 border-t border-[#E8DFC8]/60">
-          {/* Subtle Section Divider */}
           <div className="flex items-center justify-center gap-2 mb-2 opacity-70">
             <div className="w-12 h-[1px] bg-[#B59A57]" />
             <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
@@ -322,7 +350,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
             <div className="w-10 h-[1px] bg-[#B59A57]" />
           </div>
 
-          {/* 4 Stat Boxes */}
+          {/* 4 Soft Warm Beige-Grey Stat Boxes */}
           <div className="grid grid-cols-4 gap-2.5 max-w-[340px] mx-auto">
             {[
               { val: timeLeft.days, label: isArabic ? 'يوم' : 'DAYS' },
@@ -332,7 +360,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="flex flex-col items-center justify-center py-3.5 px-1 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/35 shadow-sm"
+                className="flex flex-col items-center justify-center py-3.5 px-1 rounded-xl bg-[#EFECE6] border border-[#D8CEBC]/60 shadow-sm"
               >
                 <span className="font-['Playfair_Display',serif] text-2xl md:text-3xl font-bold text-[#2A3725]">
                   {String(item.val).padStart(2, '0')}
@@ -349,7 +377,6 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
             SECTION 5: PROGRAM TIMELINE
             ======================================================== */}
         <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60">
-          {/* Clock Icon in circle */}
           <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
             <Clock className="w-4 h-4 text-[#B59A57]" />
           </div>
@@ -363,7 +390,6 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
             <div className="w-10 h-[1px] bg-[#B59A57]" />
           </div>
 
-          {/* Timeline Items */}
           <div className="max-w-[320px] mx-auto space-y-7 text-center">
             {/* 1. Guest Arrival */}
             <div className="flex flex-col items-center">
@@ -372,7 +398,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
                 <h4>{isArabic ? 'استقبال الضيوف' : 'Guest Arrival'}</h4>
               </div>
               <p className="text-xs text-[#6B5A3E] font-['Cinzel',serif] tracking-wider mt-0.5">
-                {isArabic ? '٣٠ نوفمبر ٢٠٢٦، ١٠:٠٠ صباحاً' : 'Nov 30, 2026 • 10:00 AM'}
+                {isArabic ? '٣٠ نوفمبر ٢٠٢٦، ١٠:٠٠ صباحاً' : 'Nov 30, 2026, 10:00 AM'}
               </p>
               <p className="italic text-xs text-[#52634B] mt-0.5">
                 {isArabic ? 'أهلاً وسهلاً بكم ♥' : 'We welcome you ♥'}
@@ -386,7 +412,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
                 <h4>{isArabic ? 'عقد القران ومراسم الزفاف' : 'Wedding Ceremony'}</h4>
               </div>
               <p className="text-xs text-[#6B5A3E] font-['Cinzel',serif] tracking-wider mt-0.5">
-                {isArabic ? '٣٠ نوفمبر ٢٠٢٦، ١٠:٣٠ صباحاً' : 'Nov 30, 2026 • 10:30 AM'}
+                {isArabic ? '٣٠ نوفمبر ٢٠٢٦، ١٠:٣٠ صباحاً' : 'Nov 30, 2026, 10:30 AM'}
               </p>
               <p className="italic text-xs text-[#52634B] mt-0.5">
                 {isArabic ? 'حضوركم يكتمل به فرحنا!' : 'Your presence means a lot!'}
@@ -400,7 +426,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
                 <h4>{isArabic ? 'حفل الاستقبال والعشاء' : 'Reception'}</h4>
               </div>
               <p className="text-xs text-[#6B5A3E] font-['Cinzel',serif] tracking-wider mt-0.5">
-                {isArabic ? '٢ ديسمبر ٢٠٢٦، ٧:٣٠ مساءً' : 'Dec 2, 2026 • 7:30 PM'}
+                {isArabic ? '٢ ديسمبر ٢٠٢٦، ٧:٣٠ مساءً' : 'Dec 2, 2026, 7:30 PM'}
               </p>
               <p className="italic text-xs text-[#52634B] mt-0.5">
                 {isArabic ? 'عشاء واحتفال ببهجة لا تُنسى' : 'Dinner, dancing & celebration'}
@@ -410,10 +436,9 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
         </section>
 
         {/* ========================================================
-            SECTION 6: VENUE & INTERACTIVE MAP
+            SECTION 6: VENUE & MAP
             ======================================================== */}
         <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60">
-          {/* Location Pin Icon */}
           <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
             <MapPin className="w-4 h-4 text-[#B59A57]" />
           </div>
@@ -436,11 +461,10 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
             </p>
           </div>
 
-          {/* Interactive Map Card Preview with "Open in Maps" */}
+          {/* Interactive Map Card (North London with top-left Open in Maps button) */}
           <div className="relative w-full max-w-[340px] mx-auto aspect-[16/9] rounded-2xl overflow-hidden border border-[#C4A265]/40 shadow-lg bg-[#E6E1D5]">
-            {/* Stylized Map Background */}
             <div
-              className="absolute inset-0 opacity-80"
+              className="absolute inset-0 opacity-85"
               style={{
                 backgroundImage:
                   'radial-gradient(#C5BCAB 1.5px, transparent 1.5px), linear-gradient(135deg, #ECE5D8 0%, #D8CFBE 100%)',
@@ -450,7 +474,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
 
             {/* Map Roads & Stylized Grid */}
             <svg
-              className="absolute inset-0 w-full h-full opacity-35"
+              className="absolute inset-0 w-full h-full opacity-40"
               viewBox="0 0 340 190"
               fill="none"
               stroke="#A89B85"
@@ -469,21 +493,111 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
               <div className="w-2.5 h-1 rounded-full bg-black/20 blur-[1px] mt-0.5" />
             </div>
 
-            {/* Open in Maps Overlay Pill Button */}
+            {/* Open in Maps Overlay Pill Button (TOP-LEFT CORNER like video f_0042.jpg) */}
             <a
               href="https://maps.google.com/?q=Grand+Palace+Hall+City+centre+London"
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-[#2A3725] text-[11px] font-['Cinzel',serif] tracking-wider uppercase shadow-md border border-[#B59A57]/40 hover:bg-white transition-all flex items-center gap-1.5 hover:scale-105 active:scale-95"
+              className="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[#2A3725] text-[10px] font-['Cinzel',serif] tracking-wider uppercase shadow-md border border-[#B59A57]/40 hover:bg-white transition-all flex items-center gap-1.5 hover:scale-105 active:scale-95"
             >
-              <Navigation className="w-3 h-3 text-[#3B4D36]" />
-              <span>{isArabic ? 'فتح في خرائط جوجل ↗' : 'Open in Maps ↗'}</span>
+              <Navigation className="w-2.5 h-2.5 text-[#3B4D36]" />
+              <span>{isArabic ? 'فتح في الخرائط ↗' : 'Open in Maps ↗'}</span>
             </a>
           </div>
         </section>
 
         {/* ========================================================
-            SECTION 7: INFORMATION CARDS (Transportation, Accommodation, Gifts)
+            SECTION 7: DRESS CODE (Exact match from video f_0046.jpg)
+            ======================================================== */}
+        <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60">
+          <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
+            <Shirt className="w-4 h-4 text-[#B59A57]" />
+          </div>
+
+          <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
+            {isArabic ? 'قواعد اللباس' : 'Dress Code'}
+          </h3>
+          <div className="flex items-center justify-center gap-2 mb-6 opacity-70">
+            <div className="w-10 h-[1px] bg-[#B59A57]" />
+            <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+            <div className="w-10 h-[1px] bg-[#B59A57]" />
+          </div>
+
+          <div className="max-w-[320px] mx-auto space-y-5 text-center">
+            {/* Women */}
+            <div>
+              <h4 className="font-['Playfair_Display',serif] text-base font-medium text-[#2E3C29]">
+                {isArabic ? 'السيدات' : 'Women'}
+              </h4>
+              <p className="text-xs text-[#52634B] font-['Cormorant_Garamond',serif] mt-0.5">
+                {isArabic
+                  ? 'أزياء رسمية أنيقة بألوان هادئة أو درجات الأحجار الكريمة'
+                  : 'Elegant formal attire in pastel or jewel tones'}
+              </p>
+            </div>
+
+            {/* Men */}
+            <div>
+              <h4 className="font-['Playfair_Display',serif] text-base font-medium text-[#2E3C29]">
+                {isArabic ? 'الرجال' : 'Men'}
+              </h4>
+              <p className="text-xs text-[#52634B] font-['Cormorant_Garamond',serif] mt-0.5">
+                {isArabic
+                  ? 'بدلة رسمية أو زي تقليدي أنيق'
+                  : 'Suit or traditional formal wear'}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            SECTION 8: PRE-WEDDING EVENTS (Exact match from video f_0048.jpg)
+            ======================================================== */}
+        <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60">
+          <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
+            <PartyPopper className="w-4 h-4 text-[#B59A57]" />
+          </div>
+
+          <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
+            {isArabic ? 'الفعاليات التي تسبق الزفاف' : 'Pre-Wedding Events'}
+          </h3>
+          <div className="flex items-center justify-center gap-2 mb-6 opacity-70">
+            <div className="w-10 h-[1px] bg-[#B59A57]" />
+            <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+            <div className="w-10 h-[1px] bg-[#B59A57]" />
+          </div>
+
+          <div className="max-w-[320px] mx-auto space-y-6 text-center">
+            {/* Mahendi */}
+            <div>
+              <h4 className="font-['Playfair_Display',serif] text-lg font-medium text-[#2E3C29]">
+                {isArabic ? 'ليلة الحناء (ميهندي)' : 'Mahendi'}
+              </h4>
+              <p className="text-xs text-[#6B5A3E] font-['Cinzel',serif] tracking-wider mt-0.5">
+                {isArabic ? '٢٨ نوفمبر ٢٠٢٦، ٨:٣٠ مساءً' : 'Nov 28, 2026, 8:30 PM'}
+              </p>
+              <p className="italic text-xs text-[#52634B] mt-0.5">
+                {isArabic ? 'في منزل العروس' : "At Bride's House"}
+              </p>
+            </div>
+
+            {/* Haldi */}
+            <div>
+              <h4 className="font-['Playfair_Display',serif] text-lg font-medium text-[#2E3C29]">
+                {isArabic ? 'مراسم الهالدي' : 'Haldi'}
+              </h4>
+              <p className="text-xs text-[#6B5A3E] font-['Cinzel',serif] tracking-wider mt-0.5">
+                {isArabic ? '٢٩ نوفمبر ٢٠٢٦، ٨:٠٠ مساءً' : 'Nov 29, 2026, 8:00 PM'}
+              </p>
+              <p className="italic text-xs text-[#52634B] mt-0.5">
+                {isArabic ? 'في منزل العريس' : "At Groom's House"}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            SECTION 9: INFORMATION CARDS (Transportation, Accommodation, Gifts)
             ======================================================== */}
         <section className="relative z-10 py-10 px-6 border-t border-[#E8DFC8]/60 text-center space-y-10">
           {/* 1. Transportation */}
@@ -545,10 +659,9 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
         </section>
 
         {/* ========================================================
-            SECTION 8: RSVP FORM
+            SECTION 10: RSVP FORM (Exact fields from video f_0052.jpg)
             ======================================================== */}
         <section className="relative z-10 py-12 px-6 border-t border-[#E8DFC8]/60 text-center">
-          {/* Envelope Icon */}
           <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
             <Mail className="w-4 h-4 text-[#B59A57]" />
           </div>
@@ -657,7 +770,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
                   rows={3}
                   value={rsvpMessage}
                   onChange={(e) => setRsvpMessage(e.target.value)}
-                  placeholder={isArabic ? 'أطيب الأمنيات والتبريكات...' : 'Warm wishes for Zayn & Nora...'}
+                  placeholder={isArabic ? 'أطيب الأمنيات والتبريكات...' : 'Write your wishes...'}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/40 text-sm text-[#2A3725] placeholder:text-[#9E9484] focus:outline-none focus:border-[#3B4D36] focus:ring-1 focus:ring-[#3B4D36] resize-none"
                 />
               </div>

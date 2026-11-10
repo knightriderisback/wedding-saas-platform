@@ -1064,7 +1064,7 @@ export const PRESSED_LOVE_TEMPLATES: Record<string, PressedLoveTemplate> = {
     assets: {
       introVideo: '',
       introVideoPoster: '/templates/zareqia/hero-courtyard.jpg',
-      backgroundMusic: '/audio/zareqia-saathiyaa.mp3',
+      backgroundMusic: '/audio/indian-wedding-instrumental.mp3',
       heroImage: '/templates/zareqia/hero-courtyard.jpg',
       venueImage: '/templates/zareqia/carousel-1.jpg',
       rsvpConfirmation: '',

@@ -74,8 +74,8 @@ export const ZareqiaPhotoCarousel: React.FC = () => {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {/* Photo Frame Container with rounded corners and drop shadow */}
-      <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden shadow-xl shadow-[#2C3827]/15 border border-[#C4A265]/40 bg-[#EDE7DB]">
+      {/* Photo Frame Container with rounded corners and drop shadow (frameless like video) */}
+      <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden shadow-lg bg-[#EDE7DB]">
         {CAROUSEL_IMAGES.map((img, idx) => (
           <div
             key={idx}
@@ -94,11 +94,6 @@ export const ZareqiaPhotoCarousel: React.FC = () => {
             />
             {/* Subtle bottom vignette gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
-            <div className="absolute bottom-2.5 left-3.5 right-3.5 text-center">
-              <span className="font-['Cormorant_Garamond',serif] italic text-xs text-[#FAF8F5]/90 tracking-wide drop-shadow">
-                {img.caption}
-              </span>
-            </div>
           </div>
         ))}
 
@@ -106,7 +101,7 @@ export const ZareqiaPhotoCarousel: React.FC = () => {
         <button
           onClick={handlePrev}
           aria-label="Previous slide"
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/25 backdrop-blur-sm text-white/90 flex items-center justify-center hover:bg-black/40 transition-colors"
+          className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/20 backdrop-blur-sm text-white/90 flex items-center justify-center hover:bg-black/35 transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
@@ -115,26 +110,26 @@ export const ZareqiaPhotoCarousel: React.FC = () => {
         <button
           onClick={handleNext}
           aria-label="Next slide"
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/25 backdrop-blur-sm text-white/90 flex items-center justify-center hover:bg-black/40 transition-colors"
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/20 backdrop-blur-sm text-white/90 flex items-center justify-center hover:bg-black/35 transition-colors"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
-      </div>
 
-      {/* Pagination Dots */}
-      <div className="flex items-center justify-center gap-2 mt-3">
-        {CAROUSEL_IMAGES.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrentIndex(idx)}
-            aria-label={`Go to slide ${idx + 1}`}
-            className={`transition-all duration-300 rounded-full ${
-              idx === currentIndex
-                ? 'w-6 h-1.5 bg-[#3B4D36]'
-                : 'w-1.5 h-1.5 bg-[#3B4D36]/30 hover:bg-[#3B4D36]/60'
-            }`}
-          />
-        ))}
+        {/* PAGINATION DOTS (FLOATING INSIDE BOTTOM OF PHOTO like video f_0038.jpg) */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-full bg-black/25 backdrop-blur-sm">
+          {CAROUSEL_IMAGES.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentIndex(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+              className={`transition-all duration-300 rounded-full ${
+                idx === currentIndex
+                  ? 'w-4 h-1.5 bg-white'
+                  : 'w-1.5 h-1.5 bg-white/50 hover:bg-white/80'
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
