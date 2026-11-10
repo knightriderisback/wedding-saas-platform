@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import confetti from 'canvas-confetti';
-import { Calendar, Check } from 'lucide-react';
+import { Calendar, Check, Sparkles } from 'lucide-react';
 
 interface ZareqiaHeartScratchProps {
   coupleNames?: string;
@@ -21,12 +21,13 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const lastPointRef = useRef<{ x: number; y: number } | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
   const [scratchProgress, setScratchProgress] = useState(0);
   const [isDrawing, setIsDrawing] = useState(false);
   const [calendarSaved, setCalendarSaved] = useState(false);
 
-  // Initialize glitter canvas with specular 3D gloss dome
+  // Initialize glitter canvas with specular 3D gloss dome and emerald metallic foil
   const initCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -58,14 +59,14 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
       width * 0.38,
       topCurveHeight * 0.25,
       width * 0.48,
-      topCurveHeight * 0.7,
+      topCurveHeight * 0.65,
       width / 2,
-      topCurveHeight
+      height * 0.28
     );
     // Right curve
     ctx.bezierCurveTo(
       width * 0.52,
-      topCurveHeight * 0.7,
+      topCurveHeight * 0.65,
       width * 0.62,
       topCurveHeight * 0.25,
       width * 0.75,
@@ -80,10 +81,9 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
       height * 0.86
     );
     ctx.closePath();
-
     ctx.clip();
 
-    // Base Emerald Green gradient with deep edges
+    // Base Emerald Green gradient with deep beveled edges
     const grad = ctx.createRadialGradient(
       width * 0.45,
       height * 0.38,
@@ -92,10 +92,10 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
       height / 2,
       width * 0.52
     );
-    grad.addColorStop(0, '#5A8B67');
-    grad.addColorStop(0.35, '#3D6D4A');
-    grad.addColorStop(0.75, '#264E33');
-    grad.addColorStop(1, '#1A3924');
+    grad.addColorStop(0, '#5E8F6C');
+    grad.addColorStop(0.35, '#3F6F4C');
+    grad.addColorStop(0.75, '#285035');
+    grad.addColorStop(1, '#1A3B25');
 
     ctx.fillStyle = grad;
     ctx.fill();
@@ -107,7 +107,7 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
     };
 
     let seed = 42;
-    for (let i = 0; i < 2600; i++) {
+    for (let i = 0; i < 3000; i++) {
       const gx = rng(seed++) * width;
       const gy = rng(seed++) * height;
       const gSize = rng(seed++) * 2.2 + 0.4;
@@ -116,7 +116,7 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
 
       ctx.fillStyle = isGold
         ? `rgba(255, 230, 150, ${alpha})`
-        : `rgba(155, 235, 175, ${alpha})`;
+        : `rgba(165, 240, 185, ${alpha})`;
       ctx.beginPath();
       ctx.arc(gx, gy, gSize, 0, Math.PI * 2);
       ctx.fill();
@@ -131,14 +131,14 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
       height * 0.38,
       width * 0.32
     );
-    specGrad.addColorStop(0, 'rgba(255, 255, 255, 0.7)');
-    specGrad.addColorStop(0.4, 'rgba(255, 255, 255, 0.25)');
+    specGrad.addColorStop(0, 'rgba(255, 255, 255, 0.75)');
+    specGrad.addColorStop(0.4, 'rgba(255, 255, 255, 0.28)');
     specGrad.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
     ctx.fillStyle = specGrad;
     ctx.fill();
 
     // Outer subtle gold bevel ring
-    ctx.strokeStyle = 'rgba(218, 185, 110, 0.5)';
+    ctx.strokeStyle = 'rgba(218, 185, 110, 0.6)';
     ctx.lineWidth = 2.5;
     ctx.stroke();
 
@@ -149,9 +149,9 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
     initCanvas();
   }, [initCanvas]);
 
-  // Scratch action handler
+  // Scratch action handler with continuous line interpolation
   const handleScratch = useCallback(
-    (clientX: number, clientY: number) => {
+    (clientX: number, clientY: number, isStarting = false) => {
       if (isRevealed) return;
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -166,12 +166,25 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
       const y = (clientY - rect.top) * scaleY;
 
       ctx.globalCompositeOperation = 'destination-out';
-      ctx.beginPath();
-      ctx.arc(x, y, 26, 0, Math.PI * 2);
-      ctx.fill();
 
-      // Check progress every few scratches
-      if (Math.random() > 0.55) {
+      if (isStarting || !lastPointRef.current) {
+        ctx.beginPath();
+        ctx.arc(x, y, 24, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Continuous thick stroke between previous point and current point
+        ctx.beginPath();
+        ctx.lineWidth = 48;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.moveTo(lastPointRef.current.x, lastPointRef.current.y);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+
+      lastPointRef.current = { x, y };
+
+      if (Math.random() > 0.5) {
         checkProgress();
       }
     },
@@ -198,7 +211,7 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
     const progress = transparentCount / totalPixels;
     setScratchProgress(progress);
 
-    if (progress > 0.3) {
+    if (progress > 0.32) {
       triggerFullReveal();
     }
   };
@@ -211,43 +224,47 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
     // Confetti flakes shower drifting from top
     try {
       confetti({
-        particleCount: 75,
-        spread: 65,
+        particleCount: 110,
+        spread: 80,
         origin: { y: 0.55 },
-        colors: ['#D4AF37', '#2E5B3D', '#E8D389', '#558260', '#FAF8F5'],
+        colors: ['#D4AF37', '#5E8F6C', '#FFFDF9', '#E5C07B', '#8C6D23'],
+        ticks: 240,
+        gravity: 0.85,
       });
-    } catch {
-      // ignore
-    }
+    } catch {}
   };
 
   const onMouseDown = (e: React.MouseEvent) => {
     setIsDrawing(true);
-    handleScratch(e.clientX, e.clientY);
+    handleScratch(e.clientX, e.clientY, true);
   };
 
   const onMouseMove = (e: React.MouseEvent) => {
     if (!isDrawing) return;
-    handleScratch(e.clientX, e.clientY);
+    handleScratch(e.clientX, e.clientY, false);
   };
 
-  const onMouseUp = () => setIsDrawing(false);
+  const onMouseUp = () => {
+    setIsDrawing(false);
+    lastPointRef.current = null;
+    checkProgress();
+  };
 
   const onTouchStart = (e: React.TouchEvent) => {
-    if (e.touches.length > 0) {
-      setIsDrawing(true);
-      handleScratch(e.touches[0].clientX, e.touches[0].clientY);
-    }
+    setIsDrawing(true);
+    const touch = e.touches[0];
+    handleScratch(touch.clientX, touch.clientY, true);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    if (e.touches.length > 0) {
-      handleScratch(e.touches[0].clientX, e.touches[0].clientY);
-    }
+    if (!isDrawing) return;
+    const touch = e.touches[0];
+    handleScratch(touch.clientX, touch.clientY, false);
   };
 
   const onTouchEnd = () => {
     setIsDrawing(false);
+    lastPointRef.current = null;
     checkProgress();
   };
 
@@ -269,7 +286,7 @@ VERSION:2.0
 PRODID:-//Zareqia Luxury Wedding//EN
 BEGIN:VEVENT
 SUMMARY:Wedding of Zayn & Nora
-DESCRIPTION:We warmly invite you to celebrate our wedding.
+DESCRIPTION:We warmly invite you to celebrate our wedding ceremony.
 LOCATION:Grand Palace Hall, City centre, London
 DTSTART:20261130T100000Z
 DTEND:20261130T150000Z

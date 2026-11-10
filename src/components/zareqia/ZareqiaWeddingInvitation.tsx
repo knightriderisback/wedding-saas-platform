@@ -11,14 +11,12 @@ import {
   MapPin,
   Clock,
   Building2,
-  Gift,
   Mail,
-  ChevronDown,
   Navigation,
   CheckCircle2,
   PartyPopper,
   Shirt,
-  UserCheck,
+  Calendar,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { ZareqiaGatefoldEnvelope } from './ZareqiaGatefoldEnvelope';
@@ -80,7 +78,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
     return () => clearInterval(timer);
   }, []);
 
-  // Indian Wedding Instrumental Audio
+  // Indian Wedding Instrumental Audio (Tanpura + Sitar + Bansuri)
   useEffect(() => {
     const audio = new Audio('/audio/indian-wedding-instrumental.mp3');
     audio.loop = true;
@@ -118,12 +116,10 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
 
   const handleEnvelopeOpen = () => {
     setIsEnvelopeOpen(true);
-    // Reveal hero text right after curtains finish opening
     setTimeout(() => {
       setHeroTextVisible(true);
     }, 400);
 
-    // Start Indian wedding instrumental audio
     if (!isAudioPlaying) {
       if (audioRef.current) {
         audioRef.current
@@ -162,640 +158,635 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
   return (
     <div
       dir={isArabic ? 'rtl' : 'ltr'}
-      className="min-h-screen bg-[#F7F4EE] text-[#24201D] font-['Cormorant_Garamond',serif] antialiased overflow-x-hidden selection:bg-[#B59A57]/30"
+      className="min-h-screen w-full bg-[#182016] relative flex items-center justify-center p-0 sm:py-8 sm:px-4 overflow-x-hidden selection:bg-[#C4A265]/30 font-['Cinzel',serif]"
     >
-      {/* 1. GATEFOLD 3D DOORS ENVELOPE (TOP-LEVEL OVERLAY WITH TWO-STAGE CURTAIN REVEAL) */}
-      {!isEnvelopeOpen && (
-        <ZareqiaGatefoldEnvelope
-          onOpenComplete={handleEnvelopeOpen}
-          isArabic={isArabic}
-          onToggleLanguage={() => setIsArabic(!isArabic)}
-          audioSrc="/audio/indian-wedding-instrumental.mp3"
-          isAudioPlaying={isAudioPlaying}
-          onToggleAudio={toggleAudio}
-        />
-      )}
+      {/* Ambient Botanical Backdrop for Desktop (Matching POV garden mood) */}
+      <div className="fixed inset-0 pointer-events-none opacity-40 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#384832] via-[#1C261A] to-[#0D130B]" />
+      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(#C4A265_1px,transparent_1px)] [background-size:28px_28px] opacity-10 z-0" />
 
-      {/* 2. FLOATING FIXED CONTROLS */}
-      {/* Sound Toggle (Top-Right Frosted Glass Button) */}
-      <button
-        onClick={toggleAudio}
-        aria-label="Toggle Audio"
-        className="fixed top-4 right-4 z-40 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/75 backdrop-blur-md text-[#2A3825] text-xs font-['Cinzel',serif] tracking-wider uppercase border border-[#B59A57]/40 hover:bg-white transition-all shadow-md active:scale-95"
-      >
-        {isAudioPlaying ? (
-          <>
-            <div className="flex items-end gap-[2px] h-3">
-              <span className="w-0.5 bg-[#3A5A3F] h-full animate-[pulse_0.6s_ease-in-out_infinite]" />
-              <span className="w-0.5 bg-[#3A5A3F] h-2/3 animate-[pulse_0.8s_ease-in-out_infinite_0.2s]" />
-              <span className="w-0.5 bg-[#3A5A3F] h-4/5 animate-[pulse_0.7s_ease-in-out_infinite_0.4s]" />
-            </div>
-            <Volume2 className="w-3.5 h-3.5 text-[#3A5A3F]" />
-          </>
-        ) : (
-          <>
-            <VolumeX className="w-3.5 h-3.5 text-[#736A5B]" />
-            <span>Mute</span>
-          </>
-        )}
-      </button>
-
-      {/* Language Switcher (Bottom-Left Frosted Glass Button) */}
-      <button
-        onClick={() => setIsArabic(!isArabic)}
-        aria-label="Toggle Language"
-        className="fixed bottom-5 left-5 z-40 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 backdrop-blur-md text-[#2A3825] text-xs font-['Cinzel',serif] tracking-widest uppercase border border-[#B59A57]/40 hover:bg-white transition-all shadow-lg active:scale-95"
-      >
-        <Globe className="w-3.5 h-3.5 text-[#B59A57]" />
-        <span>{isArabic ? 'English' : 'Arabic'}</span>
-      </button>
-
-      {/* "Use this Design" Floating Pill Button (Bottom Right) */}
-      <Link
-        href="/customer?template=zareqia-emerald"
-        className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#2E3C29]/90 backdrop-blur-md text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-wider uppercase border border-[#C4A265]/40 hover:bg-[#232F1F] transition-all shadow-xl active:scale-95 hover:scale-105"
-      >
-        <Sparkles className="w-3 h-3 text-[#E8D389]" />
-        <span>{isArabic ? 'استخدم هذا التصميم' : 'Use this Design'}</span>
-      </Link>
-
-      {/* 3. MAIN MOBILE CONTAINER (9:16 Canvas matching exact video screen) */}
-      <main className="max-w-[480px] mx-auto min-h-screen bg-[#F7F4EE] shadow-2xl relative overflow-hidden pb-24">
-        {/* Paper Texture Background */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-40"
-          style={{
-            backgroundImage:
-              'radial-gradient(#D6CDBC 0.75px, transparent 0.75px), radial-gradient(#D6CDBC 0.75px, #F7F4EE 0.75px)',
-            backgroundSize: '30px 30px',
-            backgroundPosition: '0 0, 15px 15px',
-          }}
-        />
+      {/* ========================================================
+          LUXURY MOBILE DEVICE PRESENTATION CONTAINER
+          On Desktop: Centered luxury flagship smartphone frame with dark titanium bezel & ambient shadow.
+          On Mobile: 100% full screen responsive, edge-to-edge.
+          ======================================================== */}
+      <div className="relative w-full sm:max-w-[430px] min-h-screen sm:min-h-[880px] sm:max-h-[92vh] sm:rounded-[48px] bg-[#F7F4EE] shadow-[0_30px_90px_rgba(0,0,0,0.7),0_0_90px_rgba(46,60,41,0.35)] overflow-hidden flex flex-col z-10 border-0 sm:border-[8px] sm:border-[#232B20]">
+        
+        {/* Desktop Phone Notch / Dynamic Island */}
+        <div className="hidden sm:flex absolute top-2.5 left-1/2 -translate-x-1/2 z-50 items-center justify-center pointer-events-none">
+          <div className="w-24 h-5 rounded-full bg-black/85 flex items-center justify-between px-3">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#1A1A1A] border border-white/10" />
+            <div className="w-8 h-1 rounded-full bg-[#2A2A2A]" />
+          </div>
+        </div>
 
         {/* ========================================================
-            SECTION 1: HERO (Curtains, Zayn & Nora, Courtyard Fountain)
+            GATEFOLD ENVELOPE OVERLAY (CONTAINED TO MOBILE CONTAINER)
             ======================================================== */}
-        <section className="relative min-h-[92vh] flex flex-col items-center justify-between pt-10 pb-6 px-6 text-center overflow-hidden">
-          {/* Background Courtyard Illustration with Curtains & Fountain */}
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/templates/zareqia/hero-courtyard.jpg"
-              alt="Romantic Classical Courtyard and Silk Curtains"
-              fill
-              className="object-cover object-center"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#F5EFE6]/30 via-[#F5EFE6]/10 to-[#F5EFE6]/40" />
-          </div>
-
-          {/* Top Silk Valance & Heart & Text Announcement */}
-          <div
-            className={`relative z-10 pt-4 flex flex-col items-center transition-all duration-1000 ${
-              heroTextVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
-          >
-            {/* Small Romantic Heart Icon */}
-            <div className="text-[#3A4A33] text-sm mb-2 opacity-90 drop-shadow">♥</div>
-
-            {/* "We're getting married" */}
-            <h2 className="font-['Cormorant_Garamond',serif] italic text-base md:text-lg text-[#3A4A33] tracking-wider">
-              {isArabic ? 'يسرنا دعوتكم لحضور حفل زفافنا' : "We're getting married"}
-            </h2>
-
-            {/* Decorative Divider with Center Diamond */}
-            <div className="flex items-center justify-center gap-2 mt-2 mb-4 opacity-80">
-              <div className="w-12 h-[1px] bg-[#B59A57]" />
-              <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-              <div className="w-12 h-[1px] bg-[#B59A57]" />
-            </div>
-
-            {/* GROOM: Zayn */}
-            <div className="flex flex-col items-center my-1">
-              <h1 className="font-['Alex_Brush','Pinyon_Script',cursive] text-5xl md:text-6xl text-[#242A20] font-normal tracking-wide drop-shadow-sm">
-                {isArabic ? 'زين' : 'Zayn'}
-              </h1>
-              <div className="mt-1 flex flex-col items-center text-xs md:text-sm text-[#4E5B45] font-['Cormorant_Garamond',serif] leading-tight">
-                <span>{isArabic ? 'ابن السيد والسيدة مالك' : 'Son of Mr. & Mrs. Malik'}</span>
-                <span className="tracking-widest text-[11px] uppercase opacity-90">B.E., M.S.</span>
-                <span className="italic text-[#6B5A3E] text-xs">
-                  {isArabic ? 'عالم بيانات' : 'Data Scientist'}
-                </span>
-              </div>
-            </div>
-
-            {/* Ampersand */}
-            <div className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#B59A57] my-1">
-              &
-            </div>
-
-            {/* BRIDE: Nora */}
-            <div className="flex flex-col items-center my-1">
-              <h1 className="font-['Alex_Brush','Pinyon_Script',cursive] text-5xl md:text-6xl text-[#242A20] font-normal tracking-wide drop-shadow-sm">
-                {isArabic ? 'نورا' : 'Nora'}
-              </h1>
-              <div className="mt-1 flex flex-col items-center text-xs md:text-sm text-[#4E5B45] font-['Cormorant_Garamond',serif] leading-tight">
-                <span>{isArabic ? 'ابنة السيد والسيدة ناصر' : 'Daughter of Mr. & Mrs. Nasser'}</span>
-                <span className="tracking-widest text-[11px] uppercase opacity-90">MBBS, M.D.</span>
-                <span className="italic text-[#6B5A3E] text-xs">
-                  {isArabic ? 'طبيبة أطفال' : 'Pediatrician'}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Courtyard Space & Scroll Down Chevron Indicator */}
-          <div className="relative z-10 flex flex-col items-center pt-24 pb-2">
-            <span className="text-[11px] font-['Cinzel',serif] tracking-[0.25em] text-[#607358] uppercase mb-1 opacity-90">
-              {isArabic ? 'انتقل للأسفل' : 'Scroll'}
-            </span>
-            <ChevronDown className="w-4 h-4 text-[#607358] animate-bounce" />
-          </div>
-        </section>
-
-        {/* ========================================================
-            SECTION 2: SCRATCH TO REVEAL (3D Recessed Emerald Glitter Heart)
-            ======================================================== */}
-        <section className="relative z-10 py-8 bg-[#F7F4EE]/90 backdrop-blur-sm border-t border-[#E8DFC8]/60">
-          <ZareqiaHeartScratch
-            coupleNames={isArabic ? 'زين & نورا' : 'Zayn & Nora'}
-            weddingDate={isArabic ? '٣٠ نوفمبر ٢٠٢٦' : 'November 30, 2026'}
-            weddingDay={isArabic ? 'الاثنين' : 'Monday'}
-            weddingTime={isArabic ? '١٠:٠٠ صباحاً' : '10:00 AM'}
+        {!isEnvelopeOpen && (
+          <ZareqiaGatefoldEnvelope
+            onOpenComplete={handleEnvelopeOpen}
             isArabic={isArabic}
+            onToggleLanguage={() => setIsArabic(!isArabic)}
+            isAudioPlaying={isAudioPlaying}
+            onToggleAudio={toggleAudio}
           />
-        </section>
+        )}
 
         {/* ========================================================
-            SECTION 3: PHOTO CAROUSEL (Frameless with Floating Dots Inside)
+            FLOATING CONTROLS (INSIDE MOBILE CANVAS)
             ======================================================== */}
-        <section className="relative z-10 py-6 border-t border-[#E8DFC8]/60">
-          <div className="flex items-center justify-center gap-2 mb-2 opacity-70">
-            <div className="w-12 h-[1px] bg-[#B59A57]" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-            <div className="w-12 h-[1px] bg-[#B59A57]" />
-          </div>
-          <ZareqiaPhotoCarousel />
-        </section>
+        {/* Top-Right Sound Button */}
+        <button
+          onClick={toggleAudio}
+          aria-label="Toggle Sound"
+          className="absolute top-4 right-4 z-40 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-white/95 text-xs font-['Cinzel',serif] tracking-wider uppercase border border-white/20 hover:bg-black/60 transition-all shadow-lg active:scale-95"
+        >
+          {isAudioPlaying ? (
+            <>
+              <Volume2 className="w-3.5 h-3.5 text-[#FFE89E] animate-pulse" />
+              <span>On</span>
+            </>
+          ) : (
+            <>
+              <VolumeX className="w-3.5 h-3.5 text-white/75" />
+              <span>Mute</span>
+            </>
+          )}
+        </button>
+
+        {/* Bottom-Left Language Switcher */}
+        <button
+          onClick={() => setIsArabic(!isArabic)}
+          aria-label="Toggle Language"
+          className="absolute bottom-4 left-4 z-40 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-[#FAF7F0] text-xs font-['Cinzel',serif] tracking-widest uppercase border border-white/20 hover:bg-black/60 transition-all shadow-lg active:scale-95"
+        >
+          <Globe className="w-3.5 h-3.5 text-[#FFE89E]" />
+          <span>{isArabic ? 'English' : 'Arabic'}</span>
+        </button>
+
+        {/* Bottom-Right "Use this Design" Button */}
+        <Link
+          href="/customer?template=zareqia-emerald"
+          className="absolute bottom-4 right-4 z-40 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#2E3C29]/90 backdrop-blur-md text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-wider uppercase border border-[#C4A265]/40 hover:bg-[#232F1F] transition-all shadow-xl active:scale-95 hover:scale-105"
+        >
+          <Sparkles className="w-3 h-3 text-[#E8D389]" />
+          <span>{isArabic ? 'استخدم هذا التصميم' : 'Use this Design'}</span>
+        </Link>
 
         {/* ========================================================
-            SECTION 4: COUNTDOWN ("Counting Down to Forever")
+            SCROLLABLE CONTENT BODY (PHYSICAL LUXURY PAPER)
             ======================================================== */}
-        <section className="relative z-10 py-8 px-6 text-center border-t border-[#E8DFC8]/60">
-          <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
-            {isArabic ? 'نعد التنازلي إلى الأبد' : 'Counting Down to Forever'}
-          </h3>
-          <div className="flex items-center justify-center gap-2 mb-6 opacity-70">
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-          </div>
+        <div className="relative flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-[#C4A265]/40 pb-20">
+          
+          {/* Paper Texture Overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-40 z-0"
+            style={{
+              backgroundImage:
+                'radial-gradient(#D6CDBC 0.75px, transparent 0.75px), radial-gradient(#D6CDBC 0.75px, #F7F4EE 0.75px)',
+              backgroundSize: '28px 28px',
+              backgroundPosition: '0 0, 14px 14px',
+            }}
+          />
 
-          {/* 4 Soft Warm Beige-Grey Stat Boxes */}
-          <div className="grid grid-cols-4 gap-2.5 max-w-[340px] mx-auto">
-            {[
-              { val: timeLeft.days, label: isArabic ? 'يوم' : 'DAYS' },
-              { val: timeLeft.hours, label: isArabic ? 'ساعة' : 'HOURS' },
-              { val: timeLeft.minutes, label: isArabic ? 'دقيقة' : 'MINUTES' },
-              { val: timeLeft.seconds, label: isArabic ? 'ثانية' : 'SECONDS' },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col items-center justify-center py-3.5 px-1 rounded-xl bg-[#EFECE6] border border-[#D8CEBC]/60 shadow-sm"
-              >
-                <span className="font-['Playfair_Display',serif] text-2xl md:text-3xl font-bold text-[#2A3725]">
-                  {String(item.val).padStart(2, '0')}
-                </span>
-                <span className="font-['Cinzel',serif] text-[9px] tracking-widest text-[#7C6E5A] mt-1 uppercase">
-                  {item.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ========================================================
-            SECTION 5: PROGRAM TIMELINE
-            ======================================================== */}
-        <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60">
-          <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
-            <Clock className="w-4 h-4 text-[#B59A57]" />
-          </div>
-
-          <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
-            {isArabic ? 'جدول فعاليات الحفل' : 'Program Timeline'}
-          </h3>
-          <div className="flex items-center justify-center gap-2 mb-8 opacity-70">
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-          </div>
-
-          <div className="max-w-[320px] mx-auto space-y-7 text-center">
-            {/* 1. Guest Arrival */}
-            <div className="flex flex-col items-center">
-              <div className="flex items-center gap-2 text-[#2E3C29] font-['Playfair_Display',serif] text-lg font-medium">
-                <span className="w-2 h-2 rounded-full bg-[#3B4D36]" />
-                <h4>{isArabic ? 'استقبال الضيوف' : 'Guest Arrival'}</h4>
-              </div>
-              <p className="text-xs text-[#6B5A3E] font-['Cinzel',serif] tracking-wider mt-0.5">
-                {isArabic ? '٣٠ نوفمبر ٢٠٢٦، ١٠:٠٠ صباحاً' : 'Nov 30, 2026, 10:00 AM'}
-              </p>
-              <p className="italic text-xs text-[#52634B] mt-0.5">
-                {isArabic ? 'أهلاً وسهلاً بكم ♥' : 'We welcome you ♥'}
-              </p>
+          {/* ========================================================
+              SECTION 1: HERO (Curtains, Zayn & Nora, Courtyard Fountain)
+              ======================================================== */}
+          <section className="relative min-h-[92vh] flex flex-col items-center justify-between pt-12 pb-8 px-6 text-center overflow-hidden">
+            {/* Background Courtyard Illustration with Curtains & Fountain */}
+            <div className="absolute inset-0 z-0">
+              <Image
+                src="/templates/zareqia/hero-courtyard-hd.jpg"
+                alt="Romantic Classical Courtyard and Silk Curtains"
+                fill
+                className="object-cover object-center"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-[#F5EFE6]/25 via-transparent to-[#F5EFE6]/35" />
             </div>
 
-            {/* 2. Wedding Ceremony */}
-            <div className="flex flex-col items-center">
-              <div className="flex items-center gap-2 text-[#2E3C29] font-['Playfair_Display',serif] text-lg font-medium">
-                <span className="w-2 h-2 rounded-full bg-[#3B4D36]" />
-                <h4>{isArabic ? 'عقد القران ومراسم الزفاف' : 'Wedding Ceremony'}</h4>
-              </div>
-              <p className="text-xs text-[#6B5A3E] font-['Cinzel',serif] tracking-wider mt-0.5">
-                {isArabic ? '٣٠ نوفمبر ٢٠٢٦، ١٠:٣٠ صباحاً' : 'Nov 30, 2026, 10:30 AM'}
-              </p>
-              <p className="italic text-xs text-[#52634B] mt-0.5">
-                {isArabic ? 'حضوركم يكتمل به فرحنا!' : 'Your presence means a lot!'}
-              </p>
-            </div>
-
-            {/* 3. Reception */}
-            <div className="flex flex-col items-center">
-              <div className="flex items-center gap-2 text-[#2E3C29] font-['Playfair_Display',serif] text-lg font-medium">
-                <span className="w-2 h-2 rounded-full bg-[#3B4D36]" />
-                <h4>{isArabic ? 'حفل الاستقبال والعشاء' : 'Reception'}</h4>
-              </div>
-              <p className="text-xs text-[#6B5A3E] font-['Cinzel',serif] tracking-wider mt-0.5">
-                {isArabic ? '٢ ديسمبر ٢٠٢٦، ٧:٣٠ مساءً' : 'Dec 2, 2026, 7:30 PM'}
-              </p>
-              <p className="italic text-xs text-[#52634B] mt-0.5">
-                {isArabic ? 'عشاء واحتفال ببهجة لا تُنسى' : 'Dinner, dancing & celebration'}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================
-            SECTION 6: VENUE & MAP
-            ======================================================== */}
-        <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60">
-          <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
-            <MapPin className="w-4 h-4 text-[#B59A57]" />
-          </div>
-
-          <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
-            {isArabic ? 'موقع الحفل' : 'Venue'}
-          </h3>
-          <div className="flex items-center justify-center gap-2 mb-4 opacity-70">
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-          </div>
-
-          <div className="mb-5">
-            <h4 className="font-['Playfair_Display',serif] text-xl font-bold text-[#2A3725]">
-              {isArabic ? 'قاعة القصر الكبير' : 'Grand Palace Hall'}
-            </h4>
-            <p className="text-xs text-[#6B5A3E] font-['Cormorant_Garamond',serif] mt-0.5">
-              {isArabic ? 'وسط المدينة، لندن، المملكة المتحدة' : 'City centre, London'}
-            </p>
-          </div>
-
-          {/* Interactive Map Card (North London with top-left Open in Maps button) */}
-          <div className="relative w-full max-w-[340px] mx-auto aspect-[16/9] rounded-2xl overflow-hidden border border-[#C4A265]/40 shadow-lg bg-[#E6E1D5]">
+            {/* Top Silk Valance & Heart & Text Announcement */}
             <div
-              className="absolute inset-0 opacity-85"
-              style={{
-                backgroundImage:
-                  'radial-gradient(#C5BCAB 1.5px, transparent 1.5px), linear-gradient(135deg, #ECE5D8 0%, #D8CFBE 100%)',
-                backgroundSize: '20px 20px, 100% 100%',
-              }}
-            />
-
-            {/* Map Roads & Stylized Grid */}
-            <svg
-              className="absolute inset-0 w-full h-full opacity-40"
-              viewBox="0 0 340 190"
-              fill="none"
-              stroke="#A89B85"
+              className={`relative z-10 pt-4 flex flex-col items-center transition-all duration-1000 ${
+                heroTextVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
             >
-              <line x1="0" y1="95" x2="340" y2="95" strokeWidth="6" stroke="#FAF8F5" />
-              <line x1="120" y1="0" x2="120" y2="190" strokeWidth="4" stroke="#FAF8F5" />
-              <line x1="240" y1="0" x2="240" y2="190" strokeWidth="3" stroke="#FAF8F5" />
-              <line x1="0" y1="40" x2="340" y2="150" strokeWidth="2" stroke="#FFFFFF" />
-            </svg>
+              {/* Small Romantic Heart Icon */}
+              <div className="text-[#3A4A33] text-sm mb-2 opacity-90 drop-shadow">♥</div>
 
-            {/* Center Map Pin */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-              <div className="w-8 h-8 rounded-full bg-[#2E3C29] text-white flex items-center justify-center shadow-lg border-2 border-white animate-bounce">
-                <MapPin className="w-4 h-4 text-[#E8D389]" />
+              {/* "We're getting married" */}
+              <h2 className="font-['Cormorant_Garamond',serif] italic text-base md:text-lg text-[#3A4A33] tracking-wider">
+                {isArabic ? 'يسرنا دعوتكم لحضور حفل زفافنا' : "We're getting married"}
+              </h2>
+
+              {/* Decorative Divider with Center Diamond */}
+              <div className="flex items-center justify-center gap-2 mt-2 mb-4 opacity-80">
+                <div className="w-12 h-[1px] bg-[#B59A57]" />
+                <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+                <div className="w-12 h-[1px] bg-[#B59A57]" />
               </div>
-              <div className="w-2.5 h-1 rounded-full bg-black/20 blur-[1px] mt-0.5" />
+
+              {/* GROOM: Zayn */}
+              <div className="flex flex-col items-center my-1">
+                <h1 className="font-['Alex_Brush','Pinyon_Script',cursive] text-5xl md:text-6xl text-[#242A20] font-normal tracking-wide drop-shadow-sm">
+                  {isArabic ? 'زين' : 'Zayn'}
+                </h1>
+                <div className="mt-1 flex flex-col items-center text-xs md:text-sm text-[#4E5B45] font-['Cormorant_Garamond',serif] leading-tight">
+                  <span>{isArabic ? 'ابن السيد والسيدة مالك' : 'Son of Mr. & Mrs. Malik'}</span>
+                  <span className="tracking-widest text-[11px] uppercase opacity-90">B.E., M.S.</span>
+                  <span className="italic text-[#6B5A3E] text-xs">
+                    {isArabic ? 'عالم بيانات' : 'Data Scientist'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Ampersand */}
+              <div className="my-1 font-['Cormorant_Garamond',serif] italic text-2xl text-[#8C764E] font-light">
+                &
+              </div>
+
+              {/* BRIDE: Nora */}
+              <div className="flex flex-col items-center my-1">
+                <h1 className="font-['Alex_Brush','Pinyon_Script',cursive] text-5xl md:text-6xl text-[#242A20] font-normal tracking-wide drop-shadow-sm">
+                  {isArabic ? 'نورا' : 'Nora'}
+                </h1>
+                <div className="mt-1 flex flex-col items-center text-xs md:text-sm text-[#4E5B45] font-['Cormorant_Garamond',serif] leading-tight">
+                  <span>{isArabic ? 'ابنة السيد والسيدة ناصر' : 'Daughter of Mr. & Mrs. Nasser'}</span>
+                  <span className="tracking-widest text-[11px] uppercase opacity-90">MBBS, M.D.</span>
+                  <span className="italic text-[#6B5A3E] text-xs">
+                    {isArabic ? 'طبيبة أطفال' : 'Pediatrician'}
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* Open in Maps Overlay Pill Button (TOP-LEFT CORNER like video f_0042.jpg) */}
-            <a
-              href="https://maps.google.com/?q=Grand+Palace+Hall+City+centre+London"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[#2A3725] text-[10px] font-['Cinzel',serif] tracking-wider uppercase shadow-md border border-[#B59A57]/40 hover:bg-white transition-all flex items-center gap-1.5 hover:scale-105 active:scale-95"
-            >
-              <Navigation className="w-2.5 h-2.5 text-[#3B4D36]" />
-              <span>{isArabic ? 'فتح في الخرائط ↗' : 'Open in Maps ↗'}</span>
-            </a>
-          </div>
-        </section>
+            {/* Bottom Fountain Balustrade Spacer */}
+            <div className="relative z-10 w-full h-16 pointer-events-none" />
+          </section>
 
-        {/* ========================================================
-            SECTION 7: DRESS CODE (Exact match from video f_0046.jpg)
-            ======================================================== */}
-        <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60">
-          <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
-            <Shirt className="w-4 h-4 text-[#B59A57]" />
-          </div>
-
-          <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
-            {isArabic ? 'قواعد اللباس' : 'Dress Code'}
-          </h3>
-          <div className="flex items-center justify-center gap-2 mb-6 opacity-70">
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-          </div>
-
-          <div className="max-w-[320px] mx-auto space-y-5 text-center">
-            {/* Women */}
-            <div>
-              <h4 className="font-['Playfair_Display',serif] text-base font-medium text-[#2E3C29]">
-                {isArabic ? 'السيدات' : 'Women'}
-              </h4>
-              <p className="text-xs text-[#52634B] font-['Cormorant_Garamond',serif] mt-0.5">
+          {/* ========================================================
+              SECTION 2: WELCOME LETTER & CARDSTOCK BLESSING
+              ======================================================== */}
+          <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60 bg-[#F7F4EE]/90">
+            <div className="max-w-[340px] mx-auto relative px-4 py-6 rounded-2xl bg-[#FCFAF5] border border-[#C4A265]/35 shadow-sm">
+              <div className="text-[#3A4A33] text-xs mb-3 opacity-80">♥</div>
+              <p className="font-['Cormorant_Garamond',serif] italic text-base md:text-lg text-[#3E4939] leading-relaxed">
                 {isArabic
-                  ? 'أزياء رسمية أنيقة بألوان هادئة أو درجات الأحجار الكريمة'
-                  : 'Elegant formal attire in pastel or jewel tones'}
+                  ? 'يشرفنا ويسعدنا أن نرحب بكم في حفل زفاف زين ونورا. ومع بداية رحلتهما معاً في المودة والإيمان، نشكركم لمشاركتنا هذه المناسبة المباركة.'
+                  : 'We are honored to welcome you to the Wedding ceremony of Zayn & Nora. As they begin their journey together in faith and love, we thank you for being part of this blessed occasion.'}
               </p>
+              <div className="text-[#3A4A33] text-xs mt-3 opacity-80">♥</div>
             </div>
+          </section>
 
-            {/* Men */}
-            <div>
-              <h4 className="font-['Playfair_Display',serif] text-base font-medium text-[#2E3C29]">
-                {isArabic ? 'الرجال' : 'Men'}
-              </h4>
-              <p className="text-xs text-[#52634B] font-['Cormorant_Garamond',serif] mt-0.5">
-                {isArabic
-                  ? 'بدلة رسمية أو زي تقليدي أنيق'
-                  : 'Suit or traditional formal wear'}
-              </p>
-            </div>
-          </div>
-        </section>
+          {/* ========================================================
+              SECTION 3: SCRATCH TO REVEAL (Interactive Glitter Heart)
+              ======================================================== */}
+          <section className="relative z-10 py-8 px-6 border-t border-[#E8DFC8]/60 bg-[#F5F0E6]/50">
+            <ZareqiaHeartScratch
+              coupleNames={isArabic ? 'زين ونورا' : 'Zayn & Nora'}
+              weddingDate={isArabic ? '٣٠ نوفمبر ٢٠٢٦' : 'November 30, 2026'}
+              weddingDay={isArabic ? 'الاثنين' : 'Monday'}
+              weddingTime={isArabic ? '١٠:٠٠ صباحاً' : '10:00 AM'}
+              isArabic={isArabic}
+            />
+          </section>
 
-        {/* ========================================================
-            SECTION 8: PRE-WEDDING EVENTS (Exact match from video f_0048.jpg)
-            ======================================================== */}
-        <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60">
-          <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
-            <PartyPopper className="w-4 h-4 text-[#B59A57]" />
-          </div>
+          {/* ========================================================
+              SECTION 4: PHOTO CAROUSEL (Moments & Memories)
+              ======================================================== */}
+          <section className="relative z-10 py-8 px-6 border-t border-[#E8DFC8]/60">
+            <ZareqiaPhotoCarousel />
+          </section>
 
-          <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
-            {isArabic ? 'الفعاليات التي تسبق الزفاف' : 'Pre-Wedding Events'}
-          </h3>
-          <div className="flex items-center justify-center gap-2 mb-6 opacity-70">
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-          </div>
-
-          <div className="max-w-[320px] mx-auto space-y-6 text-center">
-            {/* Mahendi */}
-            <div>
-              <h4 className="font-['Playfair_Display',serif] text-lg font-medium text-[#2E3C29]">
-                {isArabic ? 'ليلة الحناء (ميهندي)' : 'Mahendi'}
-              </h4>
-              <p className="text-xs text-[#6B5A3E] font-['Cinzel',serif] tracking-wider mt-0.5">
-                {isArabic ? '٢٨ نوفمبر ٢٠٢٦، ٨:٣٠ مساءً' : 'Nov 28, 2026, 8:30 PM'}
-              </p>
-              <p className="italic text-xs text-[#52634B] mt-0.5">
-                {isArabic ? 'في منزل العروس' : "At Bride's House"}
-              </p>
-            </div>
-
-            {/* Haldi */}
-            <div>
-              <h4 className="font-['Playfair_Display',serif] text-lg font-medium text-[#2E3C29]">
-                {isArabic ? 'مراسم الهالدي' : 'Haldi'}
-              </h4>
-              <p className="text-xs text-[#6B5A3E] font-['Cinzel',serif] tracking-wider mt-0.5">
-                {isArabic ? '٢٩ نوفمبر ٢٠٢٦، ٨:٠٠ مساءً' : 'Nov 29, 2026, 8:00 PM'}
-              </p>
-              <p className="italic text-xs text-[#52634B] mt-0.5">
-                {isArabic ? 'في منزل العريس' : "At Groom's House"}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================
-            SECTION 9: INFORMATION CARDS (Transportation, Accommodation, Gifts)
-            ======================================================== */}
-        <section className="relative z-10 py-10 px-6 border-t border-[#E8DFC8]/60 text-center space-y-10">
-          {/* 1. Transportation */}
-          <div className="max-w-[340px] mx-auto">
+          {/* ========================================================
+              SECTION 5: LIVE COUNTDOWN TIMER
+              ======================================================== */}
+          <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60 bg-[#F5F0E6]/40">
             <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
-              {isArabic ? 'المواصلات والنقل' : 'Transportation'}
+              {isArabic ? 'العد التنازلي' : 'Counting Down'}
             </h3>
-            <div className="flex items-center justify-center gap-2 mb-3 opacity-70">
-              <div className="w-8 h-[1px] bg-[#B59A57]" />
+            <div className="flex items-center justify-center gap-2 mb-6 opacity-70">
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
               <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-              <div className="w-8 h-[1px] bg-[#B59A57]" />
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
             </div>
-            <p className="text-xs md:text-sm text-[#52634B] leading-relaxed">
-              {isArabic
-                ? 'ستتوفر خدمة حافلات النقل الخاصة من وسط المدينة إلى مكان الحفل. نقطة التجمع: المحطة المركزية الساعة ٣:٣٠ عصراً.'
-                : 'Shuttle service will be available from the city center to the venue. Pickup point: Central Station at 3:30 PM.'}
-            </p>
-          </div>
 
-          {/* 2. Accommodation */}
-          <div className="max-w-[340px] mx-auto">
-            <div className="w-9 h-9 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-2 text-[#3A4A33] bg-[#FAF8F5]">
+            {/* 4 Gold Countdown Cards */}
+            <div className="grid grid-cols-4 gap-2.5 max-w-[320px] mx-auto">
+              {[
+                { label: isArabic ? 'أيام' : 'DAYS', value: timeLeft.days },
+                { label: isArabic ? 'ساعات' : 'HOURS', value: timeLeft.hours },
+                { label: isArabic ? 'دقائق' : 'MINUTES', value: timeLeft.minutes },
+                { label: isArabic ? 'ثواني' : 'SECONDS', value: timeLeft.seconds },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-col items-center justify-center py-3 px-1 rounded-2xl bg-[#FCFAF5] border border-[#C4A265]/40 shadow-sm"
+                >
+                  <span className="font-['Cinzel',serif] text-2xl font-semibold text-[#2E3C29]">
+                    {String(item.value).padStart(2, '0')}
+                  </span>
+                  <span className="text-[9px] tracking-widest text-[#7A6A52] uppercase mt-1">
+                    {item.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ========================================================
+              SECTION 6: PROGRAM TIMELINE
+              ======================================================== */}
+          <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60">
+            <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
+              <Clock className="w-4 h-4 text-[#B59A57]" />
+            </div>
+
+            <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
+              {isArabic ? 'برنامج الحفل' : 'Program Timeline'}
+            </h3>
+            <div className="flex items-center justify-center gap-2 mb-6 opacity-70">
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
+            </div>
+
+            {/* Timeline Vertical Trail */}
+            <div className="max-w-[320px] mx-auto relative text-left rtl:text-right pl-6 rtl:pl-0 rtl:pr-6 space-y-6">
+              {/* Connecting Vertical Trail Line */}
+              <div className="absolute left-[7px] rtl:left-auto rtl:right-[7px] top-2 bottom-2 w-[1.5px] bg-gradient-to-b from-[#B59A57] via-[#D4AF37] to-[#B59A57]/40" />
+
+              {/* Event 1: Guest Arrival */}
+              <div className="relative">
+                <div className="absolute -left-[23px] rtl:-left-auto rtl:-right-[23px] top-1.5 w-3 h-3 rounded-full bg-[#3B4D36] border-2 border-[#FAF8F5] shadow" />
+                <h4 className="font-['Playfair_Display',serif] text-base font-medium text-[#2E3C29]">
+                  {isArabic ? 'وصول الضيوف الكرام' : 'Guest Arrival'}
+                </h4>
+                <div className="text-xs text-[#8C764E] font-['Cinzel',serif] tracking-wider mt-0.5">
+                  {isArabic ? '٣٠ نوفمبر ٢٠٢٦، ١٠:٠٠ صباحاً' : 'Nov 30, 2026, 10:00 AM'}
+                </div>
+                <p className="text-xs text-[#5C6A54] italic font-['Cormorant_Garamond',serif] mt-1">
+                  {isArabic ? 'نرحب بحضوركم بكل سرور... ♥' : 'We welcome you... ♥'}
+                </p>
+              </div>
+
+              {/* Event 2: Wedding Ceremony */}
+              <div className="relative">
+                <div className="absolute -left-[23px] rtl:-left-auto rtl:-right-[23px] top-1.5 w-3 h-3 rounded-full bg-[#3B4D36] border-2 border-[#FAF8F5] shadow" />
+                <h4 className="font-['Playfair_Display',serif] text-base font-medium text-[#2E3C29]">
+                  {isArabic ? 'مراسم عقد القران والزفاف' : 'Wedding Ceremony'}
+                </h4>
+                <div className="text-xs text-[#8C764E] font-['Cinzel',serif] tracking-wider mt-0.5">
+                  {isArabic ? '٣٠ نوفمبر ٢٠٢٦، ١٠:٣٠ صباحاً' : 'Nov 30, 2026, 10:30 AM'}
+                </div>
+                <p className="text-xs text-[#5C6A54] italic font-['Cormorant_Garamond',serif] mt-1">
+                  {isArabic ? 'حضوركم يكتمل به فرحنا وسعادتنا!' : 'Your presence means a lot!'}
+                </p>
+              </div>
+
+              {/* Event 3: Reception */}
+              <div className="relative">
+                <div className="absolute -left-[23px] rtl:-left-auto rtl:-right-[23px] top-1.5 w-3 h-3 rounded-full bg-[#3B4D36] border-2 border-[#FAF8F5] shadow" />
+                <h4 className="font-['Playfair_Display',serif] text-base font-medium text-[#2E3C29]">
+                  {isArabic ? 'حفل الاستقبال والعشاء' : 'Reception'}
+                </h4>
+                <div className="text-xs text-[#8C764E] font-['Cinzel',serif] tracking-wider mt-0.5">
+                  {isArabic ? '٢ ديسمبر ٢٠٢٦، ٧:٣٠ مساءً' : 'Dec 2, 2026, 7:30 PM'}
+                </div>
+                <p className="text-xs text-[#5C6A54] italic font-['Cormorant_Garamond',serif] mt-1">
+                  {isArabic ? 'أمسية احتفالية لا تُنسى' : 'An evening of celebration and joy'}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* ========================================================
+              SECTION 7: VENUE & MAP
+              ======================================================== */}
+          <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60 bg-[#F5F0E6]/30">
+            <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
               <Building2 className="w-4 h-4 text-[#B59A57]" />
             </div>
+
             <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
-              {isArabic ? 'الإقامة الفندقية' : 'Accommodation'}
+              {isArabic ? 'موقع الحفل' : 'Venue Location'}
             </h3>
-            <div className="flex items-center justify-center gap-2 mb-3 opacity-70">
-              <div className="w-8 h-[1px] bg-[#B59A57]" />
+            <div className="flex items-center justify-center gap-2 mb-4 opacity-70">
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
               <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-              <div className="w-8 h-[1px] bg-[#B59A57]" />
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
             </div>
-            <p className="text-xs md:text-sm text-[#52634B] leading-relaxed">
-              {isArabic
-                ? 'أسعار خاصة لضيوفنا في فندق جراند بالاس (على بعد ٥ دقائق من الحفل). يرجى استخدام الرمز WEDDING2026 عند الحجز.'
-                : 'Special rates at The Grand Palace Hotel (5 min from venue). Use code WEDDING2026 when booking.'}
+
+            <p className="font-['Playfair_Display',serif] text-sm text-[#2E3C29] font-medium">
+              Grand Palace Hall
             </p>
-          </div>
-
-          {/* 3. Gifts */}
-          <div className="max-w-[340px] mx-auto">
-            <div className="w-9 h-9 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-2 text-[#3A4A33] bg-[#FAF8F5]">
-              <Gift className="w-4 h-4 text-[#B59A57]" />
-            </div>
-            <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
-              {isArabic ? 'الهدايا وجميل محبتكم' : 'Gifts'}
-            </h3>
-            <div className="flex items-center justify-center gap-2 mb-3 opacity-70">
-              <div className="w-8 h-[1px] bg-[#B59A57]" />
-              <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-              <div className="w-8 h-[1px] bg-[#B59A57]" />
-            </div>
-            <p className="text-xs md:text-sm text-[#52634B] leading-relaxed">
-              {isArabic
-                ? 'محبتكم، دعواتكم الصادقة وحضوركم لمشاركتنا فرحتنا هي أثمن وأجمل هدية نتمناها.'
-                : 'Your love, blessings and presence are the greatest gifts we could ever ask for.'}
+            <p className="text-xs text-[#6F604D] mb-5">
+              City centre, London
             </p>
-          </div>
-        </section>
 
-        {/* ========================================================
-            SECTION 10: RSVP FORM (Exact fields from video f_0052.jpg)
-            ======================================================== */}
-        <section className="relative z-10 py-12 px-6 border-t border-[#E8DFC8]/60 text-center">
-          <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
-            <Mail className="w-4 h-4 text-[#B59A57]" />
-          </div>
+            {/* Map Preview Card */}
+            <div className="relative w-full max-w-[340px] mx-auto aspect-[16/9] rounded-2xl overflow-hidden border border-[#C4A265]/40 shadow-lg bg-[#E6E1D5]">
+              <div
+                className="absolute inset-0 opacity-85"
+                style={{
+                  backgroundImage:
+                    'radial-gradient(#C5BCAB 1.5px, transparent 1.5px), linear-gradient(135deg, #ECE5D8 0%, #D8CFBE 100%)',
+                  backgroundSize: '20px 20px, 100% 100%',
+                }}
+              />
 
-          <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-4xl md:text-5xl text-[#3A4A33] tracking-wide mb-1">
-            {isArabic ? 'تأكيد الحضور (RSVP)' : 'RSVP'}
-          </h3>
-          <p className="text-xs text-[#7C6E5A] font-['Cinzel',serif] tracking-widest uppercase mb-1">
-            {isArabic ? 'يرجى التكرم بالرد قبل ١٥ نوفمبر ٢٠٢٦' : 'Kindly reply by November 15, 2026'}
-          </p>
-          <div className="flex items-center justify-center gap-2 mb-6 opacity-70">
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-            <div className="w-10 h-[1px] bg-[#B59A57]" />
-          </div>
-
-          {rsvpSubmitted ? (
-            <div className="max-w-[340px] mx-auto p-6 rounded-2xl bg-[#FAF8F5] border border-[#B59A57]/40 shadow-md">
-              <CheckCircle2 className="w-10 h-10 text-[#3B4D36] mx-auto mb-2" />
-              <h4 className="font-['Playfair_Display',serif] text-lg font-bold text-[#2A3725]">
-                {isArabic ? 'شكراً جزيلاً لكم!' : 'Thank you!'}
-              </h4>
-              <p className="text-xs text-[#52634B] mt-1">
-                {isArabic
-                  ? 'تم استلام تأكيد حضوركم بكل سرور. نتطلع للاحتفال معكم!'
-                  : 'Your RSVP has been joyfully received. We look forward to celebrating together!'}
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleRsvpSubmit} className="max-w-[340px] mx-auto text-left space-y-4">
-              {/* Name */}
-              <div>
-                <label className="block text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#544634] mb-1">
-                  {isArabic ? 'الاسم الكريم *' : 'Your Name *'}
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={rsvpName}
-                  onChange={(e) => setRsvpName(e.target.value)}
-                  placeholder={isArabic ? 'الاسم الكامل' : 'Your full name'}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/40 text-sm text-[#2A3725] placeholder:text-[#9E9484] focus:outline-none focus:border-[#3B4D36] focus:ring-1 focus:ring-[#3B4D36]"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#544634] mb-1">
-                  {isArabic ? 'البريد الإلكتروني *' : 'Email *'}
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={rsvpEmail}
-                  onChange={(e) => setRsvpEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/40 text-sm text-[#2A3725] placeholder:text-[#9E9484] focus:outline-none focus:border-[#3B4D36] focus:ring-1 focus:ring-[#3B4D36]"
-                />
-              </div>
-
-              {/* Attendance */}
-              <div>
-                <label className="block text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#544634] mb-1">
-                  {isArabic ? 'هل ستشرفوننا بالحضور؟ *' : 'Will you be attending? *'}
-                </label>
-                <select
-                  required
-                  value={rsvpAttending}
-                  onChange={(e) => setRsvpAttending(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/40 text-sm text-[#2A3725] focus:outline-none focus:border-[#3B4D36] focus:ring-1 focus:ring-[#3B4D36]"
-                >
-                  <option value="">{isArabic ? 'اختر الإجابة...' : 'Select...'}</option>
-                  <option value="yes">
-                    {isArabic ? 'نعم، يشرفني الحضور بكل سرور ♥' : 'Joyfully Accept ♥'}
-                  </option>
-                  <option value="no">
-                    {isArabic ? 'للأسف لن أتمكن من الحضور' : 'Regretfully Decline'}
-                  </option>
-                </select>
-              </div>
-
-              {/* Number of Guests */}
-              <div>
-                <label className="block text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#544634] mb-1">
-                  {isArabic ? 'عدد الضيوف' : 'Number of Guests'}
-                </label>
-                <select
-                  value={rsvpGuests}
-                  onChange={(e) => setRsvpGuests(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/40 text-sm text-[#2A3725] focus:outline-none focus:border-[#3B4D36] focus:ring-1 focus:ring-[#3B4D36]"
-                >
-                  <option value="1">1 {isArabic ? 'ضيف' : 'Guest'}</option>
-                  <option value="2">2 {isArabic ? 'ضيوف' : 'Guests'}</option>
-                  <option value="3">3 {isArabic ? 'ضيوف' : 'Guests'}</option>
-                  <option value="4">4 {isArabic ? 'ضيوف' : 'Guests'}</option>
-                  <option value="5">5+ {isArabic ? 'ضيوف' : 'Guests'}</option>
-                </select>
-              </div>
-
-              {/* Message */}
-              <div>
-                <label className="block text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#544634] mb-1">
-                  {isArabic ? 'رسالتكم وتهنئتكم' : 'Your Message'}
-                </label>
-                <textarea
-                  rows={3}
-                  value={rsvpMessage}
-                  onChange={(e) => setRsvpMessage(e.target.value)}
-                  placeholder={isArabic ? 'أطيب الأمنيات والتبريكات...' : 'Write your wishes...'}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/40 text-sm text-[#2A3725] placeholder:text-[#9E9484] focus:outline-none focus:border-[#3B4D36] focus:ring-1 focus:ring-[#3B4D36] resize-none"
-                />
-              </div>
-
-              {/* Submit Pill Button */}
-              <button
-                type="submit"
-                disabled={rsvpLoading}
-                className="w-full mt-2 py-3 px-6 rounded-full bg-[#2E3C29] text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-widest uppercase shadow-lg shadow-[#2E3C29]/25 hover:bg-[#232F1F] active:scale-95 transition-all flex items-center justify-center gap-2 border border-[#B59A57]/30 disabled:opacity-70"
+              {/* Map Roads & Stylized Grid */}
+              <svg
+                className="absolute inset-0 w-full h-full opacity-40"
+                viewBox="0 0 340 190"
+                fill="none"
+                stroke="#A89B85"
               >
-                {rsvpLoading ? (
-                  <span>{isArabic ? 'جاري الإرسال...' : 'Sending...'}</span>
-                ) : (
-                  <span>{isArabic ? 'إرسال الرسالة' : 'Send Message'}</span>
-                )}
-              </button>
-            </form>
-          )}
-        </section>
+                <line x1="0" y1="95" x2="340" y2="95" strokeWidth="6" stroke="#FAF8F5" />
+                <line x1="120" y1="0" x2="120" y2="190" strokeWidth="4" stroke="#FAF8F5" />
+                <line x1="240" y1="0" x2="240" y2="190" strokeWidth="3" stroke="#FAF8F5" />
+                <line x1="0" y1="40" x2="340" y2="150" strokeWidth="2" stroke="#FFFFFF" />
+              </svg>
 
-        {/* Footer Brand */}
-        <footer className="text-center py-6 text-[10px] font-['Cinzel',serif] tracking-[0.2em] text-[#8C7E6A] uppercase opacity-75">
-          © {new Date().getFullYear()} Zayn & Nora • Zareqia Haute Couture Wedding Suite
-        </footer>
-      </main>
+              {/* Center Map Pin */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+                <div className="w-8 h-8 rounded-full bg-[#2E3C29] text-white flex items-center justify-center shadow-lg border-2 border-white animate-bounce">
+                  <MapPin className="w-4 h-4 text-[#E8D389]" />
+                </div>
+                <div className="w-2.5 h-1 rounded-full bg-black/20 blur-[1px] mt-0.5" />
+              </div>
+
+              {/* Open in Maps Overlay Pill Button */}
+              <a
+                href="https://maps.google.com/?q=Grand+Palace+Hall+City+centre+London"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[#2A3725] text-[10px] font-['Cinzel',serif] tracking-wider uppercase shadow-md border border-[#B59A57]/40 hover:bg-white transition-all flex items-center gap-1.5 hover:scale-105 active:scale-95"
+              >
+                <Navigation className="w-2.5 h-2.5 text-[#3B4D36]" />
+                <span>{isArabic ? 'فتح في الخرائط ↗' : 'Open in Maps ↗'}</span>
+              </a>
+            </div>
+
+            {/* View on Google Maps Pill Button Below Map */}
+            <div className="mt-4">
+              <a
+                href="https://maps.google.com/?q=Grand+Palace+Hall+City+centre+London"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[#2E3C29] text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-widest uppercase shadow-md hover:bg-[#232F1F] active:scale-95 transition-all border border-[#B59A57]/30"
+              >
+                <MapPin className="w-3.5 h-3.5 text-[#C4A265]" />
+                <span>{isArabic ? 'عرض على خرائط Google' : 'View on Google Maps'}</span>
+              </a>
+            </div>
+          </section>
+
+          {/* ========================================================
+              SECTION 8: DRESS CODE
+              ======================================================== */}
+          <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60">
+            <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
+              <Shirt className="w-4 h-4 text-[#B59A57]" />
+            </div>
+
+            <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
+              {isArabic ? 'قواعد اللباس' : 'Dress Code'}
+            </h3>
+            <div className="flex items-center justify-center gap-2 mb-6 opacity-70">
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
+            </div>
+
+            <div className="max-w-[320px] mx-auto space-y-5 text-center">
+              {/* Women */}
+              <div>
+                <h4 className="font-['Playfair_Display',serif] text-base font-medium text-[#2E3C29]">
+                  {isArabic ? 'السيدات' : 'Women'}
+                </h4>
+                <p className="text-xs text-[#5C6A54] italic font-['Cormorant_Garamond',serif] mt-0.5">
+                  {isArabic
+                    ? 'أزياء رسمية أنيقة بألوان الباستيل أو الجواهر'
+                    : 'Elegant formal attire in pastel or jewel tones'}
+                </p>
+              </div>
+
+              {/* Men */}
+              <div>
+                <h4 className="font-['Playfair_Display',serif] text-base font-medium text-[#2E3C29]">
+                  {isArabic ? 'الرجال' : 'Men'}
+                </h4>
+                <p className="text-xs text-[#5C6A54] italic font-['Cormorant_Garamond',serif] mt-0.5">
+                  {isArabic ? 'بدلة رسمية أو زي تقليدي فاخر' : 'Suit or traditional formal wear'}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* ========================================================
+              SECTION 9: PRE-WEDDING EVENTS (Mahendi & Haldi)
+              ======================================================== */}
+          <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60 bg-[#F5F0E6]/40">
+            <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
+              <Sparkles className="w-4 h-4 text-[#B59A57]" />
+            </div>
+
+            <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide mb-1">
+              {isArabic ? 'الفعاليات السابقة للزفاف' : 'Pre-Wedding Events'}
+            </h3>
+            <div className="flex items-center justify-center gap-2 mb-6 opacity-70">
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
+            </div>
+
+            <div className="max-w-[320px] mx-auto space-y-4 text-center">
+              {/* Mahendi Ceremony */}
+              <div className="p-4 rounded-2xl bg-[#FCFAF5] border border-[#C4A265]/40 shadow-sm">
+                <h4 className="font-['Playfair_Display',serif] text-base font-medium text-[#2E3C29]">
+                  {isArabic ? 'حفل الحناء (المهندي)' : 'Mahendi'}
+                </h4>
+                <div className="text-xs text-[#8C764E] font-['Cinzel',serif] tracking-wider mt-1">
+                  {isArabic ? '٢٨ نوفمبر ٢٠٢٦، ٨:٣٠ مساءً' : 'Nov 28, 2026, 8:30 PM'}
+                </div>
+                <p className="text-xs text-[#5C6A54] italic font-['Cormorant_Garamond',serif] mt-1">
+                  {isArabic ? 'في منزل العروس' : "At Bride's House"}
+                </p>
+              </div>
+
+              {/* Haldi Ceremony */}
+              <div className="p-4 rounded-2xl bg-[#FCFAF5] border border-[#C4A265]/40 shadow-sm">
+                <h4 className="font-['Playfair_Display',serif] text-base font-medium text-[#2E3C29]">
+                  {isArabic ? 'حفل الهالدي المبارك' : 'Haldi'}
+                </h4>
+                <div className="text-xs text-[#8C764E] font-['Cinzel',serif] tracking-wider mt-1">
+                  {isArabic ? '٢٩ نوفمبر ٢٠٢٦، ٨:٠٠ مساءً' : 'Nov 29, 2026, 8:00 PM'}
+                </div>
+                <p className="text-xs text-[#5C6A54] italic font-['Cormorant_Garamond',serif] mt-1">
+                  {isArabic ? 'في منزل العريس' : "At Groom's House"}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* ========================================================
+              SECTION 10: RSVP & WISHES
+              ======================================================== */}
+          <section className="relative z-10 py-10 px-6 text-center border-t border-[#E8DFC8]/60 bg-[#F5F0E6]/30">
+            {/* Gift/Blessing Note */}
+            <p className="font-['Cormorant_Garamond',serif] italic text-sm text-[#4E5B45] max-w-[320px] mx-auto mb-6">
+              {isArabic
+                ? 'محبتكم ودعواتكم وحضوركم هي أغلى وأجمل هدية نتمناها.'
+                : 'Your love, blessings, and presence are the greatest gifts we could ever ask for.'}
+            </p>
+
+            <div className="w-10 h-10 rounded-full border border-[#B59A57]/60 flex items-center justify-center mx-auto mb-3 text-[#3A4A33] bg-[#FAF8F5]">
+              <Mail className="w-4 h-4 text-[#B59A57]" />
+            </div>
+
+            <h3 className="font-['Playfair_Display',serif] text-2xl text-[#2E3C29] tracking-wider uppercase mb-1">
+              RSVP
+            </h3>
+            <div className="flex items-center justify-center gap-2 mb-6 opacity-70">
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+              <div className="w-10 h-[1px] bg-[#B59A57]" />
+            </div>
+
+            {rsvpSubmitted ? (
+              <div className="max-w-[320px] mx-auto p-6 rounded-2xl bg-[#FCFAF5] border border-[#B59A57]/40 shadow-sm text-center">
+                <div className="w-12 h-12 rounded-full bg-[#3B4D36]/10 text-[#3B4D36] flex items-center justify-center mx-auto mb-3">
+                  <CheckCircle2 className="w-6 h-6 text-[#3B4D36]" />
+                </div>
+                <h4 className="font-['Playfair_Display',serif] text-lg text-[#2E3C29] font-medium mb-1">
+                  {isArabic ? 'شكراً لتأكيد حضوركم!' : 'RSVP Received with Joy!'}
+                </h4>
+                <p className="text-xs text-[#5C6A54] font-['Cormorant_Garamond',serif] italic">
+                  {isArabic
+                    ? 'نتطلع بشوق لرؤيتكم والاحتفال معاً بهذه اللحظة الجميلة.'
+                    : 'We look forward to celebrating this special day with you.'}
+                </p>
+              </div>
+            ) : (
+              <form
+                onSubmit={handleRsvpSubmit}
+                className="max-w-[320px] mx-auto space-y-4 text-left rtl:text-right"
+              >
+                {/* Full Name */}
+                <div>
+                  <label className="block text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#544634] mb-1">
+                    {isArabic ? 'الاسم الكريم *' : 'Your Name *'}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={rsvpName}
+                    onChange={(e) => setRsvpName(e.target.value)}
+                    placeholder={isArabic ? 'الاسم بالكامل' : 'Your full name'}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/40 text-sm text-[#2A3725] placeholder:text-[#9E9484] focus:outline-none focus:border-[#3B4D36] focus:ring-1 focus:ring-[#3B4D36]"
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className="block text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#544634] mb-1">
+                    {isArabic ? 'البريد الإلكتروني *' : 'Email *'}
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={rsvpEmail}
+                    onChange={(e) => setRsvpEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/40 text-sm text-[#2A3725] placeholder:text-[#9E9484] focus:outline-none focus:border-[#3B4D36] focus:ring-1 focus:ring-[#3B4D36]"
+                  />
+                </div>
+
+                {/* Attendance */}
+                <div>
+                  <label className="block text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#544634] mb-1">
+                    {isArabic ? 'هل ستشرفوننا بالحضور؟ *' : 'Will you be attending? *'}
+                  </label>
+                  <select
+                    required
+                    value={rsvpAttending}
+                    onChange={(e) => setRsvpAttending(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/40 text-sm text-[#2A3725] focus:outline-none focus:border-[#3B4D36] focus:ring-1 focus:ring-[#3B4D36]"
+                  >
+                    <option value="">{isArabic ? 'اختر الإجابة...' : 'Select...'}</option>
+                    <option value="yes">
+                      {isArabic ? 'نعم، يشرفني الحضور بكل سرور ♥' : 'Joyfully Accept ♥'}
+                    </option>
+                    <option value="no">
+                      {isArabic ? 'للأسف لن أتمكن من الحضور' : 'Regretfully Decline'}
+                    </option>
+                  </select>
+                </div>
+
+                {/* Number of Guests */}
+                <div>
+                  <label className="block text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#544634] mb-1">
+                    {isArabic ? 'عدد الضيوف' : 'Number of Guests'}
+                  </label>
+                  <select
+                    value={rsvpGuests}
+                    onChange={(e) => setRsvpGuests(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/40 text-sm text-[#2A3725] focus:outline-none focus:border-[#3B4D36] focus:ring-1 focus:ring-[#3B4D36]"
+                  >
+                    {[1, 2, 3, 4, 5].map((num) => (
+                      <option key={num} value={num}>
+                        {num} {isArabic ? (num === 1 ? 'ضيف' : 'ضيوف') : num === 1 ? 'Guest' : 'Guests'}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Message / Wishes */}
+                <div>
+                  <label className="block text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#544634] mb-1">
+                    {isArabic ? 'رسالة تهنئة للعروسين' : 'Your Message'}
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={rsvpMessage}
+                    onChange={(e) => setRsvpMessage(e.target.value)}
+                    placeholder={isArabic ? 'اكتب تمنياتك ومباركتك...' : 'Write your wishes...'}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#C4A265]/40 text-sm text-[#2A3725] placeholder:text-[#9E9484] focus:outline-none focus:border-[#3B4D36] focus:ring-1 focus:ring-[#3B4D36] resize-none"
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <div className="pt-2 text-center">
+                  <button
+                    type="submit"
+                    disabled={rsvpLoading}
+                    className="w-full py-3 rounded-full bg-[#2E3C29] text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-widest uppercase shadow-md hover:bg-[#232F1F] active:scale-95 transition-all border border-[#B59A57]/30 flex items-center justify-center gap-2"
+                  >
+                    {rsvpLoading ? (
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        <PartyPopper className="w-3.5 h-3.5 text-[#E8D389]" />
+                        <span>{isArabic ? 'إرسال الرسالة والتأكيد' : 'Send Message'}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
+          </section>
+
+          {/* Bottom Cardstock Watermark */}
+          <div className="py-8 text-center opacity-60">
+            <span className="font-['Cinzel',serif] text-[10px] tracking-[0.25em] text-[#7A6A52] uppercase">
+              Zareqia Royal Atelier • Emerald Suite
+            </span>
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 };
