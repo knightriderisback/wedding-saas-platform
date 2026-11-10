@@ -114,12 +114,8 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
     }
   };
 
-  const handleEnvelopeOpen = () => {
-    setIsEnvelopeOpen(true);
-    setTimeout(() => {
-      setHeroTextVisible(true);
-    }, 400);
-
+  const handleCurtainsOpen = () => {
+    setHeroTextVisible(true);
     if (!isAudioPlaying) {
       if (audioRef.current) {
         audioRef.current
@@ -134,6 +130,10 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
         setIsAudioPlaying(true);
       }
     }
+  };
+
+  const handleEnvelopeComplete = () => {
+    setIsEnvelopeOpen(true);
   };
 
   const handleRsvpSubmit = (e: React.FormEvent) => {
@@ -162,14 +162,14 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
     >
       {/* Ambient Botanical Backdrop for Desktop (Matching POV garden mood) */}
       <div className="fixed inset-0 pointer-events-none opacity-40 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#384832] via-[#1C261A] to-[#0D130B]" />
-      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(#C4A265_1px,transparent_1px)] [background-size:28px_28px] opacity-10 z-0" />
+      <div className="fixed inset-0 pointer-events-none bg-gradient-to-b from-black/40 via-transparent to-black/70 z-0" />
 
       {/* ========================================================
           LUXURY MOBILE DEVICE PRESENTATION CONTAINER
           On Desktop: Centered luxury flagship smartphone frame with dark titanium bezel & ambient shadow.
           On Mobile: 100% full screen responsive, edge-to-edge.
           ======================================================== */}
-      <div className="relative w-full sm:max-w-[430px] min-h-screen sm:min-h-[880px] sm:max-h-[92vh] sm:rounded-[48px] bg-[#F7F4EE] shadow-[0_30px_90px_rgba(0,0,0,0.7),0_0_90px_rgba(46,60,41,0.35)] overflow-hidden flex flex-col z-10 border-0 sm:border-[8px] sm:border-[#232B20]">
+      <div className="relative w-full sm:max-w-[430px] h-[100dvh] sm:h-[880px] sm:max-h-[92vh] sm:rounded-[48px] bg-[#F7F4EE] shadow-[0_30px_90px_rgba(0,0,0,0.7),0_0_90px_rgba(46,60,41,0.35)] overflow-hidden flex flex-col z-10 border-0 sm:border-[8px] sm:border-[#232B20]">
         
         {/* Desktop Phone Notch / Dynamic Island */}
         <div className="hidden sm:flex absolute top-2.5 left-1/2 -translate-x-1/2 z-50 items-center justify-center pointer-events-none">
@@ -184,7 +184,8 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
             ======================================================== */}
         {!isEnvelopeOpen && (
           <ZareqiaGatefoldEnvelope
-            onOpenComplete={handleEnvelopeOpen}
+            onCurtainsOpen={handleCurtainsOpen}
+            onOpenComplete={handleEnvelopeComplete}
             isArabic={isArabic}
             onToggleLanguage={() => setIsArabic(!isArabic)}
             isAudioPlaying={isAudioPlaying}
@@ -193,13 +194,13 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
         )}
 
         {/* ========================================================
-            FLOATING CONTROLS (INSIDE MOBILE CANVAS)
+            FLOATING CONTROLS (ALWAYS INTERACTIVE, Z-50)
             ======================================================== */}
         {/* Top-Right Sound Button */}
         <button
           onClick={toggleAudio}
           aria-label="Toggle Sound"
-          className="absolute top-4 right-4 z-40 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-white/95 text-xs font-['Cinzel',serif] tracking-wider uppercase border border-white/20 hover:bg-black/60 transition-all shadow-lg active:scale-95"
+          className="absolute top-4 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-white/95 text-xs font-['Cinzel',serif] tracking-wider uppercase border border-white/20 hover:bg-black/60 transition-all shadow-lg active:scale-95"
         >
           {isAudioPlaying ? (
             <>
@@ -218,7 +219,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
         <button
           onClick={() => setIsArabic(!isArabic)}
           aria-label="Toggle Language"
-          className="absolute bottom-4 left-4 z-40 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-[#FAF7F0] text-xs font-['Cinzel',serif] tracking-widest uppercase border border-white/20 hover:bg-black/60 transition-all shadow-lg active:scale-95"
+          className="absolute bottom-4 left-4 z-50 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md text-[#FAF7F0] text-xs font-['Cinzel',serif] tracking-widest uppercase border border-white/20 hover:bg-black/60 transition-all shadow-lg active:scale-95"
         >
           <Globe className="w-3.5 h-3.5 text-[#FFE89E]" />
           <span>{isArabic ? 'English' : 'Arabic'}</span>
@@ -227,7 +228,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
         {/* Bottom-Right "Use this Design" Button */}
         <Link
           href="/customer?template=zareqia-emerald"
-          className="absolute bottom-4 right-4 z-40 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#2E3C29]/90 backdrop-blur-md text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-wider uppercase border border-[#C4A265]/40 hover:bg-[#232F1F] transition-all shadow-xl active:scale-95 hover:scale-105"
+          className="absolute bottom-4 right-4 z-50 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#2E3C29]/90 backdrop-blur-md text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-wider uppercase border border-[#C4A265]/40 hover:bg-[#232F1F] transition-all shadow-xl active:scale-95 hover:scale-105"
         >
           <Sparkles className="w-3 h-3 text-[#E8D389]" />
           <span>{isArabic ? 'استخدم هذا التصميم' : 'Use this Design'}</span>
@@ -238,16 +239,8 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
             ======================================================== */}
         <div className="relative flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-[#C4A265]/40 pb-20">
           
-          {/* Paper Texture Overlay */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-40 z-0"
-            style={{
-              backgroundImage:
-                'radial-gradient(#D6CDBC 0.75px, transparent 0.75px), radial-gradient(#D6CDBC 0.75px, #F7F4EE 0.75px)',
-              backgroundSize: '28px 28px',
-              backgroundPosition: '0 0, 14px 14px',
-            }}
-          />
+          {/* Authentic Warm Wedding Cardstock Surface (Clean luxury paper, zero dots/checks) */}
+          <div className="absolute inset-0 pointer-events-none z-0 bg-gradient-to-b from-[#FAF8F5] via-[#F4EFE6] to-[#FAF8F5]" />
 
           {/* ========================================================
               SECTION 1: HERO (Curtains, Zayn & Nora, Courtyard Fountain)

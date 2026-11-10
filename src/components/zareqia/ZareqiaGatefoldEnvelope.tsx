@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { Volume2, VolumeX, Globe, Sparkles } from 'lucide-react';
 
 interface ZareqiaGatefoldEnvelopeProps {
+  onCurtainsOpen?: () => void;
   onOpenComplete?: () => void;
   isArabic?: boolean;
   onToggleLanguage?: () => void;
@@ -14,6 +14,7 @@ interface ZareqiaGatefoldEnvelopeProps {
 }
 
 export const ZareqiaGatefoldEnvelope: React.FC<ZareqiaGatefoldEnvelopeProps> = ({
+  onCurtainsOpen,
   onOpenComplete,
   isArabic = false,
   onToggleLanguage,
@@ -35,21 +36,18 @@ export const ZareqiaGatefoldEnvelope: React.FC<ZareqiaGatefoldEnvelopeProps> = (
       onToggleAudio();
     }
 
-    // Start Stage 2: Curtains part open after doors slide outward (750ms)
+    // Start Stage 2: Curtains part open after doors slide outward (850ms)
     setTimeout(() => {
       setOpenStage('curtains-opening');
-    }, 750);
+      if (onCurtainsOpen) onCurtainsOpen();
+    }, 850);
 
-    // Call onOpenComplete so hero typography fades in gracefully
-    setTimeout(() => {
-      if (onOpenComplete) onOpenComplete();
-    }, 1800);
-
-    // Unmount envelope overlay after animation ends
+    // Stage 3: After curtains fully parted (2400ms), envelope completes its lifecycle
     setTimeout(() => {
       setOpenStage('done');
+      if (onOpenComplete) onOpenComplete();
       setIsRendered(false);
-    }, 2500);
+    }, 2400);
   };
 
   if (!isRendered) return null;
@@ -59,8 +57,8 @@ export const ZareqiaGatefoldEnvelope: React.FC<ZareqiaGatefoldEnvelopeProps> = (
 
   return (
     <div
-      className={`absolute inset-0 z-50 overflow-hidden flex items-center justify-center select-none transition-opacity duration-700 ${
-        curtainsOpen ? 'pointer-events-none' : 'pointer-events-auto'
+      className={`absolute inset-0 z-30 overflow-hidden flex items-center justify-center select-none transition-opacity duration-700 ${
+        openStage === 'done' ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
       style={{ perspective: '1400px' }}
     >
@@ -153,11 +151,12 @@ export const ZareqiaGatefoldEnvelope: React.FC<ZareqiaGatefoldEnvelopeProps> = (
         }}
       >
         {/* Sage Green Base with Embossed Botanical Branches */}
-        <div className="absolute inset-0 bg-[#596A4F]">
+        <div className="absolute inset-0 bg-[#596A4F] overflow-hidden">
           <Image
             src="/templates/zareqia/embossed-botanical-doors.svg"
             alt="Sage Leaf Gatefold Left"
             fill
+            unoptimized
             className="object-cover object-right"
             priority
           />
@@ -167,7 +166,7 @@ export const ZareqiaGatefoldEnvelope: React.FC<ZareqiaGatefoldEnvelopeProps> = (
         <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-black/45 pointer-events-none" />
 
         {/* Vertical Gold Ribbon / Cord Running Down Center Seam */}
-        <div className="absolute top-0 right-0 w-[2px] h-full bg-gradient-to-b from-[#DFC07C] via-[#F3E5AB] to-[#997938] z-10 shadow-sm" />
+        <div className="absolute top-0 right-0 w-[2px] h-full bg-gradient-to-b from-[#DFC07C] via-[#F3E5AB] to-[#997938] z-10 shadow-sm pointer-events-none" />
 
         {/* Golden Beaded Trim on Right Edge */}
         <div className="absolute top-0 right-0 w-[12px] h-full pointer-events-none flex flex-col items-center justify-between py-1 z-10">
@@ -184,21 +183,22 @@ export const ZareqiaGatefoldEnvelope: React.FC<ZareqiaGatefoldEnvelopeProps> = (
         </div>
       </div>
 
-      {/* RIGHT SAGE DOOR */}
+      {/* RIGHT SAGE DOOR (overflow-visible allows centered seal to extend across seam) */}
       <div
         onClick={handleOpen}
-        className="absolute top-0 right-0 w-1/2 h-full z-30 cursor-pointer overflow-hidden transition-transform duration-[1150ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="absolute top-0 right-0 w-1/2 h-full z-30 cursor-pointer overflow-visible transition-transform duration-[1150ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{
           transform: doorsOpen ? 'translateX(100%)' : 'translateX(0)',
           boxShadow: '-16px 0 40px rgba(0,0,0,0.55)',
         }}
       >
         {/* Sage Green Base with Embossed Botanical Branches (Mirrored) */}
-        <div className="absolute inset-0 bg-[#596A4F] scale-x-[-1]">
+        <div className="absolute inset-0 bg-[#596A4F] overflow-hidden scale-x-[-1]">
           <Image
             src="/templates/zareqia/embossed-botanical-doors.svg"
             alt="Sage Leaf Gatefold Right"
             fill
+            unoptimized
             className="object-cover object-right"
             priority
           />
@@ -208,7 +208,7 @@ export const ZareqiaGatefoldEnvelope: React.FC<ZareqiaGatefoldEnvelopeProps> = (
         <div className="absolute inset-0 bg-gradient-to-l from-black/25 via-transparent to-black/45 pointer-events-none" />
 
         {/* Vertical Gold Ribbon / Cord Running Down Center Seam */}
-        <div className="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-[#DFC07C] via-[#F3E5AB] to-[#997938] z-10 shadow-sm" />
+        <div className="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-[#DFC07C] via-[#F3E5AB] to-[#997938] z-10 shadow-sm pointer-events-none" />
 
         {/* Golden Beaded Trim on Left Edge */}
         <div className="absolute top-0 left-0 w-[12px] h-full pointer-events-none flex flex-col items-center justify-between py-1 z-10">
@@ -230,82 +230,22 @@ export const ZareqiaGatefoldEnvelope: React.FC<ZareqiaGatefoldEnvelopeProps> = (
             (Matching exact video behavior in f_0006.jpg & f_0007.jpg)
             ======================================================== */}
         <div
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-40 pointer-events-none cursor-pointer"
+          onClick={handleOpen}
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-40 pointer-events-auto cursor-pointer"
           style={{ width: '180px', height: '240px' }}
         >
-          <div className="relative w-full h-full transform hover:scale-105 transition-transform duration-300">
+          <div className="relative w-full h-full transform hover:scale-105 active:scale-95 transition-transform duration-300">
             <Image
               src="/templates/zareqia/seal-cartouche-ultra.svg"
               alt="Baroque Cartouche Seal - Tap To Open"
               fill
+              unoptimized
               className="object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.55)]"
               priority
             />
           </div>
         </div>
       </div>
-
-      {/* ========================================================
-          FLOATING CONTROLS (ON CLOSED ENVELOPE)
-          ======================================================== */}
-      {!doorsOpen && (
-        <>
-          {/* Sound / Mute Toggle (Top-Right Frosted Glass Pill) */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (onToggleAudio) onToggleAudio();
-            }}
-            aria-label="Toggle Sound"
-            className="absolute top-4 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/35 backdrop-blur-md text-white/95 text-xs font-['Cinzel',serif] tracking-wider uppercase border border-white/20 hover:bg-black/50 transition-all shadow-lg active:scale-95"
-          >
-            {isAudioPlaying ? (
-              <>
-                <Volume2 className="w-3.5 h-3.5 text-[#FFE89E] animate-pulse" />
-                <span>On</span>
-              </>
-            ) : (
-              <>
-                <VolumeX className="w-3.5 h-3.5 text-white/75" />
-                <span>Mute</span>
-              </>
-            )}
-          </button>
-
-          {/* Language Switcher (Bottom-Left Frosted Glass Pill) */}
-          {onToggleLanguage && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleLanguage();
-              }}
-              aria-label="Toggle Language"
-              className="absolute bottom-5 left-5 z-50 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/35 backdrop-blur-md text-[#FAF7F0] text-xs font-['Cinzel',serif] tracking-widest uppercase border border-white/25 hover:bg-black/50 transition-all shadow-lg active:scale-95"
-            >
-              <Globe className="w-3.5 h-3.5 text-[#FFE89E]" />
-              <span>{isArabic ? 'English' : 'Arabic'}</span>
-            </button>
-          )}
-
-          {/* "Use this Design" (Bottom-Center Frosted Glass Pill) */}
-          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
-            <span className="px-3.5 py-1.5 rounded-full bg-black/35 backdrop-blur-md text-white/90 text-[11px] font-['Cinzel',serif] tracking-widest uppercase border border-white/20 shadow-md flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3 text-[#E8D389]" />
-              <span>Use this Design</span>
-            </span>
-          </div>
-
-          {/* Tap Prompt Hint */}
-          <div
-            onClick={handleOpen}
-            className="absolute bottom-16 z-50 text-center cursor-pointer pointer-events-auto"
-          >
-            <span className="font-['Cinzel',serif] text-[11px] uppercase tracking-[0.3em] text-[#F3EEDB]/90 drop-shadow animate-pulse">
-              {isArabic ? 'اضغط لفتح بطاقة الدعوة' : 'TAP TO OPEN INVITATION'}
-            </span>
-          </div>
-        </>
-      )}
     </div>
   );
 };
