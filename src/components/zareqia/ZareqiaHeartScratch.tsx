@@ -10,6 +10,7 @@ interface ZareqiaHeartScratchProps {
   weddingDay?: string;
   weddingTime?: string;
   isArabic?: boolean;
+  language?: 'en' | 'hi' | 'hinglish' | 'ur';
 }
 
 export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
@@ -18,7 +19,10 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
   weddingDay = 'Monday',
   weddingTime = '10:00 AM',
   isArabic = false,
+  language,
 }) => {
+  // Determine effective language
+  const currentLang = language || (isArabic ? 'ur' : 'en');
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
@@ -275,10 +279,14 @@ END:VCALENDAR`;
     >
       {/* Welcome Blessing Intro Text (Matching Video f_0025.jpg) */}
       <div className="max-w-[320px] mx-auto px-2 mb-4 text-center">
-        <p className="font-['Cormorant_Garamond',serif] italic text-[15px] sm:text-[16px] leading-relaxed text-[#4B5845]">
-          {isArabic
-            ? `يشرفنا أن نرحب بكم في حفل زفاف ${coupleNames || 'زين ونورا'}. ومع بداية رحلتهما معاً في الإيمان والمحبة، نشكركم لكونكم جزءاً من هذه المناسبة المباركة.`
-            : `We are honored to welcome you to the Wedding ceremony of ${coupleNames || 'Aryan & Eva'}. As they begin their journey together in faith and love, we thank you for being part of this blessed occasion.`}
+        <p className="font-['Cormorant_Garamond',serif] italic text-[15px] sm:text-[16px] leading-relaxed text-[#2C3827]">
+          {currentLang === 'hi'
+            ? `हम ${coupleNames} के शुभ विवाह में आपका सप्रेम स्वागत करते हैं। विश्वास और प्रेम के इस नए सफर में हमारे साथ शामिल होने के लिए आपका हार्दिक धन्यवाद।`
+            : currentLang === 'hinglish'
+            ? `Hum ${coupleNames} ki shaadi mein aapka tahe dil se swagat karte hain. Pyaar aur vishwas ke is naye safar mein humare saath judne ke liye shukriya.`
+            : currentLang === 'ur'
+            ? `ہم ${coupleNames} کی شادی کی بابرکت تقریب میں آپ کو تہہ دل سے خوش آمدید کہتے ہیں۔ محبت اور وفا کے اس نئے سفر میں ہمارا ساتھ دینے کا شکریہ۔`
+            : `We are honored to welcome you to the Wedding ceremony of ${coupleNames}. As they begin their journey together in faith and love, we thank you for being part of this blessed occasion.`}
         </p>
         <div className="flex items-center justify-center gap-1.5 mt-2 text-[#7C9172]">
           <span className="text-xs">♥</span>
@@ -287,13 +295,21 @@ END:VCALENDAR`;
 
       {/* Section Title */}
       <div className="mb-4 transition-all duration-700">
-        <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#3A4A33] tracking-wide">
+        <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#1E2E1B] tracking-wide">
           {isRevealed
-            ? isArabic
-              ? 'بداية حكايتنا إلى الأبد'
+            ? currentLang === 'hi'
+              ? 'एक नए जीवन की शुरुआत'
+              : currentLang === 'hinglish'
+              ? 'Hamara Naya Safar Shuru'
+              : currentLang === 'ur'
+              ? 'ہماری نئی زندگی کا آغاز'
               : 'Our forever begins'
-            : isArabic
-            ? 'انقر أو امسح للكشف'
+            : currentLang === 'hi'
+            ? 'तारीख जानने के लिए स्क्रैच करें'
+            : currentLang === 'hinglish'
+            ? 'Date Dekhne Ke Liye Scratch Karein'
+            : currentLang === 'ur'
+            ? 'تاریخ جاننے کے لیے کھرچیں'
             : 'Scratch to Reveal'}
         </h3>
         {/* Subtle Diamond Divider */}
@@ -335,16 +351,38 @@ END:VCALENDAR`;
           {/* Text Content Inside Heart (Matching exact video lines in f_0035.jpg) */}
           <div className="relative z-10 flex flex-col items-center px-4 pt-4">
             <span className="font-['Alex_Brush','Pinyon_Script',cursive] text-lg text-[#5A4C32] mb-0.5">
-              {isArabic ? 'يسعدنا حضوركم!' : "You're Invited!"}
+              {currentLang === 'hi'
+                ? 'आप सादर आमंत्रित हैं!'
+                : currentLang === 'hinglish'
+                ? 'Aap Sadar Amantrit Hain!'
+                : currentLang === 'ur'
+                ? 'آپ تشریف لائیں!'
+                : "You're Invited!"}
             </span>
             <span className="font-['Playfair_Display',serif] text-xl md:text-2xl font-bold text-[#242A20] tracking-tight">
-              {isArabic ? '٣٠ نوفمبر ٢٠٢٦' : weddingDate}
+              {currentLang === 'hi'
+                ? '१२ दिसंबर २०२६'
+                : currentLang === 'ur'
+                ? '١٢ دسمبر ٢٠٢٦'
+                : weddingDate}
             </span>
             <span className="font-['Cormorant_Garamond',serif] text-sm text-[#4E5C46] font-medium mt-0.5">
-              {isArabic ? 'الاثنين' : weddingDay}
+              {currentLang === 'hi'
+                ? 'शनिवार'
+                : currentLang === 'hinglish'
+                ? 'Shaniwar'
+                : currentLang === 'ur'
+                ? 'ہفتہ'
+                : weddingDay}
             </span>
             <span className="font-['Cinzel',serif] text-[11px] tracking-wider text-[#685A42] font-semibold mt-0.5">
-              {isArabic ? '١٠:٠٠ صباحاً' : weddingTime}
+              {currentLang === 'hi'
+                ? 'प्रातः १०:०० बजे'
+                : currentLang === 'hinglish'
+                ? 'Subah 10:00 Baje'
+                : currentLang === 'ur'
+                ? 'صبح ١٠:٠٠ بجے'
+                : weddingTime}
             </span>
           </div>
         </div>
@@ -379,12 +417,28 @@ END:VCALENDAR`;
           {calendarSaved ? (
             <>
               <Check className="w-3.5 h-3.5 text-emerald-300" />
-              <span>{isArabic ? 'تم الحفظ في التقويم' : 'SAVED TO CALENDAR'}</span>
+              <span>
+                {currentLang === 'hi'
+                  ? 'कैलेंडर में सेव हो गया'
+                  : currentLang === 'hinglish'
+                  ? 'Calendar Mein Save Ho Gaya'
+                  : currentLang === 'ur'
+                  ? 'کیلنڈر میں محفوظ ہو گیا'
+                  : 'SAVED TO CALENDAR'}
+              </span>
             </>
           ) : (
             <>
               <Calendar className="w-3.5 h-3.5 text-[#E6D197] group-hover:scale-110 transition-transform" />
-              <span>{isArabic ? 'احفظ التاريخ في التقويم' : 'SAVE THE DATE'}</span>
+              <span>
+                {currentLang === 'hi'
+                  ? 'कैलेंडर में सेव करें'
+                  : currentLang === 'hinglish'
+                  ? 'SAVE THE DATE'
+                  : currentLang === 'ur'
+                  ? 'تاریخ محفوظ کریں'
+                  : 'SAVE THE DATE'}
+              </span>
             </>
           )}
         </button>
