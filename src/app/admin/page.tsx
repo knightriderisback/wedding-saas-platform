@@ -1066,7 +1066,7 @@ export default function SuperAdminPage() {
                     required
                     value={partner1}
                     onChange={(e) => handlePartnerChange(e.target.value, partner2)}
-                    placeholder="e.g. Rohit Sharma"
+                    placeholder="e.g. Gourao Verma"
                     className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] focus:outline-none focus:border-[#AA820A]"
                   />
                 </div>
@@ -1079,7 +1079,7 @@ export default function SuperAdminPage() {
                     required
                     value={partner2}
                     onChange={(e) => handlePartnerChange(partner1, e.target.value)}
-                    placeholder="e.g. Priya Mehra"
+                    placeholder="e.g. Riya Sen"
                     className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] focus:outline-none focus:border-[#AA820A]"
                   />
                 </div>

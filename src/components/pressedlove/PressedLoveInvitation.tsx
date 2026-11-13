@@ -22,7 +22,7 @@ import { GuestRsvpForm } from '@/components/guest/GuestRsvpForm';
 import { EstateBlueprintExplorer } from '@/components/guest/EstateBlueprintExplorer';
 import { BotanicalHerbariumPicker } from '@/components/guest/BotanicalHerbariumPicker';
 import { RivaBoatSchedule } from '@/components/guest/RivaBoatSchedule';
-import { StoryMilestone } from '@/types/wedding';
+import { StoryMilestone, WeddingProject } from '@/types/wedding';
 import {
   Calendar,
   Clock,
@@ -53,6 +53,7 @@ import { INVITATION_TRANSLATIONS, InvitationLanguage } from '@/lib/invitationI18
 
 interface PressedLoveInvitationProps {
   initialTemplate: PressedLoveTemplate;
+  project?: WeddingProject | null;
   guestName?: string;
   autoOpen?: boolean;
   showCategorySwitcher?: boolean;
@@ -73,7 +74,7 @@ const defaultStoryMilestones: StoryMilestone[] = [
     year: '2023',
     title: 'A Spontaneous Trip to Udaipur',
     description:
-      'Floating on Lake Pichola during twilight, Rohit made a quiet promise under the glowing City Palace lights.',
+      'Floating on the peaceful waters during twilight, a quiet promise of a lifetime together was made under the glowing lights.',
     imageUrl:
       'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
   },
@@ -90,12 +91,32 @@ const defaultStoryMilestones: StoryMilestone[] = [
 
 export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
   initialTemplate,
+  project,
   guestName = 'Special Guest',
   autoOpen = false,
   showCategorySwitcher = false,
 }) => {
   const router = useRouter();
   const [template, setTemplate] = useState<PressedLoveTemplate>(initialTemplate);
+
+  useEffect(() => {
+    if (initialTemplate) {
+      setTemplate(initialTemplate);
+    }
+  }, [initialTemplate]);
+
+  // Dynamic Client Data Binding (Guarantees client names like Gourao are ALWAYS used!)
+  const effectivePartner1 = project?.partner1 || template.couple.partner1;
+  const effectivePartner2 = project?.partner2 || template.couple.partner2;
+  const effectiveFormalTitle =
+    project?.formalTitle ||
+    template.couple.formalTitle ||
+    `The Wedding Celebrations of ${effectivePartner1} & ${effectivePartner2}`;
+  const effectiveVenue = project?.venue?.name || template.location.venueName;
+  const effectiveCity = project?.venue?.city || template.location.city;
+  const effectiveMilestones = project?.story && project.story.length > 0 ? project.story : defaultStoryMilestones;
+  const effectiveAccountHolder = project ? `${effectivePartner1} & ${effectivePartner2}` : template.gifts.accountHolder;
+
   const [isOpened, setIsOpened] = useState(autoOpen);
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
   const [copiedIban, setCopiedIban] = useState(false);
@@ -220,13 +241,13 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
   };
 
   const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-    template.couple.formalTitle
+    effectiveFormalTitle
   )}&dates=${template.ceremony.date.replace(/-/g, '')}T${template.ceremony.time.replace(':', '')}00Z/${template.ceremony.date.replace(
     /-/g,
     ''
   )}T235900Z&details=${encodeURIComponent(
-    `Wedding celebration of ${template.couple.partner1} & ${template.couple.partner2} at ${template.location.venueName}.`
-  )}&location=${encodeURIComponent(template.location.venueName + ', ' + template.location.address)}`;
+    `Wedding celebration of ${effectivePartner1} & ${effectivePartner2} at ${effectiveVenue}.`
+  )}&location=${encodeURIComponent(effectiveVenue + ', ' + template.location.address)}`;
 
   return (
     <div
@@ -244,13 +265,17 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
       {/* 3D ROYAL GATEFOLD BOXED ENVELOPE WITH WAX SEAL */}
       <GatefoldEnvelope
         guestName={guestName}
-        partner1={template.couple.partner1}
-        partner2={template.couple.partner2}
-        venueCity={template.location.city + ', ' + template.location.country}
+        partner1={effectivePartner1}
+        partner2={effectivePartner2}
+        venueCity={effectiveCity + ', ' + template.location.country}
         isOpen={isOpened}
         themeStyle={template.id}
         waxColor={template.envelope?.waxColor || '#9B1C2E'}
-        waxMonogram={template.envelope?.waxMonogram || template.couple.initials}
+        waxMonogram={
+          project
+            ? `${effectivePartner1.charAt(0) || 'G'} & ${effectivePartner2.charAt(0) || 'B'}`
+            : (template.envelope?.waxMonogram || template.couple.initials)
+        }
         introVideo={template.assets.introVideo}
         introVideoPoster={template.assets.introVideoPoster}
         onOpened={() => {
@@ -398,9 +423,9 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               <span className="absolute -top-3 left-1/4 text-sm glitter-sparkle text-[#D4AF37]">✦</span>
               <span className="absolute -bottom-2 right-1/4 text-sm glitter-sparkle-delayed text-[#D4AF37]">✦</span>
               <h1 className="font-pinyon text-6xl sm:text-8xl md:text-9xl text-gold-shimmer leading-none drop-shadow-sm">
-                {template.couple.partner1} <br />
+                {effectivePartner1} <br />
                 <span className="text-4xl sm:text-6xl italic font-serif text-[#7A1423]">&</span>{' '}
-                {template.couple.partner2}
+                {effectivePartner2}
               </h1>
             </div>
 
@@ -408,10 +433,10 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
             <div className="pt-3 flex items-center justify-center gap-2 text-base sm:text-lg font-serif text-[#544230]">
               <MapPin className="w-4 h-4 text-[#AA820A]" />
               <span className="font-serif font-bold text-[#3B2219]">
-                {template.location.venueName}
+                {effectiveVenue}
               </span>
               <span>•</span>
-              <span className="font-serif">{template.location.city}</span>
+              <span className="font-serif">{effectiveCity}</span>
             </div>
 
             {/* Personalized Guest Inscription on Paper */}
@@ -624,7 +649,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                   : 'भाग्य द्वारा रचित प्रत्येक सुंदर अध्याय, आपके शुभाशीष से परिपूर्ण'}
               </p>
             </div>
-            <MilestoneSlider milestones={defaultStoryMilestones} language={language} />
+            <MilestoneSlider milestones={effectiveMilestones} language={language} />
           </section>
 
           {/* COUPLE TRIVIA CHALLENGE */}
@@ -638,11 +663,11 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               </h3>
               <p className="font-cormorant italic text-base sm:text-lg text-[#7D5F04]">
                 {language === 'en'
-                  ? `Test how well you know ${template.couple.partner1} & ${template.couple.partner2} before the party!`
-                  : `विवाह से पूर्व देखें आप ${template.couple.partner1} और ${template.couple.partner2} को कितना जानते हैं!`}
+                  ? `Test how well you know ${effectivePartner1} & ${effectivePartner2} before the party!`
+                  : `विवाह से पूर्व देखें आप ${effectivePartner1} और ${effectivePartner2} को कितना जानते हैं!`}
               </p>
             </div>
-            <CoupleTrivia coupleNames={`${template.couple.partner1} & ${template.couple.partner2}`} language={language} />
+            <CoupleTrivia coupleNames={`${effectivePartner1} & ${effectivePartner2}`} language={language} />
           </section>
 
           {/* SANGEET DJ DANCE FLOOR SONG REQUEST BOX */}
@@ -821,7 +846,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               </div>
 
               <p className="text-xs text-[#7D5F04] font-serif italic">
-                {t.shagunAccountHolderLabel}: {template.gifts.accountHolder}
+                {t.shagunAccountHolderLabel}: {effectiveAccountHolder}
               </p>
             </div>
           </section>
@@ -840,8 +865,10 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               </p>
             </div>
             <GuestRsvpForm
-              weddingSlug={template.slug}
+              weddingSlug={project?.slug || template.slug}
               defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
+              coupleNames={`${effectivePartner1} & ${effectivePartner2}`}
+              venueName={effectiveVenue}
               language={language}
             />
           </section>
@@ -852,7 +879,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               {t.footerShloka}
             </p>
             <p className="font-pinyon text-3xl sm:text-5xl text-[#2C2218] font-bold">
-              {template.couple.partner1} & {template.couple.partner2}
+              {effectivePartner1} & {effectivePartner2}
             </p>
             <p className="font-serif text-sm text-[#7D5F04]">
               {t.footerFamilies}
@@ -1005,8 +1032,8 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
                   </div>
                   <div className="text-xs space-y-1">
                     <p className="font-serif font-bold text-base text-[#2C2218]">{rsvpName}</p>
-                    <p className="text-[#544230] font-serif">{template.couple.formalTitle}</p>
-                    <p className="text-[#544230] font-serif">{template.location.venueName} • {template.ceremony.displayDate}</p>
+                    <p className="text-[#544230] font-serif">{effectiveFormalTitle}</p>
+                    <p className="text-[#544230] font-serif">{effectiveVenue} • {template.ceremony.displayDate}</p>
                   </div>
                 </div>
 

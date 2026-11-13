@@ -9,6 +9,8 @@ import { INVITATION_TRANSLATIONS, InvitationLanguage } from '@/lib/invitationI18
 interface GuestRsvpFormProps {
   weddingSlug: string;
   defaultGuestName?: string;
+  coupleNames?: string;
+  venueName?: string;
   onSuccess?: () => void;
   language?: InvitationLanguage;
 }
@@ -16,6 +18,8 @@ interface GuestRsvpFormProps {
 export const GuestRsvpForm: React.FC<GuestRsvpFormProps> = ({
   weddingSlug,
   defaultGuestName = '',
+  coupleNames = 'The Royal Wedding Celebrations',
+  venueName = 'The Royal Palace',
   onSuccess,
   language = 'en',
 }) => {
@@ -102,10 +106,10 @@ export const GuestRsvpForm: React.FC<GuestRsvpFormProps> = ({
               <div className="flex justify-between items-start border-b border-[#D4AF37]/40 pb-2">
                 <div>
                   <span className="font-serif text-xs uppercase tracking-wider text-[#7D5F04] font-bold block">
-                    {language === 'en' ? 'The Oberoi Udaivilas • Royal Pass' : 'द ओबेरॉय उदयविलास • शाही प्रवेश पत्र'}
+                    {venueName} • {language === 'en' ? 'Royal Pass' : 'शाही प्रवेश पत्र'}
                   </span>
                   <h5 className="font-serif text-base font-bold text-[#2C2218]">
-                    Rohit Sharma & Priya Mehra
+                    {coupleNames}
                   </h5>
                 </div>
                 <span className="px-2.5 py-0.5 text-xs font-serif font-bold bg-[#7A1423] text-white">
@@ -155,7 +159,7 @@ export const GuestRsvpForm: React.FC<GuestRsvpFormProps> = ({
           ) : (
             <p className="font-cormorant italic text-base text-[#544230] leading-relaxed">
               {language === 'en'
-                ? 'Thank you for letting us know. Your warm blessings will accompany Rohit and Priya as they take their sacred vows.'
+                ? `Thank you for letting us know. Your warm blessings will accompany ${coupleNames} as they take their sacred vows.`
                 : 'आपकी शुभकामनाएँ सप्रेम स्वीकार की गईं। वर-वधू के मंगल भविष्य हेतु आपके शुभाशीष के लिए हार्दिक धन्यवाद।'}
             </p>
           )}

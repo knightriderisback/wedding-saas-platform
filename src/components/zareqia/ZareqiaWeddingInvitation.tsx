@@ -23,13 +23,16 @@ import { ZareqiaGatefoldEnvelope } from './ZareqiaGatefoldEnvelope';
 import { ZareqiaHeartScratch } from './ZareqiaHeartScratch';
 import { ZareqiaPhotoCarousel } from './ZareqiaPhotoCarousel';
 import { royalSitarAudio } from '@/lib/sitarSynth';
+import { WeddingProject } from '@/types/wedding';
 
 interface ZareqiaWeddingInvitationProps {
+  project?: WeddingProject | null;
   guestName?: string;
   autoOpen?: boolean;
 }
 
 export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> = ({
+  project,
   guestName = 'Special Guest',
   autoOpen = false,
 }) => {
@@ -38,6 +41,10 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(autoOpen);
   const [heroTextVisible, setHeroTextVisible] = useState(autoOpen);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Dynamic Client Data Binding
+  const effectiveGroom = project?.partner1 || (isArabic ? 'زين' : 'Zayn');
+  const effectiveBride = project?.partner2 || (isArabic ? 'نورا' : 'Nora');
 
   // RSVP state
   const [rsvpName, setRsvpName] = useState(guestName !== 'Special Guest' ? guestName : '');
@@ -56,9 +63,10 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
     seconds: 55,
   });
 
-  // Calculate live countdown to Nov 30, 2026
+  // Calculate live countdown to wedding date
   useEffect(() => {
-    const targetDate = new Date('2026-11-30T10:00:00Z').getTime();
+    const weddingDateStr = project?.weddingDate || '2026-11-30T10:00:00Z';
+    const targetDate = new Date(weddingDateStr).getTime();
 
     const updateCountdown = () => {
       const now = new Date().getTime();
@@ -279,16 +287,15 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
                 <div className="w-12 h-[1px] bg-[#B59A57]" />
               </div>
 
-              {/* GROOM: Zayn */}
+              {/* GROOM */}
               <div className="flex flex-col items-center my-1">
                 <h1 className="font-['Alex_Brush','Pinyon_Script',cursive] text-5xl md:text-6xl text-[#242A20] font-normal tracking-wide drop-shadow-sm">
-                  {isArabic ? 'زين' : 'Zayn'}
+                  {effectiveGroom}
                 </h1>
                 <div className="mt-1 flex flex-col items-center text-xs md:text-sm text-[#4E5B45] font-['Cormorant_Garamond',serif] leading-tight">
-                  <span>{isArabic ? 'ابن السيد والسيدة مالك' : 'Son of Mr. & Mrs. Malik'}</span>
-                  <span className="tracking-widest text-[11px] uppercase opacity-90">B.E., M.S.</span>
+                  <span>{isArabic ? 'بصد خلوص و احترام مدعو ہیں' : 'Together With Their Families'}</span>
                   <span className="italic text-[#6B5A3E] text-xs">
-                    {isArabic ? 'عالم بيانات' : 'Data Scientist'}
+                    {isArabic ? 'اس پرمسرت نکاح کی تقریب میں' : 'Request The Pleasure Of Your Company'}
                   </span>
                 </div>
               </div>
@@ -298,16 +305,15 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
                 &
               </div>
 
-              {/* BRIDE: Nora */}
+              {/* BRIDE */}
               <div className="flex flex-col items-center my-1">
                 <h1 className="font-['Alex_Brush','Pinyon_Script',cursive] text-5xl md:text-6xl text-[#242A20] font-normal tracking-wide drop-shadow-sm">
-                  {isArabic ? 'نورا' : 'Nora'}
+                  {effectiveBride}
                 </h1>
                 <div className="mt-1 flex flex-col items-center text-xs md:text-sm text-[#4E5B45] font-['Cormorant_Garamond',serif] leading-tight">
-                  <span>{isArabic ? 'ابنة السيد والسيدة ناصر' : 'Daughter of Mr. & Mrs. Nasser'}</span>
-                  <span className="tracking-widest text-[11px] uppercase opacity-90">MBBS, M.D.</span>
+                  <span>{isArabic ? 'نیک تمناؤں اور دعاؤں کے ساتھ' : 'To Celebrate The Sacred Union'}</span>
                   <span className="italic text-[#6B5A3E] text-xs">
-                    {isArabic ? 'طبيبة أطفال' : 'Pediatrician'}
+                    {isArabic ? 'آپ کی تشریف آوری کے منتظر' : 'And Joyful New Beginning'}
                   </span>
                 </div>
               </div>
@@ -323,7 +329,7 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
               ======================================================== */}
           <section className="relative z-10 py-10 px-6">
             <ZareqiaHeartScratch
-              coupleNames={isArabic ? 'زين ونورا' : 'Zayn & Nora'}
+              coupleNames={isArabic ? `${effectiveGroom} و ${effectiveBride}` : `${effectiveGroom} & ${effectiveBride}`}
               weddingDate={isArabic ? '٣٠ نوفمبر ٢٠٢٦' : 'November 30, 2026'}
               weddingDay={isArabic ? 'الاثنين' : 'Monday'}
               weddingTime={isArabic ? '١٠:٠٠ صباحاً' : '10:00 AM'}
@@ -458,10 +464,10 @@ export const ZareqiaWeddingInvitation: React.FC<ZareqiaWeddingInvitationProps> =
             </div>
 
             <p className="font-['Playfair_Display',serif] text-sm text-[#2E3C29] font-medium">
-              Grand Palace Hall
+              {project?.venue?.name || 'Grand Palace Hall'}
             </p>
             <p className="text-xs text-[#6F604D] mb-5">
-              City centre, London
+              {project?.venue?.city || (isArabic ? 'لندن' : 'City centre, London')}
             </p>
 
             {/* Map Preview Card */}

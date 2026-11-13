@@ -14,7 +14,7 @@ interface ZareqiaHeartScratchProps {
 }
 
 export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
-  coupleNames = 'Zayn & Nora',
+  coupleNames = 'Groom & Bride',
   weddingDate = 'November 30, 2026',
   weddingDay = 'Monday',
   weddingTime = '10:00 AM',
@@ -243,9 +243,9 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
     setTimeout(() => setCalendarSaved(false), 3000);
 
     const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-      'Zayn & Nora Wedding Ceremony'
+      `${coupleNames} Wedding Ceremony`
     )}&dates=20261130T100000Z/20261130T150000Z&details=${encodeURIComponent(
-      'You are cordially invited to celebrate the wedding ceremony of Zayn & Nora at Grand Palace Hall, London.'
+      `You are cordially invited to celebrate the wedding ceremony of ${coupleNames} at Grand Palace Hall, London.`
     )}&location=${encodeURIComponent('Grand Palace Hall, City centre, London')}`;
 
     window.open(gCalUrl, '_blank');
@@ -254,7 +254,7 @@ export const ZareqiaHeartScratch: React.FC<ZareqiaHeartScratchProps> = ({
 VERSION:2.0
 PRODID:-//Zareqia Luxury Wedding//EN
 BEGIN:VEVENT
-SUMMARY:Wedding of Zayn & Nora
+SUMMARY:Wedding of ${coupleNames}
 DESCRIPTION:We warmly invite you to celebrate our wedding ceremony.
 LOCATION:Grand Palace Hall, City centre, London
 DTSTART:20261130T100000Z
@@ -266,7 +266,7 @@ END:VCALENDAR`;
     const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
-    link.setAttribute('download', 'Zayn-Nora-Wedding-2026.ics');
+    link.setAttribute('download', `${coupleNames.replace(/[^a-zA-Z0-9]/g, '-')}-Wedding.ics`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

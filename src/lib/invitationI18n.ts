@@ -220,7 +220,7 @@ export const INVITATION_TRANSLATIONS: Record<InvitationLanguage, InvitationTrans
     djPhoneLabel: 'WhatsApp / Phone (Optional)',
     djPhonePlaceholder: '+91 98765 43210',
     djNotesLabel: 'Special Shoutout or Dedication (Optional)',
-    djNotesPlaceholder: 'e.g. For Rohit & Priya’s epic group dance battle!',
+    djNotesPlaceholder: 'e.g. For the couple’s epic dance face-off!',
     djSubmitButton: 'Send Song Request To DJ',
     djSubmittingButton: 'Transmitting To Console...',
     djSuccessTitle: 'Song Request Recorded!',
@@ -237,7 +237,7 @@ export const INVITATION_TRANSLATIONS: Record<InvitationLanguage, InvitationTrans
     voicePlaying: 'Playing Blessing...',
     voicePlayPreview: 'Listen To Recording',
     voiceReRecord: 'Record Again',
-    voiceNamePlaceholder: 'Your Name (e.g. Sharma Uncle & Family)',
+    voiceNamePlaceholder: 'Your Name (e.g. Uncle & Family)',
     voiceSubmitButton: 'Save Voice Blessing For Couple',
     voiceSubmittingButton: 'Inscribing Audio Blessing...',
     voiceSuccessTitle: 'Voice Blessing Preserved!',
@@ -316,7 +316,7 @@ export const INVITATION_TRANSLATIONS: Record<InvitationLanguage, InvitationTrans
 
     // Footer
     footerShloka: '॥ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः । सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत् ॥',
-    footerFamilies: 'Forever Begins Under The Sacred Stars • With Warm Love From Sharma & Mehra Families',
+    footerFamilies: 'Forever Begins Under The Sacred Stars • With Warm Love From Both Families',
   },
 
   hi: {
@@ -398,7 +398,7 @@ export const INVITATION_TRANSLATIONS: Record<InvitationLanguage, InvitationTrans
     djPhoneLabel: 'व्हाट्सएप / फोन नंबर (ऐच्छिक)',
     djPhonePlaceholder: '+91 98765 43210',
     djNotesLabel: 'विशेष समर्पण या संदेश (ऐच्छिक)',
-    djNotesPlaceholder: 'जैसे: रोहित और प्रिया के डांस कॉम्पिटिशन के लिए!',
+    djNotesPlaceholder: 'जैसे: नवदंपति के संगीतमय डांस मुकाबले के लिए!',
     djSubmitButton: 'डीजे को अपनी फरमाइश भेजें',
     djSubmittingButton: 'फरमाइश भेजी जा रही है...',
     djSuccessTitle: 'आपकी फरमाइश दर्ज हो गई!',
@@ -415,7 +415,7 @@ export const INVITATION_TRANSLATIONS: Record<InvitationLanguage, InvitationTrans
     voicePlaying: 'आशीर्वाद बज रहा है...',
     voicePlayPreview: 'रिकॉर्डिंग सुनें',
     voiceReRecord: 'पुनः रिकॉर्ड करें',
-    voiceNamePlaceholder: 'आपका नाम (जैसे: शर्मा अंकल एवं परिवार)',
+    voiceNamePlaceholder: 'आपका नाम (जैसे: चाचाजी एवं परिवार)',
     voiceSubmitButton: 'आशीर्वाद सुरक्षित करें',
     voiceSubmittingButton: 'सुरक्षित किया जा रहा है...',
     voiceSuccessTitle: 'मंगल आशीर्वाद सहेज लिया गया!',
@@ -494,6 +494,6 @@ export const INVITATION_TRANSLATIONS: Record<InvitationLanguage, InvitationTrans
 
     // Footer
     footerShloka: '॥ सर्वे भवन्तु सुखिनः सर्वे सन्तु निरामयाः । सर्वे भद्राणि पश्यन्तु मा कश्चिद्दुःखभाग्भवेत् ॥',
-    footerFamilies: 'ईश्वर की कृपा और आपके शुभाशीष से • शर्मा एवं मेहरा परिवार',
+    footerFamilies: 'ईश्वर की कृपा और आपके शुभाशीष से • दोनों परिवारों की ओर से सप्रेम सादर',
   },
 };

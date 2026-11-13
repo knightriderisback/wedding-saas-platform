@@ -385,11 +385,11 @@ function ClientPortalContent() {
       highlightText: 'text-[#1E3F66]',
     },
     suites: {
-      title: '13 Luxury Design Suites Switcher',
+      title: 'Luxury Design Suites Switcher',
       shortTitle: 'Design Suites',
       icon: Palette,
       subtitle: 'Select any PressedLove or Royal Palace template for your wedding microsite',
-      badge: '13 Suites',
+      badge: `${TEMPLATE_LIST.length} Suites`,
       acrylicClass: 'acrylic-azure card-3d-elevated',
       border: 'border-[#6B9AC4]/40',
       shadowGlow: 'shadow-[0_12px_32px_rgba(30,63,102,0.1)]',
@@ -979,12 +979,12 @@ function ClientPortalContent() {
                     Choose Your Active Invitation Suite
                   </h3>
                   <p className="text-[11px] text-[#544230]">
-                    Switch instantly between all 13 luxury templates without losing any guest RSVPs or DJ requests
+                    Switch instantly between all {TEMPLATE_LIST.length} luxury design suites without losing any guest RSVPs or DJ requests
                   </p>
                 </div>
               </div>
               <span className="font-mono text-xs font-bold bg-white/90 text-[#1E3F66] px-3 py-1 rounded-xl border border-[#6B9AC4]/30 shadow-2xs shrink-0">
-                13 Couture Suites
+                {TEMPLATE_LIST.length} Couture Suites
               </span>
             </div>
 

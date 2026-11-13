@@ -1,19 +1,23 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { WeddingProject } from '@/types/wedding';
-import { getWeddingProject } from '@/lib/firebase';
+import { getWeddingProject, parseProjectFromSlug } from '@/lib/firebase';
 import { defaultWeddingProject } from '@/lib/mockData';
-import { PRESSED_LOVE_TEMPLATES } from '@/lib/pressedLoveTemplates';
+import { PRESSED_LOVE_TEMPLATES, TEMPLATE_LIST } from '@/lib/pressedLoveTemplates';
+import { SUITE_CATEGORY_METAS } from '@/lib/suiteCategoryMetas';
 import { PressedLoveInvitation } from '@/components/pressedlove/PressedLoveInvitation';
 import { ZareqiaWeddingInvitation } from '@/components/zareqia/ZareqiaWeddingInvitation';
 import { RoyalHeritageWeddingInvitation } from '@/components/royal-heritage/RoyalHeritageWeddingInvitation';
+import { UniversalFloatingSuiteSwitcher } from '@/components/common/UniversalFloatingSuiteSwitcher';
 import { Sparkles } from 'lucide-react';
 
 function LuxuryGuestMicrositeContent() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const slug = (params?.weddingSlug as string) || 'rohit-weds-priya';
   const guestQuery = searchParams.get('guest') || 'Special Guest';
   const requestedTemplate = searchParams.get('template');
@@ -21,16 +25,54 @@ function LuxuryGuestMicrositeContent() {
 
   const [project, setProject] = useState<WeddingProject | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTemplate, setActiveTemplate] = useState<string>('royal-heritage');
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       const data = await getWeddingProject(slug);
-      setProject(data || defaultWeddingProject);
+      const effective = data || parseProjectFromSlug(slug);
+      setProject(effective);
+
+      // Determine initial active template
+      let suiteFromSlug: string | null = null;
+      if (slug === 'wedding-invitation-royal-heritage') {
+        suiteFromSlug = 'royal-heritage';
+      } else if (slug === 'wedding-invitation-zareqia-emerald') {
+        suiteFromSlug = 'zareqia-emerald';
+      } else if (slug.startsWith('wedding-invitation-')) {
+        const potential = slug.replace('wedding-invitation-', '');
+        if (PRESSED_LOVE_TEMPLATES[potential] || potential === 'royal-heritage' || potential === 'zareqia-emerald') {
+          suiteFromSlug = potential;
+        }
+      }
+
+      const resolved =
+        requestedTemplate ||
+        suiteFromSlug ||
+        effective.suite ||
+        effective.template ||
+        'royal-heritage';
+
+      setActiveTemplate(resolved);
       setLoading(false);
     };
     loadData();
-  }, [slug]);
+  }, [slug, requestedTemplate]);
+
+  // Keep activeTemplate in sync if requestedTemplate query param changes
+  useEffect(() => {
+    if (requestedTemplate) {
+      setActiveTemplate(requestedTemplate);
+    }
+  }, [requestedTemplate]);
+
+  const handleSwitchTemplate = (templateId: string) => {
+    setActiveTemplate(templateId);
+    const url = new URL(window.location.href);
+    url.searchParams.set('template', templateId);
+    window.history.pushState({}, '', url.toString());
+  };
 
   if (loading && !project) {
     return (
@@ -41,51 +83,59 @@ function LuxuryGuestMicrositeContent() {
     );
   }
 
-  const effectiveProject = project || defaultWeddingProject;
+  const effectiveProject = project || parseProjectFromSlug(slug);
 
-  // Determine active template key
-  const templateKey =
-    requestedTemplate ||
-    effectiveProject.suite ||
-    effectiveProject.template ||
-    (slug === 'wedding-invitation-royal-heritage'
-      ? 'royal-heritage'
-      : slug === 'wedding-invitation-zareqia-emerald'
-      ? 'zareqia-emerald'
-      : slug.startsWith('wedding-invitation-')
-      ? slug.replace('wedding-invitation-', '')
-      : 'royal-heritage');
+  // Render the selected template
+  let templateView = null;
 
-  // 1. Royal Heritage 3D Scrolly Suite (Default & Flagship)
-  if (templateKey === 'royal-heritage' || slug === 'wedding-invitation-royal-heritage') {
-    return (
+  if (activeTemplate === 'royal-heritage') {
+    templateView = (
       <RoyalHeritageWeddingInvitation
+        key="royal-heritage"
         project={effectiveProject}
         guestName={guestQuery}
         autoOpen={autoOpen}
         weddingSlug={slug}
       />
     );
-  }
+  } else if (activeTemplate === 'zareqia-emerald') {
+    templateView = (
+      <ZareqiaWeddingInvitation
+        key="zareqia-emerald"
+        project={effectiveProject}
+        guestName={guestQuery}
+        autoOpen={autoOpen}
+      />
+    );
+  } else {
+    const selectedTemplate =
+      PRESSED_LOVE_TEMPLATES[activeTemplate] ||
+      PRESSED_LOVE_TEMPLATES['the-palace'] ||
+      PRESSED_LOVE_TEMPLATES['the-venue'];
 
-  // 2. Zareqia Emerald Suite
-  if (templateKey === 'zareqia-emerald' || slug === 'wedding-invitation-zareqia-emerald') {
-    return <ZareqiaWeddingInvitation guestName={guestQuery} autoOpen={autoOpen} />;
+    templateView = (
+      <PressedLoveInvitation
+        key={activeTemplate}
+        project={effectiveProject}
+        initialTemplate={selectedTemplate}
+        guestName={guestQuery}
+        autoOpen={autoOpen}
+        showCategorySwitcher={false}
+      />
+    );
   }
-
-  // 3. Other Pressed Love Suites
-  const selectedTemplate =
-    PRESSED_LOVE_TEMPLATES[templateKey] ||
-    PRESSED_LOVE_TEMPLATES['the-palace'] ||
-    PRESSED_LOVE_TEMPLATES['the-venue'];
 
   return (
-    <PressedLoveInvitation
-      initialTemplate={selectedTemplate}
-      guestName={guestQuery}
-      autoOpen={autoOpen}
-      showCategorySwitcher={false}
-    />
+    <div className="relative min-h-screen">
+      {templateView}
+
+      {/* Floating Universal Template Switcher Bar */}
+      <UniversalFloatingSuiteSwitcher
+        activeTemplate={activeTemplate}
+        onSwitchTemplate={handleSwitchTemplate}
+        currentSlug={slug}
+      />
+    </div>
   );
 }
 

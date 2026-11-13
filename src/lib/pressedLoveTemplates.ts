@@ -1005,7 +1005,7 @@ export const PRESSED_LOVE_TEMPLATES: Record<string, PressedLoveTemplate> = {
       message:
         'Your presence and blessings as we embark on this sacred journey together is the only gift we seek (No boxed gifts requested).',
       bankName: 'HDFC Private Banking Mumbai',
-      accountHolder: 'Rohit Sharma & Priya Kapoor',
+      accountHolder: 'Palace Royal Wedding Registry',
       iban: 'IN55 HDFC 0001 2345 6789 01',
       bicSwift: 'HDFCINBBXXX',
     },
@@ -1129,10 +1129,10 @@ export const PRESSED_LOVE_TEMPLATES: Record<string, PressedLoveTemplate> = {
     tagline: 'Interactive scroll-scrubbed Indian royal couple animation, gatefold unboxing, 3D glitter scratch heart, and royal palace itinerary.',
     badge: 'New 3D Cinematic Motion',
     couple: {
-      partner1: 'Aryan',
-      partner2: 'Eva',
-      formalTitle: "We're getting married: Aryan & Eva",
-      initials: 'A & E',
+      partner1: 'Gaurav',
+      partner2: 'Riya',
+      formalTitle: "The Royal Wedding Celebrations of Gaurav & Riya",
+      initials: 'G & R',
     },
     ceremony: {
       date: '2026-12-12',
@@ -1215,13 +1215,13 @@ export const PRESSED_LOVE_TEMPLATES: Record<string, PressedLoveTemplate> = {
     gifts: {
       message: 'Your love, blessings, and presence are the greatest gifts we could ever ask for.',
       bankName: 'HDFC Private Banking',
-      accountHolder: 'Aryan Sharma & Eva Mehta',
+      accountHolder: 'Royal Heritage Wedding Registry',
       iban: 'HDFC0001234',
       bicSwift: 'HDFCINBB',
     },
     envelope: {
       waxColor: '#273822',
-      waxMonogram: 'A&E',
+      waxMonogram: 'G&R',
       bgColor: '#1A2218',
     },
   },

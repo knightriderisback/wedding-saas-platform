@@ -182,8 +182,8 @@ export const CoupleTrivia: React.FC<CoupleTriviaProps> = ({
                   ? 'Outstanding! You know the couple inside out. Special family blessing seat reserved for you!'
                   : 'अद्भुत! आप वर-वधू को अत्यंत गहराई से जानते हैं। आपके लिए विवाह में विशेष स्थान आरक्षित है!')
               : (language === 'en'
-                  ? 'Splendid attempt! Get ready to dance and celebrate with Rohit & Priya!'
-                  : 'शानदार प्रयास! विवाह समारोह में खूब नाचने और उत्सव मनाने हेतु तैयार रहें!')}
+                  ? `Splendid attempt! Get ready to dance and celebrate with ${coupleNames || 'the couple'}!`
+                  : `शानदार प्रयास! ${coupleNames ? `${coupleNames} के ` : ''}विवाह समारोह में खूब नाचने और उत्सव मनाने हेतु तैयार रहें!`)}
           </p>
           <button
             onClick={() => {
