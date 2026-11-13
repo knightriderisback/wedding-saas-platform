@@ -232,12 +232,12 @@ function ClientPortalContent() {
   };
 
   // Switch Active Template Suite
-  const handleSwitchSuite = async (suiteSlug: string) => {
+  const handleSwitchSuite = async (suiteId: string) => {
     if (!project) return;
-    const updated = { ...project, slug: suiteSlug };
+    const updated: WeddingProject = { ...project, suite: suiteId, template: suiteId };
     await saveWeddingProject(updated);
     setProject(updated);
-    showToast(`Activated ${suiteSlug} as your primary wedding suite!`);
+    showToast(`Activated ${suiteId} as your primary wedding suite!`);
   };
 
   // Bottom Navigation Items (matching Rajhara Express dock)
@@ -990,7 +990,9 @@ function ClientPortalContent() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {TEMPLATE_LIST.map((suite) => {
-                const isActive = project.slug === suite.slug;
+                const isActive = (project.suite || project.template)
+                  ? (project.suite === suite.id || project.template === suite.id)
+                  : project.slug === suite.slug;
                 return (
                   <div
                     key={suite.id}
@@ -1015,14 +1017,14 @@ function ClientPortalContent() {
 
                     <div className="pt-3 border-t border-[#E8DFC8]/60 flex items-center justify-between">
                       <Link
-                        href={`/wedding-invitation-${suite.id}`}
+                        href={`/${project.slug}?template=${suite.id}`}
                         target="_blank"
                         className="text-xs text-[#AA820A] hover:underline font-bold font-cinzel"
                       >
                         Preview Live
                       </Link>
                       <button
-                        onClick={() => handleSwitchSuite(suite.slug)}
+                        onClick={() => handleSwitchSuite(suite.id)}
                         disabled={isActive}
                         className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all ${
                           isActive

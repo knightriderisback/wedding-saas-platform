@@ -113,6 +113,8 @@ export default function SuperAdminPage() {
       clientAccessToken: token,
       createdAt: new Date().toISOString().split('T')[0],
       status: 'active',
+      suite: selectedSuite,
+      template: selectedSuite,
       guests: [
         {
           id: `g-101`,

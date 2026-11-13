@@ -98,7 +98,7 @@ export const DynamicTextEffects: React.FC<DynamicTextEffectsProps> = ({
         ref={elementRef}
         className={`select-none ${className}`}
         style={{
-          textShadow: '0 1px 3px rgba(255,255,255,0.95), 0 2px 6px rgba(0,0,0,0.45)',
+          textShadow: '0 2px 4px rgba(255,255,255,0.95), 0 3px 12px rgba(0,0,0,0.65)',
           ...style,
         }}
       >
@@ -119,7 +119,7 @@ export const DynamicTextEffects: React.FC<DynamicTextEffectsProps> = ({
       className={`select-none ${className}`}
       style={{
         perspective: '800px',
-        textShadow: '0 1px 3px rgba(255,255,255,0.95), 0 2px 6px rgba(0,0,0,0.45)',
+        textShadow: '0 2px 4px rgba(255,255,255,0.95), 0 3px 12px rgba(0,0,0,0.65)',
         ...style,
       }}
     >

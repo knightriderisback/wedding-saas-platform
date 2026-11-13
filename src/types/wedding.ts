@@ -84,6 +84,8 @@ export interface WeddingProject {
   status: 'active' | 'draft' | 'archived';
   clientAccessToken: string;
   createdAt: string;
+  suite?: string;
+  template?: string;
 
   // Modules
   events: EventScheduleItem[];
