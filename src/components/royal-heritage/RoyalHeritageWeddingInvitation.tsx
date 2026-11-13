@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Volume2,
@@ -17,14 +16,6 @@ import {
   PartyPopper,
   Shirt,
   Calendar,
-  Check,
-  Share2,
-  Copy,
-  Heart,
-  QrCode,
-  Music,
-  HelpCircle,
-  BookOpen,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { RoyalRealisticEnvelope } from './RoyalRealisticEnvelope';
@@ -33,12 +24,8 @@ import { DynamicTextEffects } from './DynamicTextEffects';
 import { ZareqiaHeartScratch } from '../zareqia/ZareqiaHeartScratch';
 import { ZareqiaPhotoCarousel } from '../zareqia/ZareqiaPhotoCarousel';
 import { RoyalScrollyBackground } from './RoyalScrollyBackground';
-import { MilestoneSlider } from '@/components/guest/MilestoneSlider';
-import { CoupleTrivia } from '@/components/guest/CoupleTrivia';
-import { DjSongRequestBox } from '@/components/guest/DjSongRequestBox';
-import { VoiceBlessingRecorder } from '@/components/guest/VoiceBlessingRecorder';
 import { royalSitarAudio } from '@/lib/sitarSynth';
-import { WeddingProject, StoryMilestone, TriviaQuestion } from '@/types/wedding';
+import { WeddingProject } from '@/types/wedding';
 import { saveWeddingProject } from '@/lib/firebase';
 
 export type SupportedLanguage = 'en' | 'hi' | 'hinglish' | 'ur';
@@ -69,10 +56,7 @@ const TRANSLATIONS: Record<
     hours: string;
     minutes: string;
     seconds: string;
-    storyTitle: string;
-    triviaTitle: string;
     timelineTitle: string;
-    addToCalendar: string;
     events: Array<{ title: string; time: string; desc: string }>;
     venueTitle: string;
     palaceName: string;
@@ -81,8 +65,6 @@ const TRANSLATIONS: Record<
     dressCodeTitle: string;
     dressCodeValue: string;
     dressCodeDesc: string;
-    djTitle: string;
-    voiceBlessingTitle: string;
     rsvpTitle: string;
     rsvpIntro: string;
     rsvpSuccessTitle: string;
@@ -100,10 +82,6 @@ const TRANSLATIONS: Record<
     placeholderMessage: string;
     submitBtn: string;
     sending: string;
-    shareTitle: string;
-    shareWhatsApp: string;
-    copyLink: string;
-    copied: string;
     footerBlessing: string;
   }
 > = {
@@ -123,63 +101,49 @@ const TRANSLATIONS: Record<
     hours: 'HOURS',
     minutes: 'MINUTES',
     seconds: 'SECONDS',
-    storyTitle: 'Our Love Story',
-    triviaTitle: 'How Well Do You Know Us?',
     timelineTitle: 'Ceremony Itinerary',
-    addToCalendar: 'Add to Calendar',
     events: [
       {
-        title: 'Haldi & Phoolon Ki Holi',
-        time: 'Dec 11, 2026, 11:00 AM',
-        desc: 'Sunlit turmeric blessings, marigold flower showers & dhol beats.',
-      },
-      {
         title: 'Mehndi & Royal Sangeet',
-        time: 'Dec 11, 2026, 6:30 PM',
-        desc: 'An evening of musical dance face-offs, henna artistry, and festive gala.',
+        time: 'Dec 11, 2026, 6:00 PM',
+        desc: 'An evening of music, dance face-offs, and festive henna.',
       },
       {
         title: 'Shubh Vivah & Pheras',
         time: 'Dec 12, 2026, 10:00 AM',
-        desc: 'Sacred Vedic mantras under the royal mandap as two souls unite.',
+        desc: 'Sacred wedding rituals, Vedic mantras, and seven lifetimes vows.',
       },
       {
         title: 'Imperial Gala Reception',
         time: 'Dec 12, 2026, 7:30 PM',
-        desc: 'Grand royal banquet, champagne toasts, and live sitar soirée.',
+        desc: 'Grand royal banquet, toasts, and royal celebrations.',
       },
     ],
     venueTitle: 'The Royal Venue',
     palaceName: 'The Royal Palace & Gardens',
     palaceCity: 'Lake Pichola, Udaipur, Rajasthan',
     viewMap: 'View on Google Maps',
-    dressCodeTitle: 'Dress Code & Attire',
+    dressCodeTitle: 'Dress Code',
     dressCodeValue: 'Royal Traditional / Formal Festive',
-    dressCodeDesc: 'Sunlit Ochre for Haldi, Emerald Velvet for Sangeet, Regal Ivory & Gold for Wedding.',
-    djTitle: 'Request a Song for the DJ',
-    voiceBlessingTitle: 'Leave a Voice Blessing',
+    dressCodeDesc: 'Pastel florals, emerald green, and regal navy tones.',
     rsvpTitle: 'RSVP Confirmation',
     rsvpIntro:
-      'Your auspicious presence and blessings are the most precious gift for our new journey.',
+      'Your love, blessings, and auspicious presence are the greatest gifts we could ever ask for.',
     rsvpSuccessTitle: 'RSVP Received with Joy!',
-    rsvpSuccessDesc: 'We look forward to welcoming you warmly to the royal celebration.',
-    labelName: 'Your Full Name *',
+    rsvpSuccessDesc: 'We look forward to celebrating this royal celebration together.',
+    labelName: 'Your Name *',
     placeholderName: 'Enter your full name',
-    labelEmail: 'Email / WhatsApp Phone *',
+    labelEmail: 'Email Address *',
     labelAttend: 'Will you attend? *',
     optionSelect: 'Please select...',
     optionYes: 'Joyfully Accepts with Pleasure ♥',
-    optionNo: 'Regretfully Declines with Love',
+    optionNo: 'Regretfully Declines',
     labelGuests: 'Number of Guests',
     guestUnit: 'Guest(s)',
-    labelMessage: 'Heartfelt Blessing / Warm Wishes',
-    placeholderMessage: 'Inscribe your blessings for the couple...',
-    submitBtn: 'Confirm My Attendance',
-    sending: 'Recording Attendance...',
-    shareTitle: 'Share this Royal Invitation',
-    shareWhatsApp: 'Share on WhatsApp',
-    copyLink: 'Copy Invitation Link',
-    copied: 'Link Copied to Clipboard!',
+    labelMessage: 'Warm Wishes / Blessings',
+    placeholderMessage: 'Share your heartfelt blessings for the couple...',
+    submitBtn: 'Confirm RSVP',
+    sending: 'Recording...',
     footerBlessing: 'With Love & Blessings',
   },
   hi: {
@@ -198,19 +162,11 @@ const TRANSLATIONS: Record<
     hours: 'घंटे',
     minutes: 'मिनट',
     seconds: 'सेकंड',
-    storyTitle: 'हमारी प्रेम यात्रा',
-    triviaTitle: 'आप हमें कितना जानते हैं?',
     timelineTitle: 'विवाह कार्यक्रम',
-    addToCalendar: 'कैलेंडर में जोड़ें',
     events: [
       {
-        title: 'हल्दी एवं फूलों की होली',
-        time: '११ दिसंबर २०२६, प्रातः ११:०० बजे',
-        desc: 'पारंपरिक हल्दी लेपन एवं गेंदे के फूलों की वर्षा।',
-      },
-      {
         title: 'मेहंदी एवं संगीत संध्या',
-        time: '११ दिसंबर २०२६, सायं ६:३० बजे',
+        time: '११ दिसंबर २०२६, सायं ६:०० बजे',
         desc: 'संगीत, नृत्य और उल्लास भरी मेहंदी की शाम।',
       },
       {
@@ -221,7 +177,7 @@ const TRANSLATIONS: Record<
       {
         title: 'शाही प्रतिभोज (रिसेप्शन)',
         time: '१२ दिसंबर २०२६, सायं ७:३० बजे',
-        desc: 'शाही रात्रिभोज एवं मंगल उत्सव।',
+        desc: 'शाही रात्रिभोज एवं उत्सव।',
       },
     ],
     venueTitle: 'विवाह स्थल',
@@ -230,17 +186,15 @@ const TRANSLATIONS: Record<
     viewMap: 'गूगल मैप पर देखें',
     dressCodeTitle: 'पहनावा (Dress Code)',
     dressCodeValue: 'शाही पारंपरिक परिधान',
-    dressCodeDesc: 'हल्दी हेतु पीला, संगीत हेतु एमराल्ड ग्रीन, विवाह हेतु आइवरी एवं गोल्ड।',
-    djTitle: 'डीजे हेतु मनपसंद गीत का अनुरोध',
-    voiceBlessingTitle: 'अपना स्वर आशीर्वाद रिकॉर्ड करें',
+    dressCodeDesc: 'पेस्टल फ्लोरल, एमराल्ड ग्रीन, और रॉयल नेवी रंग।',
     rsvpTitle: 'उपस्थिति पुष्टि (RSVP)',
     rsvpIntro:
-      'आपकी शुभकामनाएं और सानिध्य हमारे इस पावन प्रसंग का सबसे अनमोल उपहार हैं।',
+      'आपकी शुभकामनाएं और सानिध्य हमारे लिए सबसे अनमोल उपहार हैं।',
     rsvpSuccessTitle: 'उपस्थिति सप्रेम स्वीकार की गई!',
-    rsvpSuccessDesc: 'हम इस पावन उत्सव में आपके स्वागत के लिए सस्नेह प्रतीक्षारत हैं।',
+    rsvpSuccessDesc: 'हम इस पावन उत्सव में आपके स्वागत के लिए उत्सुक हैं।',
     labelName: 'आपका शुभ नाम *',
     placeholderName: 'अपना पूरा नाम दर्ज करें',
-    labelEmail: 'ईमेल / व्हाट्सएप नंबर *',
+    labelEmail: 'ईमेल पता *',
     labelAttend: 'क्या आप पधारेंगे? *',
     optionSelect: 'कृपया चयन करें...',
     optionYes: 'हाँ, हम सप्रेम पधारेंगे ♥',
@@ -251,10 +205,6 @@ const TRANSLATIONS: Record<
     placeholderMessage: 'नवदंपति के लिए अपना आशीर्वाद लिखें...',
     submitBtn: 'उपस्थिति दर्ज करें',
     sending: 'भेजा जा रहा है...',
-    shareTitle: 'यह शाही निमंत्रण साझा करें',
-    shareWhatsApp: 'व्हाट्सएप पर शेयर करें',
-    copyLink: 'लिंक कॉपी करें',
-    copied: 'लिंक कॉपी हो गया!',
     footerBlessing: 'सप्रेम एवं आदर सहित',
   },
   hinglish: {
@@ -273,20 +223,12 @@ const TRANSLATIONS: Record<
     hours: 'GHANTE',
     minutes: 'MINUTE',
     seconds: 'SECOND',
-    storyTitle: 'Humari Love Story',
-    triviaTitle: 'Aap Humein Kitna Jaante Hain?',
     timelineTitle: 'Ceremony Schedule',
-    addToCalendar: 'Calendar Mein Add Karein',
     events: [
       {
-        title: 'Haldi & Phoolon Ki Holi',
-        time: '11 Dec 2026, 11:00 AM',
-        desc: 'Turmeric rasam, phoolon ki barsaat aur dhol beats.',
-      },
-      {
         title: 'Mehndi & Sangeet Night',
-        time: '11 Dec 2026, 6:30 PM',
-        desc: 'Gaane, dance aur rang-birangi mehndi ki dhamakedaar shaam.',
+        time: '11 Dec 2026, 6:00 PM',
+        desc: 'Gaane, dance aur rang-birangi mehndi ki shaam.',
       },
       {
         title: 'Shubh Vivah & Saat Phere',
@@ -305,31 +247,25 @@ const TRANSLATIONS: Record<
     viewMap: 'Google Maps Par Dekhein',
     dressCodeTitle: 'Dress Code',
     dressCodeValue: 'Royal Traditional / Festive Wear',
-    dressCodeDesc: 'Haldi ke liye Yellow, Sangeet ke liye Emerald Green, aur Vivah ke liye Ivory & Gold.',
-    djTitle: 'DJ Ke Liye Song Request Karein',
-    voiceBlessingTitle: 'Apna Voice Aashirwaad Record Karein',
+    dressCodeDesc: 'Pastel florals, emerald green, aur regal navy tones.',
     rsvpTitle: 'RSVP Confirmation',
     rsvpIntro:
-      'Aapka aashirwaad aur upsthiti humare liye sabse bada gift hai.',
+      'Aapka aashirwaad aur উপস্থিতি humare liye sabse bada gift hai.',
     rsvpSuccessTitle: 'Aapka RSVP Confirm Ho Gaya!',
     rsvpSuccessDesc: 'Hum is shubh avsar par aapke swagat ke liye besabri se intezaar kar rahe hain.',
     labelName: 'Aapka Pura Naam *',
-    placeholderName: 'Apna naam likhein',
-    labelEmail: 'Email / WhatsApp Phone *',
+    placeholderName: 'Apna pura naam likhein',
+    labelEmail: 'Email Address *',
     labelAttend: 'Kya Aap Padhaarenge? *',
     optionSelect: 'Select Karein...',
     optionYes: 'Haan, Hum Zaroor Aayenge ♥',
     optionNo: 'Kshama Karein, Aa Nahi Paayenge',
-    labelGuests: 'Total Guests Ki Sankhya',
+    labelGuests: 'Total Guests',
     guestUnit: 'Log',
     labelMessage: 'Blessings / Sandesh',
     placeholderMessage: 'Couple ke liye aashirwaad likhein...',
-    submitBtn: 'Attendance Confirm Karein',
+    submitBtn: 'Confirm Karein',
     sending: 'Save Ho Raha Hai...',
-    shareTitle: 'Ye Card Share Karein',
-    shareWhatsApp: 'WhatsApp Par Bhejein',
-    copyLink: 'Link Copy Karein',
-    copied: 'Link Copy Ho Gaya!',
     footerBlessing: 'Sneh Aur Aadar Sahit',
   },
   ur: {
@@ -348,19 +284,11 @@ const TRANSLATIONS: Record<
     hours: 'گھنٹے',
     minutes: 'منٹ',
     seconds: 'سیکنڈ',
-    storyTitle: 'ہماری محبت کی داستان',
-    triviaTitle: 'آپ ہمیں کتنا جانتے ہیں؟',
     timelineTitle: 'تقریبات کا شیڈول',
-    addToCalendar: 'کیلنڈر میں محفوظ کریں',
     events: [
       {
-        title: 'ہلدی و مہندی کی تقریب',
-        time: '١١ دسمبر ٢٠٢٦، صبح ١١:٠٠ بجے',
-        desc: 'ہلدی، پھولوں کی برسات اور روایتی دھول کے ساتھ جشن۔',
-      },
-      {
-        title: 'سنگیت اور محفل رقص',
-        time: '١١ دسمبر ٢٠٢٦، شام ٦:٣٠ بجے',
+        title: 'مہندی اور سنگیت کی شام',
+        time: '١١ دسمبر ٢٠٢٦، شام ٦:٠٠ بجے',
         desc: 'خوبصورت گیتوں، رقص اور مہندی کی رنگین شام۔',
       },
       {
@@ -380,9 +308,7 @@ const TRANSLATIONS: Record<
     viewMap: 'گوگل میپس پر دیکھیں',
     dressCodeTitle: 'لباس کی رہنمائی',
     dressCodeValue: 'شاہی روایتی لباس',
-    dressCodeDesc: 'ہلدی کیلئے زرد، سنگیت کیلئے زمردی سبز، نکاح کیلئے سنہرا و عنبری روایتی لباس۔',
-    djTitle: 'ڈی جے کے لیے من پسند گیت',
-    voiceBlessingTitle: 'صوتی دعا و تبریک ریکارڈ کریں',
+    dressCodeDesc: 'پیسٹل پھولدار، زمردی سبز اور روایتی نیلے رنگ کا لباس۔',
     rsvpTitle: 'تصدیقِ تشریف آوری (RSVP)',
     rsvpIntro:
       'آپ کی تشریف آوری اور دعائیں ہمارے اس مبارک سفر کا سب سے قیمتی تحفہ ہیں۔',
@@ -390,7 +316,7 @@ const TRANSLATIONS: Record<
     rsvpSuccessDesc: 'ہم اس پرمسرت موقع پر آپ کے استقبال کے بے حد مشتاق ہیں۔',
     labelName: 'آپ کا اسم گرامی *',
     placeholderName: 'اپنا پورا نام درج کریں',
-    labelEmail: 'ای میل / فون نمبر *',
+    labelEmail: 'ای میل ایڈریس *',
     labelAttend: 'کیا آپ تشریف لائیں گے؟ *',
     optionSelect: 'انتخاب فرمائیں...',
     optionYes: 'جی ہاں، نہایت مسرت سے شرکت کریں گے ♥',
@@ -401,20 +327,65 @@ const TRANSLATIONS: Record<
     placeholderMessage: 'نئے جوڑے کیلئے اپنے نیک تمنائیں تحریر فرمائیں...',
     submitBtn: 'شرکت کی تصدیق کریں',
     sending: 'محفوظ ہو رہا ہے...',
-    shareTitle: 'یہ شاہی کارڈ شیئر کریں',
-    shareWhatsApp: 'واٹس ایپ پر شیئر کریں',
-    copyLink: 'لنک کاپی کریں',
-    copied: 'لنک کاپی ہو گیا!',
     footerBlessing: 'خلوص و دعاؤں کے ساتھ',
   },
 };
 
-// Deep, High-Contrast Text Shadows for Maximum Legibility over Any Video Background
+// High-Contrast Deep Text Shadows for Crisp Readability over Any Video Frame
 const deepTextShadow: React.CSSProperties = {
-  textShadow: '0 2px 4px rgba(255, 255, 255, 0.95), 0 3px 14px rgba(0, 0, 0, 0.75)',
+  textShadow:
+    '0 2px 4px rgba(255, 255, 255, 0.95), 0 3px 12px rgba(0, 0, 0, 0.7)',
 };
-const goldGlowShadow: React.CSSProperties = {
-  textShadow: '0 1px 2px rgba(255, 255, 255, 0.9), 0 2px 10px rgba(181, 154, 87, 0.65), 0 4px 14px rgba(0, 0, 0, 0.65)',
+
+// Date helpers for Scratch Card
+const getFormattedWeddingDate = (dateStr: string, lang: SupportedLanguage) => {
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return lang === 'hi' ? '१२ दिसंबर २०२६' : 'December 12, 2026';
+    if (lang === 'hi') {
+      const months = ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'];
+      return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
+    if (lang === 'ur') {
+      const months = ['جنوری', 'فروری', 'مارچ', 'اپریل', 'مئی', 'جون', 'جولائی', 'اگست', 'ستمبر', 'اکتوبر', 'نومبر', 'دسمبر'];
+      return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
+    return d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+  } catch {
+    return 'December 12, 2026';
+  }
+};
+
+const getFormattedWeddingDay = (dateStr: string, lang: SupportedLanguage) => {
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return lang === 'hi' ? 'शनिवार' : lang === 'ur' ? 'ہفتہ' : 'Saturday';
+    const daysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const daysHi = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
+    const daysUr = ['اتوار', 'پیر', 'منگل', 'بدھ', 'جمعرات', 'جمعہ', 'ہفتہ'];
+    const dayIdx = d.getDay();
+    if (lang === 'hi') return daysHi[dayIdx];
+    if (lang === 'ur') return daysUr[dayIdx];
+    return daysEn[dayIdx];
+  } catch {
+    return 'Saturday';
+  }
+};
+
+const getFormattedWeddingTime = (dateStr: string, lang: SupportedLanguage) => {
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return lang === 'hi' ? 'प्रातः १०:०० बजे' : '10:00 AM';
+    let hours = d.getHours();
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    if (lang === 'hi') return `${hours}:${minutes} ${ampm === 'AM' ? 'प्रातः' : 'सायं'}`;
+    if (lang === 'ur') return `${hours}:${minutes} ${ampm === 'AM' ? 'صبح' : 'شام'}`;
+    return `${hours}:${minutes} ${ampm}`;
+  } catch {
+    return '10:00 AM';
+  }
 };
 
 export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvitationProps> = ({
@@ -427,8 +398,6 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
   const [langMenuOpen, setLangMenuOpen] = useState<boolean>(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState<boolean>(autoOpen);
-  const [copiedLink, setCopiedLink] = useState<boolean>(false);
-  const [guestPassCode, setGuestPassCode] = useState<string>('');
 
   // RSVP Form States
   const [rsvpName, setRsvpName] = useState<string>(
@@ -447,7 +416,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
   const t = TRANSLATIONS[currentLang];
   const isRTL = currentLang === 'ur';
 
-  // 1. DYNAMIC CLIENT DATA BINDING
+  // 1. DYNAMIC CLIENT DATA BINDING (Fixes Aryan & Eva issue for new clients!)
   const effectiveGroomName = project?.partner1 || t.groomName;
   const effectiveBrideName = project?.partner2 || t.brideName;
   const effectiveWeddingDate = project?.weddingDate || '2026-12-12T10:00:00Z';
@@ -458,9 +427,8 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
     `https://maps.google.com/?q=${encodeURIComponent(
       effectiveVenueName + ' ' + effectiveVenueCity
     )}`;
-  const effectiveSlug = weddingSlug || project?.slug || 'royal-heritage';
 
-  // Dynamic countdown target
+  // Dynamic countdown timer
   const [timeLeft, setTimeLeft] = useState({
     days: 29,
     hours: 19,
@@ -491,7 +459,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
     return () => clearInterval(timer);
   }, [effectiveWeddingDate]);
 
-  // Audio Player (Indian Wedding Instrumental + Web Audio Sitar fallback)
+  // Audio Player (Indian Wedding Instrumental)
   useEffect(() => {
     const audio = new Audio('/audio/indian-wedding-instrumental.mp3');
     audio.loop = true;
@@ -536,16 +504,12 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
     setIsEnvelopeOpen(true);
   };
 
-  // RSVP Submission Handler with Firebase persistence & VIP Pass generation
   const handleRsvpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!rsvpName.trim()) return;
 
     setRsvpLoading(true);
-    const passToken = `ROYAL-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
-    setGuestPassCode(passToken);
 
-    // Save to Firebase/Local project guest list if project is present
     if (project) {
       const updatedGuests = [
         ...(project.guests || []),
@@ -554,7 +518,9 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           name: rsvpName.trim(),
           phone: rsvpEmail.trim(),
           sentWhatsApp: false,
-          rsvpStatus: (rsvpAttending === 'yes' ? 'attending' : 'declined') as 'attending' | 'declined',
+          rsvpStatus: (rsvpAttending === 'yes' ? 'attending' : 'declined') as
+            | 'attending'
+            | 'declined',
           attendingCount: Number(rsvpGuests) || 1,
           dietaryChoice: rsvpMessage.trim(),
         },
@@ -571,253 +537,139 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
       setRsvpSubmitted(true);
 
       confetti({
-        particleCount: 110,
-        spread: 75,
-        origin: { y: 0.65 },
+        particleCount: 90,
+        spread: 65,
+        origin: { y: 0.7 },
         colors: ['#DFC07C', '#273822', '#D4AF37', '#FAF8F5'],
       });
     }, 600);
   };
 
-  // Google Calendar Link Helper
-  const getGoogleCalendarLink = (
-    title: string,
-    timeStr: string,
-    venueStr: string,
-    descStr: string
-  ) => {
-    const encTitle = encodeURIComponent(`${title} - ${effectiveGroomName} & ${effectiveBrideName}`);
-    const encDetails = encodeURIComponent(descStr);
-    const encLocation = encodeURIComponent(venueStr);
-    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encTitle}&details=${encDetails}&location=${encLocation}`;
-  };
-
-  // WhatsApp & Share Links
-  const handleShareWhatsApp = () => {
-    if (typeof window === 'undefined') return;
-    const url = window.location.href;
-    const msg = encodeURIComponent(
-      `👑 Royal Wedding Invitation: ${effectiveGroomName} & ${effectiveBrideName} cordially invite you to their wedding celebrations!\n\nExperience the interactive royal microsite here:\n${url}`
-    );
-    window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
-  };
-
-  const handleCopyLink = () => {
-    if (typeof window === 'undefined') return;
-    navigator.clipboard.writeText(window.location.href);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2500);
-  };
-
-  // Milestones & Trivia fallbacks
-  const effectiveMilestones: StoryMilestone[] =
-    project?.story && project.story.length > 0
-      ? project.story
-      : [
-          {
-            id: 'sm-1',
-            year: '2021',
-            title: 'First Glance & Destiny',
-            description: `A chance meeting over filter coffee sparked a beautiful conversation between ${effectiveGroomName} and ${effectiveBrideName} that never ended.`,
-            imageUrl:
-              'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
-          },
-          {
-            id: 'sm-2',
-            year: '2023',
-            title: 'A Promise Under the Stars',
-            description: `Floating on Lake Pichola during twilight, ${effectiveGroomName} made a quiet promise to ${effectiveBrideName} under the glowing palace lights.`,
-            imageUrl:
-              'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
-          },
-          {
-            id: 'sm-3',
-            year: '2026',
-            title: 'The Sacred Roka Ceremony',
-            description: `Both families united with folded hands and heartfelt prayers, sealing forever in the auspicious presence of elders.`,
-            imageUrl:
-              'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-          },
-        ];
-
-  const effectiveTrivia: TriviaQuestion[] =
-    project?.trivia && project.trivia.length > 0
-      ? project.trivia
-      : [
-          {
-            id: 'tr-1',
-            question: `Who confessed their love first between ${effectiveGroomName} and ${effectiveBrideName}?`,
-            options: [
-              effectiveGroomName,
-              effectiveBrideName,
-              'Both at the exact same sunset!',
-              'Still debating playfully!',
-            ],
-            correctIndex: 2,
-            explanation: 'They spoke the words at the exact same second while watching the twilight sunset!',
-          },
-          {
-            id: 'tr-2',
-            question: 'What is their favorite weekend dish to cook together?',
-            options: [
-              'Slow-cooked Sunday Rajma Chawal with Desi Ghee',
-              'Woodfired Truffle Pizza',
-              'Street-style Pav Bhaji',
-              'Belgian Waffles with Strawberries',
-            ],
-            correctIndex: 0,
-            explanation: 'Slow-simmered Sunday Rajma Chawal with pure desi ghee is their sacred ritual!',
-          },
-          {
-            id: 'tr-3',
-            question: 'Where was their first spontaneous vacation together?',
-            options: [
-              'Udaipur Lake Palaces',
-              'Quiet Beaches of North Goa',
-              'Ladakh Mountain Expedition',
-              'Manali Snow Chalets',
-            ],
-            correctIndex: 1,
-            explanation: 'A spontaneous monsoon road trip to the serene beaches of North Goa!',
-          },
-        ];
-
-  // Effective events schedule
+  // Dynamic Events
   const effectiveEvents =
     project?.events && project.events.length > 0
       ? project.events.map((ev) => ({
           title: ev.title,
           time: `${ev.date ? ev.date + ' • ' : ''}${ev.time}`,
           desc: ev.subtitle || ev.dressCodeDetails || ev.venue,
-          venue: ev.venue,
         }))
       : t.events;
 
   return (
     <div
-      className={`relative min-h-screen w-full bg-[#FAF8F5] overflow-x-hidden selection:bg-[#D4AF37]/30 select-none ${
+      className={`relative min-h-screen w-full bg-[#FAF8F5] flex items-center justify-center p-0 sm:py-6 sm:px-4 overflow-hidden select-none ${
         isRTL ? 'font-serif rtl' : ''
       }`}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      {/* ========================================================
-          1. 3D SCROLL-SCRUBBED VIDEO CANVAS BACKGROUND (100% EDGE-TO-EDGE)
-          Zero black strips, zero borders, covers entire viewport smoothly
-          ======================================================== */}
-      <RoyalScrollyBackground
-        scrollerRef={scrollContainerRef}
-        overlayOpacity={0.16}
-      />
+      {/* Ambient background glow for desktop mode (Clean Ivory/Sage, NO black background!) */}
+      <div className="fixed inset-0 pointer-events-none opacity-40 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#EAE4D5] via-[#FAF8F5] to-[#F3EDE2]" />
 
-      {/* ========================================================
-          2. STAGE 1 & 2: 3D REALISTIC PERSPECTIVE GATEFOLD ENVELOPE
-          Wax seal cracking, gold confetti burst, audio launch
-          ======================================================== */}
-      {!isEnvelopeOpen && (
-        <RoyalRealisticEnvelope
-          onCurtainsOpen={handleCurtainsOpen}
-          onOpenComplete={handleEnvelopeComplete}
-          isArabic={isRTL}
-          onToggleLanguage={() =>
-            setCurrentLang(currentLang === 'en' ? 'hi' : 'en')
-          }
-          isAudioPlaying={isAudioPlaying}
-          onToggleAudio={toggleAudio}
+      {/* Main Luxury Presentation Container (Clean, centered mobile aspect ratio, NO black borders!) */}
+      <div className="relative w-full sm:max-w-[430px] h-[100dvh] sm:h-[880px] sm:max-h-[92vh] rounded-none sm:rounded-[44px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.18)] border-0 sm:border-2 border-[#DFC07C]/40 bg-[#FAF8F5] flex flex-col z-10">
+        
+        {/* ========================================================
+            FIXED PINNED 3D SCROLL-SCRUBBED VIDEO CANVAS BACKGROUND
+            ======================================================== */}
+        <RoyalScrollyBackground
+          scrollerRef={scrollContainerRef}
+          overlayOpacity={0.16}
         />
-      )}
 
-      {/* ========================================================
-          3. FLOATING MINIMAL CONTROLS (Top-Left Language, Top-Right Sound)
-          Zero Header Strip: Clean, floating, frosted acrylic buttons
-          ======================================================== */}
-      {/* Floating Sound Toggle (Top-Right) */}
-      <button
-        onClick={toggleAudio}
-        aria-label="Toggle Sound"
-        className="fixed top-4 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md text-[#273822] text-xs font-['Cinzel',serif] tracking-wider uppercase border border-[#B59A57]/45 hover:bg-[#FAF8F5] transition-all shadow-md active:scale-95 cursor-pointer"
-        style={deepTextShadow}
-      >
-        {isAudioPlaying ? (
-          <>
-            <Volume2 className="w-3.5 h-3.5 text-[#B59A57] animate-pulse" />
-            <span className="font-bold">Sound On</span>
-          </>
-        ) : (
-          <>
-            <VolumeX className="w-3.5 h-3.5 text-[#6B5A3E]" />
-            <span className="font-bold">Mute</span>
-          </>
+        {/* ========================================================
+            STAGE 1 & 2: 3D REALISTIC PERSPECTIVE GATEFOLD ENVELOPE
+            ======================================================== */}
+        {!isEnvelopeOpen && (
+          <RoyalRealisticEnvelope
+            onCurtainsOpen={handleCurtainsOpen}
+            onOpenComplete={handleEnvelopeComplete}
+            isArabic={isRTL}
+            onToggleLanguage={() =>
+              setCurrentLang(currentLang === 'en' ? 'hi' : 'en')
+            }
+            isAudioPlaying={isAudioPlaying}
+            onToggleAudio={toggleAudio}
+          />
         )}
-      </button>
 
-      {/* Floating 4-Language Switcher (Top-Left) */}
-      <div className="fixed top-4 left-4 z-50">
-        <AnimatePresence>
-          {langMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              className="bg-[#FAF8F5]/95 backdrop-blur-md border border-[#B59A57]/50 shadow-xl rounded-2xl p-1.5 flex flex-col gap-1 mb-1"
-            >
-              {(
-                [
-                  { code: 'en', label: 'English' },
-                  { code: 'hi', label: 'हिंदी' },
-                  { code: 'hinglish', label: 'Hinglish' },
-                  { code: 'ur', label: 'اردو' },
-                ] as const
-              ).map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => {
-                    setCurrentLang(lang.code);
-                    setLangMenuOpen(false);
-                  }}
-                  className={`px-3 py-1 text-xs rounded-xl text-left transition-colors font-medium ${
-                    currentLang === lang.code
-                      ? 'bg-[#273822] text-[#FAF8F5] font-bold shadow-sm'
-                      : 'text-[#273822] hover:bg-[#DFC07C]/25'
-                  }`}
-                  style={deepTextShadow}
-                >
-                  {lang.label}
-                </button>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
+        {/* ========================================================
+            FLOATING CONTROLS (Top-Right Sound, Bottom-Left Language)
+            Clean, minimal floating pills. NO header strip, NO footer strip!
+            ======================================================== */}
+        {/* Audio Mute/Unmute Button (Top Right) */}
         <button
-          onClick={() => setLangMenuOpen(!langMenuOpen)}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/45 shadow-md text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer"
-          style={deepTextShadow}
+          onClick={toggleAudio}
+          className="absolute top-4 right-4 z-50 w-9 h-9 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md flex items-center justify-center text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer"
+          title={isAudioPlaying ? 'Mute Music' : 'Play Music'}
         >
-          <Globe className="w-3.5 h-3.5 text-[#B59A57]" />
-          <span className="font-bold">{t.langName}</span>
+          {isAudioPlaying ? (
+            <Volume2 className="w-4 h-4 text-[#B59A57] animate-pulse" />
+          ) : (
+            <VolumeX className="w-4 h-4 text-[#6B5A3E]" />
+          )}
         </button>
-      </div>
 
-      {/* ========================================================
-          4. SCROLLABLE CONTENT BODY (CARDLESS, FLOATING OVER VIDEO)
-          Edge-to-edge full width with centered responsive content
-          ======================================================== */}
-      <div
-        ref={scrollContainerRef}
-        className="relative z-10 w-full min-h-screen overflow-y-auto overflow-x-hidden scrollbar-none pb-20"
-      >
-        <div className="w-full max-w-xl mx-auto px-4 sm:px-6">
+        {/* 4-Language Switcher (Bottom Left) */}
+        <div className="absolute bottom-4 left-4 z-50 flex flex-col items-start gap-1">
+          <AnimatePresence>
+            {langMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                className="bg-[#FAF8F5]/95 backdrop-blur-md border border-[#B59A57]/50 shadow-xl rounded-2xl p-1.5 flex flex-col gap-1 mb-1"
+              >
+                {(['en', 'hi', 'hinglish', 'ur'] as SupportedLanguage[]).map((lng) => (
+                  <button
+                    key={lng}
+                    onClick={() => {
+                      setCurrentLang(lng);
+                      setLangMenuOpen(false);
+                    }}
+                    className={`px-3 py-1 rounded-xl text-xs font-['Cinzel',serif] tracking-wider text-left transition-all ${
+                      currentLang === lng
+                        ? 'bg-[#273822] text-[#FAF8F5] font-bold shadow-sm'
+                        : 'text-[#273822] hover:bg-[#DFC07C]/25'
+                    }`}
+                    style={deepTextShadow}
+                  >
+                    {TRANSLATIONS[lng].langName}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <button
+            onClick={() => setLangMenuOpen(!langMenuOpen)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer font-bold"
+            style={deepTextShadow}
+          >
+            <Globe className="w-3.5 h-3.5 text-[#B59A57]" />
+            <span>{t.langName}</span>
+          </button>
+        </div>
+
+        {/* ========================================================
+            SCROLLABLE CONTENT BODY (CARDLESS, FLOATING DIRECTLY OVER VIDEO)
+            Placement is optimized so the couple's poses in the center
+            are 100% visible throughout scrolling!
+            ======================================================== */}
+        <div
+          ref={scrollContainerRef}
+          className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden scrollbar-none pb-20 bg-transparent"
+        >
           {/* ========================================================
-              SECTION 1: HERO (Dynamic Couple Names 3D Pop-Out)
+              SECTION 1: HERO (Dynamic Couple Names 3D Pop Out)
               ======================================================== */}
-          <section className="relative min-h-[92vh] flex flex-col items-center justify-between pt-16 sm:pt-20 pb-8 text-center z-10">
+          <section className="relative min-h-[92vh] flex flex-col items-center justify-between pt-6 sm:pt-8 pb-8 px-4 sm:px-6 text-center z-10">
             {/* Top Announcement */}
             <motion.div
               initial={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
               whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: false, amount: 0.3 }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
-              className="space-y-1.5"
+              className="space-y-1"
             >
               <div className="flex items-center justify-center gap-2 opacity-90">
                 <div className="w-10 h-[1.5px] bg-[#B59A57]" />
@@ -852,7 +704,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: false, amount: 0.3 }}
               transition={{ duration: 0.9, delay: 0.15 }}
-              className="my-auto py-4 w-full flex flex-col items-center"
+              className="my-auto py-2 w-full flex flex-col items-center"
             >
               <Royal3DNames
                 groomName={effectiveGroomName}
@@ -886,7 +738,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     style={deepTextShadow}
                   />
                 </div>
-                <div className="w-[1.5px] h-6 bg-[#B59A57]/80" />
+                <div className="w-[1.5px] h-6 bg-[#B59A57]/70" />
                 <div className={`flex flex-col ${isRTL ? 'text-right' : 'text-left'}`}>
                   <DynamicTextEffects
                     text={t.brideParentage}
@@ -909,7 +761,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
             {/* Scroll Indicator */}
             <motion.div
               initial={{ opacity: 0 }}
-              whileInView={{ opacity: 0.95 }}
+              whileInView={{ opacity: 0.9 }}
               viewport={{ once: false }}
               className="relative z-10 flex flex-col items-center gap-1 animate-bounce pb-2"
             >
@@ -917,7 +769,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.scrollDown}
                 effect="typewriter"
                 speed={50}
-                className="text-[10px] sm:text-[11px] font-['Cinzel',serif] tracking-widest text-[#273822] font-black uppercase"
+                className="text-[10px] font-['Cinzel',serif] tracking-widest text-[#273822] font-black uppercase"
                 style={deepTextShadow}
               />
               <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
@@ -927,7 +779,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           {/* ========================================================
               SECTION 2: SCRATCH TO REVEAL (Interactive 3D Glitter Heart)
               ======================================================== */}
-          <section className="relative z-10 py-16 min-h-[85vh] flex flex-col justify-center items-center">
+          <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.72, y: 40 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -935,32 +787,14 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
               className="w-full flex flex-col items-center"
               style={{
-                filter: 'drop-shadow(0 12px 28px rgba(0,0,0,0.22))',
+                filter: 'drop-shadow(0 12px 28px rgba(0,0,0,0.2))',
               }}
             >
               <ZareqiaHeartScratch
                 coupleNames={`${effectiveGroomName} & ${effectiveBrideName}`}
-                weddingDate={
-                  currentLang === 'hi'
-                    ? '१२ दिसंबर २०२६'
-                    : currentLang === 'ur'
-                    ? '١٢ دسمبر ٢٠٢٦'
-                    : 'December 12, 2026'
-                }
-                weddingDay={
-                  currentLang === 'hi'
-                    ? 'शनिवार'
-                    : currentLang === 'ur'
-                    ? 'ہفتہ'
-                    : 'Saturday'
-                }
-                weddingTime={
-                  currentLang === 'hi'
-                    ? 'प्रातः १०:०० बजे'
-                    : currentLang === 'ur'
-                    ? 'صبح ١٠:٠٠ بجے'
-                    : '10:00 AM'
-                }
+                weddingDate={getFormattedWeddingDate(effectiveWeddingDate, currentLang)}
+                weddingDay={getFormattedWeddingDay(effectiveWeddingDate, currentLang)}
+                weddingTime={getFormattedWeddingTime(effectiveWeddingDate, currentLang)}
                 language={currentLang}
               />
             </motion.div>
@@ -969,20 +803,20 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           {/* ========================================================
               SECTION 3: PHOTO CAROUSEL & LIVE COUNTDOWN
               ======================================================== */}
-          <section className="relative z-10 py-16 min-h-[85vh] flex flex-col justify-center items-center">
+          <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
             <motion.div
-              initial={{ opacity: 0, x: -50, rotateY: 10 }}
+              initial={{ opacity: 0, x: -60, rotateY: 12 }}
               whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
               viewport={{ once: false, amount: 0.25 }}
               transition={{ duration: 0.9, ease: 'easeOut' }}
-              className="w-full max-w-[380px]"
+              className="w-full max-w-[360px]"
             >
-              {/* Photo Carousel */}
-              <div className="rounded-3xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.3)] border-2 border-white/80">
+              {/* Photo Carousel floating directly */}
+              <div className="rounded-3xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.25)] border-2 border-white/70">
                 <ZareqiaPhotoCarousel />
               </div>
 
-              {/* Countdown Title with 3D Drop Impact letter animation */}
+              {/* Countdown Title with 3D Drop Impact */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -1004,7 +838,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 </div>
               </motion.div>
 
-              {/* Countdown Blocks */}
+              {/* Countdown Blocks (Floating glass pills) */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.85 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -1020,7 +854,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 ].map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white/90 backdrop-blur-[4px] border border-[#DFC07C] shadow-lg"
+                    className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white/90 backdrop-blur-[3px] border border-[#DFC07C] shadow-md"
                   >
                     <span
                       className="font-['Playfair_Display',serif] text-xl sm:text-2xl font-black text-[#273822]"
@@ -1042,96 +876,18 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           </section>
 
           {/* ========================================================
-              SECTION 4: OUR LOVE STORY MILESTONES
-              Feature decided from beginning: Chapter-by-chapter slider
+              SECTION 4: CEREMONY ITINERARY (TIMELINE)
+              Floating directly over video, zero card box, couple visible!
               ======================================================== */}
-          <section className="relative z-10 py-16 min-h-[85vh] flex flex-col justify-center items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.25 }}
-              transition={{ duration: 0.85, ease: 'easeOut' }}
-              className="w-full text-center"
-            >
-              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/70 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
-                <BookOpen className="w-5 h-5" />
-              </div>
-
-              <DynamicTextEffects
-                text={t.storyTitle}
-                effect="scepter-slide"
-                as="h3"
-                className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl sm:text-4xl text-[#1E2E1B] tracking-wide"
-                style={deepTextShadow}
-              />
-              <div className="flex items-center justify-center gap-2 mt-1.5 mb-6 opacity-90">
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-                <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-              </div>
-
-              {/* Milestone Slider */}
-              <div className="rounded-3xl overflow-hidden bg-white/85 backdrop-blur-md border border-[#DFC07C] shadow-xl p-4 sm:p-6">
-                <MilestoneSlider
-                  milestones={effectiveMilestones}
-                  language={currentLang === 'hi' ? 'hi' : 'en'}
-                />
-              </div>
-            </motion.div>
-          </section>
-
-          {/* ========================================================
-              SECTION 5: INTERACTIVE COUPLE TRIVIA QUIZ
-              Feature decided from beginning: Fun guest engagement
-              ======================================================== */}
-          <section className="relative z-10 py-16 min-h-[85vh] flex flex-col justify-center items-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.88 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false, amount: 0.25 }}
-              transition={{ duration: 0.85, ease: 'easeOut' }}
-              className="w-full text-center"
-            >
-              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/70 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
-                <HelpCircle className="w-5 h-5" />
-              </div>
-
-              <DynamicTextEffects
-                text={t.triviaTitle}
-                effect="dome-rise"
-                as="h3"
-                className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl sm:text-4xl text-[#1E2E1B] tracking-wide"
-                style={deepTextShadow}
-              />
-              <div className="flex items-center justify-center gap-2 mt-1.5 mb-6 opacity-90">
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-                <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-              </div>
-
-              {/* Interactive Trivia */}
-              <div className="rounded-3xl overflow-hidden bg-white/90 backdrop-blur-md border border-[#DFC07C] shadow-xl p-4 sm:p-6">
-                <CoupleTrivia
-                  questions={effectiveTrivia}
-                  coupleNames={`${effectiveGroomName} & ${effectiveBrideName}`}
-                  language={currentLang === 'hi' ? 'hi' : 'en'}
-                />
-              </div>
-            </motion.div>
-          </section>
-
-          {/* ========================================================
-              SECTION 6: CEREMONY ITINERARY & CALENDAR SYNC
-              ======================================================== */}
-          <section className="relative z-10 py-16 min-h-[85vh] flex flex-col justify-center items-center">
+          <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
             <motion.div
               initial={{ opacity: 0, y: 50, filter: 'blur(6px)' }}
               whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: false, amount: 0.25 }}
               transition={{ duration: 0.85, ease: 'easeOut' }}
-              className="w-full text-center"
+              className="w-full max-w-[340px] text-center"
             >
-              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/70 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
+              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
                 <Clock className="w-5 h-5" />
               </div>
 
@@ -1150,7 +906,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
               {/* Ceremonies Timeline */}
               <div
-                className={`relative pl-6 space-y-7 text-left max-w-[340px] mx-auto border-l-2 border-[#DFC07C] ${
+                className={`relative pl-6 space-y-7 text-left max-w-[320px] mx-auto border-l-2 border-[#DFC07C] ${
                   isRTL ? 'text-right border-l-0 border-r-2 pr-6 pl-0' : ''
                 }`}
               >
@@ -1160,11 +916,11 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     initial={{ opacity: 0, x: isRTL ? 30 : -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: false, amount: 0.3 }}
-                    transition={{ duration: 0.6, delay: index * 0.12 }}
-                    className="relative bg-white/80 backdrop-blur-sm p-3.5 rounded-2xl border border-[#DFC07C]/50 shadow-md"
+                    transition={{ duration: 0.6, delay: index * 0.15 }}
+                    className="relative"
                   >
                     <div
-                      className={`absolute top-4 w-3.5 h-3.5 rounded-full bg-[#273822] border-2 border-[#DFC07C] shadow-md ${
+                      className={`absolute top-1 w-3.5 h-3.5 rounded-full bg-[#273822] border-2 border-[#DFC07C] shadow-md ${
                         isRTL ? '-right-[31px]' : '-left-[31px]'
                       }`}
                     />
@@ -1186,28 +942,9 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       text={item.desc}
                       effect="scepter-slide"
                       as="p"
-                      className="font-['Cormorant_Garamond',serif] text-xs italic text-[#2C3827] mt-1 font-semibold"
+                      className="font-['Cormorant_Garamond',serif] text-xs italic text-[#2C3827] mt-1 font-bold"
                       style={deepTextShadow}
                     />
-
-                    {/* Add to Google Calendar Action */}
-                    <div className="mt-2.5 pt-2 border-t border-[#DFC07C]/40">
-                      <a
-                        href={getGoogleCalendarLink(
-                          item.title,
-                          item.time,
-                          effectiveVenueName,
-                          item.desc
-                        )}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[10px] font-['Cinzel',serif] font-bold tracking-wider uppercase text-[#785B24] hover:text-[#273822] transition-colors"
-                        style={deepTextShadow}
-                      >
-                        <Calendar className="w-3 h-3 text-[#B59A57]" />
-                        <span>{t.addToCalendar}</span>
-                      </a>
-                    </div>
                   </motion.div>
                 ))}
               </div>
@@ -1215,17 +952,18 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           </section>
 
           {/* ========================================================
-              SECTION 7: VENUE & GOOGLE MAPS NAVIGATION
+              SECTION 5: VENUE & DRESS CODE
+              Floating directly over video, zero card box, couple visible!
               ======================================================== */}
-          <section className="relative z-10 py-16 min-h-[85vh] flex flex-col justify-center items-center">
+          <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.85 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: false, amount: 0.25 }}
               transition={{ duration: 0.85, ease: 'easeOut' }}
-              className="w-full text-center"
+              className="w-full max-w-[340px] text-center"
             >
-              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/70 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
+              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
                 <Building2 className="w-5 h-5" />
               </div>
 
@@ -1242,38 +980,36 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 <div className="w-8 h-[1.5px] bg-[#B59A57]" />
               </div>
 
-              <div className="p-5 rounded-3xl bg-white/85 backdrop-blur-md border border-[#DFC07C] shadow-xl max-w-[340px] mx-auto">
-                <DynamicTextEffects
-                  text={effectiveVenueName}
-                  effect="dome-rise"
-                  as="h4"
-                  className="font-['Playfair_Display',serif] text-lg font-black text-[#1E2E1B]"
-                  style={deepTextShadow}
-                />
-                <DynamicTextEffects
-                  text={effectiveVenueCity}
-                  effect="dome-rise"
-                  as="p"
-                  className="font-['Cinzel',serif] text-xs tracking-wider text-[#6B5A3E] font-bold mt-1 uppercase"
-                  style={deepTextShadow}
-                />
+              <DynamicTextEffects
+                text={effectiveVenueName}
+                effect="dome-rise"
+                as="h4"
+                className="font-['Playfair_Display',serif] text-lg font-black text-[#1E2E1B]"
+                style={deepTextShadow}
+              />
+              <DynamicTextEffects
+                text={effectiveVenueCity}
+                effect="dome-rise"
+                as="p"
+                className="font-['Cinzel',serif] text-xs tracking-wider text-[#6B5A3E] font-bold mt-1 uppercase"
+                style={deepTextShadow}
+              />
 
-                {/* Floating Venue Pin & Google Maps Action */}
-                <div className="mt-4 flex flex-col items-center">
-                  <div className="w-11 h-11 rounded-full bg-[#273822] text-[#E6D197] flex items-center justify-center shadow-lg border-2 border-[#DFC07C] mb-3">
-                    <MapPin className="w-5 h-5 animate-pulse" />
-                  </div>
-                  <a
-                    href={effectiveMapsLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#273822] text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-wider uppercase shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/60 cursor-pointer"
-                    style={deepTextShadow}
-                  >
-                    <Navigation className="w-3.5 h-3.5 text-[#E6D197]" />
-                    <span className="font-bold">{t.viewMap}</span>
-                  </a>
+              {/* Floating Venue Pin & Google Maps Action */}
+              <div className="mt-5 flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#E6D197] flex items-center justify-center shadow-lg border-2 border-[#DFC07C] mb-3">
+                  <MapPin className="w-6 h-6 animate-pulse" />
                 </div>
+                <a
+                  href={effectiveMapsLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-wider uppercase shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 cursor-pointer font-bold"
+                  style={deepTextShadow}
+                >
+                  <Navigation className="w-3.5 h-3.5 text-[#E6D197]" />
+                  <span>{t.viewMap}</span>
+                </a>
               </div>
 
               {/* Dress Code Floating Badge */}
@@ -1282,9 +1018,9 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="mt-6 pt-4 border-t border-[#DFC07C]/50 max-w-[340px] mx-auto"
+                className="mt-6 pt-4 border-t border-[#DFC07C]/50"
               >
-                <div className="w-9 h-9 mx-auto mb-1.5 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-sm">
+                <div className="w-9 h-9 mx-auto mb-1.5 rounded-full border border-[#B59A57]/50 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-sm">
                   <Shirt className="w-4 h-4" />
                 </div>
                 <DynamicTextEffects
@@ -1313,97 +1049,18 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           </section>
 
           {/* ========================================================
-              SECTION 8: SANGEET DJ SONG REQUEST BOX
-              Feature decided from beginning: Live interactive music requests
+              SECTION 6: RSVP FORM
+              Floating cleanly over video, zero card frame, couple visible!
               ======================================================== */}
-          <section className="relative z-10 py-16 min-h-[85vh] flex flex-col justify-center items-center">
+          <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, amount: 0.25 }}
               transition={{ duration: 0.85, ease: 'easeOut' }}
-              className="w-full text-center"
+              className="w-full max-w-[340px] text-center"
             >
-              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/70 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
-                <Music className="w-5 h-5" />
-              </div>
-
-              <DynamicTextEffects
-                text={t.djTitle}
-                effect="pop-3d"
-                as="h3"
-                className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl sm:text-4xl text-[#1E2E1B] tracking-wide"
-                style={deepTextShadow}
-              />
-              <div className="flex items-center justify-center gap-2 mt-1.5 mb-6 opacity-90">
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-                <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-              </div>
-
-              {/* DJ Song Request Box */}
-              <div className="rounded-3xl overflow-hidden bg-white/90 backdrop-blur-md border border-[#DFC07C] shadow-xl p-4 sm:p-6 max-w-[340px] mx-auto">
-                <DjSongRequestBox
-                  weddingSlug={effectiveSlug}
-                  defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
-                  language={currentLang === 'hi' ? 'hi' : 'en'}
-                />
-              </div>
-            </motion.div>
-          </section>
-
-          {/* ========================================================
-              SECTION 9: VOICE BLESSING AUDIO RECORDER
-              Feature decided from beginning: Mic voice recording for couple
-              ======================================================== */}
-          <section className="relative z-10 py-16 min-h-[85vh] flex flex-col justify-center items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.25 }}
-              transition={{ duration: 0.85, ease: 'easeOut' }}
-              className="w-full text-center"
-            >
-              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/70 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
-                <Sparkles className="w-5 h-5" />
-              </div>
-
-              <DynamicTextEffects
-                text={t.voiceBlessingTitle}
-                effect="velvet-mist"
-                as="h3"
-                className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl sm:text-4xl text-[#1E2E1B] tracking-wide"
-                style={deepTextShadow}
-              />
-              <div className="flex items-center justify-center gap-2 mt-1.5 mb-6 opacity-90">
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-                <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-              </div>
-
-              {/* Voice Blessing Box */}
-              <div className="rounded-3xl overflow-hidden bg-white/90 backdrop-blur-md border border-[#DFC07C] shadow-xl p-4 sm:p-6 max-w-[340px] mx-auto">
-                <VoiceBlessingRecorder
-                  weddingSlug={effectiveSlug}
-                  defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
-                  language={currentLang === 'hi' ? 'hi' : 'en'}
-                />
-              </div>
-            </motion.div>
-          </section>
-
-          {/* ========================================================
-              SECTION 10: RSVP FORM & VIP PASS GENERATION
-              ======================================================== */}
-          <section className="relative z-10 py-16 min-h-[85vh] flex flex-col justify-center items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.25 }}
-              transition={{ duration: 0.85, ease: 'easeOut' }}
-              className="w-full text-center"
-            >
-              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/70 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
+              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
                 <Mail className="w-5 h-5" />
               </div>
 
@@ -1424,7 +1081,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.rsvpIntro}
                 effect="velvet-mist"
                 as="p"
-                className="font-['Cormorant_Garamond',serif] text-xs sm:text-sm italic text-[#273822] max-w-[300px] mx-auto mb-6 font-bold"
+                className="font-['Cormorant_Garamond',serif] text-xs sm:text-sm italic text-[#273822] max-w-[280px] mx-auto mb-6 font-bold"
                 style={deepTextShadow}
               />
 
@@ -1432,7 +1089,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="py-6 px-4 bg-white/95 rounded-3xl border-2 border-[#DFC07C] shadow-2xl max-w-[340px] mx-auto flex flex-col items-center"
+                  className="py-8 flex flex-col items-center"
                 >
                   <div className="w-12 h-12 rounded-full bg-[#273822] text-[#E6D197] flex items-center justify-center mb-3 shadow-lg border border-[#DFC07C]">
                     <CheckCircle2 className="w-6 h-6" />
@@ -1444,37 +1101,16 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     {t.rsvpSuccessTitle}
                   </h4>
                   <p
-                    className="font-['Cormorant_Garamond',serif] text-xs italic text-[#3A4A33] mt-1 max-w-[260px] font-bold"
+                    className="font-['Cormorant_Garamond',serif] text-xs italic text-[#3A4A33] mt-1 max-w-[240px] font-bold"
                     style={deepTextShadow}
                   >
                     {t.rsvpSuccessDesc}
                   </p>
-
-                  {/* VIP Access Pass Card */}
-                  <div className="w-full mt-4 p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#B59A57]/60 text-left space-y-1 shadow-inner">
-                    <div className="flex items-center justify-between border-b border-[#B59A57]/40 pb-1.5">
-                      <span className="font-['Cinzel',serif] text-[10px] font-bold text-[#785B24] uppercase tracking-wider">
-                        Royal VIP Boarding Pass
-                      </span>
-                      <span className="font-mono text-[10px] font-black text-[#273822]">
-                        {guestPassCode}
-                      </span>
-                    </div>
-                    <p className="font-['Playfair_Display',serif] font-bold text-sm text-[#1E2E1B] pt-1">
-                      {rsvpName}
-                    </p>
-                    <p className="text-[11px] font-['Cinzel',serif] text-[#6B5A3E] font-semibold">
-                      {effectiveGroomName} & {effectiveBrideName}
-                    </p>
-                    <p className="text-[10px] text-[#785B24] italic font-serif">
-                      {effectiveVenueName} • {effectiveVenueCity}
-                    </p>
-                  </div>
                 </motion.div>
               ) : (
                 <form
                   onSubmit={handleRsvpSubmit}
-                  className={`space-y-3 text-left max-w-[340px] mx-auto bg-white/90 backdrop-blur-md p-5 rounded-3xl border border-[#DFC07C] shadow-xl ${
+                  className={`space-y-3 text-left max-w-[320px] mx-auto ${
                     isRTL ? 'text-right' : ''
                   }`}
                 >
@@ -1491,7 +1127,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       value={rsvpName}
                       onChange={(e) => setRsvpName(e.target.value)}
                       placeholder={t.placeholderName}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-white/95 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                      className="w-full px-3.5 py-2 rounded-xl bg-white/90 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
                     />
                   </div>
 
@@ -1503,12 +1139,12 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       {t.labelEmail}
                     </label>
                     <input
-                      type="text"
+                      type="email"
                       required
                       value={rsvpEmail}
                       onChange={(e) => setRsvpEmail(e.target.value)}
-                      placeholder="phone or email"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-white/95 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                      placeholder="name@example.com"
+                      className="w-full px-3.5 py-2 rounded-xl bg-white/90 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
                     />
                   </div>
 
@@ -1525,7 +1161,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                         required
                         value={rsvpAttending}
                         onChange={(e) => setRsvpAttending(e.target.value)}
-                        className="w-full px-2.5 py-2.5 rounded-xl bg-white/95 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                        className="w-full px-2.5 py-2 rounded-xl bg-white/90 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
                       >
                         <option value="">{t.optionSelect}</option>
                         <option value="yes">{t.optionYes}</option>
@@ -1543,7 +1179,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       <select
                         value={rsvpGuests}
                         onChange={(e) => setRsvpGuests(e.target.value)}
-                        className="w-full px-2.5 py-2.5 rounded-xl bg-white/95 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                        className="w-full px-2.5 py-2 rounded-xl bg-white/90 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
                       >
                         <option value="1">1 {t.guestUnit}</option>
                         <option value="2">2 {t.guestUnit}</option>
@@ -1565,14 +1201,14 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       value={rsvpMessage}
                       onChange={(e) => setRsvpMessage(e.target.value)}
                       placeholder={t.placeholderMessage}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-white/95 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm resize-none"
+                      className="w-full px-3.5 py-2 rounded-xl bg-white/90 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={rsvpLoading}
-                    className="w-full py-3.5 rounded-full bg-[#273822] text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-widest uppercase shadow-lg hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/60 flex items-center justify-center gap-2 mt-2 cursor-pointer"
+                    className="w-full py-3 rounded-full bg-[#273822] text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-widest uppercase shadow-lg hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 flex items-center justify-center gap-2 mt-2 cursor-pointer"
                     style={deepTextShadow}
                   >
                     {rsvpLoading ? (
@@ -1589,60 +1225,8 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
             </motion.div>
           </section>
 
-          {/* ========================================================
-              SECTION 11: WHATSAPP SHARE & COPY LINK
-              Feature decided from beginning: One-tap social invite
-              ======================================================== */}
-          <section className="relative z-10 py-10 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-              className="max-w-[340px] mx-auto p-4 rounded-3xl bg-white/85 backdrop-blur-md border border-[#DFC07C] shadow-lg space-y-3"
-            >
-              <h4
-                className="font-['Cinzel',serif] text-xs font-black uppercase tracking-wider text-[#273822]"
-                style={deepTextShadow}
-              >
-                {t.shareTitle}
-              </h4>
-
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  onClick={handleShareWhatsApp}
-                  className="py-2.5 px-3 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-['Cinzel',serif] font-bold uppercase tracking-wider shadow-sm flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer"
-                  style={deepTextShadow}
-                >
-                  <Share2 className="w-3.5 h-3.5" />
-                  <span>WhatsApp</span>
-                </button>
-
-                <button
-                  onClick={handleCopyLink}
-                  className="py-2.5 px-3 rounded-full bg-[#273822] hover:bg-[#1D2B19] text-[#FAF8F5] text-[11px] font-['Cinzel',serif] font-bold uppercase tracking-wider shadow-sm flex items-center justify-center gap-1.5 transition-all active:scale-95 border border-[#B59A57]/40 cursor-pointer"
-                  style={deepTextShadow}
-                >
-                  {copiedLink ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-300" />
-                      <span>Copied!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5 text-[#E6D197]" />
-                      <span>Copy Link</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </motion.div>
-          </section>
-
-          {/* ========================================================
-              SECTION 12: ELEGANT BLESSING (ZERO BLACK STRIP)
-              Clean, floating signature of the couple
-              ======================================================== */}
-          <div className="relative z-10 text-center py-8">
+          {/* Footer Blessing (Zero Black Strip, Pure Floating Signature) */}
+          <div className="relative z-10 text-center py-8 px-4">
             <DynamicTextEffects
               text={`${t.footerBlessing}: ${effectiveGroomName} & ${effectiveBrideName}`}
               effect="velvet-mist"
