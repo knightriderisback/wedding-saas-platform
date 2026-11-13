@@ -20,7 +20,8 @@ import {
   Check,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { ZareqiaGatefoldEnvelope } from '../zareqia/ZareqiaGatefoldEnvelope';
+import { RoyalRealisticEnvelope } from './RoyalRealisticEnvelope';
+import { LetterStaggerText } from './LetterStaggerText';
 import { ZareqiaHeartScratch } from '../zareqia/ZareqiaHeartScratch';
 import { ZareqiaPhotoCarousel } from '../zareqia/ZareqiaPhotoCarousel';
 import { RoyalScrollyBackground } from './RoyalScrollyBackground';
@@ -470,10 +471,10 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
         />
 
         {/* ========================================================
-            STAGE 1 & 2: GATEFOLD ENVELOPE & SILK CURTAINS OVERLAY
+            STAGE 1 & 2: 3D REALISTIC PERSPECTIVE GATEFOLD ENVELOPE
             ======================================================== */}
         {!isEnvelopeOpen && (
-          <ZareqiaGatefoldEnvelope
+          <RoyalRealisticEnvelope
             onCurtainsOpen={() => setHeroTextVisible(true)}
             onOpenComplete={handleEnvelopeOpen}
             isArabic={currentLang === 'ur'}
@@ -571,14 +572,15 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
             >
               <div className="text-[#273822] text-sm mb-1 opacity-90 drop-shadow">♥</div>
 
-              <h2
+              <LetterStaggerText
+                text={t.weAreGettingMarried}
+                type="hero"
+                as="h2"
                 className="font-['Cormorant_Garamond',serif] italic text-base sm:text-lg text-[#1E2E1B] tracking-wider font-semibold"
                 style={{
                   textShadow: '0 1px 4px rgba(255,255,255,0.95), 0 0 1px rgba(0,0,0,0.5)',
                 }}
-              >
-                {t.weAreGettingMarried}
-              </h2>
+              />
 
               {/* Decorative Divider */}
               <div className="flex items-center justify-center gap-2 mt-1 mb-2 opacity-80">
@@ -594,7 +596,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 isRTL={isRTL}
               />
 
-              {/* Compact Royal Parentage Row - Sits neatly above couple's heads */}
+              {/* Compact Royal Parentage Row - Sits neatly above couple's heads with dramatic letter stagger */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -606,13 +608,33 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 }}
               >
                 <div className={`flex flex-col ${isRTL ? 'text-left' : 'text-right'}`}>
-                  <span className="font-semibold leading-tight">{t.groomParentage}</span>
-                  <span className="italic text-[#785B24] text-[10px] sm:text-[11px] font-semibold">{t.groomTitle}</span>
+                  <LetterStaggerText
+                    text={t.groomParentage}
+                    type="hero"
+                    delay={0.12}
+                    className="font-semibold leading-tight"
+                  />
+                  <LetterStaggerText
+                    text={t.groomTitle}
+                    type="hero"
+                    delay={0.2}
+                    className="italic text-[#785B24] text-[10px] sm:text-[11px] font-semibold"
+                  />
                 </div>
                 <div className="w-[1px] h-6 bg-[#B59A57]/60" />
                 <div className={`flex flex-col ${isRTL ? 'text-right' : 'text-left'}`}>
-                  <span className="font-semibold leading-tight">{t.brideParentage}</span>
-                  <span className="italic text-[#785B24] text-[10px] sm:text-[11px] font-semibold">{t.brideTitle}</span>
+                  <LetterStaggerText
+                    text={t.brideParentage}
+                    type="hero"
+                    delay={0.12}
+                    className="font-semibold leading-tight"
+                  />
+                  <LetterStaggerText
+                    text={t.brideTitle}
+                    type="hero"
+                    delay={0.2}
+                    className="italic text-[#785B24] text-[10px] sm:text-[11px] font-semibold"
+                  />
                 </div>
               </motion.div>
             </motion.div>
@@ -624,14 +646,14 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               viewport={{ once: false }}
               className="relative z-10 flex flex-col items-center gap-1 animate-bounce pb-2"
             >
-              <span
+              <LetterStaggerText
+                text={t.scrollDown}
+                type="hero"
                 className="text-[10px] font-['Cinzel',serif] tracking-widest text-[#273822] font-bold uppercase"
                 style={{
                   textShadow: '0 1px 2px rgba(255,255,255,0.9)',
                 }}
-              >
-                {t.scrollDown}
-              </span>
+              />
               <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
             </motion.div>
           </section>
@@ -688,7 +710,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 <ZareqiaPhotoCarousel />
               </div>
 
-              {/* Countdown Title */}
+              {/* Countdown Title with 3D Drop Impact letter animation */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -696,14 +718,15 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 transition={{ duration: 0.7, delay: 0.2 }}
                 className="mt-8 text-center"
               >
-                <h3
+                <LetterStaggerText
+                  text={t.countdownTitle}
+                  type="countdown"
+                  as="h3"
                   className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl sm:text-4xl text-[#1E2E1B] tracking-wide"
                   style={{
                     textShadow: '0 1px 3px rgba(255,255,255,0.95)',
                   }}
-                >
-                  {t.countdownTitle}
-                </h3>
+                />
                 <div className="flex items-center justify-center gap-2 mt-1.5 opacity-80">
                   <div className="w-8 h-[1px] bg-[#B59A57]" />
                   <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
@@ -732,9 +755,12 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     <span className="font-['Playfair_Display',serif] text-xl sm:text-2xl font-bold text-[#273822]">
                       {String(item.value).padStart(2, '0')}
                     </span>
-                    <span className="text-[9px] font-['Cinzel',serif] tracking-wider text-[#6B5A3E] font-semibold mt-0.5 uppercase">
-                      {item.label}
-                    </span>
+                    <LetterStaggerText
+                      text={item.label}
+                      type="countdown"
+                      as="span"
+                      className="text-[9px] font-['Cinzel',serif] tracking-wider text-[#6B5A3E] font-semibold mt-0.5 uppercase"
+                    />
                   </div>
                 ))}
               </motion.div>
@@ -758,14 +784,15 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 <Clock className="w-5 h-5" />
               </div>
 
-              <h3
+              <LetterStaggerText
+                text={t.timelineTitle}
+                type="timeline"
+                as="h3"
                 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl sm:text-4xl text-[#1E2E1B] tracking-wide"
                 style={{
                   textShadow: '0 1px 3px rgba(255,255,255,0.95)',
                 }}
-              >
-                {t.timelineTitle}
-              </h3>
+              />
               <div className="flex items-center justify-center gap-2 mt-1.5 mb-8 opacity-80">
                 <div className="w-8 h-[1px] bg-[#B59A57]" />
                 <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
@@ -792,25 +819,30 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                         isRTL ? '-right-[31px]' : '-left-[31px]'
                       }`}
                     />
-                    <h4
+                    <LetterStaggerText
+                      text={item.title}
+                      type="timeline"
+                      as="h4"
                       className="font-['Playfair_Display',serif] text-base font-bold text-[#1E2E1B]"
                       style={{
                         textShadow: '0 1px 2px rgba(255,255,255,0.95)',
                       }}
-                    >
-                      {item.title}
-                    </h4>
-                    <p className="font-['Cinzel',serif] text-[11px] tracking-wider text-[#785B24] font-semibold mt-0.5">
-                      {item.time}
-                    </p>
-                    <p
+                    />
+                    <LetterStaggerText
+                      text={item.time}
+                      type="timeline"
+                      as="p"
+                      className="font-['Cinzel',serif] text-[11px] tracking-wider text-[#785B24] font-semibold mt-0.5"
+                    />
+                    <LetterStaggerText
+                      text={item.desc}
+                      type="timeline"
+                      as="p"
                       className="font-['Cormorant_Garamond',serif] text-xs italic text-[#2C3827] mt-1 font-medium"
                       style={{
                         textShadow: '0 1px 2px rgba(255,255,255,0.85)',
                       }}
-                    >
-                      {item.desc}
-                    </p>
+                    />
                   </motion.div>
                 ))}
               </div>
@@ -819,7 +851,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
           {/* ========================================================
               SECTION 5: VENUE & DRESS CODE
-              Intro & Outro Animation: Radial Compass Expand & Floating Map
+              Intro & Outro Animation: Architectural Dome 3D Spin
               Video Background: Couple royal pose!
               ======================================================== */}
           <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
@@ -834,31 +866,36 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 <Building2 className="w-5 h-5" />
               </div>
 
-              <h3
+              <LetterStaggerText
+                text={t.venueTitle}
+                type="venue"
+                as="h3"
                 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl sm:text-4xl text-[#1E2E1B] tracking-wide"
                 style={{
                   textShadow: '0 1px 3px rgba(255,255,255,0.95)',
                 }}
-              >
-                {t.venueTitle}
-              </h3>
+              />
               <div className="flex items-center justify-center gap-2 mt-1.5 mb-4 opacity-80">
                 <div className="w-8 h-[1px] bg-[#B59A57]" />
                 <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
                 <div className="w-8 h-[1px] bg-[#B59A57]" />
               </div>
 
-              <h4
+              <LetterStaggerText
+                text={t.palaceName}
+                type="venue"
+                as="h4"
                 className="font-['Playfair_Display',serif] text-lg font-bold text-[#1E2E1B]"
                 style={{
                   textShadow: '0 1px 2px rgba(255,255,255,0.95)',
                 }}
-              >
-                {t.palaceName}
-              </h4>
-              <p className="font-['Cinzel',serif] text-xs tracking-wider text-[#6B5A3E] font-semibold mt-1 uppercase">
-                {t.palaceCity}
-              </p>
+              />
+              <LetterStaggerText
+                text={t.palaceCity}
+                type="venue"
+                as="p"
+                className="font-['Cinzel',serif] text-xs tracking-wider text-[#6B5A3E] font-semibold mt-1 uppercase"
+              />
 
               {/* Floating Venue Pin & Google Maps Action */}
               <div className="mt-5 flex flex-col items-center">
@@ -887,27 +924,34 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 <div className="w-9 h-9 mx-auto mb-1.5 rounded-full border border-[#B59A57]/50 flex items-center justify-center text-[#B59A57] bg-white/80 shadow-sm">
                   <Shirt className="w-4 h-4" />
                 </div>
-                <h4
+                <LetterStaggerText
+                  text={t.dressCodeTitle}
+                  type="venue"
+                  as="h4"
                   className="font-['Alex_Brush','Pinyon_Script',cursive] text-2xl text-[#1E2E1B]"
                   style={{
                     textShadow: '0 1px 2px rgba(255,255,255,0.95)',
                   }}
-                >
-                  {t.dressCodeTitle}
-                </h4>
-                <p className="font-['Playfair_Display',serif] text-sm font-bold text-[#273822] mt-0.5">
-                  {t.dressCodeValue}
-                </p>
-                <p className="font-['Cormorant_Garamond',serif] text-xs italic text-[#3A4A33] mt-0.5 font-medium">
-                  {t.dressCodeDesc}
-                </p>
+                />
+                <LetterStaggerText
+                  text={t.dressCodeValue}
+                  type="venue"
+                  as="p"
+                  className="font-['Playfair_Display',serif] text-sm font-bold text-[#273822] mt-0.5"
+                />
+                <LetterStaggerText
+                  text={t.dressCodeDesc}
+                  type="venue"
+                  as="p"
+                  className="font-['Cormorant_Garamond',serif] text-xs italic text-[#3A4A33] mt-0.5 font-medium"
+                />
               </motion.div>
             </motion.div>
           </section>
 
           {/* ========================================================
               SECTION 6: RSVP FORM
-              Intro & Outro Animation: Upward Royal Velvet Slide
+              Intro & Outro Animation: Luxury Velvet Mist Float
               Video Background: Couple royal pose + Celebration fireworks!
               ======================================================== */}
           <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
@@ -922,28 +966,30 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 <Mail className="w-5 h-5" />
               </div>
 
-              <h3
+              <LetterStaggerText
+                text={t.rsvpTitle}
+                type="rsvp"
+                as="h3"
                 className="font-['Cinzel',serif] text-2xl text-[#1E2E1B] tracking-widest font-bold uppercase"
                 style={{
                   textShadow: '0 1px 3px rgba(255,255,255,0.95)',
                 }}
-              >
-                {t.rsvpTitle}
-              </h3>
+              />
               <div className="flex items-center justify-center gap-2 mt-1.5 mb-3 opacity-80">
                 <div className="w-8 h-[1px] bg-[#B59A57]" />
                 <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
                 <div className="w-8 h-[1px] bg-[#B59A57]" />
               </div>
 
-              <p
+              <LetterStaggerText
+                text={t.rsvpIntro}
+                type="rsvp"
+                as="p"
                 className="font-['Cormorant_Garamond',serif] text-xs sm:text-sm italic text-[#273822] max-w-[280px] mx-auto mb-6 font-medium"
                 style={{
                   textShadow: '0 1px 2px rgba(255,255,255,0.9)',
                 }}
-              >
-                {t.rsvpIntro}
-              </p>
+              />
 
               {rsvpSubmitted ? (
                 <motion.div
@@ -1065,14 +1111,15 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
           {/* Footer Blessing */}
           <div className="relative z-10 text-center py-8 px-4">
-            <p
+            <LetterStaggerText
+              text={t.footerBlessing}
+              type="rsvp"
+              as="p"
               className="font-['Alex_Brush','Pinyon_Script',cursive] text-2xl sm:text-3xl text-[#1E2E1B]"
               style={{
                 textShadow: '0 1px 3px rgba(255,255,255,0.95)',
               }}
-            >
-              {t.footerBlessing}
-            </p>
+            />
             <div className="flex items-center justify-center gap-1.5 mt-2 text-[#7C9172]">
               <span className="text-xs">♥</span>
             </div>
