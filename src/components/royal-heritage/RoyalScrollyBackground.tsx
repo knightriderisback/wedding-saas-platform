@@ -226,10 +226,6 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
             'radial-gradient(circle at 50% 30%, rgba(255,255,255,0.35) 0%, rgba(238,230,215,0.45) 100%)',
         }}
       />
-
-      {/* Top & Bottom Soft Vignette */}
-      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#FAF8F5]/85 via-[#FAF8F5]/30 to-transparent pointer-events-none" />
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#FAF8F5]/90 via-[#FAF8F5]/30 to-transparent pointer-events-none" />
     </div>
   );
 };

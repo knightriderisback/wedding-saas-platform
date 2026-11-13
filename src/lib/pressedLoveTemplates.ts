@@ -1169,7 +1169,7 @@ export const PRESSED_LOVE_TEMPLATES: Record<string, PressedLoveTemplate> = {
     assets: {
       introVideo: '',
       introVideoPoster: '/templates/royal-heritage/frames/frame_0001.webp',
-      backgroundMusic: '/audio/indian-wedding-instrumental.mp3',
+      backgroundMusic: '/audio/royal-heritage-music.mp3',
       heroImage: '/templates/royal-heritage/frames/frame_0001.webp',
       venueImage: '/templates/royal-heritage/frames/frame_0001.webp',
       rsvpConfirmation: '',

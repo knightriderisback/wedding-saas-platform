@@ -459,9 +459,10 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
     return () => clearInterval(timer);
   }, [effectiveWeddingDate]);
 
-  // Audio Player (Indian Wedding Instrumental)
+  // Audio Player (User's Royal Heritage Soundtrack)
   useEffect(() => {
-    const audio = new Audio('/audio/indian-wedding-instrumental.mp3');
+    const audioSrc = project?.backgroundAudioUrl || '/audio/royal-heritage-music.mp3';
+    const audio = new Audio(audioSrc);
     audio.loop = true;
     audio.volume = 0.65;
     audioRef.current = audio;
@@ -471,7 +472,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
       audio.currentTime = 0;
       royalSitarAudio.stopAmbient();
     };
-  }, []);
+  }, [project?.backgroundAudioUrl]);
 
   const toggleAudio = () => {
     if (isAudioPlaying) {
@@ -557,108 +558,104 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
   return (
     <div
-      className={`relative min-h-screen w-full bg-[#FAF8F5] flex items-center justify-center p-0 sm:py-6 sm:px-4 overflow-hidden select-none ${
+      className={`relative w-full h-[100dvh] min-h-[100dvh] overflow-hidden bg-[#FAF8F5] select-none ${
         isRTL ? 'font-serif rtl' : ''
       }`}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      {/* Ambient background glow for desktop mode (Clean Ivory/Sage, NO black background!) */}
-      <div className="fixed inset-0 pointer-events-none opacity-40 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#EAE4D5] via-[#FAF8F5] to-[#F3EDE2]" />
+      {/* ========================================================
+          FIXED PINNED 3D SCROLL-SCRUBBED VIDEO CANVAS BACKGROUND (100% Full-Bleed Edge-to-Edge)
+          ======================================================== */}
+      <RoyalScrollyBackground
+        scrollerRef={scrollContainerRef}
+        overlayOpacity={0.16}
+      />
 
-      {/* Main Luxury Presentation Container (Clean, centered mobile aspect ratio, NO black borders!) */}
-      <div className="relative w-full sm:max-w-[430px] h-[100dvh] sm:h-[880px] sm:max-h-[92vh] rounded-none sm:rounded-[44px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.18)] border-0 sm:border-2 border-[#DFC07C]/40 bg-[#FAF8F5] flex flex-col z-10">
-        
-        {/* ========================================================
-            FIXED PINNED 3D SCROLL-SCRUBBED VIDEO CANVAS BACKGROUND
-            ======================================================== */}
-        <RoyalScrollyBackground
-          scrollerRef={scrollContainerRef}
-          overlayOpacity={0.16}
+      {/* ========================================================
+          STAGE 1 & 2: REALISTIC ROYAL ENVELOPE (From User Drive)
+          Magically dissolves on click anywhere + launches music
+          ======================================================== */}
+      {!isEnvelopeOpen && (
+        <RoyalRealisticEnvelope
+          onCurtainsOpen={handleCurtainsOpen}
+          onOpenComplete={handleEnvelopeComplete}
+          isArabic={isRTL}
+          onToggleLanguage={() =>
+            setCurrentLang(currentLang === 'en' ? 'hi' : 'en')
+          }
+          isAudioPlaying={isAudioPlaying}
+          onToggleAudio={toggleAudio}
         />
+      )}
 
-        {/* ========================================================
-            STAGE 1 & 2: 3D REALISTIC PERSPECTIVE GATEFOLD ENVELOPE
-            ======================================================== */}
-        {!isEnvelopeOpen && (
-          <RoyalRealisticEnvelope
-            onCurtainsOpen={handleCurtainsOpen}
-            onOpenComplete={handleEnvelopeComplete}
-            isArabic={isRTL}
-            onToggleLanguage={() =>
-              setCurrentLang(currentLang === 'en' ? 'hi' : 'en')
-            }
-            isAudioPlaying={isAudioPlaying}
-            onToggleAudio={toggleAudio}
-          />
+      {/* ========================================================
+          FLOATING CONTROLS (Top-Right Sound, Bottom-Left Language)
+          Clean, minimal floating pills. NO header strip, NO footer strip!
+          ======================================================== */}
+      {/* Audio Mute/Unmute Button (Top Right) */}
+      <button
+        onClick={toggleAudio}
+        className="fixed top-4 right-4 z-40 w-10 h-10 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/60 shadow-[0_4px_15px_rgba(0,0,0,0.18)] flex items-center justify-center text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer"
+        title={isAudioPlaying ? 'Mute Music' : 'Play Music'}
+      >
+        {isAudioPlaying ? (
+          <Volume2 className="w-5 h-5 text-[#B59A57] animate-pulse" />
+        ) : (
+          <VolumeX className="w-5 h-5 text-[#6B5A3E]" />
         )}
+      </button>
 
-        {/* ========================================================
-            FLOATING CONTROLS (Top-Right Sound, Bottom-Left Language)
-            Clean, minimal floating pills. NO header strip, NO footer strip!
-            ======================================================== */}
-        {/* Audio Mute/Unmute Button (Top Right) */}
-        <button
-          onClick={toggleAudio}
-          className="absolute top-4 right-4 z-50 w-9 h-9 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md flex items-center justify-center text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer"
-          title={isAudioPlaying ? 'Mute Music' : 'Play Music'}
-        >
-          {isAudioPlaying ? (
-            <Volume2 className="w-4 h-4 text-[#B59A57] animate-pulse" />
-          ) : (
-            <VolumeX className="w-4 h-4 text-[#6B5A3E]" />
+      {/* 4-Language Switcher (Bottom Left) */}
+      <div className="fixed bottom-4 left-4 z-40 flex flex-col items-start gap-1">
+        <AnimatePresence>
+          {langMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.9 }}
+              className="bg-[#FAF8F5]/95 backdrop-blur-md border border-[#B59A57]/50 shadow-xl rounded-2xl p-1.5 flex flex-col gap-1 mb-1"
+            >
+              {(['en', 'hi', 'hinglish', 'ur'] as SupportedLanguage[]).map((lng) => (
+                <button
+                  key={lng}
+                  onClick={() => {
+                    setCurrentLang(lng);
+                    setLangMenuOpen(false);
+                  }}
+                  className={`px-3 py-1 rounded-xl text-xs font-['Cinzel',serif] tracking-wider text-left transition-all ${
+                    currentLang === lng
+                      ? 'bg-[#273822] text-[#FAF8F5] font-bold shadow-sm'
+                      : 'text-[#273822] hover:bg-[#DFC07C]/25'
+                  }`}
+                  style={deepTextShadow}
+                >
+                  {TRANSLATIONS[lng].langName}
+                </button>
+              ))}
+            </motion.div>
           )}
-        </button>
+        </AnimatePresence>
 
-        {/* 4-Language Switcher (Bottom Left) */}
-        <div className="absolute bottom-4 left-4 z-50 flex flex-col items-start gap-1">
-          <AnimatePresence>
-            {langMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                className="bg-[#FAF8F5]/95 backdrop-blur-md border border-[#B59A57]/50 shadow-xl rounded-2xl p-1.5 flex flex-col gap-1 mb-1"
-              >
-                {(['en', 'hi', 'hinglish', 'ur'] as SupportedLanguage[]).map((lng) => (
-                  <button
-                    key={lng}
-                    onClick={() => {
-                      setCurrentLang(lng);
-                      setLangMenuOpen(false);
-                    }}
-                    className={`px-3 py-1 rounded-xl text-xs font-['Cinzel',serif] tracking-wider text-left transition-all ${
-                      currentLang === lng
-                        ? 'bg-[#273822] text-[#FAF8F5] font-bold shadow-sm'
-                        : 'text-[#273822] hover:bg-[#DFC07C]/25'
-                    }`}
-                    style={deepTextShadow}
-                  >
-                    {TRANSLATIONS[lng].langName}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <button
-            onClick={() => setLangMenuOpen(!langMenuOpen)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer font-bold"
-            style={deepTextShadow}
-          >
-            <Globe className="w-3.5 h-3.5 text-[#B59A57]" />
-            <span>{t.langName}</span>
-          </button>
-        </div>
-
-        {/* ========================================================
-            SCROLLABLE CONTENT BODY (CARDLESS, FLOATING DIRECTLY OVER VIDEO)
-            Placement is optimized so the couple's poses in the center
-            are 100% visible throughout scrolling!
-            ======================================================== */}
-        <div
-          ref={scrollContainerRef}
-          className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden scrollbar-none pb-20 bg-transparent"
+        <button
+          onClick={() => setLangMenuOpen(!langMenuOpen)}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer font-bold"
+          style={deepTextShadow}
         >
+          <Globe className="w-3.5 h-3.5 text-[#B59A57]" />
+          <span>{t.langName}</span>
+        </button>
+      </div>
+
+      {/* ========================================================
+          SCROLLABLE CONTENT BODY (CARDLESS, FLOATING DIRECTLY OVER VIDEO)
+          Placement is optimized so the couple's poses in the center
+          are 100% visible throughout scrolling!
+          ======================================================== */}
+      <div
+        ref={scrollContainerRef}
+        className="relative z-10 w-full h-[100dvh] overflow-y-auto overflow-x-hidden scrollbar-none pb-24 bg-transparent"
+      >
+        <div className="w-full max-w-lg mx-auto px-4 sm:px-6">
           {/* ========================================================
               SECTION 1: HERO (Dynamic Couple Names 3D Pop Out)
               ======================================================== */}
