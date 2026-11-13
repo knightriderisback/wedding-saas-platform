@@ -1120,6 +1120,111 @@ export const PRESSED_LOVE_TEMPLATES: Record<string, PressedLoveTemplate> = {
       bgColor: '#5C7153',
     },
   },
+
+  'royal-heritage': {
+    id: 'royal-heritage',
+    slug: 'wedding-invitation-royal-heritage',
+    name: 'Royal Heritage 3D Scrolly Suite',
+    subtitle: 'Cinematic Royal Couple & 3D Video Scroller',
+    tagline: 'Interactive scroll-scrubbed Indian royal couple animation, gatefold unboxing, 3D glitter scratch heart, and royal palace itinerary.',
+    badge: 'New 3D Cinematic Motion',
+    couple: {
+      partner1: 'Aryan',
+      partner2: 'Eva',
+      formalTitle: "We're getting married: Aryan & Eva",
+      initials: 'A & E',
+    },
+    ceremony: {
+      date: '2026-12-12',
+      time: '10:00',
+      displayDate: 'Saturday, December 12, 2026',
+      displayTime: '10:00 AM',
+      timeZone: 'Asia/Kolkata',
+    },
+    theme: {
+      name: 'theme-royal-heritage',
+      colors: {
+        primary: '#1A2218',
+        secondary: '#273822',
+        accent: '#DFC07C',
+        text: '#242A20',
+        background: '#FAF8F5',
+        surface: '#FFFFFF',
+        border: '#DFC07C',
+      },
+      fonts: {
+        display: 'font-cinzel',
+        script: 'font-pinyon',
+        body: 'font-cormorant',
+      },
+    },
+    location: {
+      venueName: 'The Royal Palace & Gardens',
+      address: 'Lake Pichola',
+      city: 'Udaipur, Rajasthan',
+      country: 'India',
+      googleMapsUrl: 'https://maps.google.com/?q=The+Oberoi+Udaivilas+Udaipur',
+      description: 'Regal lakeside palace heritage, intricate jharokha arches, and fairytale courtyard gardens.',
+    },
+    assets: {
+      introVideo: '',
+      introVideoPoster: '/templates/royal-heritage/frames/frame_0001.webp',
+      backgroundMusic: '/audio/indian-wedding-instrumental.mp3',
+      heroImage: '/templates/royal-heritage/frames/frame_0001.webp',
+      venueImage: '/templates/royal-heritage/frames/frame_0001.webp',
+      rsvpConfirmation: '',
+    },
+    program: [
+      {
+        time: '6:00 PM',
+        title: 'Mehndi & Sangeet',
+        description: 'An evening of music, dance, and festive henna.',
+        iconType: 'wine',
+      },
+      {
+        time: '10:00 AM',
+        title: 'Wedding Ceremony',
+        description: 'Sacred wedding rituals and auspicious vows.',
+        iconType: 'ring',
+      },
+      {
+        time: '7:30 PM',
+        title: 'Royal Reception',
+        description: 'Grand dinner banquet and royal celebrations.',
+        iconType: 'party',
+      },
+    ],
+    accommodation: {
+      title: 'Accommodation',
+      description: 'Luxury suites reserved at The Royal Palace Resort for our esteemed guests.',
+      hotels: [
+        {
+          name: 'The Royal Palace Heritage Resort',
+          tier: '5-Star Luxury Heritage',
+          distance: 'At venue',
+          bookingUrl: 'https://maps.google.com/?q=The+Oberoi+Udaivilas+Udaipur',
+        },
+      ],
+    },
+    faqs: [
+      {
+        question: 'What is the recommended dress code?',
+        answer: 'Pastel florals, emerald green, and regal navy Indian traditional formal wear.',
+      },
+    ],
+    gifts: {
+      message: 'Your love, blessings, and presence are the greatest gifts we could ever ask for.',
+      bankName: 'HDFC Private Banking',
+      accountHolder: 'Aryan Sharma & Eva Mehta',
+      iban: 'HDFC0001234',
+      bicSwift: 'HDFCINBB',
+    },
+    envelope: {
+      waxColor: '#273822',
+      waxMonogram: 'A&E',
+      bgColor: '#1A2218',
+    },
+  },
 };
 
 export const TEMPLATE_LIST = Object.values(PRESSED_LOVE_TEMPLATES);

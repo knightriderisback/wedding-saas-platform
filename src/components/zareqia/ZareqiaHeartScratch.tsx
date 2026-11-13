@@ -277,8 +277,8 @@ END:VCALENDAR`;
       <div className="max-w-[320px] mx-auto px-2 mb-4 text-center">
         <p className="font-['Cormorant_Garamond',serif] italic text-[15px] sm:text-[16px] leading-relaxed text-[#4B5845]">
           {isArabic
-            ? 'يشرفنا أن نرحب بكم في حفل زفاف زين ونورا. ومع بداية رحلتهما معاً في الإيمان والمحبة، نشكركم لكونكم جزءاً من هذه المناسبة المباركة.'
-            : 'We are honored to welcome you to the Wedding ceremony of Zayn & Nora. As they begin their journey together in faith and love, we thank you for being part of this blessed occasion.'}
+            ? `يشرفنا أن نرحب بكم في حفل زفاف ${coupleNames || 'زين ونورا'}. ومع بداية رحلتهما معاً في الإيمان والمحبة، نشكركم لكونكم جزءاً من هذه المناسبة المباركة.`
+            : `We are honored to welcome you to the Wedding ceremony of ${coupleNames || 'Aryan & Eva'}. As they begin their journey together in faith and love, we thank you for being part of this blessed occasion.`}
         </p>
         <div className="flex items-center justify-center gap-1.5 mt-2 text-[#7C9172]">
           <span className="text-xs">♥</span>
