@@ -619,6 +619,266 @@
     inset 0 2px 3px rgba(0, 0, 0, 0.3);
 }
 
+/* =========================================================================
+   AUTHENTIC 3D POP-OUT CARDS & TILES (MULTI-COLORED ROYAL PALETTE)
+   Ultra-Readable Modern Luxury Typography & Zero Black Dullness
+   ========================================================================= */
+
+.font-portal {
+  font-family: 'Plus Jakarta Sans', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* 3D Pop Out - Warm Royal Amber Card */
+.card-pop3d-amber {
+  position: relative;
+  background: linear-gradient(145deg, #FFFDF8 0%, #FBF4E4 100%);
+  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  box-shadow:
+    0 12px 24px -4px rgba(170, 130, 10, 0.12),
+    0 6px 12px -2px rgba(170, 130, 10, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(170, 130, 10, 0.15);
+  border-radius: 1rem;
+  color: #5C4303;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-pop3d-amber:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow:
+    0 18px 32px -4px rgba(170, 130, 10, 0.18),
+    0 10px 16px -2px rgba(170, 130, 10, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(170, 130, 10, 0.22);
+}
+
+/* 3D Pop Out - Royal Emerald Card */
+.card-pop3d-emerald {
+  position: relative;
+  background: linear-gradient(145deg, #F9FCF8 0%, #EBF4E9 100%);
+  border: 1.5px solid rgba(45, 74, 54, 0.4);
+  box-shadow:
+    0 12px 24px -4px rgba(45, 74, 54, 0.12),
+    0 6px 12px -2px rgba(45, 74, 54, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(45, 74, 54, 0.15);
+  border-radius: 1rem;
+  color: #193822;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-pop3d-emerald:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow:
+    0 18px 32px -4px rgba(45, 74, 54, 0.18),
+    0 10px 16px -2px rgba(45, 74, 54, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(45, 74, 54, 0.22);
+}
+
+/* 3D Pop Out - Royal Ruby Rose Card */
+.card-pop3d-rose {
+  position: relative;
+  background: linear-gradient(145deg, #FFF9FA 0%, #FBE6EA 100%);
+  border: 1.5px solid rgba(155, 28, 46, 0.4);
+  box-shadow:
+    0 12px 24px -4px rgba(155, 28, 46, 0.12),
+    0 6px 12px -2px rgba(155, 28, 46, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(155, 28, 46, 0.15);
+  border-radius: 1rem;
+  color: #6E121E;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-pop3d-rose:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow:
+    0 18px 32px -4px rgba(155, 28, 46, 0.18),
+    0 10px 16px -2px rgba(155, 28, 46, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(155, 28, 46, 0.22);
+}
+
+/* 3D Pop Out - Sapphire Azure Card */
+.card-pop3d-azure {
+  position: relative;
+  background: linear-gradient(145deg, #F8FAFC 0%, #E6EEF8 100%);
+  border: 1.5px solid rgba(30, 63, 102, 0.4);
+  box-shadow:
+    0 12px 24px -4px rgba(30, 63, 102, 0.12),
+    0 6px 12px -2px rgba(30, 63, 102, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(30, 63, 102, 0.15);
+  border-radius: 1rem;
+  color: #142F4C;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-pop3d-azure:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow:
+    0 18px 32px -4px rgba(30, 63, 102, 0.18),
+    0 10px 16px -2px rgba(30, 63, 102, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(30, 63, 102, 0.22);
+}
+
+/* 3D Pop Out - Royal Amethyst Lilac Card */
+.card-pop3d-amethyst {
+  position: relative;
+  background: linear-gradient(145deg, #FAF7FC 0%, #EFE5F6 100%);
+  border: 1.5px solid rgba(107, 59, 130, 0.4);
+  box-shadow:
+    0 12px 24px -4px rgba(107, 59, 130, 0.12),
+    0 6px 12px -2px rgba(107, 59, 130, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(107, 59, 130, 0.15);
+  border-radius: 1rem;
+  color: #431E54;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-pop3d-amethyst:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow:
+    0 18px 32px -4px rgba(107, 59, 130, 0.18),
+    0 10px 16px -2px rgba(107, 59, 130, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(107, 59, 130, 0.22);
+}
+
+/* 3D Pop Out - Sandstone Terracotta Card */
+.card-pop3d-terracotta {
+  position: relative;
+  background: linear-gradient(145deg, #FFF9F7 0%, #F8E7E0 100%);
+  border: 1.5px solid rgba(160, 75, 45, 0.4);
+  box-shadow:
+    0 12px 24px -4px rgba(160, 75, 45, 0.12),
+    0 6px 12px -2px rgba(160, 75, 45, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(160, 75, 45, 0.15);
+  border-radius: 1rem;
+  color: #612B18;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-pop3d-terracotta:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow:
+    0 18px 32px -4px rgba(160, 75, 45, 0.18),
+    0 10px 16px -2px rgba(160, 75, 45, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(160, 75, 45, 0.22);
+}
+
+/* Slim & Compact 3D Action Buttons */
+.btn-slim-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 0.65rem;
+  background: linear-gradient(180deg, #FBF4E0 0%, #E8D395 50%, #CBB068 100%);
+  border: 1px solid rgba(181, 154, 87, 0.6);
+  box-shadow:
+    0 2px 6px rgba(181, 154, 87, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(100, 75, 15, 0.3);
+  color: #382803;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-slim-gold:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 10px rgba(181, 154, 87, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.btn-slim-gold:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 1px 3px rgba(181, 154, 87, 0.2),
+    inset 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.btn-slim-emerald {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 0.65rem;
+  background: linear-gradient(180deg, #2D4A36 0%, #1C3323 100%);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow:
+    0 2px 6px rgba(45, 74, 54, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+  color: #FAF8F5;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-slim-emerald:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 10px rgba(45, 74, 54, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.btn-slim-emerald:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 1px 3px rgba(45, 74, 54, 0.2),
+    inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-slim-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(181, 154, 87, 0.4);
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  color: #5C4303;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-slim-outline:hover {
+  background: #FFFFFF;
+  border-color: #B59A57;
+  transform: translateY(-1px);
+}
+
+.pill-slim {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+
 .toggle-switch-3d {
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
 }

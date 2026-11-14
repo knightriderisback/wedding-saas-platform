@@ -254,6 +254,7 @@ function ClientPortalContent() {
     { id: 'dj', icon: Music, label: 'DJ Playlist' },
     { id: 'blessings', icon: Mic, label: 'Blessings' },
     { id: 'content', icon: Edit2, label: 'Editor' },
+    { id: 'media', icon: Camera, label: 'Media & Upload' },
     { id: 'suites', icon: Palette, label: 'Suites' },
   ];
 
@@ -450,38 +451,38 @@ function ClientPortalContent() {
   const CurrentTabIcon = currentTab.icon;
 
   return (
-    <div className="min-h-screen bg-khadi-fabric relative overflow-hidden pb-24 text-[#2C2218] selection:bg-[#D4AF37]/30 selection:text-[#2C2218]">
+    <div className="min-h-screen bg-khadi-fabric relative overflow-hidden pb-24 text-[#5C4303] font-portal selection:bg-[#D4AF37]/30 selection:text-[#5C4303]">
       {/* 3D Ambient Refractive Bubbles & Glass Orbs */}
       <AcrylicBackgroundOrbs variant="multi" />
 
       {/* Toast Notification */}
       {toastMsg && (
-        <div className="fixed top-3 right-3 z-50 bg-[#2C2218] text-[#FAF8F5] px-4 py-2 rounded-xl border border-[#AA820A] shadow-xl text-xs font-cinzel flex items-center gap-2 animate-in fade-in">
+        <div className="fixed top-3 right-3 z-50 bg-[#193822] text-[#FAF8F5] px-4 py-2 rounded-xl border border-[#AA820A] shadow-xl text-xs font-portal font-bold flex items-center gap-2 animate-in fade-in">
           <CheckCircle2 className="w-4 h-4 text-emerald-400" />
           <span>{toastMsg}</span>
         </div>
       )}
 
       {/* ULTRA-SLIM STICKY CLIENT HEADER (Rajhara Express Pattern in Luxury Soft Gold/Alabaster) */}
-      <header className="bg-white/90 backdrop-blur-md text-[#2C2218] sticky top-0 z-30 border-b border-[#E8DFC8] shadow-xs">
+      <header className="bg-white/95 backdrop-blur-md text-[#5C4303] sticky top-0 z-30 border-b border-[#E8DFC8] shadow-xs">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2">
           {/* Left: Store Link & Title */}
           <div className="flex items-center gap-2.5">
             <Link
               href="/admin"
-              className="p-1.5 rounded-lg bg-[#FAF4E3] hover:bg-[#F3E5AB] text-[#7D5F04] border border-[#AA820A]/30 transition shadow-2xs"
+              className="p-1.5 rounded-lg bg-[#FAF4E3] hover:bg-[#F3E5AB] text-[#5C4303] border border-[#AA820A]/30 transition shadow-2xs"
               title="Return to Master Admin"
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
             <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#AA820A] via-[#D4AF37] to-[#FAF4E3] flex items-center justify-center text-white font-cinzel font-bold text-xs shadow-xs">
-              {project.partner1[0]}&{project.partner2[0]}
+              👑
             </div>
             <div className="leading-tight">
-              <span className="font-cinzel font-black text-xs sm:text-sm tracking-tight text-[#2C2218]">
+              <span className="font-cinzel font-black text-xs sm:text-sm tracking-tight text-[#5C4303]">
                 {project.partner1.split(' ')[0]} & {project.partner2.split(' ')[0]} Wedding Studio
               </span>
-              <span className="text-[10px] text-[#7D5F04] font-serif ml-1.5 hidden sm:inline">
+              <span className="text-[10px] text-[#785B24] font-medium ml-1.5 hidden sm:inline">
                 • {project.venue.city}
               </span>
             </div>
@@ -492,7 +493,7 @@ function ClientPortalContent() {
             <Link
               href={`/${project.slug}`}
               target="_blank"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#FAF4E3] hover:bg-[#F3E5AB] text-[#7D5F04] text-xs font-cinzel font-bold transition shadow-2xs border border-[#AA820A]/40"
+              className="btn-slim-outline text-[11px] font-bold"
               title="Preview Live Wedding Microsite"
             >
               <Eye className="w-3.5 h-3.5 text-[#AA820A] shrink-0" />
@@ -501,7 +502,7 @@ function ClientPortalContent() {
 
             <button
               onClick={() => setShowAddGuestModal(true)}
-              className="px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#AA820A] hover:brightness-110 text-[#2C2218] font-cinzel font-black text-xs shadow-xs transition flex items-center gap-1 cursor-pointer"
+              className="btn-slim-gold text-[11px] font-bold"
               title="Add Guest"
             >
               <Plus className="w-3.5 h-3.5 stroke-[3]" />
@@ -565,62 +566,68 @@ function ClientPortalContent() {
         {/* TAB 1: OVERVIEW */}
         {activeTab === 'overview' && (
           <div className="space-y-3">
-            {/* Metric Cards - 3D Royal Rajhara Cards with Bevel Highlights */}
+            {/* Metric Cards - 3D Royal Pop-out Cards in Multi-Colors */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
-              <div className="card-rajhara-3d p-3.5 sm:p-4 rounded-2xl border border-[#AA820A]/30 shadow-md">
-                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase tracking-wider flex items-center gap-1">
-                  <Users className="w-3 h-3 text-[#AA820A]" /> Total Guests
+              <div className="card-pop3d-amber p-3.5 sm:p-4 rounded-2xl">
+                <div className="text-[10px] font-portal font-bold text-[#785B24] uppercase tracking-wider flex items-center gap-1">
+                  <Users className="w-3.5 h-3.5 text-[#AA820A]" /> Total Guests
                 </div>
-                <div className="text-lg sm:text-2xl font-black text-[#2C2218] mt-0.5">{guests.length}</div>
-                <div className="text-[10px] text-[#7D5F04] font-medium mt-0.5">Invited in Registry</div>
-              </div>
-
-              <div className="card-rajhara-3d p-3.5 sm:p-4 rounded-2xl border border-[#739B83]/30 shadow-md">
-                <div className="text-[10px] font-cinzel font-bold text-[#2D4A36] uppercase tracking-wider flex items-center gap-1">
-                  <MessageCircle className="w-3 h-3 text-[#2D4A36]" /> Invites Sent
-                </div>
-                <div className="text-lg sm:text-2xl font-black text-[#2D4A36] mt-0.5">{dispatchedCount}</div>
-                <div className="text-[10px] text-[#2D4A36] font-medium mt-0.5">
-                  {guests.length > 0 ? Math.round((dispatchedCount / guests.length) * 100) : 0}% WhatsApp coverage
+                <div className="text-xl sm:text-2xl font-black text-[#5C4303] mt-0.5">{guests.length}</div>
+                <div className="text-[10px] text-[#785B24] font-medium mt-0.5 flex items-center gap-1">
+                  <span>✨</span> Invited in Registry
                 </div>
               </div>
 
-              <div className="card-rajhara-3d p-3.5 sm:p-4 rounded-2xl border border-[#D47A88]/30 shadow-md">
-                <div className="text-[10px] font-cinzel font-bold text-[#9B1C2E] uppercase tracking-wider flex items-center gap-1">
-                  <Heart className="w-3 h-3 text-[#9B1C2E]" /> Attending
+              <div className="card-pop3d-emerald p-3.5 sm:p-4 rounded-2xl">
+                <div className="text-[10px] font-portal font-bold text-[#193822] uppercase tracking-wider flex items-center gap-1">
+                  <MessageCircle className="w-3.5 h-3.5 text-[#234E30]" /> Invites Sent
                 </div>
-                <div className="text-lg sm:text-2xl font-black text-[#9B1C2E] mt-0.5">{totalAttendingHeadcount}</div>
-                <div className="text-[10px] text-[#9B1C2E] font-medium mt-0.5">{attendingCount} VIP Passes</div>
+                <div className="text-xl sm:text-2xl font-black text-[#193822] mt-0.5">{dispatchedCount}</div>
+                <div className="text-[10px] text-[#234E30] font-medium mt-0.5 flex items-center gap-1">
+                  <span>📱</span> {guests.length > 0 ? Math.round((dispatchedCount / guests.length) * 100) : 0}% WhatsApp coverage
+                </div>
               </div>
 
-              <div className="card-rajhara-3d p-3.5 sm:p-4 rounded-2xl border border-[#6B9AC4]/30 shadow-md">
-                <div className="text-[10px] font-cinzel font-bold text-[#1E3F66] uppercase tracking-wider flex items-center gap-1">
-                  <Music className="w-3 h-3 text-[#1E3F66]" /> DJ Requests
+              <div className="card-pop3d-rose p-3.5 sm:p-4 rounded-2xl">
+                <div className="text-[10px] font-portal font-bold text-[#6E121E] uppercase tracking-wider flex items-center gap-1">
+                  <Heart className="w-3.5 h-3.5 text-[#9B1C2E]" /> Attending
                 </div>
-                <div className="text-lg sm:text-2xl font-black text-[#1E3F66] mt-0.5">{djPlaylist.length}</div>
-                <div className="text-[10px] text-[#1E3F66] font-medium mt-0.5">Ready for Sangeet PDF</div>
+                <div className="text-xl sm:text-2xl font-black text-[#6E121E] mt-0.5">{totalAttendingHeadcount}</div>
+                <div className="text-[10px] text-[#9B1C2E] font-medium mt-0.5 flex items-center gap-1">
+                  <span>👑</span> {attendingCount} VIP Passes
+                </div>
+              </div>
+
+              <div className="card-pop3d-azure p-3.5 sm:p-4 rounded-2xl">
+                <div className="text-[10px] font-portal font-bold text-[#142F4C] uppercase tracking-wider flex items-center gap-1">
+                  <Music className="w-3.5 h-3.5 text-[#1E3F66]" /> DJ Requests
+                </div>
+                <div className="text-xl sm:text-2xl font-black text-[#142F4C] mt-0.5">{djPlaylist.length}</div>
+                <div className="text-[10px] text-[#1E3F66] font-medium mt-0.5 flex items-center gap-1">
+                  <span>🎵</span> Ready for Sangeet PDF
+                </div>
               </div>
             </div>
 
             {/* Royal Customization Studio Feature Card */}
-            <div className="card-rajhara-elevated-3d p-4 rounded-2xl border border-[#AA820A]/50 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="card-pop3d-amethyst p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#D4AF37] to-[#7D5F04] text-white flex items-center justify-center shadow-md shrink-0">
-                  <Sliders className="w-6 h-6 animate-pulse" />
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#AA820A] to-[#431E54] text-white flex items-center justify-center shadow-md shrink-0">
+                  <Sliders className="w-5 h-5 animate-pulse" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-['Cinzel',serif] uppercase tracking-wider font-bold text-[#7D5F04]">
+                    <span className="text-[10px] font-portal uppercase tracking-wider font-bold text-[#431E54]">
                       Bespoke Royal Studio
                     </span>
-                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#273822] text-[#FAF8F5] font-bold">
-                      NEW
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#193822] text-[#FAF8F5] font-bold">
+                      NEW 💎
                     </span>
                   </div>
-                  <h3 className="font-['Rozha_One',serif] font-bold text-sm sm:text-base text-[#1E2E1B] leading-tight">
+                  <h3 className="font-['Rozha_One',serif] font-bold text-sm sm:text-base text-[#431E54] leading-tight">
                     Customise Every Text, Font, Size & Section Visibility
                   </h3>
-                  <p className="text-xs text-[#544230] mt-0.5">
+                  <p className="text-xs text-[#6B3B82] mt-0.5 font-medium">
                     Tailor couple names, lineage, dates, music tracks, and toggle any of the 9 sections.
                   </p>
                 </div>
@@ -628,53 +635,66 @@ function ClientPortalContent() {
 
               <button
                 onClick={() => setActiveTab('customization')}
-                className="btn-rajhara-3d px-5 py-2.5 rounded-xl text-xs font-['Cinzel',serif] uppercase tracking-wider font-bold shrink-0 shadow-md flex items-center gap-2 cursor-pointer self-start sm:self-auto"
+                className="btn-slim-gold text-xs font-bold shrink-0 flex items-center gap-1.5 self-start sm:self-auto"
               >
-                <Sliders className="w-4 h-4" />
+                <Sliders className="w-3.5 h-3.5" />
                 <span>Open Customization Studio</span>
+                <span>✨</span>
               </button>
             </div>
 
             {/* Quick Action Hub */}
-            <div className="card-rajhara-3d p-4 rounded-2xl border border-[#E8DFC8] shadow-md space-y-3">
-              <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04] tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#AA820A]" /> Quick Wedding Concierge Actions
+            <div className="card-pop3d-terracotta p-4 rounded-2xl space-y-3">
+              <h3 className="font-portal text-xs font-bold uppercase text-[#612B18] tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#AA820A]" /> Quick Wedding Concierge Actions 🏰
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
                 <button
                   onClick={handleImportPhoneContacts}
-                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#AA820A] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-rajhara-3d shadow-xs hover:shadow-md"
+                  className="card-pop3d-amber p-3 rounded-xl text-left flex flex-col justify-between cursor-pointer group"
                 >
-                  <Phone className="w-4 h-4 text-[#AA820A] mb-1" />
-                  <span className="font-bold text-[#2C2218]">Import Contacts</span>
-                  <span className="text-[10px] text-[#544230]">From Mobile Phone</span>
+                  <div className="flex items-center justify-between mb-1">
+                    <Phone className="w-4 h-4 text-[#AA820A]" />
+                    <span className="text-xs">📱</span>
+                  </div>
+                  <span className="font-bold text-[#5C4303] text-xs">Import Contacts</span>
+                  <span className="text-[10px] text-[#785B24]">From Phone</span>
                 </button>
 
                 <button
                   onClick={handleExportDjPdf}
-                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#739B83] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-rajhara-3d shadow-xs hover:shadow-md"
+                  className="card-pop3d-emerald p-3 rounded-xl text-left flex flex-col justify-between cursor-pointer group"
                 >
-                  <Download className="w-4 h-4 text-[#2D4A36] mb-1" />
-                  <span className="font-bold text-[#2C2218]">Export DJ PDF</span>
-                  <span className="text-[10px] text-[#544230]">1-Click Printable PDF</span>
+                  <div className="flex items-center justify-between mb-1">
+                    <Download className="w-4 h-4 text-[#193822]" />
+                    <span className="text-xs">📄</span>
+                  </div>
+                  <span className="font-bold text-[#193822] text-xs">Export DJ PDF</span>
+                  <span className="text-[10px] text-[#234E30]">1-Click PDF</span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('customization')}
-                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#AA820A] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-rajhara-3d shadow-xs hover:shadow-md"
+                  className="card-pop3d-amethyst p-3 rounded-xl text-left flex flex-col justify-between cursor-pointer group"
                 >
-                  <Sliders className="w-4 h-4 text-[#AA820A] mb-1" />
-                  <span className="font-bold text-[#2C2218]">Customize Design</span>
-                  <span className="text-[10px] text-[#544230]">Fonts, Copy & Sections</span>
+                  <div className="flex items-center justify-between mb-1">
+                    <Sliders className="w-4 h-4 text-[#431E54]" />
+                    <span className="text-xs">🎨</span>
+                  </div>
+                  <span className="font-bold text-[#431E54] text-xs">Customize Design</span>
+                  <span className="text-[10px] text-[#6B3B82]">Copy & Sections</span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('suites')}
-                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#6B9AC4] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-rajhara-3d shadow-xs hover:shadow-md"
+                  className="card-pop3d-azure p-3 rounded-xl text-left flex flex-col justify-between cursor-pointer group"
                 >
-                  <Palette className="w-4 h-4 text-[#1E3F66] mb-1" />
-                  <span className="font-bold text-[#2C2218]">Switch Suite</span>
-                  <span className="text-[10px] text-[#544230]">13 Luxury Templates</span>
+                  <div className="flex items-center justify-between mb-1">
+                    <Palette className="w-4 h-4 text-[#142F4C]" />
+                    <span className="text-xs">👑</span>
+                  </div>
+                  <span className="font-bold text-[#142F4C] text-xs">Switch Suite</span>
+                  <span className="text-[10px] text-[#1E3F66]">13 Luxury Themes</span>
                 </button>
               </div>
             </div>
@@ -694,59 +714,61 @@ function ClientPortalContent() {
         {activeTab === 'guests' && (
           <div className="space-y-3">
             {/* Top Colorful Telemetry Card (Rose Theme) */}
-            <div className="acrylic-rose card-3d-elevated p-3.5 sm:p-4 rounded-2xl border border-[#D47A88]/40 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="card-pop3d-rose p-3.5 sm:p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#D47A88]/30 flex items-center justify-center text-[#9B1C2E] shadow-2xs shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#D47A88]/40 flex items-center justify-center text-[#9B1C2E] shadow-2xs shrink-0">
                   <Users className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="font-cinzel text-xs font-bold uppercase text-[#9B1C2E]">
-                    Guest Dispatch & Live RSVP Telemetry
+                  <h3 className="font-portal text-xs font-bold uppercase text-[#6E121E]">
+                    Guest Dispatch & Live RSVP Telemetry 💌
                   </h3>
-                  <p className="text-[11px] text-[#544230]">
+                  <p className="text-[11px] text-[#9B1C2E] font-medium">
                     1-Click WhatsApp invites via wa.me, mobile contacts import, and real-time attendance
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <span className="font-mono text-xs font-bold bg-white/90 text-[#9B1C2E] px-3 py-1 rounded-xl border border-rose-200 shadow-2xs">
-                  {dispatchedCount}/{guests.length} Dispatched
+                <span className="font-mono text-xs font-bold bg-white/95 text-[#6E121E] px-3 py-1 rounded-xl border border-rose-200 shadow-2xs">
+                  {dispatchedCount}/{guests.length} Dispatched 🚀
                 </span>
-                <span className="font-mono text-xs font-bold bg-white/90 text-emerald-800 px-3 py-1 rounded-xl border border-emerald-200 shadow-2xs">
-                  {attendingCount} Attending
+                <span className="font-mono text-xs font-bold bg-white/95 text-[#193822] px-3 py-1 rounded-xl border border-emerald-200 shadow-2xs">
+                  {attendingCount} Attending 👑
                 </span>
               </div>
             </div>
 
             {/* Top Toolbar */}
-            <div className="acrylic-glass card-3d p-3 sm:p-4 rounded-2xl border border-[#E8DFC8] shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="card-pop3d-amber p-3 sm:p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleImportPhoneContacts}
-                  className="px-3.5 py-2 rounded-xl bg-white/80 hover:bg-white text-[#7D5F04] border border-[#AA820A]/40 text-xs font-cinzel font-bold flex items-center gap-1.5 cursor-pointer card-3d shadow-2xs hover:shadow-sm transition-all"
+                  className="btn-slim-outline text-xs font-bold flex items-center gap-1.5"
                   title="Import from Mobile Device Contacts via Web Contact Picker API"
                 >
                   <Phone className="w-3.5 h-3.5 text-[#AA820A]" />
                   <span>Import Phone Contacts</span>
+                  <span>📱</span>
                 </button>
 
                 <button
                   onClick={() => setShowAddGuestModal(true)}
-                  className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] text-xs font-cinzel font-bold flex items-center gap-1.5 cursor-pointer shadow-md hover:brightness-105 active:scale-95 transition-all"
+                  className="btn-slim-gold text-xs font-bold flex items-center gap-1.5"
                 >
                   <Plus className="w-3.5 h-3.5 stroke-[3]" />
                   <span>+ Manual Guest</span>
+                  <span>✍️</span>
                 </button>
               </div>
 
               <div className="relative w-full sm:w-64">
-                <Search className="w-3.5 h-3.5 text-[#7D5F04] absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-[#785B24] absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={guestSearch}
                   onChange={(e) => setGuestSearch(e.target.value)}
                   placeholder="Search guests by name or phone..."
-                  className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-[#E8DFC8] bg-white/80 focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors shadow-2xs"
+                  className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-[#AA820A]/30 bg-white/90 text-[#5C4303] placeholder-[#785B24]/70 focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors shadow-2xs"
                 />
               </div>
             </div>
@@ -754,31 +776,32 @@ function ClientPortalContent() {
             {/* Filter Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
               {[
-                { id: 'all', label: `All Guests (${guests.length})` },
-                { id: 'sent', label: `WhatsApp Dispatched (${dispatchedCount})` },
-                { id: 'pending', label: `Pending Dispatch (${guests.length - dispatchedCount})` },
-                { id: 'attending', label: `Attending (${attendingCount})` },
-                { id: 'declined', label: 'Declined' },
+                { id: 'all', label: `All Guests (${guests.length})`, icon: '👥' },
+                { id: 'sent', label: `WhatsApp Dispatched (${dispatchedCount})`, icon: '✅' },
+                { id: 'pending', label: `Pending Dispatch (${guests.length - dispatchedCount})`, icon: '⏳' },
+                { id: 'attending', label: `Attending (${attendingCount})`, icon: '👑' },
+                { id: 'declined', label: 'Declined', icon: '❌' },
               ].map((pill) => (
                 <button
                   key={pill.id}
                   onClick={() => setGuestFilter(pill.id as typeof guestFilter)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-cinzel font-bold transition whitespace-nowrap cursor-pointer ${
+                  className={`pill-slim ${
                     guestFilter === pill.id
-                      ? 'bg-[#2C2218] text-[#FAF8F5] shadow-sm'
-                      : 'bg-white/80 text-[#7D5F04] hover:bg-white border border-[#E8DFC8] shadow-2xs'
+                      ? 'bg-[#193822] text-[#FAF8F5] border-[#193822]'
+                      : 'bg-white/80 text-[#5C4303] hover:bg-white border-[#AA820A]/30'
                   }`}
                 >
-                  {pill.label}
+                  <span>{pill.icon}</span>
+                  <span>{pill.label}</span>
                 </button>
               ))}
             </div>
 
             {/* Guests Table */}
-            <div className="acrylic-glass card-3d rounded-2xl border border-[#E8DFC8] shadow-md overflow-hidden">
+            <div className="card-pop3d-amber rounded-2xl overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#FAF4E3]/70 text-[10px] uppercase font-cinzel font-bold text-[#7D5F04] border-b border-[#E8DFC8]">
+                  <thead className="bg-[#FAF4E3]/90 text-[10px] uppercase font-portal font-bold text-[#785B24] border-b border-[#E8DFC8]">
                     <tr>
                       <th className="py-3 px-3.5">Guest Name</th>
                       <th className="py-3 px-3.5">Phone Number</th>
@@ -788,19 +811,19 @@ function ClientPortalContent() {
                       <th className="py-3 px-3.5 text-right">1-Click Dispatch</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E8DFC8]/60">
+                  <tbody className="divide-y divide-[#E8DFC8]/60 bg-white/70">
                     {filteredGuests.map((guest) => {
                       return (
-                        <tr key={guest.id} className="hover:bg-white/60 transition-colors">
-                          <td className="py-3.5 px-3.5 font-semibold text-[#2C2218]">{guest.name}</td>
-                          <td className="py-3.5 px-3.5 font-mono text-[11px] text-[#544230]">{guest.phone}</td>
+                        <tr key={guest.id} className="hover:bg-white/90 transition-colors">
+                          <td className="py-3.5 px-3.5 font-bold text-[#5C4303]">{guest.name}</td>
+                          <td className="py-3.5 px-3.5 font-mono text-[11px] text-[#785B24]">{guest.phone}</td>
                           <td className="py-3.5 px-3.5">
                             {guest.sentWhatsApp ? (
-                              <span className="inline-flex items-center gap-1 text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-full font-bold">
+                              <span className="inline-flex items-center gap-1 text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded-full font-bold">
                                 <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Dispatched
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1 text-[10px] bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-full font-bold">
+                              <span className="inline-flex items-center gap-1 text-[10px] bg-amber-50 text-amber-800 border border-amber-300 px-2 py-0.5 rounded-full font-bold">
                                 <Clock className="w-3 h-3 text-amber-600" /> Pending
                               </span>
                             )}
@@ -819,17 +842,18 @@ function ClientPortalContent() {
                               {guest.attendingCount ? ` (${guest.attendingCount})` : ''}
                             </span>
                           </td>
-                          <td className="py-3.5 px-3.5 text-[11px] text-[#544230]">
+                          <td className="py-3.5 px-3.5 text-[11px] text-[#5C4303]">
                             {guest.dietaryChoice || 'Standard Royal Feast'}
                           </td>
                           <td className="py-3.5 px-3.5 text-right">
                             <button
                               onClick={() => handleDispatchWhatsApp(guest)}
-                              className="px-3 py-1.5 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-cinzel font-bold text-xs inline-flex items-center gap-1.5 shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
+                              className="btn-slim-emerald text-xs font-bold inline-flex items-center gap-1"
                               title="Open pre-filled wa.me invite with personalized link"
                             >
                               <MessageCircle className="w-3.5 h-3.5" />
                               <span>1-Click wa.me</span>
+                              <span>💬</span>
                             </button>
                           </td>
                         </tr>
@@ -845,39 +869,40 @@ function ClientPortalContent() {
         {/* TAB 3: DJ PLAYLIST MANAGER */}
         {activeTab === 'dj' && (
           <div className="space-y-3">
-            <div className="acrylic-sage card-3d-elevated p-3.5 sm:p-4 rounded-2xl border border-[#739B83]/40 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="card-pop3d-emerald p-3.5 sm:p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#739B83]/30 flex items-center justify-center text-[#2D4A36] shadow-2xs shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#739B83]/30 flex items-center justify-center text-[#193822] shadow-2xs shrink-0">
                   <Music className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="font-cinzel text-xs font-bold uppercase text-[#2D4A36]">
-                    Official Sangeet DJ Playlist Ledger
+                  <h3 className="font-portal text-xs font-bold uppercase text-[#193822]">
+                    Official Sangeet DJ Playlist Ledger 🎶
                   </h3>
-                  <p className="text-[11px] text-[#544230]">
+                  <p className="text-[11px] text-[#234E30]">
                     Guest-submitted dance anthems mapped with phone numbers & dedication notes
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                <span className="font-mono text-xs font-bold bg-white/90 text-[#2D4A36] px-3 py-1 rounded-xl border border-[#739B83]/30 shadow-2xs">
-                  {djPlaylist.length} Songs Queued
+                <span className="font-mono text-xs font-bold bg-white/95 text-[#193822] px-3 py-1 rounded-xl border border-[#739B83]/30 shadow-2xs">
+                  {djPlaylist.length} Songs Queued 💃
                 </span>
                 <button
                   onClick={handleExportDjPdf}
-                  className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] text-xs font-cinzel font-bold flex items-center gap-1.5 shadow-md hover:brightness-105 active:scale-95 cursor-pointer"
+                  className="btn-slim-emerald text-xs font-bold flex items-center gap-1.5"
                 >
-                  <Download className="w-4 h-4 stroke-[2.5]" />
+                  <Download className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span>Export DJ PDF</span>
+                  <span>📄</span>
                 </button>
               </div>
             </div>
 
-            <div className="acrylic-glass card-3d rounded-2xl border border-[#E8DFC8] shadow-md overflow-hidden">
+            <div className="card-pop3d-emerald rounded-2xl overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#FAF4E3]/70 text-[10px] uppercase font-cinzel font-bold text-[#7D5F04] border-b border-[#E8DFC8]">
+                  <thead className="bg-[#FAF4E3]/90 text-[10px] uppercase font-portal font-bold text-[#193822] border-b border-[#E8DFC8]">
                     <tr>
                       <th className="py-3 px-3.5">#</th>
                       <th className="py-3 px-3.5">Song Title & Artist</th>
@@ -886,17 +911,17 @@ function ClientPortalContent() {
                       <th className="py-3 px-3.5">Timing / Notes</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E8DFC8]/60">
+                  <tbody className="divide-y divide-[#E8DFC8]/60 bg-white/70">
                     {djPlaylist.map((song, idx) => (
-                      <tr key={song.id} className="hover:bg-white/60 transition-colors">
+                      <tr key={song.id} className="hover:bg-white/90 transition-colors">
                         <td className="py-3.5 px-3.5 font-mono font-bold text-[#AA820A]">{idx + 1}</td>
                         <td className="py-3.5 px-3.5">
-                          <div className="font-serif font-bold text-sm text-[#2C2218]">{song.songTitle}</div>
-                          <div className="text-[11px] text-[#7D5F04] italic">{song.artist || 'Bollywood Sangeet'}</div>
+                          <div className="font-bold text-sm text-[#193822]">{song.songTitle}</div>
+                          <div className="text-[11px] text-[#234E30] italic font-medium">{song.artist || 'Bollywood Sangeet'}</div>
                         </td>
-                        <td className="py-3.5 px-3.5 font-semibold text-[#2C2218]">{song.requestedByGuest}</td>
-                        <td className="py-3.5 px-3.5 font-mono text-[11px] text-[#544230]">{song.guestPhone}</td>
-                        <td className="py-3.5 px-3.5 text-xs text-[#544230] italic">
+                        <td className="py-3.5 px-3.5 font-semibold text-[#5C4303]">{song.requestedByGuest}</td>
+                        <td className="py-3.5 px-3.5 font-mono text-[11px] text-[#785B24]">{song.guestPhone}</td>
+                        <td className="py-3.5 px-3.5 text-xs text-[#234E30] italic">
                           "{song.notes || 'Play during peak dance floor face-off!'}"
                         </td>
                       </tr>
@@ -911,22 +936,22 @@ function ClientPortalContent() {
         {/* TAB 4: BLESSINGS HUB */}
         {activeTab === 'blessings' && (
           <div className="space-y-3">
-            <div className="acrylic-lilac card-3d-elevated p-3.5 sm:p-4 rounded-2xl border border-[#A888B5]/40 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="card-pop3d-amethyst p-3.5 sm:p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#A888B5]/30 flex items-center justify-center text-[#6B3B82] shadow-2xs shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#A888B5]/30 flex items-center justify-center text-[#431E54] shadow-2xs shrink-0">
                   <Mic className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="font-cinzel text-xs font-bold uppercase text-[#6B3B82]">
-                    Audio Wishing Well & Spoken Voice Notes
+                  <h3 className="font-portal text-xs font-bold uppercase text-[#431E54]">
+                    Audio Wishing Well & Spoken Voice Notes 🎙️
                   </h3>
-                  <p className="text-[11px] text-[#544230]">
+                  <p className="text-[11px] text-[#6B3B82]">
                     Personal microphone voice recordings left by family and cherished friends
                   </p>
                 </div>
               </div>
-              <span className="font-mono text-xs font-bold bg-white/90 text-[#6B3B82] px-3 py-1 rounded-xl border border-[#A888B5]/30 shadow-2xs shrink-0">
-                {blessings.length} Voice Recordings
+              <span className="font-mono text-xs font-bold bg-white/95 text-[#431E54] px-3 py-1 rounded-xl border border-[#A888B5]/30 shadow-2xs shrink-0">
+                {blessings.length} Recordings 💫
               </span>
             </div>
 
@@ -936,28 +961,28 @@ function ClientPortalContent() {
                 return (
                   <div
                     key={b.id}
-                    className="acrylic-lilac card-3d p-4 rounded-2xl border border-[#A888B5]/30 shadow-md space-y-3"
+                    className="card-pop3d-amethyst p-4 rounded-2xl space-y-3"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-white/80 border border-[#A888B5]/40 flex items-center justify-center text-[#6B3B82] shadow-2xs">
+                        <div className="w-8 h-8 rounded-full bg-white/90 border border-[#A888B5]/40 flex items-center justify-center text-[#431E54] shadow-2xs">
                           <Mic className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="font-serif font-bold text-sm text-[#2C2218]">{b.guestName}</div>
-                          <div className="text-[10px] text-[#6B3B82]/70 font-mono">{b.timestamp}</div>
+                          <div className="font-bold text-sm text-[#431E54]">{b.guestName}</div>
+                          <div className="text-[10px] text-[#6B3B82] font-mono">{b.timestamp}</div>
                         </div>
                       </div>
-                      <span className="text-xs font-mono text-[#6B3B82] font-bold">
+                      <span className="text-xs font-mono text-[#431E54] font-bold">
                         {b.durationSec}s audio
                       </span>
                     </div>
 
                     {/* Simulated Waveform & Play button */}
-                    <div className="p-2.5 rounded-xl bg-white/70 border border-[#A888B5]/30 flex items-center gap-3">
+                    <div className="p-2.5 rounded-xl bg-white/80 border border-[#A888B5]/30 flex items-center gap-3">
                       <button
                         onClick={() => setPlayingBlessingId(isPlaying ? null : b.id)}
-                        className="w-8 h-8 rounded-full bg-[#2C2218] text-[#FAF8F5] flex items-center justify-center hover:scale-105 transition shadow-xs cursor-pointer"
+                        className="w-8 h-8 rounded-full bg-[#431E54] text-[#FAF8F5] flex items-center justify-center hover:scale-105 transition shadow-xs cursor-pointer"
                       >
                         {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
                       </button>
@@ -966,7 +991,7 @@ function ClientPortalContent() {
                           <div
                             key={i}
                             className={`flex-1 rounded-full transition-all ${
-                              isPlaying ? 'bg-[#6B3B82] animate-pulse' : 'bg-[#E8DFC8]'
+                              isPlaying ? 'bg-[#431E54] animate-pulse' : 'bg-[#DFC07C]'
                             }`}
                             style={{ height: `${h}%` }}
                           />
@@ -983,38 +1008,38 @@ function ClientPortalContent() {
         {/* TAB 5: CONTENT EDITOR */}
         {activeTab === 'content' && (
           <div className="space-y-3">
-            <div className="acrylic-glass card-3d p-4 sm:p-6 rounded-2xl border border-[#E8DFC8] shadow-md space-y-4">
-              <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04] flex items-center gap-1.5">
-                <Edit2 className="w-4 h-4 text-[#AA820A]" /> Wedding Details & Schedule Editor
+            <div className="card-pop3d-amber p-4 sm:p-6 rounded-2xl space-y-4">
+              <h3 className="font-portal text-xs font-bold uppercase text-[#5C4303] flex items-center gap-1.5">
+                <Edit2 className="w-4 h-4 text-[#AA820A]" /> Wedding Details & Schedule Editor ✍️
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div>
-                  <label className="block text-[10px] font-cinzel uppercase font-bold text-[#7D5F04] mb-1">
-                    Partner 1
+                  <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1">
+                    Partner 1 (Groom / Bride)
                   </label>
                   <input
                     type="text"
                     value={project.partner1}
                     onChange={(e) => setProject({ ...project, partner1: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-white/80 focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
+                    className="w-full px-3 py-2 rounded-xl border border-[#AA820A]/30 bg-white/90 text-[#5C4303] focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-cinzel uppercase font-bold text-[#7D5F04] mb-1">
-                    Partner 2
+                  <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1">
+                    Partner 2 (Bride / Groom)
                   </label>
                   <input
                     type="text"
                     value={project.partner2}
                     onChange={(e) => setProject({ ...project, partner2: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-white/80 focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
+                    className="w-full px-3 py-2 rounded-xl border border-[#AA820A]/30 bg-white/90 text-[#5C4303] focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[10px] font-cinzel uppercase font-bold text-[#7D5F04] mb-1">
+                <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1">
                   Destination Venue & City
                 </label>
                 <input
@@ -1026,7 +1051,7 @@ function ClientPortalContent() {
                       venue: { ...project.venue, name: e.target.value },
                     })
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-white/80 focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
+                  className="w-full px-3 py-2 rounded-xl border border-[#AA820A]/30 bg-white/90 text-[#5C4303] focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
                 />
               </div>
 
@@ -1036,34 +1061,191 @@ function ClientPortalContent() {
                     await saveWeddingProject(project);
                     showToast('Celebration changes saved successfully!');
                   }}
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] font-cinzel font-bold text-xs shadow-md hover:brightness-105 active:scale-95 transition-all cursor-pointer"
+                  className="btn-slim-gold text-xs font-bold flex items-center gap-1.5"
                 >
-                  Save Celebration Content
+                  <Check className="w-3.5 h-3.5 stroke-[3]" />
+                  <span>Save Celebration Content</span>
+                  <span>✨</span>
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* TAB 6: SUITES SWITCHER */}
+        {/* TAB 6: MEDIA UPLOAD (Real File Upload for Photos & Audio) */}
+        {activeTab === 'media' && (
+          <div className="space-y-3">
+            <div className="card-pop3d-azure p-3.5 sm:p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#6B9AC4]/30 flex items-center justify-center text-[#142F4C] shadow-2xs shrink-0">
+                  <Camera className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-portal text-xs font-bold uppercase text-[#142F4C]">
+                    Royal Media & Assets Uploader 📸
+                  </h3>
+                  <p className="text-[11px] text-[#1E3F66]">
+                    Direct file upload for couple portraits, cover photography, and royal background audio
+                  </p>
+                </div>
+              </div>
+              <span className="font-mono text-xs font-bold bg-white/95 text-[#142F4C] px-3 py-1 rounded-xl border border-[#6B9AC4]/30 shadow-2xs shrink-0">
+                Cloud Storage Ready ☁️
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {/* Card 1: Cover Photo File Upload */}
+              <div className="card-pop3d-amber p-4 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Camera className="w-4 h-4 text-[#AA820A]" />
+                    <span className="font-portal text-xs font-bold text-[#5C4303] uppercase">
+                      Couple Portrait / Cover Photo
+                    </span>
+                  </div>
+                  <span className="text-xs">🖼️</span>
+                </div>
+                <p className="text-[11px] text-[#785B24]">
+                  Upload high-resolution couple photography for invitation banners and share cards.
+                </p>
+
+                <div className="p-3 bg-white/80 rounded-xl border border-[#AA820A]/20 flex flex-col items-center justify-center gap-2 text-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="portal-cover-photo-upload"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onload = (uploadEvent) => {
+                        const dataUrl = uploadEvent.target?.result as string;
+                        setProject({
+                          ...project,
+                          coverImageUrl: dataUrl,
+                          media: {
+                            ...(project.media || {}),
+                            coverPhoto: dataUrl,
+                          },
+                        });
+                        showToast(`Uploaded ${file.name} successfully!`);
+                      };
+                      reader.readAsDataURL(file);
+                    }}
+                  />
+                  <label
+                    htmlFor="portal-cover-photo-upload"
+                    className="btn-slim-gold text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Upload Image File</span>
+                    <span>📷</span>
+                  </label>
+                  <span className="text-[10px] text-[#785B24]">Supported formats: JPG, PNG, WEBP</span>
+                </div>
+
+                {project.media?.coverPhoto && (
+                  <div className="relative rounded-xl overflow-hidden border border-[#AA820A]/30 aspect-video bg-neutral-100 shadow-xs">
+                    <img
+                      src={project.media.coverPhoto}
+                      alt="Cover Preview"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+                      Live Preview
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Card 2: Background Music Audio File Upload */}
+              <div className="card-pop3d-emerald p-4 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Music className="w-4 h-4 text-[#193822]" />
+                    <span className="font-portal text-xs font-bold text-[#193822] uppercase">
+                      Background Shehnai / Music Track
+                    </span>
+                  </div>
+                  <span className="text-xs">🎶</span>
+                </div>
+                <p className="text-[11px] text-[#234E30]">
+                  Upload custom MP3 audio track that plays automatically when guests unlock the wedding seal.
+                </p>
+
+                <div className="p-3 bg-white/80 rounded-xl border border-[#739B83]/30 flex flex-col items-center justify-center gap-2 text-center">
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    id="portal-audio-track-upload"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const audioUrl = URL.createObjectURL(file);
+                      setProject({
+                        ...project,
+                        backgroundAudioUrl: audioUrl,
+                        media: {
+                          ...(project.media || {}),
+                          backgroundMusic: audioUrl,
+                        },
+                      });
+                      showToast(`Uploaded ${file.name} audio file!`);
+                    }}
+                  />
+                  <label
+                    htmlFor="portal-audio-track-upload"
+                    className="btn-slim-emerald text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Upload Audio File</span>
+                    <span>🎵</span>
+                  </label>
+                  <span className="text-[10px] text-[#234E30]">Supported formats: MP3, WAV, AAC, M4A</span>
+                </div>
+
+                {project.media?.backgroundMusic && (
+                  <div className="p-2.5 rounded-xl bg-white/90 border border-emerald-300 shadow-xs flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 truncate">
+                      <Music className="w-4 h-4 text-emerald-700 shrink-0" />
+                      <span className="text-xs text-[#193822] font-mono truncate">
+                        Audio Track Loaded
+                      </span>
+                    </div>
+                    <audio
+                      src={project.media.backgroundMusic}
+                      controls
+                      className="h-8 max-w-[200px]"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 7: SUITES SWITCHER */}
         {activeTab === 'suites' && (
           <div className="space-y-3">
-            <div className="acrylic-azure card-3d-elevated p-3.5 sm:p-4 rounded-2xl border border-[#6B9AC4]/40 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="card-pop3d-azure p-3.5 sm:p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#6B9AC4]/30 flex items-center justify-center text-[#1E3F66] shadow-2xs shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-white/80 border border-[#6B9AC4]/30 flex items-center justify-center text-[#142F4C] shadow-2xs shrink-0">
                   <Palette className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="font-cinzel text-xs font-bold uppercase text-[#1E3F66]">
-                    Choose Your Active Invitation Suite
+                  <h3 className="font-portal text-xs font-bold uppercase text-[#142F4C]">
+                    Choose Your Active Invitation Suite 👑
                   </h3>
-                  <p className="text-[11px] text-[#544230]">
+                  <p className="text-[11px] text-[#1E3F66]">
                     Switch instantly between all {TEMPLATE_LIST.length} luxury design suites without losing any guest RSVPs or DJ requests
                   </p>
                 </div>
               </div>
-              <span className="font-mono text-xs font-bold bg-white/90 text-[#1E3F66] px-3 py-1 rounded-xl border border-[#6B9AC4]/30 shadow-2xs shrink-0">
-                {TEMPLATE_LIST.length} Couture Suites
+              <span className="font-mono text-xs font-bold bg-white/95 text-[#142F4C] px-3 py-1 rounded-xl border border-[#6B9AC4]/30 shadow-2xs shrink-0">
+                {TEMPLATE_LIST.length} Couture Suites 💎
               </span>
             </div>
 
@@ -1075,43 +1257,42 @@ function ClientPortalContent() {
                 return (
                   <div
                     key={suite.id}
-                    className={`acrylic-glass card-3d rounded-2xl border p-4 space-y-2 flex flex-col justify-between transition-all duration-200 hover:shadow-lg ${
-                      isActive ? 'border-[#AA820A] ring-2 ring-[#AA820A]/40 shadow-md' : 'border-[#E8DFC8]'
+                    className={`rounded-2xl p-4 space-y-2 flex flex-col justify-between transition-all duration-200 ${
+                      isActive ? 'card-pop3d-emerald ring-2 ring-emerald-600/40' : 'card-pop3d-amber'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-cinzel uppercase font-bold text-[#AA820A] bg-white/80 border border-[#AA820A]/30 px-2 py-0.5 rounded-md shadow-2xs">
+                        <span className="text-[10px] font-portal uppercase font-bold text-[#5C4303] bg-white/90 border border-[#AA820A]/30 px-2 py-0.5 rounded-md shadow-2xs">
                           {suite.badge}
                         </span>
                         {isActive && (
-                          <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-2xs">
-                            <Check className="w-3 h-3" /> Active
+                          <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100/90 border border-emerald-300 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-2xs">
+                            <Check className="w-3 h-3 stroke-[3]" /> Active Suite
                           </span>
                         )}
                       </div>
-                      <h4 className="font-serif text-lg font-bold text-[#2C2218] mt-2">{suite.name}</h4>
-                      <p className="text-xs text-[#544230] leading-snug">{suite.tagline}</p>
+                      <h4 className="font-portal text-base font-bold text-[#5C4303] mt-2">{suite.name}</h4>
+                      <p className="text-xs text-[#785B24] leading-snug">{suite.tagline}</p>
                     </div>
 
-                    <div className="pt-3 border-t border-[#E8DFC8]/60 flex items-center justify-between">
+                    <div className="pt-3 border-t border-[#AA820A]/20 flex items-center justify-between">
                       <Link
                         href={`/${project.slug}?template=${suite.id}`}
                         target="_blank"
-                        className="text-xs text-[#AA820A] hover:underline font-bold font-cinzel"
+                        className="text-xs text-[#AA820A] hover:underline font-bold font-portal flex items-center gap-1"
                       >
-                        Preview Live
+                        <span>Preview</span>
+                        <ExternalLink className="w-3 h-3" />
                       </Link>
                       <button
                         onClick={() => handleSwitchSuite(suite.id)}
                         disabled={isActive}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all ${
-                          isActive
-                            ? 'bg-neutral-200/80 text-neutral-500 cursor-default'
-                            : 'bg-[#2C2218] hover:bg-[#4A3B2C] text-white shadow-xs hover:shadow-md active:scale-95 cursor-pointer'
+                        className={`btn-slim-gold text-xs font-bold ${
+                          isActive ? 'opacity-60 cursor-default' : ''
                         }`}
                       >
-                        {isActive ? 'Current Suite' : 'Activate Suite'}
+                        {isActive ? 'Current Suite ✨' : 'Activate Suite 👑'}
                       </button>
                     </div>
                   </div>
@@ -1123,7 +1304,7 @@ function ClientPortalContent() {
       </main>
 
       {/* ULTRA-SLIM BOTTOM FLOATING ICON NAVIGATION BAR (Soft Acrylic Luxury Glass) */}
-      <nav className="fixed bottom-3 left-2 right-2 sm:left-1/2 sm:-translate-x-1/2 sm:max-w-md z-40 bg-white/90 backdrop-blur-xl border border-[#AA820A]/40 rounded-2xl p-1.5 shadow-[0_12px_40px_rgba(170,130,10,0.14)] flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
+      <nav className="fixed bottom-3 left-2 right-2 sm:left-1/2 sm:-translate-x-1/2 sm:max-w-md z-40 bg-white/95 backdrop-blur-xl border border-[#AA820A]/40 rounded-2xl p-1 shadow-[0_12px_40px_rgba(170,130,10,0.18)] flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -1131,10 +1312,10 @@ function ClientPortalContent() {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id as typeof activeTab)}
-              className={`p-2 rounded-xl transition duration-200 flex items-center justify-center shrink-0 cursor-pointer ${
+              className={`p-1.5 sm:p-2 rounded-xl transition duration-200 flex items-center justify-center shrink-0 cursor-pointer ${
                 isActive
-                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] shadow-md scale-105 font-bold'
-                  : 'text-[#7D5F04] hover:text-[#2C2218] hover:bg-[#FAF4E3]'
+                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#193822] shadow-md scale-105 font-bold'
+                  : 'text-[#785B24] hover:text-[#5C4303] hover:bg-[#FAF4E3]'
               }`}
               title={item.label}
               aria-label={item.label}
@@ -1148,14 +1329,15 @@ function ClientPortalContent() {
       {/* MODAL: ADD GUEST MANUALLY */}
       {showAddGuestModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-[#E8DFC8] animate-in zoom-in-95">
-            <div className="bg-gradient-to-r from-[#FAF4E3] to-[#F3E5AB] text-[#2C2218] p-3.5 flex items-center justify-between border-b border-[#AA820A]/30">
-              <h3 className="font-cinzel font-black text-xs uppercase tracking-wider text-[#2C2218]">
-                Add Wedding Guest
+          <div className="card-pop3d-amber rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-[#AA820A]/40 animate-in zoom-in-95">
+            <div className="bg-gradient-to-r from-[#FAF4E3] to-[#F3E5AB] text-[#5C4303] p-3.5 flex items-center justify-between border-b border-[#AA820A]/30">
+              <h3 className="font-portal font-black text-xs uppercase tracking-wider text-[#5C4303] flex items-center gap-1.5">
+                <span>Add Wedding Guest</span>
+                <span>💌</span>
               </h3>
               <button
                 onClick={() => setShowAddGuestModal(false)}
-                className="p-1 rounded-full hover:bg-white/80 text-[#7D5F04] transition cursor-pointer"
+                className="p-1 rounded-full hover:bg-white/80 text-[#785B24] transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1163,7 +1345,7 @@ function ClientPortalContent() {
 
             <form onSubmit={handleAddGuestSubmit} className="p-4 space-y-3 text-xs">
               <div>
-                <label className="block text-[10px] font-cinzel uppercase font-bold text-[#7D5F04] mb-1">
+                <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1">
                   Guest Name & Salutation
                 </label>
                 <input
@@ -1172,12 +1354,12 @@ function ClientPortalContent() {
                   value={newGuestName}
                   onChange={(e) => setNewGuestName(e.target.value)}
                   placeholder="e.g. Vikramaditya & Priya Singhania"
-                  className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] focus:outline-none focus:border-[#AA820A]"
+                  className="w-full px-3 py-2 rounded-xl border border-[#AA820A]/30 bg-[#FAF8F5] text-[#5C4303] focus:outline-none focus:border-[#AA820A]"
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-cinzel uppercase font-bold text-[#7D5F04] mb-1">
+                <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1">
                   WhatsApp Mobile Number
                 </label>
                 <input
@@ -1186,16 +1368,18 @@ function ClientPortalContent() {
                   value={newGuestPhone}
                   onChange={(e) => setNewGuestPhone(e.target.value)}
                   placeholder="+919820012345"
-                  className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] font-mono text-xs focus:outline-none focus:border-[#AA820A]"
+                  className="w-full px-3 py-2 rounded-xl border border-[#AA820A]/30 bg-[#FAF8F5] text-[#5C4303] font-mono text-xs focus:outline-none focus:border-[#AA820A]"
                 />
               </div>
 
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] font-cinzel font-black uppercase text-xs shadow-md hover:brightness-110 active:scale-95 transition cursor-pointer"
+                  className="btn-slim-gold w-full text-xs font-bold uppercase flex items-center justify-center gap-1.5"
                 >
-                  Save & Enable 1-Click WhatsApp
+                  <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                  <span>Save & Enable 1-Click WhatsApp</span>
+                  <span>💬</span>
                 </button>
               </div>
             </form>

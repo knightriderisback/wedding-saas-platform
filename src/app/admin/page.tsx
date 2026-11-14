@@ -365,18 +365,18 @@ export default function SuperAdminPage() {
   const CurrentTabIcon = currentTab.icon;
 
   return (
-    <div className="min-h-screen bg-khadi-fabric relative pb-24 text-[#2C2218] selection:bg-[#D4AF37]/30 selection:text-[#2C2218] overflow-x-hidden">
+    <div className="min-h-screen bg-khadi-fabric relative pb-24 text-[#5C4303] font-portal selection:bg-[#D4AF37]/30 selection:text-[#5C4303] overflow-x-hidden">
       {/* 3D Floating Glass Bubbles & Refraction Orbs */}
       <AcrylicBackgroundOrbs variant="multi" />
 
       {/* ULTRA-SLIM STICKY MERCHANT HEADER (Rajhara Express Pattern in Luxury Soft Gold/Alabaster) */}
-      <header className="bg-white/90 backdrop-blur-md text-[#2C2218] sticky top-0 z-30 border-b border-[#E8DFC8] shadow-xs">
+      <header className="bg-white/95 backdrop-blur-md text-[#5C4303] sticky top-0 z-30 border-b border-[#E8DFC8] shadow-xs">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2">
           {/* Left: Home / Store Link & Clean Minimal Title */}
           <div className="flex items-center gap-2.5">
             <Link
               href="/"
-              className="p-1.5 rounded-lg bg-[#FAF4E3] hover:bg-[#F3E5AB] text-[#7D5F04] border border-[#AA820A]/30 transition shadow-2xs"
+              className="p-1.5 rounded-lg bg-[#FAF4E3] hover:bg-[#F3E5AB] text-[#5C4303] border border-[#AA820A]/30 transition shadow-2xs"
               title="Return to Welcome Showcase"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -385,10 +385,10 @@ export default function SuperAdminPage() {
               👑
             </div>
             <div className="leading-tight">
-              <span className="font-cinzel font-black text-xs sm:text-sm tracking-tight text-[#2C2218]">
+              <span className="font-cinzel font-black text-xs sm:text-sm tracking-tight text-[#5C4303]">
                 Super-Admin Control Panel
               </span>
-              <span className="text-[10px] text-[#7D5F04] font-serif ml-1.5 hidden sm:inline">
+              <span className="text-[10px] text-[#785B24] font-medium ml-1.5 hidden sm:inline">
                 • Royal Concierge Master SaaS
               </span>
             </div>
@@ -399,20 +399,22 @@ export default function SuperAdminPage() {
             <Link
               href="/templates"
               target="_blank"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#FAF4E3] hover:bg-[#F3E5AB] text-[#7D5F04] text-xs font-cinzel font-bold transition shadow-2xs border border-[#AA820A]/40"
+              className="btn-slim-outline text-xs font-bold"
               title="Open 13 Luxury Design Suites in new tab"
             >
               <Palette className="w-3.5 h-3.5 text-[#AA820A] shrink-0" />
               <span className="hidden sm:inline">13 Suites Gallery</span>
+              <span>🎨</span>
             </Link>
 
             <button
               onClick={() => setShowCreateModal(true)}
-              className="px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#AA820A] hover:brightness-110 text-[#2C2218] font-cinzel font-black text-xs shadow-xs transition flex items-center gap-1 cursor-pointer"
+              className="btn-slim-gold text-xs font-bold flex items-center gap-1"
               title="Onboard New Wedding Project"
             >
               <Plus className="w-3.5 h-3.5 stroke-[3]" />
               <span className="hidden sm:inline">New Client</span>
+              <span>✨</span>
             </button>
 
             <div className="p-1.5 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-mono font-bold flex items-center gap-1 border border-emerald-300 shadow-2xs">
@@ -438,7 +440,7 @@ export default function SuperAdminPage() {
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <span
-                  className={`text-[9px] sm:text-[10px] uppercase font-bold font-cinzel ${currentTab.breadcrumbColor} tracking-wider`}
+                  className={`text-[9px] sm:text-[10px] uppercase font-bold font-portal ${currentTab.breadcrumbColor} tracking-wider`}
                 >
                   Super Admin / {currentTab.shortTitle}
                 </span>
@@ -451,7 +453,7 @@ export default function SuperAdminPage() {
               <h1 className="text-sm sm:text-base font-cinzel font-black text-white tracking-tight leading-tight mt-0.5 truncate">
                 {currentTab.title}
               </h1>
-              <p className={`text-[10px] sm:text-[11px] ${currentTab.subtitleColor} mt-0.5 leading-snug font-sans`}>
+              <p className={`text-[10px] sm:text-[11px] ${currentTab.subtitleColor} mt-0.5 leading-snug font-portal`}>
                 {currentTab.subtitle}
               </p>
             </div>
@@ -470,40 +472,40 @@ export default function SuperAdminPage() {
         {/* TAB 1: PROJECTS (Super-Admin Control & Shadow Access) */}
         {activeTab === 'projects' && (
           <div className="space-y-3">
-            {/* Royal 3D Rajhara Metric Cards */}
+            {/* Royal 3D Multi-colored Pop-out Metric Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              <div className="card-rajhara-3d p-3 rounded-2xl">
-                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase flex items-center gap-1">
+              <div className="card-pop3d-amber p-3 sm:p-3.5 rounded-2xl">
+                <div className="text-[10px] font-portal font-bold text-[#785B24] uppercase flex items-center gap-1">
                   <Crown className="w-3 h-3 text-[#AA820A]" /> Total Projects
                 </div>
-                <div className="text-base sm:text-xl font-black text-[#2C2218] mt-0.5">{projects.length}</div>
-                <div className="text-[9px] text-emerald-800 font-semibold mt-1 flex items-center gap-0.5">
+                <div className="text-lg sm:text-2xl font-black text-[#5C4303] mt-0.5">{projects.length}</div>
+                <div className="text-[9px] text-[#193822] font-semibold mt-1 flex items-center gap-0.5">
                   <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" /> 100% Hosted
                 </div>
               </div>
 
-              <div className="card-rajhara-3d p-3 rounded-2xl">
-                <div className="text-[10px] font-cinzel font-bold text-[#9B1C2E] uppercase flex items-center gap-1">
+              <div className="card-pop3d-rose p-3 sm:p-3.5 rounded-2xl">
+                <div className="text-[10px] font-portal font-bold text-[#6E121E] uppercase flex items-center gap-1">
                   <Users className="w-3 h-3 text-[#9B1C2E]" /> Guests Onboarded
                 </div>
-                <div className="text-base sm:text-xl font-black text-[#AA820A] mt-0.5">{totalGuests}</div>
+                <div className="text-lg sm:text-2xl font-black text-[#6E121E] mt-0.5">{totalGuests}</div>
                 <div className="text-[9px] text-[#9B1C2E] font-medium mt-1">Across all client hubs</div>
               </div>
 
-              <div className="card-rajhara-3d p-3 rounded-2xl">
-                <div className="text-[10px] font-cinzel font-bold text-[#2D4A36] uppercase flex items-center gap-1">
-                  <Heart className="w-3 h-3 text-[#2D4A36]" /> RSVPs Confirmed
+              <div className="card-pop3d-emerald p-3 sm:p-3.5 rounded-2xl">
+                <div className="text-[10px] font-portal font-bold text-[#193822] uppercase flex items-center gap-1">
+                  <Heart className="w-3 h-3 text-[#234E30]" /> RSVPs Confirmed
                 </div>
-                <div className="text-base sm:text-xl font-black text-[#9B1C2E] mt-0.5">{totalRsvps}</div>
-                <div className="text-[9px] text-[#2D4A36] font-medium mt-1">VIP Passes Issued</div>
+                <div className="text-lg sm:text-2xl font-black text-[#193822] mt-0.5">{totalRsvps}</div>
+                <div className="text-[9px] text-[#234E30] font-medium mt-1">VIP Passes Issued</div>
               </div>
 
-              <div className="card-rajhara-3d p-3 rounded-2xl">
-                <div className="text-[10px] font-cinzel font-bold text-[#242A36] uppercase flex items-center gap-1">
-                  <MessageCircle className="w-3 h-3 text-[#1A365D]" /> WhatsApp Invites
+              <div className="card-pop3d-azure p-3 sm:p-3.5 rounded-2xl">
+                <div className="text-[10px] font-portal font-bold text-[#142F4C] uppercase flex items-center gap-1">
+                  <MessageCircle className="w-3 h-3 text-[#1E3F66]" /> WhatsApp Invites
                 </div>
-                <div className="text-base sm:text-xl font-black text-[#1A365D] mt-0.5">{totalDispatched}</div>
-                <div className="text-[9px] text-emerald-700 font-medium mt-1">Dispatched via wa.me</div>
+                <div className="text-lg sm:text-2xl font-black text-[#142F4C] mt-0.5">{totalDispatched}</div>
+                <div className="text-[9px] text-[#1E3F66] font-medium mt-1">Dispatched via wa.me</div>
               </div>
             </div>
 
@@ -601,14 +603,14 @@ export default function SuperAdminPage() {
                             {/* Couple & Monogram */}
                             <td className="py-3 px-3">
                               <div className="flex items-center gap-2.5">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#AA820A] to-[#FAF4E3] border border-[#D4AF37] flex items-center justify-center text-[#2C2218] font-cinzel font-black text-xs shrink-0 shadow-2xs">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#AA820A] to-[#FAF4E3] border border-[#D4AF37] flex items-center justify-center text-[#5C4303] font-portal font-black text-xs shrink-0 shadow-2xs">
                                   {p.partner1[0]}&{p.partner2[0]}
                                 </div>
                                 <div className="min-w-0">
-                                  <div className="font-serif font-bold text-sm text-[#2C2218] truncate">
+                                  <div className="font-portal font-bold text-sm text-[#5C4303] truncate">
                                     {p.partner1} & {p.partner2}
                                   </div>
-                                  <div className="text-[10px] text-[#7D5F04] font-mono flex items-center gap-1">
+                                  <div className="text-[10px] text-[#785B24] font-mono flex items-center gap-1">
                                     <span>Token: {p.clientAccessToken || 'CLT-ROYAL'}</span>
                                     <button
                                       onClick={() => handleCopyToken(p.clientAccessToken || 'CLT-ROYAL', p.id)}
@@ -636,11 +638,11 @@ export default function SuperAdminPage() {
                                   title="Open Guest Microsite"
                                 >
                                   /{p.slug}
-                                  <ExternalLink className="w-3 h-3 text-[#7D5F04]" />
+                                  <ExternalLink className="w-3 h-3 text-[#785B24]" />
                                 </Link>
                                 <button
                                   onClick={() => handleCopyLink(p.slug)}
-                                  className="p-1 rounded hover:bg-[#FAF4E3] text-[#7D5F04]"
+                                  className="p-1 rounded hover:bg-[#FAF4E3] text-[#785B24]"
                                   title="Copy Invitation Link"
                                 >
                                   {copiedSlug === p.slug ? (
@@ -654,11 +656,11 @@ export default function SuperAdminPage() {
 
                             {/* Venue & Date */}
                             <td className="py-3 px-3">
-                              <div className="text-[#2C2218] font-medium text-xs flex items-center gap-1">
+                              <div className="text-[#5C4303] font-medium text-xs flex items-center gap-1">
                                 <MapPin className="w-3 h-3 text-[#AA820A] shrink-0" />
                                 {p.venue.city}
                               </div>
-                              <div className="text-[10px] text-[#7D5F04] flex items-center gap-1 mt-0.5">
+                              <div className="text-[10px] text-[#785B24] flex items-center gap-1 mt-0.5">
                                 <Calendar className="w-3 h-3 shrink-0" />
                                 {dateFormatted}
                               </div>
@@ -667,7 +669,7 @@ export default function SuperAdminPage() {
                             {/* Guests & Invites Progress */}
                             <td className="py-3 px-3">
                               <div className="flex items-center gap-2">
-                                <div className="text-xs font-bold text-[#2C2218]">
+                                <div className="text-xs font-bold text-[#5C4303]">
                                   {dispatchedCount}/{guestsCount}
                                 </div>
                                 <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-mono font-bold">
@@ -690,21 +692,23 @@ export default function SuperAdminPage() {
                                 {/* Direct Customization Studio Button */}
                                 <Link
                                   href={`/portal/${p.id}?shadowAdmin=true`}
-                                  className="px-2.5 py-1.5 rounded-lg btn-rajhara-3d text-xs font-['Cinzel',serif] font-bold transition flex items-center gap-1 shadow-2xs"
+                                  className="btn-slim-gold text-xs font-bold flex items-center gap-1"
                                   title="Customize Fonts, Copy, Music & Section Visibility"
                                 >
-                                  <Sliders className="w-3 h-3 text-[#1E2E1B]" />
+                                  <Sliders className="w-3 h-3" />
                                   <span className="hidden sm:inline">Customize</span>
+                                  <span>🎨</span>
                                 </Link>
 
                                 {/* SHADOW ACCESS BUTTON (Login As Client) */}
                                 <Link
                                   href={`/portal/${p.id}?shadowAdmin=true`}
-                                  className="px-2.5 py-1.5 rounded-lg bg-[#2C2218] hover:bg-[#4A3B2C] text-[#FAF8F5] text-xs font-cinzel font-bold transition flex items-center gap-1 shadow-2xs"
+                                  className="btn-slim-outline text-xs font-bold flex items-center gap-1"
                                   title="Directly manage client's portal without credentials"
                                 >
-                                  <KeyRound className="w-3 h-3 text-[#D4AF37]" />
-                                  <span>Login As Client</span>
+                                  <KeyRound className="w-3 h-3 text-[#AA820A]" />
+                                  <span>Client Login</span>
+                                  <span>👑</span>
                                 </Link>
 
                                 <Link
@@ -1034,7 +1038,7 @@ export default function SuperAdminPage() {
       </main>
 
       {/* ULTRA-SLIM BOTTOM FLOATING ICON NAVIGATION BAR (Soft Acrylic Luxury Glass) */}
-      <nav className="fixed bottom-3 left-2 right-2 sm:left-1/2 sm:-translate-x-1/2 sm:max-w-md z-40 bg-white/90 backdrop-blur-xl border border-[#AA820A]/40 rounded-2xl p-1.5 shadow-[0_12px_40px_rgba(170,130,10,0.14)] flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
+      <nav className="fixed bottom-3 left-2 right-2 sm:left-1/2 sm:-translate-x-1/2 sm:max-w-md z-40 bg-white/95 backdrop-blur-xl border border-[#AA820A]/40 rounded-2xl p-1 shadow-[0_12px_40px_rgba(170,130,10,0.18)] flex items-center justify-between gap-1 overflow-x-auto no-scrollbar">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -1042,10 +1046,10 @@ export default function SuperAdminPage() {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id as typeof activeTab)}
-              className={`p-2 rounded-xl transition duration-200 flex items-center justify-center shrink-0 cursor-pointer ${
+              className={`p-1.5 sm:p-2 rounded-xl transition duration-200 flex items-center justify-center shrink-0 cursor-pointer ${
                 isActive
-                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] shadow-md scale-105 font-bold'
-                  : 'text-[#7D5F04] hover:text-[#2C2218] hover:bg-[#FAF4E3]'
+                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#193822] shadow-md scale-105 font-bold'
+                  : 'text-[#785B24] hover:text-[#5C4303] hover:bg-[#FAF4E3]'
               }`}
               title={item.label}
               aria-label={item.label}
@@ -1059,17 +1063,17 @@ export default function SuperAdminPage() {
       {/* MODAL: ONBOARD NEW WEDDING CLIENT */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-[#E8DFC8] animate-in zoom-in-95">
-            <div className="bg-gradient-to-r from-[#FAF4E3] to-[#F3E5AB] text-[#2C2218] p-3.5 flex items-center justify-between border-b border-[#AA820A]/30">
+          <div className="card-pop3d-amber rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-[#AA820A]/40 animate-in zoom-in-95">
+            <div className="bg-gradient-to-r from-[#FAF4E3] to-[#F3E5AB] text-[#5C4303] p-3.5 flex items-center justify-between border-b border-[#AA820A]/30">
               <div className="flex items-center gap-2">
                 <Crown className="w-4 h-4 text-[#AA820A]" />
-                <h3 className="font-cinzel font-black text-xs uppercase tracking-wider text-[#2C2218]">
-                  Onboard Wedding Client
+                <h3 className="font-portal font-black text-xs uppercase tracking-wider text-[#5C4303]">
+                  Onboard New Wedding Client 👑
                 </h3>
               </div>
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="p-1 rounded-full hover:bg-white/80 text-[#7D5F04] transition cursor-pointer"
+                className="p-1 rounded-full hover:bg-white/80 text-[#785B24] transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1197,9 +1201,11 @@ export default function SuperAdminPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-[#2C2218] font-cinzel font-black uppercase text-xs shadow-md hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                  className="btn-slim-gold w-full text-xs font-bold uppercase flex items-center justify-center gap-1.5"
                 >
-                  {isSubmitting ? 'Onboarding Wedding Client...' : 'Generate Project & Client Studio Link'}
+                  <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                  <span>{isSubmitting ? 'Onboarding Wedding Client...' : 'Generate Project & Client Studio Link'}</span>
+                  <span>✨</span>
                 </button>
               </div>
             </form>

@@ -1148,10 +1148,10 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false, amount: 0.3 }}
                   transition={{ duration: 0.7, delay: 0.6 }}
-                  className="mt-3 flex items-center justify-center gap-4 text-xs font-['Cormorant_Garamond',serif] text-[#273822]"
+                  className="mt-3 flex items-center justify-center gap-2 sm:gap-4 text-xs font-['Cormorant_Garamond',serif] text-[#273822] w-full max-w-full px-2 min-w-0"
                   style={deepTextShadow}
                 >
-                  <div className={`flex flex-col ${isRTL ? 'text-left' : 'text-right'}`}>
+                  <div className={`flex flex-col flex-1 min-w-0 max-w-[48%] ${isRTL ? 'text-left' : 'text-right'}`}>
                     <DynamicTextEffects
                       text={
                         currentLang === 'en' && customization.sections.hero.groomParentage
@@ -1160,7 +1160,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       }
                       effect="shimmer-wave"
                       delay={120}
-                      className="font-bold leading-tight text-sm sm:text-base"
+                      className="font-bold leading-tight text-xs sm:text-sm md:text-base break-words [overflow-wrap:anywhere]"
                       style={deepTextShadow}
                     />
                     <DynamicTextEffects
@@ -1171,12 +1171,12 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       }
                       effect="shimmer-wave"
                       delay={200}
-                      className="italic text-[#785B24] text-xs sm:text-sm font-bold"
+                      className="italic text-[#785B24] text-[10px] sm:text-xs md:text-sm font-bold break-words [overflow-wrap:anywhere]"
                       style={deepTextShadow}
                     />
                   </div>
-                  <div className="w-[1.5px] h-6 bg-[#B59A57]/70" />
-                  <div className={`flex flex-col ${isRTL ? 'text-right' : 'text-left'}`}>
+                  <div className="w-[1.5px] h-6 bg-[#B59A57]/70 shrink-0" />
+                  <div className={`flex flex-col flex-1 min-w-0 max-w-[48%] ${isRTL ? 'text-right' : 'text-left'}`}>
                     <DynamicTextEffects
                       text={
                         currentLang === 'en' && customization.sections.hero.brideParentage
@@ -1185,7 +1185,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       }
                       effect="shimmer-wave"
                       delay={120}
-                      className="font-bold leading-tight text-sm sm:text-base"
+                      className="font-bold leading-tight text-xs sm:text-sm md:text-base break-words [overflow-wrap:anywhere]"
                       style={deepTextShadow}
                     />
                     <DynamicTextEffects
@@ -1196,7 +1196,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       }
                       effect="shimmer-wave"
                       delay={200}
-                      className="italic text-[#785B24] text-xs sm:text-sm font-bold"
+                      className="italic text-[#785B24] text-[10px] sm:text-xs md:text-sm font-bold break-words [overflow-wrap:anywhere]"
                       style={deepTextShadow}
                     />
                   </div>
@@ -1318,7 +1318,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: false, amount: 0.3 }}
                       transition={{ duration: 0.8, delay: 0.3 }}
-                      className="grid grid-cols-4 gap-2.5 max-w-[340px] mx-auto mt-6"
+                      className="grid grid-cols-4 gap-1.5 sm:gap-2.5 w-full max-w-[340px] mx-auto mt-6 px-1"
                     >
                       {[
                         { label: t.days, value: timeLeft.days, show: customization.sections.countdown.showDays !== false },
@@ -1330,10 +1330,10 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                         .map((item, idx) => (
                           <div
                             key={idx}
-                            className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white/90 backdrop-blur-[3px] border border-[#DFC07C] shadow-md"
+                            className="flex flex-col items-center justify-center p-1.5 sm:p-2.5 rounded-2xl bg-white/90 backdrop-blur-[3px] border border-[#DFC07C] shadow-md min-w-0 break-words"
                           >
                             <span
-                              className="font-['Playfair_Display',serif] text-2xl sm:text-3xl font-black text-[#273822]"
+                              className="font-['Playfair_Display',serif] text-xl sm:text-2xl md:text-3xl font-black text-[#273822] truncate max-w-full"
                               style={deepTextShadow}
                             >
                               {toLocalizedDigits(String(item.value).padStart(2, '0'), currentLang)}
@@ -1342,7 +1342,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                               text={item.label}
                               effect="pop-3d"
                               as="span"
-                              className={`text-xs sm:text-sm ${fontSubHeading} text-[#6B5A3E] font-bold mt-0.5`}
+                              className={`text-[10px] sm:text-xs md:text-sm ${fontSubHeading} text-[#6B5A3E] font-bold mt-0.5 truncate max-w-full text-center`}
                               style={deepTextShadow}
                             />
                           </div>
@@ -1401,7 +1401,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: false, amount: 0.3 }}
                       transition={{ duration: 0.6, delay: index * 0.15 }}
-                      className="relative"
+                      className="relative min-w-0 max-w-full break-words"
                     >
                       <div
                         className={`absolute top-1 w-3.5 h-3.5 rounded-full bg-[#273822] border-2 border-[#DFC07C] shadow-md ${
@@ -1418,21 +1418,21 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                             : isNastaliq
                             ? 'font-nastaliq'
                             : "font-['Playfair_Display',serif]"
-                        } text-lg sm:text-xl font-black text-[#1E2E1B]`}
+                        } text-lg sm:text-xl font-black text-[#1E2E1B] break-words [overflow-wrap:anywhere]`}
                         style={deepTextShadow}
                       />
                       <DynamicTextEffects
                         text={item.time}
                         effect="scepter-slide"
                         as="p"
-                        className={`${fontSubHeading} text-xs sm:text-sm text-[#785B24] font-bold mt-1`}
+                        className={`${fontSubHeading} text-xs sm:text-sm text-[#785B24] font-bold mt-1 break-words [overflow-wrap:anywhere]`}
                         style={deepTextShadow}
                       />
                       <DynamicTextEffects
                         text={item.desc}
                         effect="scepter-slide"
                         as="p"
-                        className={`${fontBody} text-sm sm:text-base italic text-[#2C3827] mt-1 font-bold leading-relaxed`}
+                        className={`${fontBody} text-sm sm:text-base italic text-[#2C3827] mt-1 font-bold leading-relaxed break-words [overflow-wrap:anywhere]`}
                         style={deepTextShadow}
                       />
                     </motion.div>
@@ -1486,14 +1486,14 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       : isNastaliq
                       ? 'font-nastaliq'
                       : "font-['Playfair_Display',serif]"
-                  } text-xl sm:text-2xl font-black text-[#1E2E1B]`}
+                  } text-xl sm:text-2xl font-black text-[#1E2E1B] break-words [overflow-wrap:anywhere] max-w-full px-2`}
                   style={deepTextShadow}
                 />
                 <DynamicTextEffects
                   text={effectiveVenueCity}
                   effect="dome-rise"
                   as="p"
-                  className={`${fontSubHeading} text-sm sm:text-base text-[#6B5A3E] font-bold mt-1.5`}
+                  className={`${fontSubHeading} text-sm sm:text-base text-[#6B5A3E] font-bold mt-1.5 break-words [overflow-wrap:anywhere] max-w-full px-2`}
                   style={deepTextShadow}
                 />
 
@@ -1557,7 +1557,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                           : isNastaliq
                           ? 'font-nastaliq'
                           : "font-['Playfair_Display',serif]"
-                      } text-base sm:text-lg font-black text-[#273822] mt-1`}
+                      } text-base sm:text-lg font-black text-[#273822] mt-1 break-words [overflow-wrap:anywhere] max-w-full px-2`}
                       style={deepTextShadow}
                     />
                     <DynamicTextEffects
@@ -1568,7 +1568,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       }
                       effect="dome-rise"
                       as="p"
-                      className={`${fontBody} text-sm sm:text-base italic text-[#3A4A33] mt-1 font-bold leading-relaxed`}
+                      className={`${fontBody} text-sm sm:text-base italic text-[#3A4A33] mt-1 font-bold leading-relaxed break-words [overflow-wrap:anywhere] max-w-full px-2`}
                       style={deepTextShadow}
                     />
                   </motion.div>

@@ -210,6 +210,11 @@ export interface WeddingProject {
   };
   coverImageUrl: string;
   backgroundAudioUrl: string;
+  media?: {
+    coverPhoto?: string;
+    backgroundMusic?: string;
+    photos?: string[];
+  };
   status: 'active' | 'draft' | 'archived';
   clientAccessToken: string;
   createdAt: string;

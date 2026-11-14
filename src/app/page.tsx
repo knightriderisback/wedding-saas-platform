@@ -132,7 +132,7 @@ export default function RootLandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#2C2218] flex flex-col justify-between selection:bg-[#D4AF37]/30 selection:text-[#2C2218] pb-24 sm:pb-12">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#5C4303] font-portal flex flex-col justify-between selection:bg-[#D4AF37]/30 selection:text-[#5C4303] pb-24 sm:pb-12">
       {/* Background Soft Gold Ambient Glow */}
       <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,rgba(212,175,55,0.08)_0%,transparent_60%)] z-0" />
 

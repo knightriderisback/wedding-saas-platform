@@ -28,10 +28,10 @@ export const Royal3DNames: React.FC<Royal3DNamesProps> = ({
   const isArabicUrdu = isRTL || /[\u0600-\u06FF]/.test(groomName);
 
   const fontClass = isDevanagari
-    ? "font-['Rozha_One','Yatra_One','Playfair_Display',serif] text-6xl sm:text-7xl tracking-normal font-bold"
+    ? "font-['Rozha_One','Yatra_One','Playfair_Display',serif] text-5xl sm:text-6xl md:text-7xl tracking-normal font-bold"
     : isArabicUrdu
-    ? "font-['Noto_Nastaliq_Urdu','Playfair_Display',serif] text-5xl sm:text-6xl leading-loose font-bold"
-    : "font-['Alex_Brush','Pinyon_Script',cursive] text-7xl sm:text-8xl font-normal";
+    ? "font-['Noto_Nastaliq_Urdu','Playfair_Display',serif] text-4xl sm:text-5xl md:text-6xl leading-loose font-bold"
+    : "font-['Alex_Brush','Pinyon_Script',cursive] text-5xl sm:text-7xl md:text-8xl font-normal";
 
   // Deep 3D Extrusion Multi-layer Shadow (Creates real 3D Pop Out effect)
   const extrusion3DStyle: React.CSSProperties = {
