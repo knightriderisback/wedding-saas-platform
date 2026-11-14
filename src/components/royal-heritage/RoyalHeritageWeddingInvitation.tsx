@@ -494,6 +494,12 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
     ? 'font-nastaliq tracking-normal'
     : "font-['Cormorant_Garamond',serif]";
 
+  const fontScriptHeading = isHindi
+    ? 'font-devanagari-heading tracking-normal font-bold'
+    : isNastaliq
+    ? 'font-nastaliq tracking-normal'
+    : "font-['Alex_Brush','Pinyon_Script',cursive] tracking-wide";
+
   // Dynamic countdown timer
   const [timeLeft, setTimeLeft] = useState({
     days: 29,
@@ -511,7 +517,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
       if (difference > 0) {
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((difference % (1000 * 60)) / 1000);
         setTimeLeft({ days, hours, minutes, seconds });
@@ -893,7 +899,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   text={t.countdownTitle}
                   effect="pop-3d"
                   as="h3"
-                  className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl sm:text-4xl text-[#1E2E1B] tracking-wide"
+                  className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
                   style={deepTextShadow}
                 />
                 <div className="flex items-center justify-center gap-2 mt-1.5 opacity-90">
@@ -960,7 +966,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.timelineTitle}
                 effect="scepter-slide"
                 as="h3"
-                className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl sm:text-4xl text-[#1E2E1B] tracking-wide"
+                className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
                 style={deepTextShadow}
               />
               <div className="flex items-center justify-center gap-2 mt-1.5 mb-8 opacity-90">
@@ -1036,7 +1042,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.venueTitle}
                 effect="dome-rise"
                 as="h3"
-                className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl sm:text-4xl text-[#1E2E1B] tracking-wide"
+                className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
                 style={deepTextShadow}
               />
               <div className="flex items-center justify-center gap-2 mt-1.5 mb-4 opacity-90">
@@ -1092,7 +1098,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   text={t.dressCodeTitle}
                   effect="dome-rise"
                   as="h4"
-                  className="font-['Alex_Brush','Pinyon_Script',cursive] text-2xl text-[#1E2E1B]"
+                  className={`${fontScriptHeading} text-2xl text-[#1E2E1B]`}
                   style={deepTextShadow}
                 />
                 <DynamicTextEffects
@@ -1296,7 +1302,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               text={`${t.footerBlessing}: ${effectiveGroomName} & ${effectiveBrideName}`}
               effect="velvet-mist"
               as="p"
-              className="font-['Alex_Brush','Pinyon_Script',cursive] text-2xl sm:text-3xl text-[#1E2E1B]"
+              className={`${fontScriptHeading} text-2xl sm:text-3xl text-[#1E2E1B]`}
               style={deepTextShadow}
             />
             <div className="flex items-center justify-center gap-1.5 mt-2 text-[#7C9172]">

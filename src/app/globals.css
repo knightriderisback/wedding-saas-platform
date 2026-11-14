@@ -38,7 +38,7 @@
 
 .font-devanagari {
   font-family: 'Noto Serif Devanagari', 'Tiro Devanagari Hindi', 'Rozha One', 'Noto Sans Devanagari', serif !important;
-  letter-spacing: 0.005em !important;
+  letter-spacing: 0 !important;
   text-transform: none !important;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
@@ -49,7 +49,7 @@
 
 .font-devanagari-heading {
   font-family: 'Rozha One', 'Yatra One', 'Noto Serif Devanagari', serif !important;
-  letter-spacing: 0.01em !important;
+  letter-spacing: 0 !important;
   text-transform: none !important;
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
@@ -60,7 +60,7 @@
 
 .font-devanagari-sans {
   font-family: 'Noto Sans Devanagari', sans-serif !important;
-  letter-spacing: 0.005em !important;
+  letter-spacing: 0 !important;
   text-transform: none !important;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;

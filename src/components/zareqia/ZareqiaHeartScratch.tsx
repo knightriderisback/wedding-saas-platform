@@ -279,7 +279,15 @@ END:VCALENDAR`;
     >
       {/* Welcome Blessing Intro Text (Matching Video f_0025.jpg) */}
       <div className="max-w-[320px] mx-auto px-2 mb-4 text-center">
-        <p className="font-['Cormorant_Garamond',serif] italic text-[15px] sm:text-[16px] leading-relaxed text-[#2C3827]">
+        <p
+          className={`text-[15px] sm:text-[16px] leading-relaxed text-[#2C3827] ${
+            currentLang === 'hi'
+              ? 'font-devanagari tracking-normal'
+              : currentLang === 'ur'
+              ? 'font-nastaliq tracking-normal'
+              : "font-['Cormorant_Garamond',serif] italic"
+          }`}
+        >
           {currentLang === 'hi'
             ? `हम ${coupleNames} के शुभ विवाह में आपका सप्रेम स्वागत करते हैं। विश्वास और प्रेम के इस नए सफर में हमारे साथ शामिल होने के लिए आपका हार्दिक धन्यवाद।`
             : currentLang === 'hinglish'
@@ -295,7 +303,15 @@ END:VCALENDAR`;
 
       {/* Section Title */}
       <div className="mb-4 transition-all duration-700">
-        <h3 className="font-['Alex_Brush','Pinyon_Script',cursive] text-3xl md:text-4xl text-[#1E2E1B] tracking-wide">
+        <h3
+          className={`text-3xl md:text-4xl text-[#1E2E1B] ${
+            currentLang === 'hi'
+              ? 'font-devanagari-heading tracking-normal font-bold'
+              : currentLang === 'ur'
+              ? 'font-nastaliq tracking-normal'
+              : "font-['Alex_Brush','Pinyon_Script',cursive] tracking-wide"
+          }`}
+        >
           {isRevealed
             ? currentLang === 'hi'
               ? 'एक नए जीवन की शुरुआत'
@@ -350,7 +366,15 @@ END:VCALENDAR`;
 
           {/* Text Content Inside Heart (Matching exact video lines in f_0035.jpg) */}
           <div className="relative z-10 flex flex-col items-center px-4 pt-4">
-            <span className="font-['Alex_Brush','Pinyon_Script',cursive] text-lg text-[#5A4C32] mb-0.5">
+            <span
+              className={`text-lg text-[#5A4C32] mb-0.5 ${
+                currentLang === 'hi'
+                  ? 'font-devanagari-heading tracking-normal font-bold'
+                  : currentLang === 'ur'
+                  ? 'font-nastaliq tracking-normal'
+                  : "font-['Alex_Brush','Pinyon_Script',cursive]"
+              }`}
+            >
               {currentLang === 'hi'
                 ? 'आप सादर आमंत्रित हैं!'
                 : currentLang === 'hinglish'
@@ -359,14 +383,30 @@ END:VCALENDAR`;
                 ? 'آپ تشریف لائیں!'
                 : "You're Invited!"}
             </span>
-            <span className="font-['Playfair_Display',serif] text-xl md:text-2xl font-bold text-[#242A20] tracking-tight">
+            <span
+              className={`text-xl md:text-2xl font-bold text-[#242A20] ${
+                currentLang === 'hi'
+                  ? 'font-devanagari-heading tracking-normal font-black'
+                  : currentLang === 'ur'
+                  ? 'font-nastaliq tracking-normal'
+                  : "font-['Playfair_Display',serif] tracking-tight"
+              }`}
+            >
               {currentLang === 'hi'
                 ? '१२ दिसंबर २०२६'
                 : currentLang === 'ur'
                 ? '١٢ دسمبر ٢٠٢٦'
                 : weddingDate}
             </span>
-            <span className="font-['Cormorant_Garamond',serif] text-sm text-[#4E5C46] font-medium mt-0.5">
+            <span
+              className={`text-sm text-[#4E5C46] font-medium mt-0.5 ${
+                currentLang === 'hi'
+                  ? 'font-devanagari tracking-normal font-bold'
+                  : currentLang === 'ur'
+                  ? 'font-nastaliq tracking-normal'
+                  : "font-['Cormorant_Garamond',serif]"
+              }`}
+            >
               {currentLang === 'hi'
                 ? 'शनिवार'
                 : currentLang === 'hinglish'
@@ -375,7 +415,15 @@ END:VCALENDAR`;
                 ? 'ہفتہ'
                 : weddingDay}
             </span>
-            <span className="font-['Cinzel',serif] text-[11px] tracking-wider text-[#685A42] font-semibold mt-0.5">
+            <span
+              className={`text-[11px] text-[#685A42] font-semibold mt-0.5 ${
+                currentLang === 'hi'
+                  ? 'font-devanagari tracking-normal font-bold'
+                  : currentLang === 'ur'
+                  ? 'font-nastaliq tracking-normal'
+                  : "font-['Cinzel',serif] tracking-wider"
+              }`}
+            >
               {currentLang === 'hi'
                 ? 'प्रातः १०:०० बजे'
                 : currentLang === 'hinglish'
