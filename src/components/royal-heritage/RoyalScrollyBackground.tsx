@@ -167,8 +167,17 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
   useEffect(() => {
     updateCanvasSize();
     window.addEventListener('resize', updateCanvasSize, { passive: true });
+    window.addEventListener('orientationchange', updateCanvasSize, { passive: true });
+    const vv = window.visualViewport;
+    if (vv) {
+      vv.addEventListener('resize', updateCanvasSize, { passive: true });
+    }
     return () => {
       window.removeEventListener('resize', updateCanvasSize);
+      window.removeEventListener('orientationchange', updateCanvasSize);
+      if (vv) {
+        vv.removeEventListener('resize', updateCanvasSize);
+      }
     };
   }, []);
 
@@ -202,8 +211,8 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
 
   return (
     <div
-      className={`absolute inset-0 pointer-events-none overflow-hidden ${className}`}
-      style={{ zIndex: 0, willChange: 'transform' }}
+      className={`fixed inset-0 pointer-events-none overflow-hidden ${className}`}
+      style={{ zIndex: 0, willChange: 'transform', backgroundColor: '#1A2218' }}
     >
       {/* 3D Scrolly Video Canvas */}
       <canvas

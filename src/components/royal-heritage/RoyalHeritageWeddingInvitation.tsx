@@ -443,6 +443,38 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
     }
   }, [effectiveGroomName, effectiveBrideName, isHindi, isNastaliq]);
 
+  // Lock window and document.body to prevent scroll chaining and persistent bottom white space
+  useEffect(() => {
+    const origBodyOverflow = document.body.style.overflow;
+    const origBodyBg = document.body.style.backgroundColor;
+    const origBodyOverscroll = document.body.style.overscrollBehavior;
+    const origHtmlOverflow = document.documentElement.style.overflow;
+    const origHtmlOverscroll = document.documentElement.style.overscrollBehavior;
+
+    document.body.style.overflow = 'hidden';
+    document.body.style.backgroundColor = '#1A2218';
+    document.body.style.overscrollBehavior = 'none';
+    document.documentElement.style.overflow = 'hidden';
+    document.documentElement.style.overscrollBehavior = 'none';
+    window.scrollTo(0, 0);
+
+    const preventWindowScroll = () => {
+      if (window.scrollY !== 0 || window.scrollX !== 0) {
+        window.scrollTo(0, 0);
+      }
+    };
+    window.addEventListener('scroll', preventWindowScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', preventWindowScroll);
+      document.body.style.overflow = origBodyOverflow;
+      document.body.style.backgroundColor = origBodyBg;
+      document.body.style.overscrollBehavior = origBodyOverscroll;
+      document.documentElement.style.overflow = origHtmlOverflow;
+      document.documentElement.style.overscrollBehavior = origHtmlOverscroll;
+    };
+  }, []);
+
   // Dynamic Typography based on active language (Pure Devanagari for Hindi, Nastaliq for Urdu)
   const fontHeading = isHindi
     ? 'font-devanagari-heading tracking-normal font-bold'
@@ -592,9 +624,10 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
   return (
     <div
-      className={`relative w-full h-[100dvh] min-h-[100dvh] overflow-hidden bg-[#FAF8F5] select-none ${
+      className={`fixed inset-0 w-full h-full overflow-hidden bg-[#1A2218] select-none ${
         isHindi ? 'font-devanagari' : isRTL ? 'font-nastaliq rtl' : ''
       }`}
+      style={{ touchAction: 'pan-y' }}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       {/* ========================================================
@@ -687,7 +720,8 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           ======================================================== */}
       <div
         ref={scrollContainerRef}
-        className="relative z-10 w-full h-[100dvh] overflow-y-auto overflow-x-hidden scrollbar-none pb-24 bg-transparent"
+        className="relative z-10 w-full h-full overflow-y-auto overflow-x-hidden scrollbar-none pb-6 bg-transparent overscroll-contain"
+        style={{ WebkitOverflowScrolling: 'touch' }}
       >
         <div className="w-full max-w-lg mx-auto px-4 sm:px-6">
           {/* ========================================================
@@ -1257,7 +1291,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           </section>
 
           {/* Footer Blessing (Zero Black Strip, Pure Floating Signature) */}
-          <div className="relative z-10 text-center py-8 px-4">
+          <div className="relative z-10 text-center py-6 px-4">
             <DynamicTextEffects
               text={`${t.footerBlessing}: ${effectiveGroomName} & ${effectiveBrideName}`}
               effect="velvet-mist"

@@ -75,7 +75,7 @@ function LuxuryGuestMicrositeContent() {
 
   if (loading && !project) {
     return (
-      <div className="min-h-screen bg-[#FAF8F5] text-[#7D5F04] flex items-center justify-center font-['Cinzel',serif] text-sm">
+      <div className="fixed inset-0 bg-[#1A2218] text-[#DFC07C] flex items-center justify-center font-['Cinzel',serif] text-sm">
         <Sparkles className="w-5 h-5 animate-spin mr-2 text-[#D4AF37]" />
         Unfolding Auspicious Wedding Suite...
       </div>
@@ -125,7 +125,7 @@ function LuxuryGuestMicrositeContent() {
   }
 
   return (
-    <div className="relative min-h-screen">
+    <div className={activeTemplate === 'royal-heritage' ? "fixed inset-0 w-full h-full overflow-hidden bg-[#1A2218]" : "relative min-h-screen"}>
       {templateView}
     </div>
   );
@@ -135,7 +135,7 @@ export default function LuxuryGuestMicrosite() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#FAF8F5] text-[#7D5F04] flex items-center justify-center font-['Cinzel',serif] text-sm">
+        <div className="fixed inset-0 bg-[#1A2218] text-[#DFC07C] flex items-center justify-center font-['Cinzel',serif] text-sm">
           <Sparkles className="w-5 h-5 animate-spin mr-2 text-[#D4AF37]" />
           Unfolding Auspicious Wedding Suite...
         </div>

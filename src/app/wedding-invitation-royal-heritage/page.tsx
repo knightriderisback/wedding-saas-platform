@@ -77,7 +77,7 @@ function RoyalHeritageInvitationContent() {
   }
 
   return (
-    <div className="relative min-h-screen">
+    <div className={activeTemplate === 'royal-heritage' ? "fixed inset-0 w-full h-full overflow-hidden bg-[#1A2218]" : "relative min-h-screen"}>
       {templateView}
     </div>
   );
@@ -87,9 +87,9 @@ export default function RoyalHeritageInvitationPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center font-serif text-[#7D5F04] text-lg">
+        <div className="fixed inset-0 bg-[#1A2218] flex flex-col items-center justify-center font-serif text-[#DFC07C] text-lg">
           <div className="w-8 h-8 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin mb-4" />
-          <p className="font-['Cinzel',serif] tracking-widest uppercase text-xs text-[#7D5F04]">
+          <p className="font-['Cinzel',serif] tracking-widest uppercase text-xs text-[#DFC07C]">
             Opening Royal Heritage Suite...
           </p>
         </div>

@@ -3,8 +3,14 @@
 @tailwind utilities;
 
 @layer base {
+  html, body {
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+  }
+
   body {
-    background-color: #FAF8F5;
+    background-color: #1A2218;
     color: #2C2218;
     font-family: 'Montserrat', sans-serif;
     overflow-x: hidden;
