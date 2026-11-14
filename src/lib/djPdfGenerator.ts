@@ -129,7 +129,7 @@ export function exportDjPlaylistPdf(project: WeddingProject, songs: SongRequest[
   doc.setFont('times', 'italic');
   doc.setFontSize(9);
   doc.setTextColor(100, 110, 95);
-  doc.text(`Generated exclusively by Éternité Wedding Platform for ${project.formalTitle}`, pageWidth / 2, pageHeight - 16, { align: 'center' });
+  doc.text(`Generated exclusively by Royal Vivah Platform for ${project.formalTitle}`, pageWidth / 2, pageHeight - 16, { align: 'center' });
 
   // Trigger immediate download
   const filename = `DJ-Playlist-${project.slug}.pdf`;
