@@ -22,6 +22,7 @@ import { exportDjPlaylistPdf } from '@/lib/djPdfGenerator';
 import { defaultWeddingProject } from '@/lib/mockData';
 import { TEMPLATE_LIST } from '@/lib/pressedLoveTemplates';
 import { AcrylicBackgroundOrbs } from '@/components/common/AcrylicBackgroundOrbs';
+import { RoyalCustomizationStudio } from '@/components/portal/RoyalCustomizationStudio';
 import {
   Crown,
   Sparkles,
@@ -66,7 +67,7 @@ function ClientPortalContent() {
   const [project, setProject] = useState<WeddingProject | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'guests' | 'dj' | 'blessings' | 'content' | 'media' | 'suites'
+    'overview' | 'customization' | 'guests' | 'dj' | 'blessings' | 'content' | 'media' | 'suites'
   >('overview');
 
   // Search & Filter
@@ -248,6 +249,7 @@ function ClientPortalContent() {
   // Bottom Navigation Items (matching Rajhara Express dock)
   const navItems = [
     { id: 'overview', icon: Crown, label: 'Overview' },
+    { id: 'customization', icon: Sliders, label: 'Customization Studio' },
     { id: 'guests', icon: Users, label: 'Guests' },
     { id: 'dj', icon: Music, label: 'DJ Playlist' },
     { id: 'blessings', icon: Mic, label: 'Blessings' },
@@ -263,7 +265,7 @@ function ClientPortalContent() {
       icon: Crown,
       subtitle: `${project?.partner1 || 'Couple'} & ${project?.partner2 || ''} Wedding Portal`,
       badge: `${attendingCount} Attending`,
-      acrylicClass: 'acrylic-amber card-3d-elevated',
+      acrylicClass: 'card-rajhara-elevated-3d',
       border: 'border-[#AA820A]/40',
       shadowGlow: 'shadow-[0_12px_32px_rgba(170,130,10,0.12)]',
       iconBg: 'bg-white/80 shadow-xs border border-[#AA820A]/30',
@@ -273,6 +275,28 @@ function ClientPortalContent() {
       badgeText: 'text-[#7D5F04]',
       badgeBorder: 'border-[#AA820A]/40',
       titleColor: 'text-[#2C2218]',
+      subtitleColor: 'text-[#544230]',
+      pillBg: 'bg-white/80 backdrop-blur-sm',
+      pillBorder: 'border-[#AA820A]/30',
+      pillText: 'text-[#544230]',
+      highlightText: 'text-[#7D5F04]',
+    },
+    customization: {
+      title: 'Royal Heritage Customization & Section Studio',
+      shortTitle: 'Customization Studio',
+      icon: Sliders,
+      subtitle: 'Customize every text, font, font-size, hide/show placement, and soundtrack of your wedding microsite',
+      badge: 'Bespoke 3D Studio',
+      acrylicClass: 'card-rajhara-elevated-3d',
+      border: 'border-[#AA820A]/40',
+      shadowGlow: 'shadow-[0_12px_32px_rgba(170,130,10,0.12)]',
+      iconBg: 'bg-gradient-to-br from-[#D4AF37] to-[#7D5F04] text-white shadow-xs',
+      iconColor: 'text-white',
+      breadcrumbColor: 'text-[#7D5F04]',
+      badgeBg: 'bg-[#273822]',
+      badgeText: 'text-[#FAF8F5]',
+      badgeBorder: 'border-[#AA820A]/40',
+      titleColor: 'text-[#1E2E1B]',
       subtitleColor: 'text-[#544230]',
       pillBg: 'bg-white/80 backdrop-blur-sm',
       pillBorder: 'border-[#AA820A]/30',
@@ -541,44 +565,85 @@ function ClientPortalContent() {
         {/* TAB 1: OVERVIEW */}
         {activeTab === 'overview' && (
           <div className="space-y-3">
-            {/* Metric Cards - 3D Soft Acrylic Cards with Bevel Highlights */}
+            {/* Metric Cards - 3D Royal Rajhara Cards with Bevel Highlights */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
-              <div className="card-3d acrylic-amber p-3.5 sm:p-4 rounded-2xl border border-[#AA820A]/30 shadow-md">
-                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase tracking-wider">Total Guests</div>
+              <div className="card-rajhara-3d p-3.5 sm:p-4 rounded-2xl border border-[#AA820A]/30 shadow-md">
+                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase tracking-wider flex items-center gap-1">
+                  <Users className="w-3 h-3 text-[#AA820A]" /> Total Guests
+                </div>
                 <div className="text-lg sm:text-2xl font-black text-[#2C2218] mt-0.5">{guests.length}</div>
                 <div className="text-[10px] text-[#7D5F04] font-medium mt-0.5">Invited in Registry</div>
               </div>
 
-              <div className="card-3d acrylic-sage p-3.5 sm:p-4 rounded-2xl border border-[#739B83]/30 shadow-md">
-                <div className="text-[10px] font-cinzel font-bold text-[#2D4A36] uppercase tracking-wider">Invites Sent</div>
+              <div className="card-rajhara-3d p-3.5 sm:p-4 rounded-2xl border border-[#739B83]/30 shadow-md">
+                <div className="text-[10px] font-cinzel font-bold text-[#2D4A36] uppercase tracking-wider flex items-center gap-1">
+                  <MessageCircle className="w-3 h-3 text-[#2D4A36]" /> Invites Sent
+                </div>
                 <div className="text-lg sm:text-2xl font-black text-[#2D4A36] mt-0.5">{dispatchedCount}</div>
                 <div className="text-[10px] text-[#2D4A36] font-medium mt-0.5">
                   {guests.length > 0 ? Math.round((dispatchedCount / guests.length) * 100) : 0}% WhatsApp coverage
                 </div>
               </div>
 
-              <div className="card-3d acrylic-rose p-3.5 sm:p-4 rounded-2xl border border-[#D47A88]/30 shadow-md">
-                <div className="text-[10px] font-cinzel font-bold text-[#9B1C2E] uppercase tracking-wider">Attending Headcount</div>
+              <div className="card-rajhara-3d p-3.5 sm:p-4 rounded-2xl border border-[#D47A88]/30 shadow-md">
+                <div className="text-[10px] font-cinzel font-bold text-[#9B1C2E] uppercase tracking-wider flex items-center gap-1">
+                  <Heart className="w-3 h-3 text-[#9B1C2E]" /> Attending
+                </div>
                 <div className="text-lg sm:text-2xl font-black text-[#9B1C2E] mt-0.5">{totalAttendingHeadcount}</div>
                 <div className="text-[10px] text-[#9B1C2E] font-medium mt-0.5">{attendingCount} VIP Passes</div>
               </div>
 
-              <div className="card-3d acrylic-azure p-3.5 sm:p-4 rounded-2xl border border-[#6B9AC4]/30 shadow-md">
-                <div className="text-[10px] font-cinzel font-bold text-[#1E3F66] uppercase tracking-wider">DJ Song Requests</div>
+              <div className="card-rajhara-3d p-3.5 sm:p-4 rounded-2xl border border-[#6B9AC4]/30 shadow-md">
+                <div className="text-[10px] font-cinzel font-bold text-[#1E3F66] uppercase tracking-wider flex items-center gap-1">
+                  <Music className="w-3 h-3 text-[#1E3F66]" /> DJ Requests
+                </div>
                 <div className="text-lg sm:text-2xl font-black text-[#1E3F66] mt-0.5">{djPlaylist.length}</div>
                 <div className="text-[10px] text-[#1E3F66] font-medium mt-0.5">Ready for Sangeet PDF</div>
               </div>
             </div>
 
+            {/* Royal Customization Studio Feature Card */}
+            <div className="card-rajhara-elevated-3d p-4 rounded-2xl border border-[#AA820A]/50 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#D4AF37] to-[#7D5F04] text-white flex items-center justify-center shadow-md shrink-0">
+                  <Sliders className="w-6 h-6 animate-pulse" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-['Cinzel',serif] uppercase tracking-wider font-bold text-[#7D5F04]">
+                      Bespoke Royal Studio
+                    </span>
+                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#273822] text-[#FAF8F5] font-bold">
+                      NEW
+                    </span>
+                  </div>
+                  <h3 className="font-['Rozha_One',serif] font-bold text-sm sm:text-base text-[#1E2E1B] leading-tight">
+                    Customise Every Text, Font, Size & Section Visibility
+                  </h3>
+                  <p className="text-xs text-[#544230] mt-0.5">
+                    Tailor couple names, lineage, dates, music tracks, and toggle any of the 9 sections.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setActiveTab('customization')}
+                className="btn-rajhara-3d px-5 py-2.5 rounded-xl text-xs font-['Cinzel',serif] uppercase tracking-wider font-bold shrink-0 shadow-md flex items-center gap-2 cursor-pointer self-start sm:self-auto"
+              >
+                <Sliders className="w-4 h-4" />
+                <span>Open Customization Studio</span>
+              </button>
+            </div>
+
             {/* Quick Action Hub */}
-            <div className="acrylic-glass card-3d p-4 rounded-2xl border border-[#E8DFC8] shadow-md space-y-3">
+            <div className="card-rajhara-3d p-4 rounded-2xl border border-[#E8DFC8] shadow-md space-y-3">
               <h3 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04] tracking-wider flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-[#AA820A]" /> Quick Wedding Concierge Actions
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
                 <button
                   onClick={handleImportPhoneContacts}
-                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#AA820A] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-3d shadow-xs hover:shadow-md"
+                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#AA820A] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-rajhara-3d shadow-xs hover:shadow-md"
                 >
                   <Phone className="w-4 h-4 text-[#AA820A] mb-1" />
                   <span className="font-bold text-[#2C2218]">Import Contacts</span>
@@ -587,7 +652,7 @@ function ClientPortalContent() {
 
                 <button
                   onClick={handleExportDjPdf}
-                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#739B83] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-3d shadow-xs hover:shadow-md"
+                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#739B83] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-rajhara-3d shadow-xs hover:shadow-md"
                 >
                   <Download className="w-4 h-4 text-[#2D4A36] mb-1" />
                   <span className="font-bold text-[#2C2218]">Export DJ PDF</span>
@@ -595,17 +660,17 @@ function ClientPortalContent() {
                 </button>
 
                 <button
-                  onClick={() => setActiveTab('content')}
-                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#D47A88] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-3d shadow-xs hover:shadow-md"
+                  onClick={() => setActiveTab('customization')}
+                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#AA820A] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-rajhara-3d shadow-xs hover:shadow-md"
                 >
-                  <Edit2 className="w-4 h-4 text-[#9B1C2E] mb-1" />
-                  <span className="font-bold text-[#2C2218]">Edit Schedule</span>
-                  <span className="text-[10px] text-[#544230]">Haldi, Sangeet & Menu</span>
+                  <Sliders className="w-4 h-4 text-[#AA820A] mb-1" />
+                  <span className="font-bold text-[#2C2218]">Customize Design</span>
+                  <span className="text-[10px] text-[#544230]">Fonts, Copy & Sections</span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('suites')}
-                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#6B9AC4] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-3d shadow-xs hover:shadow-md"
+                  className="p-3.5 rounded-xl bg-white/70 hover:bg-white border border-[#E8DFC8] hover:border-[#6B9AC4] text-left transition-all duration-200 flex flex-col justify-between cursor-pointer card-rajhara-3d shadow-xs hover:shadow-md"
                 >
                   <Palette className="w-4 h-4 text-[#1E3F66] mb-1" />
                   <span className="font-bold text-[#2C2218]">Switch Suite</span>
@@ -614,6 +679,15 @@ function ClientPortalContent() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* TAB 2: CUSTOMIZATION STUDIO */}
+        {activeTab === 'customization' && (
+          <RoyalCustomizationStudio
+            project={project}
+            onUpdate={(updatedProject) => setProject(updatedProject)}
+            showToast={showToast}
+          />
         )}
 
         {/* TAB 2: GUEST & INVITATION HUB */}

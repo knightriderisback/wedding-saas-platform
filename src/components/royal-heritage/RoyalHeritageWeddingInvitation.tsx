@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Volume2,
@@ -27,6 +27,7 @@ import { RoyalScrollyBackground } from './RoyalScrollyBackground';
 import { royalSitarAudio } from '@/lib/sitarSynth';
 import { WeddingProject } from '@/types/wedding';
 import { saveWeddingProject } from '@/lib/firebase';
+import { getDefaultCustomization } from '@/lib/customizationDefaults';
 
 export type SupportedLanguage = 'en' | 'hi' | 'hinglish' | 'ur';
 
@@ -685,10 +686,32 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
   autoOpen = false,
   weddingSlug = 'royal-heritage',
 }) => {
-  const [currentLang, setCurrentLang] = useState<SupportedLanguage>('en');
+  // Merge project customization with full defaults
+  const customization = useMemo(() => {
+    const defaults = getDefaultCustomization(project || undefined);
+    if (!project?.customization) return defaults;
+    return {
+      ...defaults,
+      ...project.customization,
+      sections: {
+        ...defaults.sections,
+        ...project.customization.sections,
+      },
+      typography: {
+        ...defaults.typography,
+        ...project.customization.typography,
+      },
+    };
+  }, [project]);
+
+  const [currentLang, setCurrentLang] = useState<SupportedLanguage>(
+    customization.defaultLanguage || 'en'
+  );
   const [langMenuOpen, setLangMenuOpen] = useState<boolean>(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
-  const [isEnvelopeOpen, setIsEnvelopeOpen] = useState<boolean>(autoOpen);
+  const [isEnvelopeOpen, setIsEnvelopeOpen] = useState<boolean>(
+    autoOpen || customization.sections.envelope.enabled === false
+  );
 
   // RSVP Form States
   const [rsvpName, setRsvpName] = useState<string>(
@@ -850,9 +873,9 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
     return () => clearInterval(timer);
   }, [effectiveWeddingDate]);
 
-  // Audio Player (User's Royal Heritage Soundtrack)
+  // Audio Player (User's Royal Heritage Soundtrack or Custom track)
   useEffect(() => {
-    const audioSrc = project?.backgroundAudioUrl || '/audio/royal-heritage-music.mp3';
+    const audioSrc = customization.musicTrackUrl || project?.backgroundAudioUrl || '/audio/royal-heritage-music.mp3';
     const audio = new Audio(audioSrc);
     audio.loop = true;
     audio.volume = 0.65;
@@ -863,7 +886,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
       audio.currentTime = 0;
       royalSitarAudio.stopAmbient();
     };
-  }, [project?.backgroundAudioUrl]);
+  }, [customization.musicTrackUrl, project?.backgroundAudioUrl]);
 
   const toggleAudio = () => {
     if (isAudioPlaying) {
@@ -957,7 +980,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           STAGE 1 & 2: REALISTIC ROYAL ENVELOPE (From User Drive)
           Magically dissolves on click anywhere + launches music
           ======================================================== */}
-      {!isEnvelopeOpen && (
+      {!isEnvelopeOpen && customization.sections.envelope.enabled !== false && (
         <RoyalRealisticEnvelope
           onCurtainsOpen={handleCurtainsOpen}
           onOpenComplete={handleEnvelopeComplete}
@@ -976,58 +999,62 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           Clean, minimal floating pills. NO header strip, NO footer strip!
           ======================================================== */}
       {/* Audio Mute/Unmute Button (Top Right) */}
-      <button
-        onClick={toggleAudio}
-        className="fixed top-4 right-4 z-40 w-10 h-10 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/60 shadow-[0_4px_15px_rgba(0,0,0,0.18)] flex items-center justify-center text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer"
-        title={isAudioPlaying ? 'Mute Music' : 'Play Music'}
-      >
-        {isAudioPlaying ? (
-          <Volume2 className="w-5 h-5 text-[#B59A57] animate-pulse" />
-        ) : (
-          <VolumeX className="w-5 h-5 text-[#6B5A3E]" />
-        )}
-      </button>
+      {customization.showMusicButton !== false && (
+        <button
+          onClick={toggleAudio}
+          className="fixed top-4 right-4 z-40 w-10 h-10 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/60 shadow-[0_4px_15px_rgba(0,0,0,0.18)] flex items-center justify-center text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer"
+          title={isAudioPlaying ? 'Mute Music' : 'Play Music'}
+        >
+          {isAudioPlaying ? (
+            <Volume2 className="w-5 h-5 text-[#B59A57] animate-pulse" />
+          ) : (
+            <VolumeX className="w-5 h-5 text-[#6B5A3E]" />
+          )}
+        </button>
+      )}
 
       {/* 4-Language Switcher (Bottom Left) */}
-      <div className="fixed bottom-4 left-4 z-40 flex flex-col items-start gap-1">
-        <AnimatePresence>
-          {langMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.9 }}
-              className="bg-[#FAF8F5]/95 backdrop-blur-md border border-[#B59A57]/50 shadow-xl rounded-2xl p-1.5 flex flex-col gap-1 mb-1"
-            >
-              {(['en', 'hi', 'hinglish', 'ur'] as SupportedLanguage[]).map((lng) => (
-                <button
-                  key={lng}
-                  onClick={() => {
-                    setCurrentLang(lng);
-                    setLangMenuOpen(false);
-                  }}
-                  className={`px-3.5 py-1.5 rounded-xl text-sm font-['Cinzel',serif] tracking-wider text-left transition-all ${
-                    currentLang === lng
-                      ? 'bg-[#273822] text-[#FAF8F5] font-bold shadow-sm'
-                      : 'text-[#273822] hover:bg-[#DFC07C]/25'
-                  }`}
-                  style={deepTextShadow}
-                >
-                  {TRANSLATIONS[lng].langName}
-                </button>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+      {customization.showLanguageSwitcher !== false && (
+        <div className="fixed bottom-4 left-4 z-40 flex flex-col items-start gap-1">
+          <AnimatePresence>
+            {langMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                className="bg-[#FAF8F5]/95 backdrop-blur-md border border-[#B59A57]/50 shadow-xl rounded-2xl p-1.5 flex flex-col gap-1 mb-1"
+              >
+                {(['en', 'hi', 'hinglish', 'ur'] as SupportedLanguage[]).map((lng) => (
+                  <button
+                    key={lng}
+                    onClick={() => {
+                      setCurrentLang(lng);
+                      setLangMenuOpen(false);
+                    }}
+                    className={`px-3.5 py-1.5 rounded-xl text-sm font-['Cinzel',serif] tracking-wider text-left transition-all ${
+                      currentLang === lng
+                        ? 'bg-[#273822] text-[#FAF8F5] font-bold shadow-sm'
+                        : 'text-[#273822] hover:bg-[#DFC07C]/25'
+                    }`}
+                    style={deepTextShadow}
+                  >
+                    {TRANSLATIONS[lng].langName}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-        <button
-          onClick={() => setLangMenuOpen(!langMenuOpen)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md text-xs sm:text-sm font-['Cinzel',serif] tracking-wider uppercase text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer font-bold"
-          style={deepTextShadow}
-        >
-          <Globe className="w-4 h-4 text-[#B59A57]" />
-          <span>{t.langName}</span>
-        </button>
-      </div>
+          <button
+            onClick={() => setLangMenuOpen(!langMenuOpen)}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md text-xs sm:text-sm font-['Cinzel',serif] tracking-wider uppercase text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer font-bold"
+            style={deepTextShadow}
+          >
+            <Globe className="w-4 h-4 text-[#B59A57]" />
+            <span>{t.langName}</span>
+          </button>
+        </div>
+      )}
 
       {/* ========================================================
           SCROLLABLE CONTENT BODY (CARDLESS, FLOATING DIRECTLY OVER VIDEO)
@@ -1043,600 +1070,714 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           {/* ========================================================
               SECTION 1: HERO (Dynamic Couple Names 3D Pop Out)
               ======================================================== */}
-          <section className="relative min-h-[92vh] flex flex-col items-center justify-between pt-6 sm:pt-8 pb-8 px-4 sm:px-6 text-center z-10">
-            {/* Top Announcement */}
-            <motion.div
-              initial={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              viewport={{ once: false, amount: 0.3 }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-              className="space-y-1"
-            >
-              <div className="flex items-center justify-center gap-2 opacity-90">
-                <div className="w-10 h-[1.5px] bg-[#B59A57]" />
-                <Sparkles className="w-3.5 h-3.5 text-[#B59A57] animate-pulse" />
-                <div className="w-10 h-[1.5px] bg-[#B59A57]" />
-              </div>
-
-              <DynamicTextEffects
-                text={t.weAreGettingMarried}
-                effect="typewriter"
-                speed={40}
-                showCursor={true}
-                className={`${fontHeading} text-sm sm:text-base text-[#273822]`}
-                style={deepTextShadow}
-              />
-
-              {guestName && guestName !== 'Special Guest' && (
-                <div className="pt-1">
-                  <span
-                    className={`inline-block px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-[#B59A57]/50 ${fontSubHeading} text-xs sm:text-sm text-[#785B24] font-bold`}
-                    style={deepTextShadow}
-                  >
-                    {t.cordiallyInviting}: {localizedGuestName}
-                  </span>
-                </div>
-              )}
-            </motion.div>
-
-            {/* Couple Names: 3D Pop Out Effect on Every Letter */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false, amount: 0.3 }}
-              transition={{ duration: 0.9, delay: 0.15 }}
-              className="my-auto py-2 w-full flex flex-col items-center"
-            >
-              <Royal3DNames
-                groomName={effectiveGroomName}
-                brideName={effectiveBrideName}
-                ampersand="&"
-                isRTL={isRTL}
-              />
-
-              {/* Parents Lineage & Titles */}
+          {customization.sections.hero.enabled !== false && (
+            <section className="relative min-h-[92vh] flex flex-col items-center justify-between pt-6 sm:pt-8 pb-8 px-4 sm:px-6 text-center z-10">
+              {/* Top Announcement */}
               <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
+                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.7, delay: 0.6 }}
-                className="mt-3 flex items-center justify-center gap-4 text-xs font-['Cormorant_Garamond',serif] text-[#273822]"
-                style={deepTextShadow}
+                transition={{ duration: 0.8, ease: 'easeOut' }}
+                className="space-y-1"
               >
-                <div className={`flex flex-col ${isRTL ? 'text-left' : 'text-right'}`}>
-                  <DynamicTextEffects
-                    text={t.groomParentage}
-                    effect="shimmer-wave"
-                    delay={120}
-                    className="font-bold leading-tight text-sm sm:text-base"
-                    style={deepTextShadow}
-                  />
-                  <DynamicTextEffects
-                    text={t.groomTitle}
-                    effect="shimmer-wave"
-                    delay={200}
-                    className="italic text-[#785B24] text-xs sm:text-sm font-bold"
-                    style={deepTextShadow}
-                  />
+                <div className="flex items-center justify-center gap-2 opacity-90">
+                  <div className="w-10 h-[1.5px] bg-[#B59A57]" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#B59A57] animate-pulse" />
+                  <div className="w-10 h-[1.5px] bg-[#B59A57]" />
                 </div>
-                <div className="w-[1.5px] h-6 bg-[#B59A57]/70" />
-                <div className={`flex flex-col ${isRTL ? 'text-right' : 'text-left'}`}>
-                  <DynamicTextEffects
-                    text={t.brideParentage}
-                    effect="shimmer-wave"
-                    delay={120}
-                    className="font-bold leading-tight text-sm sm:text-base"
-                    style={deepTextShadow}
-                  />
-                  <DynamicTextEffects
-                    text={t.brideTitle}
-                    effect="shimmer-wave"
-                    delay={200}
-                    className="italic text-[#785B24] text-xs sm:text-sm font-bold"
-                    style={deepTextShadow}
-                  />
-                </div>
-              </motion.div>
-            </motion.div>
 
-            {/* Scroll Indicator */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 0.9 }}
-              viewport={{ once: false }}
-              className="relative z-10 flex flex-col items-center gap-1 animate-bounce pb-2"
-            >
-              <DynamicTextEffects
-                text={t.scrollDown}
-                effect="typewriter"
-                speed={50}
-                className={`${fontSubHeading} text-xs sm:text-sm text-[#273822] font-bold`}
-                style={deepTextShadow}
-              />
-              <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-            </motion.div>
-          </section>
-
-          {/* ========================================================
-              SECTION 2: SCRATCH TO REVEAL (Interactive 3D Glitter Heart)
-              ======================================================== */}
-          <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.72, y: 40 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.25 }}
-              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full flex flex-col items-center"
-              style={{
-                filter: 'drop-shadow(0 12px 28px rgba(0,0,0,0.2))',
-              }}
-            >
-              <ZareqiaHeartScratch
-                coupleNames={`${effectiveGroomName} & ${effectiveBrideName}`}
-                weddingDate={getFormattedWeddingDate(effectiveWeddingDate, currentLang)}
-                weddingDay={getFormattedWeddingDay(effectiveWeddingDate, currentLang)}
-                weddingTime={getFormattedWeddingTime(effectiveWeddingDate, currentLang)}
-                language={currentLang}
-              />
-            </motion.div>
-          </section>
-
-          {/* ========================================================
-              SECTION 3: PHOTO CAROUSEL & LIVE COUNTDOWN
-              ======================================================== */}
-          <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -60, rotateY: 12 }}
-              whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
-              viewport={{ once: false, amount: 0.25 }}
-              transition={{ duration: 0.9, ease: 'easeOut' }}
-              className="w-full max-w-[360px]"
-            >
-              {/* Photo Carousel floating directly */}
-              <div className="rounded-3xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.25)] border-2 border-white/70">
-                <ZareqiaPhotoCarousel />
-              </div>
-
-              {/* Countdown Title with 3D Drop Impact */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-                className="mt-8 text-center"
-              >
                 <DynamicTextEffects
-                  text={t.countdownTitle}
-                  effect="pop-3d"
-                  as="h3"
-                  className={`${fontScriptHeading} text-4xl sm:text-5xl text-[#1E2E1B]`}
+                  text={
+                    currentLang === 'en' && customization.sections.hero.announcementText
+                      ? customization.sections.hero.announcementText
+                      : t.weAreGettingMarried
+                  }
+                  effect="typewriter"
+                  speed={40}
+                  showCursor={true}
+                  className={`${fontHeading} text-sm sm:text-base text-[#273822]`}
                   style={deepTextShadow}
                 />
-                <div className="flex items-center justify-center gap-2 mt-1.5 opacity-90">
-                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-                  <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-                </div>
+
+                {customization.sections.hero.showGuestBadge !== false && guestName && guestName !== 'Special Guest' && (
+                  <div className="pt-1">
+                    <span
+                      className={`inline-block px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-[#B59A57]/50 ${fontSubHeading} text-xs sm:text-sm text-[#785B24] font-bold`}
+                      style={deepTextShadow}
+                    >
+                      {t.cordiallyInviting}: {localizedGuestName}
+                    </span>
+                  </div>
+                )}
               </motion.div>
 
-              {/* Countdown Blocks (Floating glass pills) */}
+              {/* Couple Names: 3D Pop Out Effect on Every Letter */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.85 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="grid grid-cols-4 gap-2.5 max-w-[340px] mx-auto mt-6"
+                transition={{ duration: 0.9, delay: 0.15 }}
+                className="my-auto py-2 w-full flex flex-col items-center"
               >
-                {[
-                  { label: t.days, value: timeLeft.days },
-                  { label: t.hours, value: timeLeft.hours },
-                  { label: t.minutes, value: timeLeft.minutes },
-                  { label: t.seconds, value: timeLeft.seconds },
-                ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white/90 backdrop-blur-[3px] border border-[#DFC07C] shadow-md"
-                  >
-                    <span
-                      className="font-['Playfair_Display',serif] text-2xl sm:text-3xl font-black text-[#273822]"
-                      style={deepTextShadow}
-                    >
-                      {toLocalizedDigits(String(item.value).padStart(2, '0'), currentLang)}
-                    </span>
+                <Royal3DNames
+                  groomName={effectiveGroomName}
+                  brideName={effectiveBrideName}
+                  ampersand={customization.sections.hero.ampersandStyle || '&'}
+                  isRTL={isRTL}
+                />
+
+                {/* Parents Lineage & Titles */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false, amount: 0.3 }}
+                  transition={{ duration: 0.7, delay: 0.6 }}
+                  className="mt-3 flex items-center justify-center gap-4 text-xs font-['Cormorant_Garamond',serif] text-[#273822]"
+                  style={deepTextShadow}
+                >
+                  <div className={`flex flex-col ${isRTL ? 'text-left' : 'text-right'}`}>
                     <DynamicTextEffects
-                      text={item.label}
-                      effect="pop-3d"
-                      as="span"
-                      className={`text-xs sm:text-sm ${fontSubHeading} text-[#6B5A3E] font-bold mt-0.5`}
+                      text={
+                        currentLang === 'en' && customization.sections.hero.groomParentage
+                          ? customization.sections.hero.groomParentage
+                          : t.groomParentage
+                      }
+                      effect="shimmer-wave"
+                      delay={120}
+                      className="font-bold leading-tight text-sm sm:text-base"
+                      style={deepTextShadow}
+                    />
+                    <DynamicTextEffects
+                      text={
+                        currentLang === 'en' && customization.sections.hero.groomTitle
+                          ? customization.sections.hero.groomTitle
+                          : t.groomTitle
+                      }
+                      effect="shimmer-wave"
+                      delay={200}
+                      className="italic text-[#785B24] text-xs sm:text-sm font-bold"
                       style={deepTextShadow}
                     />
                   </div>
-                ))}
+                  <div className="w-[1.5px] h-6 bg-[#B59A57]/70" />
+                  <div className={`flex flex-col ${isRTL ? 'text-right' : 'text-left'}`}>
+                    <DynamicTextEffects
+                      text={
+                        currentLang === 'en' && customization.sections.hero.brideParentage
+                          ? customization.sections.hero.brideParentage
+                          : t.brideParentage
+                      }
+                      effect="shimmer-wave"
+                      delay={120}
+                      className="font-bold leading-tight text-sm sm:text-base"
+                      style={deepTextShadow}
+                    />
+                    <DynamicTextEffects
+                      text={
+                        currentLang === 'en' && customization.sections.hero.brideTitle
+                          ? customization.sections.hero.brideTitle
+                          : t.brideTitle
+                      }
+                      effect="shimmer-wave"
+                      delay={200}
+                      className="italic text-[#785B24] text-xs sm:text-sm font-bold"
+                      style={deepTextShadow}
+                    />
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          </section>
+
+              {/* Scroll Indicator */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 0.9 }}
+                viewport={{ once: false }}
+                className="relative z-10 flex flex-col items-center gap-1 animate-bounce pb-2"
+              >
+                <DynamicTextEffects
+                  text={
+                    currentLang === 'en' && customization.sections.hero.scrollPromptText
+                      ? customization.sections.hero.scrollPromptText
+                      : t.scrollDown
+                  }
+                  effect="typewriter"
+                  speed={50}
+                  className={`${fontSubHeading} text-xs sm:text-sm text-[#273822] font-bold`}
+                  style={deepTextShadow}
+                />
+                <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+              </motion.div>
+            </section>
+          )}
+
+          {/* ========================================================
+              SECTION 2: SCRATCH TO REVEAL (Interactive 3D Glitter Heart)
+              ======================================================== */}
+          {customization.sections.scratchCard.enabled !== false && (
+            <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.72, y: 40 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full flex flex-col items-center"
+                style={{
+                  filter: 'drop-shadow(0 12px 28px rgba(0,0,0,0.2))',
+                }}
+              >
+                <ZareqiaHeartScratch
+                  coupleNames={`${effectiveGroomName} & ${effectiveBrideName}`}
+                  weddingDate={
+                    currentLang === 'en' && customization.sections.scratchCard.secretDateText
+                      ? customization.sections.scratchCard.secretDateText
+                      : getFormattedWeddingDate(effectiveWeddingDate, currentLang)
+                  }
+                  weddingDay={
+                    currentLang === 'en' && customization.sections.scratchCard.secretDayText
+                      ? customization.sections.scratchCard.secretDayText
+                      : getFormattedWeddingDay(effectiveWeddingDate, currentLang)
+                  }
+                  weddingTime={
+                    currentLang === 'en' && customization.sections.scratchCard.secretTimeText
+                      ? customization.sections.scratchCard.secretTimeText
+                      : getFormattedWeddingTime(effectiveWeddingDate, currentLang)
+                  }
+                  language={currentLang}
+                />
+              </motion.div>
+            </section>
+          )}
+
+          {/* ========================================================
+              SECTION 3: PHOTO CAROUSEL & LIVE COUNTDOWN
+              ======================================================== */}
+          {(customization.sections.countdown.enabled !== false ||
+            customization.sections.photoCarousel.enabled !== false) && (
+            <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -60, rotateY: 12 }}
+                whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.9, ease: 'easeOut' }}
+                className="w-full max-w-[360px]"
+              >
+                {/* Photo Carousel floating directly */}
+                {customization.sections.photoCarousel.enabled !== false && (
+                  <div className="rounded-3xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.25)] border-2 border-white/70">
+                    <ZareqiaPhotoCarousel />
+                  </div>
+                )}
+
+                {/* Countdown Title with 3D Drop Impact */}
+                {customization.sections.countdown.enabled !== false && (
+                  <>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: false, amount: 0.3 }}
+                      transition={{ duration: 0.7, delay: 0.2 }}
+                      className="mt-8 text-center"
+                    >
+                      <DynamicTextEffects
+                        text={
+                          currentLang === 'en' && customization.sections.countdown.customTitle
+                            ? customization.sections.countdown.customTitle
+                            : t.countdownTitle
+                        }
+                        effect="pop-3d"
+                        as="h3"
+                        className={`${fontScriptHeading} text-4xl sm:text-5xl text-[#1E2E1B]`}
+                        style={deepTextShadow}
+                      />
+                      <div className="flex items-center justify-center gap-2 mt-1.5 opacity-90">
+                        <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                        <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+                        <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                      </div>
+                    </motion.div>
+
+                    {/* Countdown Blocks (Floating glass pills) */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.85 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: false, amount: 0.3 }}
+                      transition={{ duration: 0.8, delay: 0.3 }}
+                      className="grid grid-cols-4 gap-2.5 max-w-[340px] mx-auto mt-6"
+                    >
+                      {[
+                        { label: t.days, value: timeLeft.days, show: customization.sections.countdown.showDays !== false },
+                        { label: t.hours, value: timeLeft.hours, show: customization.sections.countdown.showHours !== false },
+                        { label: t.minutes, value: timeLeft.minutes, show: customization.sections.countdown.showMinutes !== false },
+                        { label: t.seconds, value: timeLeft.seconds, show: customization.sections.countdown.showSeconds !== false },
+                      ]
+                        .filter((item) => item.show)
+                        .map((item, idx) => (
+                          <div
+                            key={idx}
+                            className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white/90 backdrop-blur-[3px] border border-[#DFC07C] shadow-md"
+                          >
+                            <span
+                              className="font-['Playfair_Display',serif] text-2xl sm:text-3xl font-black text-[#273822]"
+                              style={deepTextShadow}
+                            >
+                              {toLocalizedDigits(String(item.value).padStart(2, '0'), currentLang)}
+                            </span>
+                            <DynamicTextEffects
+                              text={item.label}
+                              effect="pop-3d"
+                              as="span"
+                              className={`text-xs sm:text-sm ${fontSubHeading} text-[#6B5A3E] font-bold mt-0.5`}
+                              style={deepTextShadow}
+                            />
+                          </div>
+                        ))}
+                    </motion.div>
+                  </>
+                )}
+              </motion.div>
+            </section>
+          )}
 
           {/* ========================================================
               SECTION 4: CEREMONY ITINERARY (TIMELINE)
               Floating directly over video, zero card box, couple visible!
               ======================================================== */}
-          <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 50, filter: 'blur(6px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              viewport={{ once: false, amount: 0.25 }}
-              transition={{ duration: 0.85, ease: 'easeOut' }}
-              className="w-full max-w-[340px] text-center"
-            >
-              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
-                <Clock className="w-5 h-5" />
-              </div>
-
-              <DynamicTextEffects
-                text={t.timelineTitle}
-                effect="scepter-slide"
-                as="h3"
-                className={`${fontScriptHeading} text-4xl sm:text-5xl text-[#1E2E1B]`}
-                style={deepTextShadow}
-              />
-              <div className="flex items-center justify-center gap-2 mt-1.5 mb-8 opacity-90">
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-                <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-              </div>
-
-              {/* Ceremonies Timeline */}
-              <div
-                className={`relative pl-6 space-y-7 text-left max-w-[320px] mx-auto border-l-2 border-[#DFC07C] ${
-                  isRTL ? 'text-right border-l-0 border-r-2 pr-6 pl-0' : ''
-                }`}
+          {customization.sections.timeline.enabled !== false && (
+            <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 50, filter: 'blur(6px)' }}
+                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.85, ease: 'easeOut' }}
+                className="w-full max-w-[340px] text-center"
               >
-                {effectiveEvents.map((item, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: isRTL ? 30 : -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: false, amount: 0.3 }}
-                    transition={{ duration: 0.6, delay: index * 0.15 }}
-                    className="relative"
-                  >
-                    <div
-                      className={`absolute top-1 w-3.5 h-3.5 rounded-full bg-[#273822] border-2 border-[#DFC07C] shadow-md ${
-                        isRTL ? '-right-[31px]' : '-left-[31px]'
-                      }`}
-                    />
-                    <DynamicTextEffects
-                      text={item.title}
-                      effect="scepter-slide"
-                      as="h4"
-                      className={`${
-                        isHindi
-                          ? 'font-devanagari-heading'
-                          : isNastaliq
-                          ? 'font-nastaliq'
-                          : "font-['Playfair_Display',serif]"
-                      } text-lg sm:text-xl font-black text-[#1E2E1B]`}
-                      style={deepTextShadow}
-                    />
-                    <DynamicTextEffects
-                      text={item.time}
-                      effect="scepter-slide"
-                      as="p"
-                      className={`${fontSubHeading} text-xs sm:text-sm text-[#785B24] font-bold mt-1`}
-                      style={deepTextShadow}
-                    />
-                    <DynamicTextEffects
-                      text={item.desc}
-                      effect="scepter-slide"
-                      as="p"
-                      className={`${fontBody} text-sm sm:text-base italic text-[#2C3827] mt-1 font-bold leading-relaxed`}
-                      style={deepTextShadow}
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </section>
+                <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
+                  <Clock className="w-5 h-5" />
+                </div>
+
+                <DynamicTextEffects
+                  text={
+                    currentLang === 'en' && customization.sections.timeline.customTitle
+                      ? customization.sections.timeline.customTitle
+                      : t.timelineTitle
+                  }
+                  effect="scepter-slide"
+                  as="h3"
+                  className={`${fontScriptHeading} text-4xl sm:text-5xl text-[#1E2E1B]`}
+                  style={deepTextShadow}
+                />
+                <div className="flex items-center justify-center gap-2 mt-1.5 mb-8 opacity-90">
+                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                  <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                </div>
+
+                {/* Ceremonies Timeline */}
+                <div
+                  className={`relative pl-6 space-y-7 text-left max-w-[320px] mx-auto border-l-2 border-[#DFC07C] ${
+                    isRTL ? 'text-right border-l-0 border-r-2 pr-6 pl-0' : ''
+                  }`}
+                >
+                  {effectiveEvents.map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: isRTL ? 30 : -30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: false, amount: 0.3 }}
+                      transition={{ duration: 0.6, delay: index * 0.15 }}
+                      className="relative"
+                    >
+                      <div
+                        className={`absolute top-1 w-3.5 h-3.5 rounded-full bg-[#273822] border-2 border-[#DFC07C] shadow-md ${
+                          isRTL ? '-right-[31px]' : '-left-[31px]'
+                        }`}
+                      />
+                      <DynamicTextEffects
+                        text={item.title}
+                        effect="scepter-slide"
+                        as="h4"
+                        className={`${
+                          isHindi
+                            ? 'font-devanagari-heading'
+                            : isNastaliq
+                            ? 'font-nastaliq'
+                            : "font-['Playfair_Display',serif]"
+                        } text-lg sm:text-xl font-black text-[#1E2E1B]`}
+                        style={deepTextShadow}
+                      />
+                      <DynamicTextEffects
+                        text={item.time}
+                        effect="scepter-slide"
+                        as="p"
+                        className={`${fontSubHeading} text-xs sm:text-sm text-[#785B24] font-bold mt-1`}
+                        style={deepTextShadow}
+                      />
+                      <DynamicTextEffects
+                        text={item.desc}
+                        effect="scepter-slide"
+                        as="p"
+                        className={`${fontBody} text-sm sm:text-base italic text-[#2C3827] mt-1 font-bold leading-relaxed`}
+                        style={deepTextShadow}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </section>
+          )}
 
           {/* ========================================================
               SECTION 5: VENUE & DRESS CODE
               Floating directly over video, zero card box, couple visible!
               ======================================================== */}
-          <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false, amount: 0.25 }}
-              transition={{ duration: 0.85, ease: 'easeOut' }}
-              className="w-full max-w-[340px] text-center"
-            >
-              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
-                <Building2 className="w-5 h-5" />
-              </div>
-
-              <DynamicTextEffects
-                text={t.venueTitle}
-                effect="dome-rise"
-                as="h3"
-                className={`${fontScriptHeading} text-4xl sm:text-5xl text-[#1E2E1B]`}
-                style={deepTextShadow}
-              />
-              <div className="flex items-center justify-center gap-2 mt-1.5 mb-4 opacity-90">
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-                <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-              </div>
-
-              <DynamicTextEffects
-                text={effectiveVenueName}
-                effect="dome-rise"
-                as="h4"
-                className={`${
-                  isHindi
-                    ? 'font-devanagari-heading'
-                    : isNastaliq
-                    ? 'font-nastaliq'
-                    : "font-['Playfair_Display',serif]"
-                } text-xl sm:text-2xl font-black text-[#1E2E1B]`}
-                style={deepTextShadow}
-              />
-              <DynamicTextEffects
-                text={effectiveVenueCity}
-                effect="dome-rise"
-                as="p"
-                className={`${fontSubHeading} text-sm sm:text-base text-[#6B5A3E] font-bold mt-1.5`}
-                style={deepTextShadow}
-              />
-
-              {/* Floating Venue Pin & Google Maps Action */}
-              <div className="mt-5 flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#E6D197] flex items-center justify-center shadow-lg border-2 border-[#DFC07C] mb-3">
-                  <MapPin className="w-6 h-6 animate-pulse" />
-                </div>
-                <a
-                  href={effectiveMapsLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#FAF8F5] text-sm ${fontSubHeading} shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 cursor-pointer font-bold`}
-                  style={deepTextShadow}
-                >
-                  <Navigation className="w-4 h-4 text-[#E6D197]" />
-                  <span>{t.viewMap}</span>
-                </a>
-              </div>
-
-              {/* Dress Code Floating Badge */}
+          {customization.sections.venue.enabled !== false && (
+            <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="mt-6 pt-4 border-t border-[#DFC07C]/50"
+                initial={{ opacity: 0, scale: 0.85 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.85, ease: 'easeOut' }}
+                className="w-full max-w-[340px] text-center"
               >
-                <div className="w-9 h-9 mx-auto mb-1.5 rounded-full border border-[#B59A57]/50 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-sm">
-                  <Shirt className="w-4 h-4" />
+                <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
+                  <Building2 className="w-5 h-5" />
                 </div>
+
                 <DynamicTextEffects
-                  text={t.dressCodeTitle}
+                  text={
+                    currentLang === 'en' && customization.sections.venue.venueTitle
+                      ? customization.sections.venue.venueTitle
+                      : t.venueTitle
+                  }
                   effect="dome-rise"
-                  as="h4"
-                  className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
+                  as="h3"
+                  className={`${fontScriptHeading} text-4xl sm:text-5xl text-[#1E2E1B]`}
                   style={deepTextShadow}
                 />
+                <div className="flex items-center justify-center gap-2 mt-1.5 mb-4 opacity-90">
+                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                  <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                </div>
+
                 <DynamicTextEffects
-                  text={t.dressCodeValue}
+                  text={effectiveVenueName}
                   effect="dome-rise"
-                  as="p"
+                  as="h4"
                   className={`${
                     isHindi
                       ? 'font-devanagari-heading'
                       : isNastaliq
                       ? 'font-nastaliq'
                       : "font-['Playfair_Display',serif]"
-                  } text-base sm:text-lg font-black text-[#273822] mt-1`}
+                  } text-xl sm:text-2xl font-black text-[#1E2E1B]`}
                   style={deepTextShadow}
                 />
                 <DynamicTextEffects
-                  text={t.dressCodeDesc}
+                  text={effectiveVenueCity}
                   effect="dome-rise"
                   as="p"
-                  className={`${fontBody} text-sm sm:text-base italic text-[#3A4A33] mt-1 font-bold leading-relaxed`}
+                  className={`${fontSubHeading} text-sm sm:text-base text-[#6B5A3E] font-bold mt-1.5`}
                   style={deepTextShadow}
                 />
+
+                {/* Floating Venue Pin & Google Maps Action */}
+                {customization.sections.venue.showMapButton !== false && (
+                  <div className="mt-5 flex flex-col items-center">
+                    <div className="w-12 h-12 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#E6D197] flex items-center justify-center shadow-lg border-2 border-[#DFC07C] mb-3">
+                      <MapPin className="w-6 h-6 animate-pulse" />
+                    </div>
+                    <a
+                      href={customization.sections.venue.googleMapsLink || effectiveMapsLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#FAF8F5] text-sm ${fontSubHeading} shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 cursor-pointer font-bold`}
+                      style={deepTextShadow}
+                    >
+                      <Navigation className="w-4 h-4 text-[#E6D197]" />
+                      <span>
+                        {currentLang === 'en' && customization.sections.venue.mapButtonText
+                          ? customization.sections.venue.mapButtonText
+                          : t.viewMap}
+                      </span>
+                    </a>
+                  </div>
+                )}
+
+                {/* Dress Code Floating Badge */}
+                {customization.sections.venue.showDressCode !== false && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false, amount: 0.3 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="mt-6 pt-4 border-t border-[#DFC07C]/50"
+                  >
+                    <div className="w-9 h-9 mx-auto mb-1.5 rounded-full border border-[#B59A57]/50 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-sm">
+                      <Shirt className="w-4 h-4" />
+                    </div>
+                    <DynamicTextEffects
+                      text={
+                        currentLang === 'en' && customization.sections.venue.dressCodeTitle
+                          ? customization.sections.venue.dressCodeTitle
+                          : t.dressCodeTitle
+                      }
+                      effect="dome-rise"
+                      as="h4"
+                      className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
+                      style={deepTextShadow}
+                    />
+                    <DynamicTextEffects
+                      text={
+                        currentLang === 'en' && customization.sections.venue.dressCodeValue
+                          ? customization.sections.venue.dressCodeValue
+                          : t.dressCodeValue
+                      }
+                      effect="dome-rise"
+                      as="p"
+                      className={`${
+                        isHindi
+                          ? 'font-devanagari-heading'
+                          : isNastaliq
+                          ? 'font-nastaliq'
+                          : "font-['Playfair_Display',serif]"
+                      } text-base sm:text-lg font-black text-[#273822] mt-1`}
+                      style={deepTextShadow}
+                    />
+                    <DynamicTextEffects
+                      text={
+                        currentLang === 'en' && customization.sections.venue.dressCodeDesc
+                          ? customization.sections.venue.dressCodeDesc
+                          : t.dressCodeDesc
+                      }
+                      effect="dome-rise"
+                      as="p"
+                      className={`${fontBody} text-sm sm:text-base italic text-[#3A4A33] mt-1 font-bold leading-relaxed`}
+                      style={deepTextShadow}
+                    />
+                  </motion.div>
+                )}
               </motion.div>
-            </motion.div>
-          </section>
+            </section>
+          )}
 
           {/* ========================================================
               SECTION 6: RSVP FORM
               Floating cleanly over video, zero card frame, couple visible!
               ======================================================== */}
-          <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.25 }}
-              transition={{ duration: 0.85, ease: 'easeOut' }}
-              className="w-full max-w-[340px] text-center"
-            >
-              <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
-                <Mail className="w-5 h-5" />
-              </div>
+          {customization.sections.rsvp.enabled !== false && (
+            <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 60 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.85, ease: 'easeOut' }}
+                className="w-full max-w-[340px] text-center"
+              >
+                <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
+                  <Mail className="w-5 h-5" />
+                </div>
 
-              <DynamicTextEffects
-                text={t.rsvpTitle}
-                effect="velvet-mist"
-                as="h3"
-                className={`${fontHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
-                style={deepTextShadow}
-              />
-              <div className="flex items-center justify-center gap-2 mt-1.5 mb-3 opacity-90">
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-                <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
-                <div className="w-8 h-[1.5px] bg-[#B59A57]" />
-              </div>
+                <DynamicTextEffects
+                  text={
+                    currentLang === 'en' && customization.sections.rsvp.customTitle
+                      ? customization.sections.rsvp.customTitle
+                      : t.rsvpTitle
+                  }
+                  effect="velvet-mist"
+                  as="h3"
+                  className={`${fontHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
+                  style={deepTextShadow}
+                />
+                <div className="flex items-center justify-center gap-2 mt-1.5 mb-3 opacity-90">
+                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                  <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                </div>
 
-              <DynamicTextEffects
-                text={t.rsvpIntro}
-                effect="velvet-mist"
-                as="p"
-                className={`${fontBody} text-sm sm:text-base italic text-[#273822] max-w-[320px] mx-auto mb-6 font-bold leading-relaxed`}
-                style={deepTextShadow}
-              />
+                <DynamicTextEffects
+                  text={
+                    currentLang === 'en' && customization.sections.rsvp.introText
+                      ? customization.sections.rsvp.introText
+                      : t.rsvpIntro
+                  }
+                  effect="velvet-mist"
+                  as="p"
+                  className={`${fontBody} text-sm sm:text-base italic text-[#273822] max-w-[320px] mx-auto mb-6 font-bold leading-relaxed`}
+                  style={deepTextShadow}
+                />
 
-              {rsvpSubmitted ? (
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="py-8 flex flex-col items-center"
-                >
-                  <div className="w-12 h-12 rounded-full bg-[#273822] text-[#E6D197] flex items-center justify-center mb-3 shadow-lg border border-[#DFC07C]">
-                    <CheckCircle2 className="w-6 h-6" />
-                  </div>
-                  <h4
-                    className="font-['Playfair_Display',serif] text-xl sm:text-2xl font-black text-[#1E2E1B]"
-                    style={deepTextShadow}
+                {rsvpSubmitted ? (
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="py-8 flex flex-col items-center"
                   >
-                    {t.rsvpSuccessTitle}
-                  </h4>
-                  <p
-                    className="font-['Cormorant_Garamond',serif] text-sm sm:text-base italic text-[#3A4A33] mt-1 max-w-[280px] font-bold"
-                    style={deepTextShadow}
-                  >
-                    {t.rsvpSuccessDesc}
-                  </p>
-                </motion.div>
-              ) : (
-                <form
-                  onSubmit={handleRsvpSubmit}
-                  className={`space-y-3.5 text-left max-w-[320px] mx-auto ${
-                    isRTL ? 'text-right' : ''
-                  }`}
-                >
-                  <div>
-                    <label
-                      className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 font-bold`}
+                    <div className="w-12 h-12 rounded-full bg-[#273822] text-[#E6D197] flex items-center justify-center mb-3 shadow-lg border border-[#DFC07C]">
+                      <CheckCircle2 className="w-6 h-6" />
+                    </div>
+                    <h4
+                      className="font-['Playfair_Display',serif] text-xl sm:text-2xl font-black text-[#1E2E1B]"
                       style={deepTextShadow}
                     >
-                      {t.labelName}
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={rsvpName}
-                      onChange={(e) => setRsvpName(e.target.value)}
-                      placeholder={t.placeholderName}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 font-bold`}
+                      {currentLang === 'en' && customization.sections.rsvp.successTitle
+                        ? customization.sections.rsvp.successTitle
+                        : t.rsvpSuccessTitle}
+                    </h4>
+                    <p
+                      className="font-['Cormorant_Garamond',serif] text-sm sm:text-base italic text-[#3A4A33] mt-1 max-w-[280px] font-bold"
                       style={deepTextShadow}
                     >
-                      {t.labelEmail}
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={rsvpEmail}
-                      onChange={(e) => setRsvpEmail(e.target.value)}
-                      placeholder="name@example.com"
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
-                    />
-                  </div>
-
-                  {/* 2-Column: Attendance & Guests */}
-                  <div className="grid grid-cols-2 gap-2.5">
+                      {currentLang === 'en' && customization.sections.rsvp.successDesc
+                        ? customization.sections.rsvp.successDesc
+                        : t.rsvpSuccessDesc}
+                    </p>
+                  </motion.div>
+                ) : (
+                  <form
+                    onSubmit={handleRsvpSubmit}
+                    className={`space-y-3.5 text-left max-w-[320px] mx-auto ${
+                      isRTL ? 'text-right' : ''
+                    }`}
+                  >
                     <div>
                       <label
-                        className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 truncate font-bold`}
+                        className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 font-bold`}
                         style={deepTextShadow}
                       >
-                        {t.labelAttend}
+                        {t.labelName}
                       </label>
-                      <select
+                      <input
+                        type="text"
                         required
-                        value={rsvpAttending}
-                        onChange={(e) => setRsvpAttending(e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
-                      >
-                        <option value="">{t.optionSelect}</option>
-                        <option value="yes">{t.optionYes}</option>
-                        <option value="no">{t.optionNo}</option>
-                      </select>
+                        value={rsvpName}
+                        onChange={(e) => setRsvpName(e.target.value)}
+                        placeholder={t.placeholderName}
+                        className="w-full px-4 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                      />
                     </div>
 
                     <div>
                       <label
-                        className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 truncate font-bold`}
+                        className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 font-bold`}
                         style={deepTextShadow}
                       >
-                        {t.labelGuests}
+                        {t.labelEmail}
                       </label>
-                      <select
-                        value={rsvpGuests}
-                        onChange={(e) => setRsvpGuests(e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
-                      >
-                        <option value="1">{toLocalizedDigits(1, currentLang)} {t.guestUnit}</option>
-                        <option value="2">{toLocalizedDigits(2, currentLang)} {t.guestUnit}</option>
-                        <option value="3">{toLocalizedDigits(3, currentLang)} {t.guestUnit}</option>
-                        <option value="4">{toLocalizedDigits(4, currentLang)}+ {t.guestUnit}</option>
-                      </select>
+                      <input
+                        type="email"
+                        required
+                        value={rsvpEmail}
+                        onChange={(e) => setRsvpEmail(e.target.value)}
+                        placeholder="name@example.com"
+                        className="w-full px-4 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                      />
                     </div>
-                  </div>
 
-                  <div>
-                    <label
-                      className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 font-bold`}
+                    {/* 2-Column: Attendance & Guests */}
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div>
+                        <label
+                          className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 truncate font-bold`}
+                          style={deepTextShadow}
+                        >
+                          {t.labelAttend}
+                        </label>
+                        <select
+                          required
+                          value={rsvpAttending}
+                          onChange={(e) => setRsvpAttending(e.target.value)}
+                          className="w-full px-3 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                        >
+                          <option value="">{t.optionSelect}</option>
+                          <option value="yes">{t.optionYes}</option>
+                          <option value="no">{t.optionNo}</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label
+                          className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 truncate font-bold`}
+                          style={deepTextShadow}
+                        >
+                          {t.labelGuests}
+                        </label>
+                        <select
+                          value={rsvpGuests}
+                          onChange={(e) => setRsvpGuests(e.target.value)}
+                          className="w-full px-3 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                        >
+                          {Array.from({ length: customization.sections.rsvp.maxGuests || 4 }, (_, i) => i + 1).map((num) => (
+                            <option key={num} value={String(num)}>
+                              {toLocalizedDigits(num, currentLang)}{num === (customization.sections.rsvp.maxGuests || 4) ? '+' : ''} {t.guestUnit}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label
+                        className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 font-bold`}
+                        style={deepTextShadow}
+                      >
+                        {t.labelMessage}
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={rsvpMessage}
+                        onChange={(e) => setRsvpMessage(e.target.value)}
+                        placeholder={t.placeholderMessage}
+                        className="w-full px-4 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm resize-none"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={rsvpLoading}
+                      className={`w-full py-3.5 rounded-full bg-[#273822] text-[#FAF8F5] text-sm sm:text-base ${fontSubHeading} shadow-lg hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 flex items-center justify-center gap-2 mt-2 cursor-pointer font-bold`}
                       style={deepTextShadow}
                     >
-                      {t.labelMessage}
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={rsvpMessage}
-                      onChange={(e) => setRsvpMessage(e.target.value)}
-                      placeholder={t.placeholderMessage}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm resize-none"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={rsvpLoading}
-                    className={`w-full py-3.5 rounded-full bg-[#273822] text-[#FAF8F5] text-sm sm:text-base ${fontSubHeading} shadow-lg hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 flex items-center justify-center gap-2 mt-2 cursor-pointer font-bold`}
-                    style={deepTextShadow}
-                  >
-                    {rsvpLoading ? (
-                      <span className="animate-pulse">{t.sending}</span>
-                    ) : (
-                      <>
-                        <PartyPopper className="w-4 h-4 text-[#E6D197]" />
-                        <span className="font-bold">{t.submitBtn}</span>
-                      </>
-                    )}
-                  </button>
-                </form>
-              )}
-            </motion.div>
-          </section>
+                      {rsvpLoading ? (
+                        <span className="animate-pulse">{t.sending}</span>
+                      ) : (
+                        <>
+                          <PartyPopper className="w-4 h-4 text-[#E6D197]" />
+                          <span className="font-bold">
+                            {currentLang === 'en' && customization.sections.rsvp.submitButtonText
+                              ? customization.sections.rsvp.submitButtonText
+                              : t.submitBtn}
+                          </span>
+                        </>
+                      )}
+                    </button>
+                  </form>
+                )}
+              </motion.div>
+            </section>
+          )}
 
           {/* Footer Blessing (Zero Black Strip, Pure Floating Signature) */}
-          <div className="relative z-10 text-center py-6 px-4">
-            <DynamicTextEffects
-              text={`${t.footerBlessing}: ${effectiveGroomName} & ${effectiveBrideName}`}
-              effect="velvet-mist"
-              as="p"
-              className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
-              style={deepTextShadow}
-            />
-            <div className="flex items-center justify-center gap-1.5 mt-2 text-[#7C9172]">
-              <span className="text-sm">♥</span>
+          {customization.sections.footerBlessing.enabled !== false && (
+            <div className="relative z-10 text-center py-6 px-4">
+              <DynamicTextEffects
+                text={
+                  currentLang === 'en' && customization.sections.footerBlessing.blessingText
+                    ? `${customization.sections.footerBlessing.blessingText}: ${
+                        customization.sections.footerBlessing.coupleSignature || `${effectiveGroomName} & ${effectiveBrideName}`
+                      }`
+                    : `${t.footerBlessing}: ${effectiveGroomName} & ${effectiveBrideName}`
+                }
+                effect="velvet-mist"
+                as="p"
+                className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
+                style={deepTextShadow}
+              />
+              <div className="flex items-center justify-center gap-1.5 mt-2 text-[#7C9172]">
+                <span className="text-sm">♥</span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

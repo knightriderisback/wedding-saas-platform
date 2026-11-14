@@ -38,6 +38,7 @@ import {
   Send,
   Layers,
   FileSpreadsheet,
+  Sliders,
 } from 'lucide-react';
 
 export default function SuperAdminPage() {
@@ -469,30 +470,38 @@ export default function SuperAdminPage() {
         {/* TAB 1: PROJECTS (Super-Admin Control & Shadow Access) */}
         {activeTab === 'projects' && (
           <div className="space-y-3">
-            {/* Soft Acrylic 3D Metric Cards */}
+            {/* Royal 3D Rajhara Metric Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              <div className="acrylic-amber card-3d p-3 rounded-2xl">
-                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase">Total Projects</div>
+              <div className="card-rajhara-3d p-3 rounded-2xl">
+                <div className="text-[10px] font-cinzel font-bold text-[#7D5F04] uppercase flex items-center gap-1">
+                  <Crown className="w-3 h-3 text-[#AA820A]" /> Total Projects
+                </div>
                 <div className="text-base sm:text-xl font-black text-[#2C2218] mt-0.5">{projects.length}</div>
                 <div className="text-[9px] text-emerald-800 font-semibold mt-1 flex items-center gap-0.5">
                   <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" /> 100% Hosted
                 </div>
               </div>
 
-              <div className="acrylic-rose card-3d p-3 rounded-2xl">
-                <div className="text-[10px] font-cinzel font-bold text-[#9B1C2E] uppercase">Guests Onboarded</div>
+              <div className="card-rajhara-3d p-3 rounded-2xl">
+                <div className="text-[10px] font-cinzel font-bold text-[#9B1C2E] uppercase flex items-center gap-1">
+                  <Users className="w-3 h-3 text-[#9B1C2E]" /> Guests Onboarded
+                </div>
                 <div className="text-base sm:text-xl font-black text-[#AA820A] mt-0.5">{totalGuests}</div>
                 <div className="text-[9px] text-[#9B1C2E] font-medium mt-1">Across all client hubs</div>
               </div>
 
-              <div className="acrylic-sage card-3d p-3 rounded-2xl">
-                <div className="text-[10px] font-cinzel font-bold text-[#2D4A36] uppercase">RSVPs Confirmed</div>
+              <div className="card-rajhara-3d p-3 rounded-2xl">
+                <div className="text-[10px] font-cinzel font-bold text-[#2D4A36] uppercase flex items-center gap-1">
+                  <Heart className="w-3 h-3 text-[#2D4A36]" /> RSVPs Confirmed
+                </div>
                 <div className="text-base sm:text-xl font-black text-[#9B1C2E] mt-0.5">{totalRsvps}</div>
-                <div className="text-[9px] text-[#2D4A36] font-medium mt-1">VIP QR Passes Issued</div>
+                <div className="text-[9px] text-[#2D4A36] font-medium mt-1">VIP Passes Issued</div>
               </div>
 
-              <div className="acrylic-azure card-3d p-3 rounded-2xl">
-                <div className="text-[10px] font-cinzel font-bold text-[#242A36] uppercase">WhatsApp Invites</div>
+              <div className="card-rajhara-3d p-3 rounded-2xl">
+                <div className="text-[10px] font-cinzel font-bold text-[#242A36] uppercase flex items-center gap-1">
+                  <MessageCircle className="w-3 h-3 text-[#1A365D]" /> WhatsApp Invites
+                </div>
                 <div className="text-base sm:text-xl font-black text-[#1A365D] mt-0.5">{totalDispatched}</div>
                 <div className="text-[9px] text-emerald-700 font-medium mt-1">Dispatched via wa.me</div>
               </div>
@@ -678,6 +687,16 @@ export default function SuperAdminPage() {
                             {/* Actions & SHADOW ACCESS */}
                             <td className="py-3 px-3 text-right">
                               <div className="flex items-center justify-end gap-1.5">
+                                {/* Direct Customization Studio Button */}
+                                <Link
+                                  href={`/portal/${p.id}?shadowAdmin=true`}
+                                  className="px-2.5 py-1.5 rounded-lg btn-rajhara-3d text-xs font-['Cinzel',serif] font-bold transition flex items-center gap-1 shadow-2xs"
+                                  title="Customize Fonts, Copy, Music & Section Visibility"
+                                >
+                                  <Sliders className="w-3 h-3 text-[#1E2E1B]" />
+                                  <span className="hidden sm:inline">Customize</span>
+                                </Link>
+
                                 {/* SHADOW ACCESS BUTTON (Login As Client) */}
                                 <Link
                                   href={`/portal/${p.id}?shadowAdmin=true`}

@@ -66,6 +66,135 @@ export interface VoiceBlessing {
   timestamp: string;
 }
 
+export type TypographyFontFamily =
+  | 'Cinzel'
+  | 'Playfair Display'
+  | 'Cormorant Garamond'
+  | 'Alex Brush'
+  | 'Pinyon Script'
+  | 'Rozha One'
+  | 'Yatra One'
+  | 'Noto Nastaliq Urdu'
+  | 'System Default';
+
+export type TypographyFontSize = 'small' | 'normal' | 'large' | 'extra-large' | 'royal-huge';
+export type TypographyFontStyle = 'normal' | 'italic';
+export type TypographyFontWeight = 'normal' | 'medium' | 'bold' | 'black';
+
+export interface SectionStyleConfig {
+  enabled: boolean;
+  order: number;
+  fontFamily?: TypographyFontFamily;
+  fontSize?: TypographyFontSize;
+  fontStyle?: TypographyFontStyle;
+  fontWeight?: TypographyFontWeight;
+  customTitle?: string;
+  customSubtitle?: string;
+}
+
+export interface EnvelopeSectionConfig extends SectionStyleConfig {
+  sealText?: string;
+  tapToOpenText?: string;
+  sealColor?: string;
+}
+
+export interface HeroSectionConfig extends SectionStyleConfig {
+  announcementText?: string;
+  showGuestBadge?: boolean;
+  groomParentage?: string;
+  groomTitle?: string;
+  brideParentage?: string;
+  brideTitle?: string;
+  scrollPromptText?: string;
+  ampersandStyle?: '&' | 'Weds' | 'Sang' | 'Aur';
+}
+
+export interface ScratchCardSectionConfig extends SectionStyleConfig {
+  blessingIntro?: string;
+  revealedInvitation?: string;
+  secretDateText?: string;
+  secretDayText?: string;
+  secretTimeText?: string;
+  saveTheDateButtonText?: string;
+}
+
+export interface CountdownSectionConfig extends SectionStyleConfig {
+  showDays?: boolean;
+  showHours?: boolean;
+  showMinutes?: boolean;
+  showSeconds?: boolean;
+}
+
+export interface PhotoCarouselSectionConfig extends SectionStyleConfig {
+  photos?: string[];
+  autoPlay?: boolean;
+}
+
+export interface TimelineSectionConfig extends SectionStyleConfig {
+  showIcons?: boolean;
+}
+
+export interface VenueSectionConfig extends SectionStyleConfig {
+  venueTitle?: string;
+  venueName?: string;
+  venueCity?: string;
+  googleMapsLink?: string;
+  showMapButton?: boolean;
+  mapButtonText?: string;
+  showDressCode?: boolean;
+  dressCodeTitle?: string;
+  dressCodeValue?: string;
+  dressCodeDesc?: string;
+}
+
+export interface RsvpSectionConfig extends SectionStyleConfig {
+  introText?: string;
+  maxGuests?: number;
+  successTitle?: string;
+  successDesc?: string;
+  submitButtonText?: string;
+}
+
+export interface FooterBlessingSectionConfig extends SectionStyleConfig {
+  blessingText?: string;
+  coupleSignature?: string;
+}
+
+export interface ProjectCustomization {
+  // Global music settings
+  musicTrackUrl?: string;
+  musicTrackTitle?: string;
+  musicAutoPlay?: boolean;
+  sitarSynthEnabled?: boolean;
+
+  // Global language settings
+  defaultLanguage?: 'en' | 'hi' | 'ur' | 'hinglish';
+  showLanguageSwitcher?: boolean;
+  showMusicButton?: boolean;
+
+  // Global Typography Defaults
+  typography?: {
+    headingFont?: TypographyFontFamily;
+    subHeadingFont?: TypographyFontFamily;
+    bodyFont?: TypographyFontFamily;
+    scriptFont?: TypographyFontFamily;
+    sizeScale?: TypographyFontSize;
+  };
+
+  // Sections
+  sections: {
+    envelope: EnvelopeSectionConfig;
+    hero: HeroSectionConfig;
+    scratchCard: ScratchCardSectionConfig;
+    countdown: CountdownSectionConfig;
+    photoCarousel: PhotoCarouselSectionConfig;
+    timeline: TimelineSectionConfig;
+    venue: VenueSectionConfig;
+    rsvp: RsvpSectionConfig;
+    footerBlessing: FooterBlessingSectionConfig;
+  };
+}
+
 export interface WeddingProject {
   id: string;
   slug: string;
@@ -86,6 +215,9 @@ export interface WeddingProject {
   createdAt: string;
   suite?: string;
   template?: string;
+
+  // Customization Hub (Custom texts, typography, section toggles, reordering, music)
+  customization?: ProjectCustomization;
 
   // Modules
   events: EventScheduleItem[];
