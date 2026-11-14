@@ -27,7 +27,7 @@ import { RoyalScrollyBackground } from './RoyalScrollyBackground';
 import { royalSitarAudio } from '@/lib/sitarSynth';
 import { WeddingProject } from '@/types/wedding';
 import { saveWeddingProject } from '@/lib/firebase';
-import { getDefaultCustomization } from '@/lib/customizationDefaults';
+import { getDefaultCustomization, getFontFamilyClass } from '@/lib/customizationDefaults';
 
 export type SupportedLanguage = 'en' | 'hi' | 'hinglish' | 'ur';
 
@@ -817,30 +817,46 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
     };
   }, []);
 
-  // Dynamic Typography based on active language (Pure Devanagari for Hindi, Nastaliq for Urdu)
+  // Dynamic Typography based on active language and client studio customization
+  const customHeadingFont = customization.typography?.headingFont
+    ? getFontFamilyClass(customization.typography.headingFont)
+    : "font-['Cinzel',serif]";
+
+  const customSubHeadingFont = customization.typography?.subHeadingFont
+    ? getFontFamilyClass(customization.typography.subHeadingFont)
+    : "font-['Cinzel',serif]";
+
+  const customBodyFont = customization.typography?.bodyFont
+    ? getFontFamilyClass(customization.typography.bodyFont)
+    : "font-['Cormorant_Garamond',serif]";
+
+  const customScriptFont = customization.typography?.scriptFont
+    ? getFontFamilyClass(customization.typography.scriptFont)
+    : "font-['Alex_Brush','Pinyon_Script',cursive]";
+
   const fontHeading = isHindi
     ? 'font-devanagari-heading tracking-normal font-bold'
     : isNastaliq
     ? 'font-nastaliq tracking-normal'
-    : "font-['Cinzel',serif] tracking-wider uppercase font-black";
+    : `${customHeadingFont} tracking-wider uppercase font-black`;
 
   const fontSubHeading = isHindi
     ? 'font-devanagari-heading tracking-normal font-bold'
     : isNastaliq
     ? 'font-nastaliq tracking-normal'
-    : "font-['Cinzel',serif] tracking-widest uppercase font-bold";
+    : `${customSubHeadingFont} tracking-widest uppercase font-bold`;
 
   const fontBody = isHindi
     ? 'font-devanagari tracking-normal'
     : isNastaliq
     ? 'font-nastaliq tracking-normal'
-    : "font-['Cormorant_Garamond',serif]";
+    : customBodyFont;
 
   const fontScriptHeading = isHindi
     ? 'font-devanagari-heading tracking-normal font-bold'
     : isNastaliq
     ? 'font-nastaliq tracking-normal'
-    : "font-['Alex_Brush','Pinyon_Script',cursive] tracking-wide";
+    : `${customScriptFont} tracking-wide`;
 
   // Dynamic countdown timer
   const [timeLeft, setTimeLeft] = useState({
