@@ -10,7 +10,6 @@ import { SUITE_CATEGORY_METAS } from '@/lib/suiteCategoryMetas';
 import { PressedLoveInvitation } from '@/components/pressedlove/PressedLoveInvitation';
 import { ZareqiaWeddingInvitation } from '@/components/zareqia/ZareqiaWeddingInvitation';
 import { RoyalHeritageWeddingInvitation } from '@/components/royal-heritage/RoyalHeritageWeddingInvitation';
-import { UniversalFloatingSuiteSwitcher } from '@/components/common/UniversalFloatingSuiteSwitcher';
 import { Sparkles } from 'lucide-react';
 
 function LuxuryGuestMicrositeContent() {
@@ -18,7 +17,7 @@ function LuxuryGuestMicrositeContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const slug = (params?.weddingSlug as string) || 'rohit-weds-priya';
+  const slug = (params?.weddingSlug as string) || 'gourav-weds-priya';
   const guestQuery = searchParams.get('guest') || 'Special Guest';
   const requestedTemplate = searchParams.get('template');
   const autoOpen = searchParams.get('open') === 'true';
@@ -33,6 +32,13 @@ function LuxuryGuestMicrositeContent() {
       const data = await getWeddingProject(slug);
       const effective = data || parseProjectFromSlug(slug);
       setProject(effective);
+
+      // Update browser tab title dynamically
+      if (effective?.partner1 && effective?.partner2) {
+        document.title = `${effective.partner1} Weds ${effective.partner2} | Shubh Vivah`;
+      } else if (effective?.partner1) {
+        document.title = `${effective.partner1} | Shubh Vivah`;
+      }
 
       // Determine initial active template
       let suiteFromSlug: string | null = null;
@@ -66,13 +72,6 @@ function LuxuryGuestMicrositeContent() {
       setActiveTemplate(requestedTemplate);
     }
   }, [requestedTemplate]);
-
-  const handleSwitchTemplate = (templateId: string) => {
-    setActiveTemplate(templateId);
-    const url = new URL(window.location.href);
-    url.searchParams.set('template', templateId);
-    window.history.pushState({}, '', url.toString());
-  };
 
   if (loading && !project) {
     return (
@@ -128,13 +127,6 @@ function LuxuryGuestMicrositeContent() {
   return (
     <div className="relative min-h-screen">
       {templateView}
-
-      {/* Floating Universal Template Switcher Bar */}
-      <UniversalFloatingSuiteSwitcher
-        activeTemplate={activeTemplate}
-        onSwitchTemplate={handleSwitchTemplate}
-        currentSlug={slug}
-      />
     </div>
   );
 }

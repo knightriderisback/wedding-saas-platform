@@ -6,7 +6,6 @@ import { PRESSED_LOVE_TEMPLATES } from '@/lib/pressedLoveTemplates';
 import { PressedLoveInvitation } from '@/components/pressedlove/PressedLoveInvitation';
 import { RoyalHeritageWeddingInvitation } from '@/components/royal-heritage/RoyalHeritageWeddingInvitation';
 import { ZareqiaWeddingInvitation } from '@/components/zareqia/ZareqiaWeddingInvitation';
-import { UniversalFloatingSuiteSwitcher } from '@/components/common/UniversalFloatingSuiteSwitcher';
 import { getWeddingProject, parseProjectFromSlug } from '@/lib/firebase';
 import { WeddingProject } from '@/types/wedding';
 
@@ -21,11 +20,14 @@ function TheVenueContent() {
   const [activeTemplate, setActiveTemplate] = useState<string>(requestedTemplate || 'the-venue');
 
   useEffect(() => {
-    if (slugQuery) {
-      getWeddingProject(slugQuery).then((data) => {
-        setProject(data || parseProjectFromSlug(slugQuery));
-      });
-    }
+    const effectiveSlug = slugQuery || 'gourav-weds-priya';
+    getWeddingProject(effectiveSlug).then((data) => {
+      const p = data || parseProjectFromSlug(effectiveSlug);
+      setProject(p);
+      if (p?.partner1 && p?.partner2) {
+        document.title = `${p.partner1} Weds ${p.partner2} | Shubh Vivah`;
+      }
+    });
   }, [slugQuery]);
 
   useEffect(() => {
@@ -34,16 +36,7 @@ function TheVenueContent() {
     }
   }, [requestedTemplate]);
 
-  const handleSwitchTemplate = (templateId: string) => {
-    setActiveTemplate(templateId);
-    if (typeof window !== 'undefined') {
-      const url = new URL(window.location.href);
-      url.searchParams.set('template', templateId);
-      window.history.pushState({}, '', url.toString());
-    }
-  };
-
-  const effectiveProject = project || (slugQuery ? parseProjectFromSlug(slugQuery) : null);
+  const effectiveProject = project || parseProjectFromSlug(slugQuery || 'gourav-weds-priya');
 
   let templateView = null;
   if (activeTemplate === 'royal-heritage') {
@@ -85,11 +78,6 @@ function TheVenueContent() {
   return (
     <div className="relative min-h-screen">
       {templateView}
-      <UniversalFloatingSuiteSwitcher
-        activeTemplate={activeTemplate}
-        onSwitchTemplate={handleSwitchTemplate}
-        currentSlug={slugQuery || 'wedding-invitation-the-venue'}
-      />
     </div>
   );
 }

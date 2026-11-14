@@ -16,7 +16,7 @@ interface UniversalFloatingSuiteSwitcherProps {
 export const UniversalFloatingSuiteSwitcher: React.FC<UniversalFloatingSuiteSwitcherProps> = ({
   activeTemplate,
   onSwitchTemplate,
-  currentSlug = 'rohit-weds-priya',
+  currentSlug = 'gourav-weds-priya',
 }) => {
   const [showSwitcher, setShowSwitcher] = useState(false);
   const router = useRouter();

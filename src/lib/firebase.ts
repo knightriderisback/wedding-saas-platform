@@ -42,14 +42,14 @@ function getLocalProjects(): WeddingProject[] {
   if (typeof window === 'undefined') return [defaultWeddingProject];
   try {
     const slugsJson = localStorage.getItem(ALL_PROJECTS_KEY);
-    const slugs: string[] = slugsJson ? JSON.parse(slugsJson) : ['rohit-weds-priya'];
+    const slugs: string[] = slugsJson ? JSON.parse(slugsJson) : ['gourav-weds-priya'];
     const projects: WeddingProject[] = [];
 
     for (const slug of slugs) {
       const data = localStorage.getItem(LOCAL_STORAGE_KEY_PREFIX + slug);
       if (data) {
         projects.push(JSON.parse(data));
-      } else if (slug === 'rohit-weds-priya') {
+      } else if (slug === 'gourav-weds-priya') {
         projects.push(defaultWeddingProject);
         localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + slug, JSON.stringify(defaultWeddingProject));
       }
@@ -68,7 +68,7 @@ function saveLocalProject(project: WeddingProject) {
 
     // Update list of slugs
     const slugsJson = localStorage.getItem(ALL_PROJECTS_KEY);
-    const slugs: string[] = slugsJson ? JSON.parse(slugsJson) : ['rohit-weds-priya'];
+    const slugs: string[] = slugsJson ? JSON.parse(slugsJson) : ['gourav-weds-priya'];
     if (!slugs.includes(project.slug)) {
       slugs.push(project.slug);
       localStorage.setItem(ALL_PROJECTS_KEY, JSON.stringify(slugs));
@@ -90,13 +90,13 @@ function capitalizeName(str: string): string {
 
 /**
  * Dynamically parse client couple names from URL slug if not found in database.
- * Guarantees that client names like "Gourao" or "gourao-weds-riya" are ALWAYS respected!
+ * Guarantees that client names like "Gourav" or "gourav-weds-priya" or "gourao" are ALWAYS respected!
  */
 export function parseProjectFromSlug(slugOrId: string): WeddingProject {
   const clean = decodeURIComponent(slugOrId || '').toLowerCase().replace('/', '').trim();
   const normalized = clean.replace(/^client-/, '');
-  let partner1 = 'Groom';
-  let partner2 = 'Bride';
+  let partner1 = 'Gourav';
+  let partner2 = 'Priya';
   let suite = 'royal-heritage';
 
   if (normalized.startsWith('wedding-invitation-')) {
@@ -125,8 +125,11 @@ export function parseProjectFromSlug(slugOrId: string): WeddingProject {
   } else if (normalized.includes('-ki-shaadi') || normalized.includes('_ki_shaadi')) {
     const groomPart = normalized.replace(/-ki-shaadi|_ki_shaadi/, '');
     if (groomPart) partner1 = capitalizeName(groomPart);
-  } else if (!normalized.startsWith('wedding-invitation-') && normalized !== 'rohit-weds-priya') {
+  } else if (!normalized.startsWith('wedding-invitation-') && normalized !== 'gourav-weds-priya' && normalized !== 'rohit-weds-priya') {
     partner1 = capitalizeName(normalized);
+  } else if (normalized === 'rohit-weds-priya' || normalized === 'rohit') {
+    partner1 = 'Rohit Sharma';
+    partner2 = 'Priya Mehra';
   }
 
   return {
@@ -232,7 +235,7 @@ export async function getWeddingProject(slugOrId: string): Promise<WeddingProjec
     } catch {}
   }
 
-  if (cleanKey === 'rohit-weds-priya' || cleanKey === 'client-rohit-priya') {
+  if (cleanKey === 'gourav-weds-priya' || cleanKey === 'client-gourav-priya') {
     return defaultWeddingProject;
   }
 
@@ -240,14 +243,10 @@ export async function getWeddingProject(slugOrId: string): Promise<WeddingProjec
   const match = all.find((p) => p.slug?.toLowerCase() === cleanKey || p.id?.toLowerCase() === cleanKey);
   if (match) return match;
 
-  // 3. Smart reconstruction from slug if client created custom slug (e.g. "gourao", "gourao-weds-priya")
-  if (cleanKey && !cleanKey.startsWith('wedding-invitation-')) {
-    const reconstructed = parseProjectFromSlug(cleanKey);
-    saveLocalProject(reconstructed);
-    return reconstructed;
-  }
-
-  return null;
+  // 3. Smart reconstruction from slug (e.g. "gourav", "gourao", "gourav-weds-priya")
+  const reconstructed = parseProjectFromSlug(cleanKey);
+  saveLocalProject(reconstructed);
+  return reconstructed;
 }
 
 /**

@@ -12,21 +12,21 @@ export default function TemplatesCatalogPage() {
       <header className="max-w-7xl mx-auto w-full px-6 py-6 border-b border-[#E8DFC8] flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#AA820A] via-[#D4AF37] to-[#FAF4E3] flex items-center justify-center text-black font-cinzel font-bold text-base shadow-sm">
-            É
+            R
           </div>
           <div>
             <h1 className="font-cinzel text-lg sm:text-xl font-bold text-[#2C2218] tracking-widest">
-              ÉTERNITÉ
+              ROYAL VIVAH
             </h1>
             <p className="text-[11px] font-cormorant italic text-[#7D5F04]">
-              Haute Couture Wedding Invitation Suites & Designs
+              Royal Wedding Invitation Suites & Designs
             </p>
           </div>
         </Link>
 
         <div className="flex items-center gap-3">
           <Link
-            href="/portal/client-rohit-priya"
+            href="/portal/client-gourav-priya"
             className="px-4 py-2 rounded-xl bg-white border border-[#E8DFC8] text-[#544230] text-xs font-cinzel uppercase tracking-wider font-semibold hover:border-[#AA820A] transition-all shadow-sm"
           >
             Client Portal
@@ -45,7 +45,7 @@ export default function TemplatesCatalogPage() {
         <div className="text-center space-y-4 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FAF4E3] border border-[#D4AF37]/50 text-[#7D5F04] text-xs font-cinzel tracking-widest uppercase">
             <Sparkles className="w-3.5 h-3.5 text-[#AA820A]" />
-            <span>Pressed Love & Haute Couture Design Collection</span>
+            <span>Pressed Love & Royal Vivah Design Collection</span>
             <Sparkles className="w-3.5 h-3.5 text-[#AA820A]" />
           </div>
 
@@ -125,7 +125,7 @@ export default function TemplatesCatalogPage() {
                 </Link>
 
                 <Link
-                  href={`/rohit-weds-priya?template=${template.id}#live`}
+                  href={`/gourav-weds-priya?template=${template.id}#live`}
                   className="px-3 py-2.5 rounded-xl border border-[#E8DFC8] text-[#544230] hover:text-[#2C2218] hover:border-[#AA820A] text-xs font-cinzel uppercase tracking-wider font-semibold transition-all"
                   title="Preview with couple data"
                 >
@@ -140,7 +140,7 @@ export default function TemplatesCatalogPage() {
       {/* Footer */}
       <footer className="max-w-7xl mx-auto w-full px-6 py-8 border-t border-[#E8DFC8] flex flex-col sm:flex-row items-center justify-between text-xs text-[#7D5F04]">
         <p className="font-serif">
-          ÉTERNITÉ Wedding Platform • Bespoke Digital Invitation & Client Operating System
+          ROYAL VIVAH Wedding Platform • Bespoke Digital Invitation & Client Operating System
         </p>
         <span className="font-mono text-[#AA820A] font-bold mt-2 sm:mt-0">
           Udaipur • London • Mallorca • Como • Berlin • Rome

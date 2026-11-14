@@ -1,12 +1,14 @@
 import { WeddingProject } from '../types/wedding';
 
 export const defaultWeddingProject: WeddingProject = {
-  id: 'client-rohit-priya',
-  slug: 'rohit-weds-priya',
-  partner1: 'Rohit Sharma',
-  partner2: 'Priya Mehra',
-  formalTitle: 'The Royal Wedding Celebrations of Rohit & Priya',
+  id: 'client-gourav-priya',
+  slug: 'gourav-weds-priya',
+  partner1: 'Gourav',
+  partner2: 'Priya',
+  formalTitle: 'The Royal Wedding Celebrations of Gourav & Priya',
   weddingDate: '2027-11-20T18:30:00.000Z',
+  suite: 'royal-heritage',
+  template: 'royal-heritage',
   venue: {
     name: 'The Oberoi Udaivilas',
     city: 'Udaipur, Rajasthan',

@@ -165,10 +165,10 @@ export const SUITE_CATEGORY_METAS: Record<string, SuiteCategoryMeta> = {
       'Canvas Scratch-to-Reveal Gold Card',
       'Voice Blessing Recorder & DJ Requests',
     ],
-    route: '/rohit-weds-priya?guest=Aditya+Singhania',
+    route: '/gourav-weds-priya?guest=Special+Guest',
     coverImage: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
     description: 'The crowning jewel of Udaipur palatial vivah — glowing oil lamps on Lake Pichola, Vedic hymns, and bespoke guest hospitality.',
-    coupleDisplay: 'Priya & Rohit',
+    coupleDisplay: 'Gourav & Priya',
     cityDisplay: 'Lake Palace, Udaipur, India',
   },
   'zareqia-emerald': {

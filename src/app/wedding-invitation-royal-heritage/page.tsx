@@ -6,7 +6,6 @@ import { PRESSED_LOVE_TEMPLATES } from '@/lib/pressedLoveTemplates';
 import { PressedLoveInvitation } from '@/components/pressedlove/PressedLoveInvitation';
 import { RoyalHeritageWeddingInvitation } from '@/components/royal-heritage/RoyalHeritageWeddingInvitation';
 import { ZareqiaWeddingInvitation } from '@/components/zareqia/ZareqiaWeddingInvitation';
-import { UniversalFloatingSuiteSwitcher } from '@/components/common/UniversalFloatingSuiteSwitcher';
 import { getWeddingProject, parseProjectFromSlug } from '@/lib/firebase';
 import { WeddingProject } from '@/types/wedding';
 
@@ -21,15 +20,14 @@ function RoyalHeritageInvitationContent() {
   const [activeTemplate, setActiveTemplate] = useState<string>(requestedTemplate || 'royal-heritage');
 
   useEffect(() => {
-    if (slugQuery) {
-      getWeddingProject(slugQuery).then((data) => {
-        setProject(data || parseProjectFromSlug(slugQuery));
-      });
-    } else {
-      getWeddingProject('rohit-weds-priya').then((data) => {
-        setProject(data || parseProjectFromSlug('rohit-weds-priya'));
-      });
-    }
+    const effectiveSlug = slugQuery || 'gourav-weds-priya';
+    getWeddingProject(effectiveSlug).then((data) => {
+      const p = data || parseProjectFromSlug(effectiveSlug);
+      setProject(p);
+      if (p?.partner1 && p?.partner2) {
+        document.title = `${p.partner1} Weds ${p.partner2} | Shubh Vivah`;
+      }
+    });
   }, [slugQuery]);
 
   useEffect(() => {
@@ -38,16 +36,7 @@ function RoyalHeritageInvitationContent() {
     }
   }, [requestedTemplate]);
 
-  const handleSwitchTemplate = (templateId: string) => {
-    setActiveTemplate(templateId);
-    if (typeof window !== 'undefined') {
-      const url = new URL(window.location.href);
-      url.searchParams.set('template', templateId);
-      window.history.pushState({}, '', url.toString());
-    }
-  };
-
-  const effectiveProject = project || (slugQuery ? parseProjectFromSlug(slugQuery) : parseProjectFromSlug('rohit-weds-priya'));
+  const effectiveProject = project || parseProjectFromSlug(slugQuery || 'gourav-weds-priya');
 
   let templateView = null;
   if (activeTemplate === 'royal-heritage') {
@@ -90,11 +79,6 @@ function RoyalHeritageInvitationContent() {
   return (
     <div className="relative min-h-screen">
       {templateView}
-      <UniversalFloatingSuiteSwitcher
-        activeTemplate={activeTemplate}
-        onSwitchTemplate={handleSwitchTemplate}
-        currentSlug={slugQuery || 'wedding-invitation-royal-heritage'}
-      />
     </div>
   );
 }

@@ -415,6 +415,8 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
   const t = TRANSLATIONS[currentLang];
   const isRTL = currentLang === 'ur';
+  const isHindi = currentLang === 'hi';
+  const isNastaliq = currentLang === 'ur';
 
   // 1. DYNAMIC CLIENT DATA BINDING (Always respects client couple names!)
   const effectiveGroomName = project?.partner1 || t.groomName;
@@ -427,6 +429,38 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
     `https://maps.google.com/?q=${encodeURIComponent(
       effectiveVenueName + ' ' + effectiveVenueCity
     )}`;
+
+  // Dynamic Browser Tab Title Customization
+  useEffect(() => {
+    const groom = effectiveGroomName || 'Gourav';
+    const bride = effectiveBrideName || 'Priya';
+    if (isHindi) {
+      document.title = `${groom} संग ${bride} | शुभ विवाह`;
+    } else if (isNastaliq) {
+      document.title = `${groom} اور ${bride} | دعوت نامہ`;
+    } else {
+      document.title = `${groom} Weds ${bride} | Shubh Vivah`;
+    }
+  }, [effectiveGroomName, effectiveBrideName, isHindi, isNastaliq]);
+
+  // Dynamic Typography based on active language (Pure Devanagari for Hindi, Nastaliq for Urdu)
+  const fontHeading = isHindi
+    ? 'font-devanagari-heading tracking-normal font-bold'
+    : isNastaliq
+    ? 'font-nastaliq tracking-normal'
+    : "font-['Cinzel',serif] tracking-wider uppercase font-black";
+
+  const fontSubHeading = isHindi
+    ? 'font-devanagari-heading tracking-normal font-bold'
+    : isNastaliq
+    ? 'font-nastaliq tracking-normal'
+    : "font-['Cinzel',serif] tracking-widest uppercase font-bold";
+
+  const fontBody = isHindi
+    ? 'font-devanagari tracking-normal'
+    : isNastaliq
+    ? 'font-nastaliq tracking-normal'
+    : "font-['Cormorant_Garamond',serif]";
 
   // Dynamic countdown timer
   const [timeLeft, setTimeLeft] = useState({
@@ -559,7 +593,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
   return (
     <div
       className={`relative w-full h-[100dvh] min-h-[100dvh] overflow-hidden bg-[#FAF8F5] select-none ${
-        isRTL ? 'font-serif rtl' : ''
+        isHindi ? 'font-devanagari' : isRTL ? 'font-nastaliq rtl' : ''
       }`}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
@@ -679,14 +713,14 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 effect="typewriter"
                 speed={40}
                 showCursor={true}
-                className="font-['Cinzel',serif] text-xs sm:text-sm tracking-[0.25em] text-[#273822] font-black uppercase"
+                className={`${fontHeading} text-xs sm:text-sm text-[#273822]`}
                 style={deepTextShadow}
               />
 
               {guestName && guestName !== 'Special Guest' && (
                 <div className="pt-1">
                   <span
-                    className="inline-block px-3 py-1 rounded-full bg-white/70 backdrop-blur-sm border border-[#B59A57]/50 font-['Cinzel',serif] text-[10px] sm:text-[11px] text-[#785B24] tracking-widest uppercase font-bold"
+                    className={`inline-block px-3 py-1 rounded-full bg-white/70 backdrop-blur-sm border border-[#B59A57]/50 ${fontSubHeading} text-[10px] sm:text-[11px] text-[#785B24]`}
                     style={deepTextShadow}
                   >
                     {t.cordiallyInviting}: {guestName}
@@ -766,7 +800,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.scrollDown}
                 effect="typewriter"
                 speed={50}
-                className="text-[10px] font-['Cinzel',serif] tracking-widest text-[#273822] font-black uppercase"
+                className={`${fontSubHeading} text-[10px] text-[#273822]`}
                 style={deepTextShadow}
               />
               <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
@@ -863,7 +897,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       text={item.label}
                       effect="pop-3d"
                       as="span"
-                      className="text-[9px] font-['Cinzel',serif] tracking-wider text-[#6B5A3E] font-bold mt-0.5 uppercase"
+                      className={`text-[9px] ${fontSubHeading} text-[#6B5A3E] font-bold mt-0.5`}
                       style={deepTextShadow}
                     />
                   </div>
@@ -932,14 +966,14 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       text={item.time}
                       effect="scepter-slide"
                       as="p"
-                      className="font-['Cinzel',serif] text-[11px] tracking-wider text-[#785B24] font-bold mt-0.5"
+                      className={`${fontSubHeading} text-[11px] text-[#785B24] font-bold mt-0.5`}
                       style={deepTextShadow}
                     />
                     <DynamicTextEffects
                       text={item.desc}
                       effect="scepter-slide"
                       as="p"
-                      className="font-['Cormorant_Garamond',serif] text-xs italic text-[#2C3827] mt-1 font-bold"
+                      className={`${fontBody} text-xs italic text-[#2C3827] mt-1 font-bold`}
                       style={deepTextShadow}
                     />
                   </motion.div>
@@ -988,7 +1022,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={effectiveVenueCity}
                 effect="dome-rise"
                 as="p"
-                className="font-['Cinzel',serif] text-xs tracking-wider text-[#6B5A3E] font-bold mt-1 uppercase"
+                className={`${fontSubHeading} text-xs text-[#6B5A3E] font-bold mt-1`}
                 style={deepTextShadow}
               />
 
@@ -1001,7 +1035,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   href={effectiveMapsLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-wider uppercase shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 cursor-pointer font-bold"
+                  className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#FAF8F5] text-xs ${fontSubHeading} shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 cursor-pointer font-bold`}
                   style={deepTextShadow}
                 >
                   <Navigation className="w-3.5 h-3.5 text-[#E6D197]" />
@@ -1065,7 +1099,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.rsvpTitle}
                 effect="velvet-mist"
                 as="h3"
-                className="font-['Cinzel',serif] text-2xl text-[#1E2E1B] tracking-widest font-black uppercase"
+                className={`${fontHeading} text-2xl text-[#1E2E1B]`}
                 style={deepTextShadow}
               />
               <div className="flex items-center justify-center gap-2 mt-1.5 mb-3 opacity-90">
@@ -1078,7 +1112,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.rsvpIntro}
                 effect="velvet-mist"
                 as="p"
-                className="font-['Cormorant_Garamond',serif] text-xs sm:text-sm italic text-[#273822] max-w-[280px] mx-auto mb-6 font-bold"
+                className={`${fontBody} text-xs sm:text-sm italic text-[#273822] max-w-[280px] mx-auto mb-6 font-bold`}
                 style={deepTextShadow}
               />
 
@@ -1113,7 +1147,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 >
                   <div>
                     <label
-                      className="block text-[10px] font-['Cinzel',serif] tracking-wider text-[#273822] font-black uppercase mb-1"
+                      className={`block text-[10px] ${fontSubHeading} text-[#273822] mb-1`}
                       style={deepTextShadow}
                     >
                       {t.labelName}
@@ -1130,7 +1164,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
                   <div>
                     <label
-                      className="block text-[10px] font-['Cinzel',serif] tracking-wider text-[#273822] font-black uppercase mb-1"
+                      className={`block text-[10px] ${fontSubHeading} text-[#273822] mb-1`}
                       style={deepTextShadow}
                     >
                       {t.labelEmail}
@@ -1149,7 +1183,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   <div className="grid grid-cols-2 gap-2.5">
                     <div>
                       <label
-                        className="block text-[10px] font-['Cinzel',serif] tracking-wider text-[#273822] font-black uppercase mb-1 truncate"
+                        className={`block text-[10px] ${fontSubHeading} text-[#273822] mb-1 truncate`}
                         style={deepTextShadow}
                       >
                         {t.labelAttend}
@@ -1168,7 +1202,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
                     <div>
                       <label
-                        className="block text-[10px] font-['Cinzel',serif] tracking-wider text-[#273822] font-black uppercase mb-1 truncate"
+                        className={`block text-[10px] ${fontSubHeading} text-[#273822] mb-1 truncate`}
                         style={deepTextShadow}
                       >
                         {t.labelGuests}
@@ -1188,7 +1222,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
                   <div>
                     <label
-                      className="block text-[10px] font-['Cinzel',serif] tracking-wider text-[#273822] font-black uppercase mb-1"
+                      className={`block text-[10px] ${fontSubHeading} text-[#273822] mb-1`}
                       style={deepTextShadow}
                     >
                       {t.labelMessage}
@@ -1205,7 +1239,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   <button
                     type="submit"
                     disabled={rsvpLoading}
-                    className="w-full py-3 rounded-full bg-[#273822] text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-widest uppercase shadow-lg hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 flex items-center justify-center gap-2 mt-2 cursor-pointer"
+                    className={`w-full py-3 rounded-full bg-[#273822] text-[#FAF8F5] text-xs ${fontSubHeading} shadow-lg hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 flex items-center justify-center gap-2 mt-2 cursor-pointer`}
                     style={deepTextShadow}
                   >
                     {rsvpLoading ? (

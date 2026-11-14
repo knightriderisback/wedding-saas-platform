@@ -223,6 +223,7 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
 
   const charVariants = getCharVariants();
   const MotionComponent = motion[as] as React.ComponentType<any>;
+  const isComplexScript = /[\u0900-\u097F\u0600-\u06FF]/.test(text);
 
   return (
     <MotionComponent
@@ -237,27 +238,48 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
         ...style,
       }}
     >
-      {words.map((word, wordIndex) => (
-        <span
-          key={`word-${wordIndex}`}
-          className="inline-block whitespace-nowrap"
-          style={{ marginRight: wordIndex < words.length - 1 ? '0.28em' : '0' }}
-        >
-          {Array.from(word).map((char, charIndex) => (
+      {words.map((word, wordIndex) => {
+        if (isComplexScript) {
+          // In Devanagari & Nastaliq scripts, keep full words intact in single text run
+          // to preserve ligature shaping, shirorekha, conjuncts, and matra attachments
+          return (
             <motion.span
-              key={`char-${wordIndex}-${charIndex}`}
+              key={`word-${wordIndex}`}
               variants={charVariants}
-              className="inline-block"
+              className="inline-block whitespace-nowrap"
               style={{
+                marginRight: wordIndex < words.length - 1 ? '0.35em' : '0',
                 willChange: 'transform, opacity, filter',
                 transformStyle: 'preserve-3d',
               }}
             >
-              {char}
+              {word}
             </motion.span>
-          ))}
-        </span>
-      ))}
+          );
+        }
+
+        return (
+          <span
+            key={`word-${wordIndex}`}
+            className="inline-block whitespace-nowrap"
+            style={{ marginRight: wordIndex < words.length - 1 ? '0.28em' : '0' }}
+          >
+            {Array.from(word).map((char, charIndex) => (
+              <motion.span
+                key={`char-${wordIndex}-${charIndex}`}
+                variants={charVariants}
+                className="inline-block"
+                style={{
+                  willChange: 'transform, opacity, filter',
+                  transformStyle: 'preserve-3d',
+                }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </span>
+        );
+      })}
     </MotionComponent>
   );
 };

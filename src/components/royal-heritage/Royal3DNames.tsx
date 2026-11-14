@@ -48,8 +48,47 @@ export const Royal3DNames: React.FC<Royal3DNamesProps> = ({
     filter: 'drop-shadow(0 8px 16px rgba(0, 0, 0, 0.45))',
   };
 
-  // Render a word with individual 3D popping letters
+  // Render a word with individual 3D popping letters or intact ligature word for Devanagari/Urdu
   const render3DWord = (word: string, baseDelay: number) => {
+    if (isDevanagari || isArabicUrdu) {
+      return (
+        <span className="inline-block whitespace-nowrap" style={{ perspective: '800px' }}>
+          <motion.span
+            initial={{ opacity: 0, scale: 0.3, y: 35, rotateX: 50, z: -80 }}
+            animate={
+              isRevealed
+                ? {
+                    opacity: 1,
+                    scale: [0.3, 1.15, 1],
+                    y: [35, -6, 0],
+                    rotateX: [50, -8, 0],
+                    z: 0,
+                  }
+                : { opacity: 0, scale: 0.3, y: 35 }
+            }
+            transition={{
+              duration: 0.8,
+              delay: baseDelay,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            whileHover={{
+              scale: 1.1,
+              y: -6,
+              transition: { duration: 0.2 },
+            }}
+            className="inline-block text-[#1E2E1B] font-bold cursor-default select-none transition-transform"
+            style={{
+              ...extrusion3DStyle,
+              transformStyle: 'preserve-3d',
+              willChange: 'transform, opacity',
+            }}
+          >
+            {word}
+          </motion.span>
+        </span>
+      );
+    }
+
     const chars = Array.from(word);
     return (
       <span className="inline-block whitespace-nowrap" style={{ perspective: '800px' }}>

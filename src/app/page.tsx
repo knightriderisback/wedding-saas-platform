@@ -154,22 +154,22 @@ export default function RootLandingPage() {
               <div
                 onClick={handleLogoTap}
                 className="flex items-center gap-2 select-none group cursor-pointer"
-                title="ÉTERNITÉ Royal Atelier • Tap 5x for Stealth Admin"
+                title="Royal Vivah • Tap 5x for Stealth Admin"
               >
                 <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-[#AA820A] via-[#D4AF37] to-[#FAF4E3] flex items-center justify-center text-black font-cinzel font-bold text-base shadow-[0_3px_12px_rgba(212,175,55,0.28)] group-hover:scale-105 transition-transform">
-                  É
+                  R
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
                     <span className="font-cinzel text-base sm:text-lg font-bold text-[#2C2218] tracking-widest leading-none">
-                      ÉTERNITÉ
+                      ROYAL VIVAH
                     </span>
                     <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-[#FAF4E3] text-[#7D5F04] border border-[#D4AF37]/40 font-bold uppercase tracking-wider hidden xs:inline">
                       OS
                     </span>
                   </div>
                   <p className="text-[10px] font-cormorant italic text-[#7D5F04] leading-tight hidden sm:block">
-                    Haute Couture Wedding OS
+                    Royal Wedding Invitation OS
                   </p>
                 </div>
               </div>
@@ -206,7 +206,7 @@ export default function RootLandingPage() {
                 <Sparkles className="w-3.5 h-3.5 text-[#AA820A]" /> 13 Suites
               </Link>
               <Link
-                href="/portal/client-rohit-priya"
+                href="/portal/client-gourav-priya"
                 className="hidden md:inline-flex px-3 py-1.5 rounded-full bg-white border border-[#E8DFC8] text-[#544230] hover:text-[#2C2218] hover:border-[#D4AF37] text-[11px] font-cinzel font-bold tracking-wider uppercase items-center gap-1 transition-all shadow-2xs"
               >
                 <Crown className="w-3.5 h-3.5 text-[#AA820A]" /> Client Portal
@@ -512,7 +512,7 @@ export default function RootLandingPage() {
 
             {/* Gateway 2: Client Portal */}
             <Link
-              href="/portal/client-rohit-priya"
+              href="/portal/client-gourav-priya"
               className="bg-white rounded-3xl p-6 border border-[#E8DFC8] hover:border-[#AA820A] shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group"
             >
               <div>
@@ -537,7 +537,7 @@ export default function RootLandingPage() {
 
             {/* Gateway 3: Luxury Guest Microsite */}
             <Link
-              href="/rohit-weds-priya?guest=Aditya+Singhania"
+              href="/gourav-weds-priya?guest=Special+Guest"
               className="bg-white rounded-3xl p-6 border border-[#E8DFC8] hover:border-[#AA820A] shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group"
             >
               <div>
@@ -555,7 +555,7 @@ export default function RootLandingPage() {
                 </p>
               </div>
               <div className="flex items-center justify-between text-xs font-cinzel font-bold text-[#AA820A] pt-3 border-t border-[#E8DFC8]">
-                <span>Launch /rohit-weds-priya</span>
+                <span>Launch /gourav-weds-priya</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -591,7 +591,7 @@ export default function RootLandingPage() {
           </Link>
 
           <Link
-            href="/portal/client-rohit-priya"
+            href="/portal/client-gourav-priya"
             className="flex flex-col items-center text-[#544230] hover:text-[#2C2218] transition"
           >
             <Crown className="w-4 h-4" />
@@ -616,14 +616,14 @@ export default function RootLandingPage() {
               <div className="flex items-center justify-between border-b border-[#E8DFC8] pb-4 mb-6">
                 <div className="flex items-center gap-2.5">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#AA820A] to-[#FAF4E3] flex items-center justify-center text-black font-cinzel font-bold text-base shadow-sm">
-                    É
+                    R
                   </div>
                   <div>
                     <h3 className="font-cinzel text-base font-bold text-[#2C2218] tracking-widest">
-                      ÉTERNITÉ
+                      ROYAL VIVAH
                     </h3>
                     <p className="text-[10px] font-cormorant italic text-[#7D5F04]">
-                      Wedding Platform Atelier
+                      Royal Wedding Platform
                     </p>
                   </div>
                 </div>
@@ -650,51 +650,18 @@ export default function RootLandingPage() {
                 </Link>
 
                 <Link
-                  href="/wedding-invitation-pressed-meadow"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center justify-between p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs font-cinzel font-bold text-emerald-900 hover:bg-emerald-100"
-                >
-                  <span className="flex items-center gap-2">
-                    <span>🌸</span> Pressed Meadow (New)
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-emerald-600" />
-                </Link>
-
-                <Link
-                  href="/wedding-invitation-the-venue"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center justify-between p-3 rounded-2xl bg-white border border-[#E8DFC8] text-xs font-cinzel font-bold text-[#2C2218] hover:bg-[#FAF4E3]"
-                >
-                  <span className="flex items-center gap-2">
-                    <span>🏰</span> The Venue (Castle)
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                </Link>
-
-                <Link
-                  href="/wedding-invitation-floral"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center justify-between p-3 rounded-2xl bg-white border border-[#E8DFC8] text-xs font-cinzel font-bold text-[#2C2218] hover:bg-[#FAF4E3]"
-                >
-                  <span className="flex items-center gap-2">
-                    <span>🌺</span> Botanical Floral
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                </Link>
-
-                <Link
-                  href="/rohit-weds-priya?guest=Aditya+Singhania"
+                  href="/gourav-weds-priya?guest=Special+Guest"
                   onClick={() => setIsMenuOpen(false)}
                   className="flex items-center justify-between p-3 rounded-2xl bg-amber-50 border border-amber-200 text-xs font-cinzel font-bold text-amber-900 hover:bg-amber-100"
                 >
                   <span className="flex items-center gap-2">
-                    <Smartphone className="w-4 h-4 text-[#AA820A]" /> Rohit & Priya (Udaipur Palace)
+                    <Smartphone className="w-4 h-4 text-[#AA820A]" /> Gourav & Priya (Royal Heritage)
                   </span>
                   <ChevronRight className="w-4 h-4 text-amber-700" />
                 </Link>
 
                 <Link
-                  href="/portal/client-rohit-priya"
+                  href="/portal/client-gourav-priya"
                   onClick={() => setIsMenuOpen(false)}
                   className="flex items-center justify-between p-3 rounded-2xl bg-white border border-[#E8DFC8] text-xs font-cinzel font-bold text-[#2C2218] hover:bg-[#FAF4E3]"
                 >
@@ -720,10 +687,10 @@ export default function RootLandingPage() {
             {/* Bottom Footer Note */}
             <div className="pt-4 border-t border-[#E8DFC8] text-center">
               <p className="text-[10px] font-cinzel text-[#7D5F04] font-bold">
-                ÉTERNITÉ WEDDING SAAS OS
+                ROYAL VIVAH WEDDING SAAS OS
               </p>
               <p className="text-[9px] font-sans text-gray-500 mt-0.5">
-                Stealth Gesture: Tap É logo 5 times for Admin access
+                Stealth Gesture: Tap R logo 5 times for Admin access
               </p>
             </div>
           </div>
@@ -732,7 +699,7 @@ export default function RootLandingPage() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-[#E8DFC8] bg-white/70 py-6 text-center text-xs text-[#7D5F04] font-cormorant italic">
-        <p>© 2026-2027 ÉTERNITÉ Atelier. Inspired by Indian Vivah Splendor & Bespoke Haute Couture.</p>
+        <p>© 2026-2027 Royal Vivah. Inspired by Indian Vivah Splendor & Royal Heritage.</p>
       </footer>
     </div>
   );

@@ -27,6 +27,48 @@
 }
 
 /* =========================================================================
+   AUTHENTIC ROYAL DEVANAGARI HINDI TYPOGRAPHY (CRISP, ELEGANT & SHIROREKHA-PRESERVED)
+   ========================================================================= */
+
+.font-devanagari {
+  font-family: 'Noto Serif Devanagari', 'Tiro Devanagari Hindi', 'Rozha One', 'Noto Sans Devanagari', serif !important;
+  letter-spacing: 0.005em !important;
+  text-transform: none !important;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "dlig" 1;
+}
+
+.font-devanagari-heading {
+  font-family: 'Rozha One', 'Yatra One', 'Noto Serif Devanagari', serif !important;
+  letter-spacing: 0.01em !important;
+  text-transform: none !important;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+.font-devanagari-sans {
+  font-family: 'Noto Sans Devanagari', sans-serif !important;
+  letter-spacing: 0.005em !important;
+  text-transform: none !important;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.font-nastaliq {
+  font-family: 'Noto Nastaliq Urdu', serif !important;
+  letter-spacing: 0 !important;
+  line-height: 2;
+  text-rendering: optimizeLegibility;
+}
+
+/* =========================================================================
    AUTHENTIC INDIAN WEDDING CARD PAPER (ZERO CHECKS, NATURAL PULP & GOLD SPECKS)
    ========================================================================= */
 

@@ -16,6 +16,7 @@ import {
   saveWeddingProject,
   uploadMediaFile,
   markWhatsAppSent,
+  parseProjectFromSlug,
 } from '@/lib/firebase';
 import { exportDjPlaylistPdf } from '@/lib/djPdfGenerator';
 import { defaultWeddingProject } from '@/lib/mockData';
@@ -60,7 +61,7 @@ function ClientPortalContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const isShadowAdmin = searchParams.get('shadowAdmin') === 'true';
-  const clientId = (params?.clientId as string) || 'client-rohit-priya';
+  const clientId = (params?.clientId as string) || 'client-gourav-priya';
 
   const [project, setProject] = useState<WeddingProject | null>(null);
   const [loading, setLoading] = useState(true);
@@ -98,7 +99,11 @@ function ClientPortalContent() {
   const loadData = async () => {
     setLoading(true);
     const data = await getWeddingProject(clientId);
-    setProject(data || defaultWeddingProject);
+    const p = data || parseProjectFromSlug(clientId);
+    setProject(p);
+    if (p?.partner1) {
+      document.title = `${p.partner1} & ${p.partner2 || ''} | Wedding Client Portal`;
+    }
     setLoading(false);
   };
 

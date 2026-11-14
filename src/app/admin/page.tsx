@@ -60,7 +60,7 @@ export default function SuperAdminPage() {
   const [weddingDate, setWeddingDate] = useState('2027-11-20');
   const [venueName, setVenueName] = useState('The Oberoi Udaivilas');
   const [venueCity, setVenueCity] = useState('Udaipur, Rajasthan');
-  const [selectedSuite, setSelectedSuite] = useState('the-venue');
+  const [selectedSuite, setSelectedSuite] = useState('royal-heritage');
   const [clientPhone, setClientPhone] = useState('+919820012345');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -697,7 +697,7 @@ export default function SuperAdminPage() {
                                   <Eye className="w-3.5 h-3.5" />
                                 </Link>
 
-                                {p.slug !== 'rohit-weds-priya' && (
+                                {p.slug !== 'gourav-weds-priya' && (
                                   <button
                                     onClick={() => handleDeleteProject(p.slug)}
                                     className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 transition"
@@ -753,8 +753,9 @@ export default function SuperAdminPage() {
                     {allGuestsFlat.map((item, idx) => {
                       const g = item.guest;
                       const cleanPhone = g.phone.replace(/[^0-9]/g, '');
+                      const origin = typeof window !== 'undefined' ? window.location.origin : 'https://wedding-saas-platform-iota.vercel.app';
                       const waLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
-                        `Royal Wedding Invitation for ${item.couple}: View your invitation at https://wedding-saas-platform-iota.vercel.app/${item.projectSlug}?guest=${encodeURIComponent(
+                        `Royal Wedding Invitation for ${item.couple}: View your invitation at ${origin}/${item.projectSlug}?guest=${encodeURIComponent(
                           g.name
                         )}`
                       )}`;
@@ -1098,7 +1099,7 @@ export default function SuperAdminPage() {
                     required
                     value={customSlug}
                     onChange={(e) => setCustomSlug(e.target.value)}
-                    placeholder="rohit-weds-priya"
+                    placeholder="gourav-weds-priya"
                     className="w-full px-3 py-2 rounded-r-xl border border-[#E8DFC8] bg-[#FAF8F5] font-mono text-xs focus:outline-none focus:border-[#AA820A]"
                   />
                 </div>
