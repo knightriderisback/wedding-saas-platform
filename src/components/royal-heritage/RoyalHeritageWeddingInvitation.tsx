@@ -337,18 +337,303 @@ const deepTextShadow: React.CSSProperties = {
     '0 2px 4px rgba(255, 255, 255, 0.95), 0 3px 12px rgba(0, 0, 0, 0.7)',
 };
 
+// Number Digit Localizer (Devanagari for Hindi, Urdu-Arabic for Urdu, Latin for English/Hinglish)
+const toLocalizedDigits = (numOrStr: number | string, lang: SupportedLanguage): string => {
+  const str = String(numOrStr);
+  if (lang === 'hi') {
+    const devanagariDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+    return str.replace(/[0-9]/g, (d) => devanagariDigits[parseInt(d, 10)]);
+  }
+  if (lang === 'ur') {
+    const urduDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    return str.replace(/[0-9]/g, (d) => urduDigits[parseInt(d, 10)]);
+  }
+  return str;
+};
+
+// Name Localizer / Transliteration Dictionary
+const NAME_MAP: Record<string, { hi: string; ur: string }> = {
+  gourav: { hi: 'गौरव', ur: 'گورو' },
+  gaurav: { hi: 'गौरव', ur: 'گورو' },
+  gourao: { hi: 'गौरव', ur: 'گورو' },
+  priya: { hi: 'प्रिया', ur: 'پریا' },
+  rohit: { hi: 'रोहित', ur: 'روہت' },
+  sharma: { hi: 'शर्मा', ur: 'شرما' },
+  mehra: { hi: 'मेहरा', ur: 'مہرا' },
+  singh: { hi: 'सिंह', ur: 'سنگھ' },
+  verma: { hi: 'वर्मा', ur: 'ورما' },
+  gupta: { hi: 'गुप्ता', ur: 'گپتا' },
+  patel: { hi: 'पटेल', ur: 'پٹیل' },
+  shah: { hi: 'शाह', ur: 'شاہ' },
+  kumar: { hi: 'कुमार', ur: 'کمار' },
+  kumari: { hi: 'कुमारी', ur: 'کماری' },
+  kapoor: { hi: 'कपूर', ur: 'کپور' },
+  khan: { hi: 'खान', ur: 'خان' },
+  malik: { hi: 'मलिक', ur: 'ملک' },
+  aryan: { hi: 'आर्यन', ur: 'آرین' },
+  eva: { hi: 'ईवा', ur: 'ایوا' },
+  charlotte: { hi: 'शार्लोट', ur: 'شارلٹ' },
+  james: { hi: 'जेम्स', ur: 'جیمز' },
+  zayn: { hi: 'ज़ैन', ur: 'زین' },
+  nora: { hi: 'नोरा', ur: 'نورا' },
+  rahul: { hi: 'राहुल', ur: 'راہول' },
+  anjali: { hi: 'अंजलि', ur: 'انجلی' },
+  amit: { hi: 'अमित', ur: 'امت' },
+  pooja: { hi: 'पूजा', ur: 'پوجا' },
+  vikram: { hi: 'विक्रम', ur: 'وکرم' },
+  neha: { hi: 'नेहा', ur: 'نیہا' },
+  aditya: { hi: 'आदित्य', ur: 'آدتیہ' },
+  kavita: { hi: 'कविता', ur: 'کوِتا' },
+  special: { hi: 'विशिष्ट', ur: 'معزز' },
+  guest: { hi: 'अतिथि', ur: 'مہمان' },
+};
+
+const localizeName = (name: string, lang: SupportedLanguage): string => {
+  if (!name) return '';
+  if (lang === 'en' || lang === 'hinglish') return name;
+
+  if (lang === 'hi' && /[\u0900-\u097F]/.test(name)) return name;
+  if (lang === 'ur' && /[\u0600-\u06FF]/.test(name)) return name;
+
+  const words = name.trim().split(/\s+/);
+  const localizedWords = words.map((w) => {
+    const clean = w.toLowerCase().replace(/[^a-z]/g, '');
+    if (NAME_MAP[clean]) {
+      return lang === 'hi' ? NAME_MAP[clean].hi : NAME_MAP[clean].ur;
+    }
+    return w;
+  });
+
+  return localizedWords.join(' ');
+};
+
+// Event Translation Dictionary
+const EVENT_DICTIONARY: Record<
+  string,
+  {
+    hi: { title: string; desc: string };
+    hinglish: { title: string; desc: string };
+    ur: { title: string; desc: string };
+    en: { title: string; desc: string };
+  }
+> = {
+  haldi: {
+    en: {
+      title: 'The Royal Haldi & Chuda',
+      desc: 'Yellow hues, auspicious turmeric blessings & vibrant dhol beats.',
+    },
+    hi: {
+      title: 'हल्दी एवं फूलों की होली',
+      desc: 'हल्दी का पावन उबटन, गेंदे के फूलों की वर्षा और पारंपरिक ढोल की धुनें।',
+    },
+    hinglish: {
+      title: 'Haldi Aur Phoolon Ki Holi',
+      desc: 'Haldi ki rasam, phoolon ki barsaat aur dhol dhamaka.',
+    },
+    ur: {
+      title: 'رسمِ ہلدی اور پھولوں کی ہولی',
+      desc: 'روایتی ہلدی کی رسم، پھولوں کی برسات اور شادیانے۔',
+    },
+  },
+  sangeet: {
+    en: {
+      title: 'Royal Mehendi & Sangeet Symphony',
+      desc: 'Henna artistry, cocktail gala & musical dance face-off.',
+    },
+    hi: {
+      title: 'शाही मेहंदी एवं संगीत संध्या',
+      desc: 'सतरंगी मेहंदी, संगीत की महफिल और मनमोहक नृत्य समारोह।',
+    },
+    hinglish: {
+      title: 'Royal Mehendi Aur Sangeet Night',
+      desc: 'Mehendi ki raat, gaane aur dance ki grand masti.',
+    },
+    ur: {
+      title: 'شاہی مہندی و محفلِ سنگیت',
+      desc: 'رنگ برنگی مہندی، نغمات کی گونج اور پرمسرت رقص۔',
+    },
+  },
+  phera: {
+    en: {
+      title: 'The Sacred Pheras & Varmala',
+      desc: 'Vedic mantras under the stars as two souls unite for seven lifetimes.',
+    },
+    hi: {
+      title: 'शुभ विवाह, वरमाला एवं पवित्र फेरे',
+      desc: 'वैदिक मंत्रोच्चार, वरमाला, सात फेरे और जन्म-जन्मांतर का पवित्र बंधन।',
+    },
+    hinglish: {
+      title: 'Shubh Vivah, Varmala Aur Saat Phere',
+      desc: 'Saat phere, vedic aashirwaad aur pavitra shaadi ki rasmein.',
+    },
+    ur: {
+      title: 'تقریبِ نکاح، ایجاب و قبول و رخصتی',
+      desc: 'نکاح کے بابرکت بول، دعائیں اور زندگی بھر کا پاکیزہ ساتھ۔',
+    },
+  },
+  reception: {
+    en: {
+      title: 'Imperial Gala Reception & Banquet',
+      desc: 'Grand royal banquet, toasts, and royal musical celebrations.',
+    },
+    hi: {
+      title: 'शाही प्रतिभोज (भव्य रिसेप्शन)',
+      desc: 'भव्य शाही रात्रिभोज, मधुर वाद्य संगीत और आशीर्वाद उत्सव।',
+    },
+    hinglish: {
+      title: 'Grand Royal Reception Dinner',
+      desc: 'Shahi daawat, live music aur celebration.',
+    },
+    ur: {
+      title: 'ولیمہ و شاہی استقبالیہ ضیافت',
+      desc: 'شاندار شاہی عشائیہ اور پرمسرت استقبالیہ۔',
+    },
+  },
+  cocktail: {
+    en: {
+      title: 'Cocktail Soirée & Sundowner',
+      desc: 'Evening cocktails, soulful jazz, and joyous reunions.',
+    },
+    hi: {
+      title: 'संध्या कॉकटेल एवं मिलन उत्सव',
+      desc: 'संध्या बेला में संगीत, जलपान और आत्मीय मिलन।',
+    },
+    hinglish: {
+      title: 'Cocktail Aur Evening Party',
+      desc: 'Masti bhari shaam aur celebration.',
+    },
+    ur: {
+      title: 'شام کی محفل و ضیافت',
+      desc: 'شام کی محفل، پُرتکلف مشروبات اور خوشگوار لمحات۔',
+    },
+  },
+};
+
+const getLocalizedEvents = (
+  rawEvents: Array<any> | undefined,
+  lang: SupportedLanguage,
+  defaultEvents: Array<{ title: string; time: string; desc: string }>
+): Array<{ title: string; time: string; desc: string }> => {
+  if (!rawEvents || rawEvents.length === 0) {
+    return defaultEvents;
+  }
+
+  return rawEvents.map((ev, index) => {
+    const titleLower = (ev.title || '').toLowerCase();
+    let matchedKey: string | null = null;
+
+    if (titleLower.includes('haldi') || titleLower.includes('turmeric') || titleLower.includes('chuda') || titleLower.includes('ubtan')) {
+      matchedKey = 'haldi';
+    } else if (titleLower.includes('sangeet') || titleLower.includes('mehendi') || titleLower.includes('mehndi') || titleLower.includes('music')) {
+      matchedKey = 'sangeet';
+    } else if (titleLower.includes('phera') || titleLower.includes('vivah') || titleLower.includes('wedding') || titleLower.includes('varmala') || titleLower.includes('mandap') || titleLower.includes('nikah')) {
+      matchedKey = 'phera';
+    } else if (titleLower.includes('reception') || titleLower.includes('valima') || titleLower.includes('walima') || titleLower.includes('gala') || titleLower.includes('banquet')) {
+      matchedKey = 'reception';
+    } else if (titleLower.includes('cocktail') || titleLower.includes('party') || titleLower.includes('soiree')) {
+      matchedKey = 'cocktail';
+    }
+
+    let resolvedTitle = ev.title;
+    let resolvedDesc = ev.subtitle || ev.desc || ev.dressCodeDetails || ev.venue || '';
+
+    if (matchedKey && EVENT_DICTIONARY[matchedKey]) {
+      resolvedTitle = EVENT_DICTIONARY[matchedKey][lang].title;
+      resolvedDesc = EVENT_DICTIONARY[matchedKey][lang].desc;
+    } else if (defaultEvents[index]) {
+      resolvedTitle = defaultEvents[index].title;
+      resolvedDesc = defaultEvents[index].desc;
+    }
+
+    let resolvedTime = ev.time || '';
+    if (ev.date) {
+      resolvedTime = `${ev.date} • ${ev.time}`;
+    }
+
+    if (lang === 'hi') {
+      resolvedTime = resolvedTime
+        .replace(/Thursday/gi, 'गुरुवार')
+        .replace(/Friday/gi, 'शुक्रवार')
+        .replace(/Saturday/gi, 'शनिवार')
+        .replace(/Sunday/gi, 'रविवार')
+        .replace(/Monday/gi, 'सोमवार')
+        .replace(/Tuesday/gi, 'मंगलवार')
+        .replace(/Wednesday/gi, 'बुधवार')
+        .replace(/January/gi, 'जनवरी')
+        .replace(/February/gi, 'फरवरी')
+        .replace(/March/gi, 'मार्च')
+        .replace(/April/gi, 'अप्रैल')
+        .replace(/May/gi, 'मई')
+        .replace(/June/gi, 'जून')
+        .replace(/July/gi, 'जुलाई')
+        .replace(/August/gi, 'अगस्त')
+        .replace(/September/gi, 'सितंबर')
+        .replace(/October/gi, 'अक्टूबर')
+        .replace(/November/gi, 'नवंबर')
+        .replace(/December/gi, 'दिसंबर')
+        .replace(/Nov/gi, 'नवंबर')
+        .replace(/Dec/gi, 'दिसंबर')
+        .replace(/Jan/gi, 'जनवरी')
+        .replace(/Feb/gi, 'फरवरी')
+        .replace(/AM/g, 'प्रातः')
+        .replace(/PM/g, 'सायं')
+        .replace(/Late/gi, 'देर रात तक')
+        .replace(/Midnight/gi, 'मध्यरात्रि');
+      resolvedTime = toLocalizedDigits(resolvedTime, 'hi');
+    } else if (lang === 'ur') {
+      resolvedTime = resolvedTime
+        .replace(/Thursday/gi, 'جمعرات')
+        .replace(/Friday/gi, 'جمعہ')
+        .replace(/Saturday/gi, 'ہفتہ')
+        .replace(/Sunday/gi, 'اتوار')
+        .replace(/Monday/gi, 'پیر')
+        .replace(/Tuesday/gi, 'منگل')
+        .replace(/Wednesday/gi, 'بدھ')
+        .replace(/January/gi, 'جنوری')
+        .replace(/February/gi, 'فروری')
+        .replace(/March/gi, 'مارچ')
+        .replace(/April/gi, 'اپریل')
+        .replace(/May/gi, 'مئی')
+        .replace(/June/gi, 'جون')
+        .replace(/July/gi, 'جولائی')
+        .replace(/August/gi, 'اگست')
+        .replace(/September/gi, 'ستمبر')
+        .replace(/October/gi, 'اکتوبر')
+        .replace(/November/gi, 'نومبر')
+        .replace(/December/gi, 'دسمبر')
+        .replace(/Nov/gi, 'نومبر')
+        .replace(/Dec/gi, 'دسمبر')
+        .replace(/Jan/gi, 'جنوری')
+        .replace(/Feb/gi, 'فروری')
+        .replace(/AM/g, 'صبح')
+        .replace(/PM/g, 'شام')
+        .replace(/Late/gi, 'دیر تک')
+        .replace(/Midnight/gi, 'نصف شب');
+      resolvedTime = toLocalizedDigits(resolvedTime, 'ur');
+    }
+
+    return {
+      title: resolvedTitle,
+      time: resolvedTime,
+      desc: resolvedDesc,
+    };
+  });
+};
+
 // Date helpers for Scratch Card
 const getFormattedWeddingDate = (dateStr: string, lang: SupportedLanguage) => {
   try {
     const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return lang === 'hi' ? '१२ दिसंबर २०२६' : 'December 12, 2026';
+    if (isNaN(d.getTime())) return lang === 'hi' ? '१२ दिसंबर २०२६' : lang === 'ur' ? '۱۲ دسمبر ۲۰۲۶' : 'December 12, 2026';
     if (lang === 'hi') {
       const months = ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'];
-      return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+      const raw = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+      return toLocalizedDigits(raw, 'hi');
     }
     if (lang === 'ur') {
       const months = ['جنوری', 'فروری', 'مارچ', 'اپریل', 'مئی', 'جون', 'جولائی', 'اگست', 'ستمبر', 'اکتوبر', 'نومبر', 'دسمبر'];
-      return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+      const raw = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+      return toLocalizedDigits(raw, 'ur');
     }
     return d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
   } catch {
@@ -375,13 +660,19 @@ const getFormattedWeddingDay = (dateStr: string, lang: SupportedLanguage) => {
 const getFormattedWeddingTime = (dateStr: string, lang: SupportedLanguage) => {
   try {
     const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return lang === 'hi' ? 'प्रातः १०:०० बजे' : '10:00 AM';
+    if (isNaN(d.getTime())) return lang === 'hi' ? 'प्रातः १०:०० बजे' : lang === 'ur' ? 'صبح ۱۰:۰۰ بجے' : '10:00 AM';
     let hours = d.getHours();
     const minutes = String(d.getMinutes()).padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12 || 12;
-    if (lang === 'hi') return `${hours}:${minutes} ${ampm === 'AM' ? 'प्रातः' : 'सायं'}`;
-    if (lang === 'ur') return `${hours}:${minutes} ${ampm === 'AM' ? 'صبح' : 'شام'}`;
+    if (lang === 'hi') {
+      const timeStr = `${hours}:${minutes}`;
+      return `${ampm === 'AM' ? 'प्रातः' : 'सायं'} ${toLocalizedDigits(timeStr, 'hi')} बजे`;
+    }
+    if (lang === 'ur') {
+      const timeStr = `${hours}:${minutes}`;
+      return `${ampm === 'AM' ? 'صبح' : 'شام'} ${toLocalizedDigits(timeStr, 'ur')} بجے`;
+    }
     return `${hours}:${minutes} ${ampm}`;
   } catch {
     return '10:00 AM';
@@ -418,22 +709,50 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
   const isHindi = currentLang === 'hi';
   const isNastaliq = currentLang === 'ur';
 
-  // 1. DYNAMIC CLIENT DATA BINDING (Always respects client couple names!)
-  const effectiveGroomName = project?.partner1 || t.groomName;
-  const effectiveBrideName = project?.partner2 || t.brideName;
+  // 1. DYNAMIC CLIENT DATA BINDING (Always respects client couple names with authentic localization!)
+  const rawGroomName = project?.partner1 || t.groomName;
+  const rawBrideName = project?.partner2 || t.brideName;
+  const effectiveGroomName = localizeName(rawGroomName, currentLang);
+  const effectiveBrideName = localizeName(rawBrideName, currentLang);
+  const localizedGuestName = localizeName(guestName, currentLang);
+
   const effectiveWeddingDate = project?.weddingDate || '2026-12-12T10:00:00Z';
-  const effectiveVenueName = project?.venue?.name || t.palaceName;
-  const effectiveVenueCity = project?.venue?.city || t.palaceCity;
+
+  const effectiveVenueName =
+    currentLang === 'hi'
+      ? (project?.venue?.name && project.venue.name !== 'The Royal Palace & Gardens'
+          ? (project.venue.name.toLowerCase().includes('oberoi') ? 'द ओबेरॉय उदयविलास पैलेस' : project.venue.name)
+          : t.palaceName)
+      : currentLang === 'ur'
+      ? (project?.venue?.name && project.venue.name !== 'The Royal Palace & Gardens'
+          ? (project.venue.name.toLowerCase().includes('oberoi') ? 'دی اوبرائے ادے ولاس پیلس' : project.venue.name)
+          : t.palaceName)
+      : project?.venue?.name || t.palaceName;
+
+  const effectiveVenueCity =
+    currentLang === 'hi'
+      ? (project?.venue?.city && project.venue.city !== 'Lake Pichola, Udaipur, Rajasthan'
+          ? (project.venue.city.toLowerCase().includes('udaipur') ? 'पिछोला झील, उदयपुर, राजस्थान' : project.venue.city)
+          : t.palaceCity)
+      : currentLang === 'ur'
+      ? (project?.venue?.city && project.venue.city !== 'Lake Pichola, Udaipur, Rajasthan'
+          ? (project.venue.city.toLowerCase().includes('udaipur') ? 'پچھولا جھیل، ادے پور، راجستھان' : project.venue.city)
+          : t.palaceCity)
+      : project?.venue?.city || t.palaceCity;
+
   const effectiveMapsLink =
     project?.venue?.googleMapsLink ||
     `https://maps.google.com/?q=${encodeURIComponent(
       effectiveVenueName + ' ' + effectiveVenueCity
     )}`;
 
+  // Dynamic Events with full Language Localization
+  const effectiveEvents = getLocalizedEvents(project?.events, currentLang, t.events);
+
   // Dynamic Browser Tab Title Customization
   useEffect(() => {
-    const groom = effectiveGroomName || 'Gourav';
-    const bride = effectiveBrideName || 'Priya';
+    const groom = effectiveGroomName || (isHindi ? 'गौरव' : isNastaliq ? 'گورو' : 'Gourav');
+    const bride = effectiveBrideName || (isHindi ? 'प्रिया' : isNastaliq ? 'پریا' : 'Priya');
     if (isHindi) {
       document.title = `${groom} संग ${bride} | शुभ विवाह`;
     } else if (isNastaliq) {
@@ -618,16 +937,6 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
     }, 600);
   };
 
-  // Dynamic Events
-  const effectiveEvents =
-    project?.events && project.events.length > 0
-      ? project.events.map((ev) => ({
-          title: ev.title,
-          time: `${ev.date ? ev.date + ' • ' : ''}${ev.time}`,
-          desc: ev.subtitle || ev.dressCodeDetails || ev.venue,
-        }))
-      : t.events;
-
   return (
     <div
       className={`fixed inset-0 w-full h-full overflow-hidden bg-[#1A2218] select-none ${
@@ -653,6 +962,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           onCurtainsOpen={handleCurtainsOpen}
           onOpenComplete={handleEnvelopeComplete}
           isArabic={isRTL}
+          language={currentLang}
           onToggleLanguage={() =>
             setCurrentLang(currentLang === 'en' ? 'hi' : 'en')
           }
@@ -695,7 +1005,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     setCurrentLang(lng);
                     setLangMenuOpen(false);
                   }}
-                  className={`px-3 py-1 rounded-xl text-xs font-['Cinzel',serif] tracking-wider text-left transition-all ${
+                  className={`px-3.5 py-1.5 rounded-xl text-sm font-['Cinzel',serif] tracking-wider text-left transition-all ${
                     currentLang === lng
                       ? 'bg-[#273822] text-[#FAF8F5] font-bold shadow-sm'
                       : 'text-[#273822] hover:bg-[#DFC07C]/25'
@@ -711,10 +1021,10 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
         <button
           onClick={() => setLangMenuOpen(!langMenuOpen)}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md text-[11px] font-['Cinzel',serif] tracking-wider uppercase text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer font-bold"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md text-xs sm:text-sm font-['Cinzel',serif] tracking-wider uppercase text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer font-bold"
           style={deepTextShadow}
         >
-          <Globe className="w-3.5 h-3.5 text-[#B59A57]" />
+          <Globe className="w-4 h-4 text-[#B59A57]" />
           <span>{t.langName}</span>
         </button>
       </div>
@@ -753,17 +1063,17 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 effect="typewriter"
                 speed={40}
                 showCursor={true}
-                className={`${fontHeading} text-xs sm:text-sm text-[#273822]`}
+                className={`${fontHeading} text-sm sm:text-base text-[#273822]`}
                 style={deepTextShadow}
               />
 
               {guestName && guestName !== 'Special Guest' && (
                 <div className="pt-1">
                   <span
-                    className={`inline-block px-3 py-1 rounded-full bg-white/70 backdrop-blur-sm border border-[#B59A57]/50 ${fontSubHeading} text-[10px] sm:text-[11px] text-[#785B24]`}
+                    className={`inline-block px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-[#B59A57]/50 ${fontSubHeading} text-xs sm:text-sm text-[#785B24] font-bold`}
                     style={deepTextShadow}
                   >
-                    {t.cordiallyInviting}: {guestName}
+                    {t.cordiallyInviting}: {localizedGuestName}
                   </span>
                 </div>
               )}
@@ -798,14 +1108,14 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     text={t.groomParentage}
                     effect="shimmer-wave"
                     delay={120}
-                    className="font-bold leading-tight"
+                    className="font-bold leading-tight text-sm sm:text-base"
                     style={deepTextShadow}
                   />
                   <DynamicTextEffects
                     text={t.groomTitle}
                     effect="shimmer-wave"
                     delay={200}
-                    className="italic text-[#785B24] text-[10px] sm:text-[11px] font-bold"
+                    className="italic text-[#785B24] text-xs sm:text-sm font-bold"
                     style={deepTextShadow}
                   />
                 </div>
@@ -815,14 +1125,14 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     text={t.brideParentage}
                     effect="shimmer-wave"
                     delay={120}
-                    className="font-bold leading-tight"
+                    className="font-bold leading-tight text-sm sm:text-base"
                     style={deepTextShadow}
                   />
                   <DynamicTextEffects
                     text={t.brideTitle}
                     effect="shimmer-wave"
                     delay={200}
-                    className="italic text-[#785B24] text-[10px] sm:text-[11px] font-bold"
+                    className="italic text-[#785B24] text-xs sm:text-sm font-bold"
                     style={deepTextShadow}
                   />
                 </div>
@@ -840,7 +1150,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.scrollDown}
                 effect="typewriter"
                 speed={50}
-                className={`${fontSubHeading} text-[10px] text-[#273822]`}
+                className={`${fontSubHeading} text-xs sm:text-sm text-[#273822] font-bold`}
                 style={deepTextShadow}
               />
               <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
@@ -899,7 +1209,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   text={t.countdownTitle}
                   effect="pop-3d"
                   as="h3"
-                  className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
+                  className={`${fontScriptHeading} text-4xl sm:text-5xl text-[#1E2E1B]`}
                   style={deepTextShadow}
                 />
                 <div className="flex items-center justify-center gap-2 mt-1.5 opacity-90">
@@ -928,16 +1238,16 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     className="flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white/90 backdrop-blur-[3px] border border-[#DFC07C] shadow-md"
                   >
                     <span
-                      className="font-['Playfair_Display',serif] text-xl sm:text-2xl font-black text-[#273822]"
+                      className="font-['Playfair_Display',serif] text-2xl sm:text-3xl font-black text-[#273822]"
                       style={deepTextShadow}
                     >
-                      {String(item.value).padStart(2, '0')}
+                      {toLocalizedDigits(String(item.value).padStart(2, '0'), currentLang)}
                     </span>
                     <DynamicTextEffects
                       text={item.label}
                       effect="pop-3d"
                       as="span"
-                      className={`text-[9px] ${fontSubHeading} text-[#6B5A3E] font-bold mt-0.5`}
+                      className={`text-xs sm:text-sm ${fontSubHeading} text-[#6B5A3E] font-bold mt-0.5`}
                       style={deepTextShadow}
                     />
                   </div>
@@ -966,7 +1276,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.timelineTitle}
                 effect="scepter-slide"
                 as="h3"
-                className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
+                className={`${fontScriptHeading} text-4xl sm:text-5xl text-[#1E2E1B]`}
                 style={deepTextShadow}
               />
               <div className="flex items-center justify-center gap-2 mt-1.5 mb-8 opacity-90">
@@ -999,21 +1309,27 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       text={item.title}
                       effect="scepter-slide"
                       as="h4"
-                      className="font-['Playfair_Display',serif] text-base font-black text-[#1E2E1B]"
+                      className={`${
+                        isHindi
+                          ? 'font-devanagari-heading'
+                          : isNastaliq
+                          ? 'font-nastaliq'
+                          : "font-['Playfair_Display',serif]"
+                      } text-lg sm:text-xl font-black text-[#1E2E1B]`}
                       style={deepTextShadow}
                     />
                     <DynamicTextEffects
                       text={item.time}
                       effect="scepter-slide"
                       as="p"
-                      className={`${fontSubHeading} text-[11px] text-[#785B24] font-bold mt-0.5`}
+                      className={`${fontSubHeading} text-xs sm:text-sm text-[#785B24] font-bold mt-1`}
                       style={deepTextShadow}
                     />
                     <DynamicTextEffects
                       text={item.desc}
                       effect="scepter-slide"
                       as="p"
-                      className={`${fontBody} text-xs italic text-[#2C3827] mt-1 font-bold`}
+                      className={`${fontBody} text-sm sm:text-base italic text-[#2C3827] mt-1 font-bold leading-relaxed`}
                       style={deepTextShadow}
                     />
                   </motion.div>
@@ -1042,7 +1358,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.venueTitle}
                 effect="dome-rise"
                 as="h3"
-                className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
+                className={`${fontScriptHeading} text-4xl sm:text-5xl text-[#1E2E1B]`}
                 style={deepTextShadow}
               />
               <div className="flex items-center justify-center gap-2 mt-1.5 mb-4 opacity-90">
@@ -1055,14 +1371,20 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={effectiveVenueName}
                 effect="dome-rise"
                 as="h4"
-                className="font-['Playfair_Display',serif] text-lg font-black text-[#1E2E1B]"
+                className={`${
+                  isHindi
+                    ? 'font-devanagari-heading'
+                    : isNastaliq
+                    ? 'font-nastaliq'
+                    : "font-['Playfair_Display',serif]"
+                } text-xl sm:text-2xl font-black text-[#1E2E1B]`}
                 style={deepTextShadow}
               />
               <DynamicTextEffects
                 text={effectiveVenueCity}
                 effect="dome-rise"
                 as="p"
-                className={`${fontSubHeading} text-xs text-[#6B5A3E] font-bold mt-1`}
+                className={`${fontSubHeading} text-sm sm:text-base text-[#6B5A3E] font-bold mt-1.5`}
                 style={deepTextShadow}
               />
 
@@ -1075,10 +1397,10 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   href={effectiveMapsLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#FAF8F5] text-xs ${fontSubHeading} shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 cursor-pointer font-bold`}
+                  className={`inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#FAF8F5] text-sm ${fontSubHeading} shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 cursor-pointer font-bold`}
                   style={deepTextShadow}
                 >
-                  <Navigation className="w-3.5 h-3.5 text-[#E6D197]" />
+                  <Navigation className="w-4 h-4 text-[#E6D197]" />
                   <span>{t.viewMap}</span>
                 </a>
               </div>
@@ -1098,21 +1420,27 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   text={t.dressCodeTitle}
                   effect="dome-rise"
                   as="h4"
-                  className={`${fontScriptHeading} text-2xl text-[#1E2E1B]`}
+                  className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
                   style={deepTextShadow}
                 />
                 <DynamicTextEffects
                   text={t.dressCodeValue}
                   effect="dome-rise"
                   as="p"
-                  className="font-['Playfair_Display',serif] text-sm font-black text-[#273822] mt-0.5"
+                  className={`${
+                    isHindi
+                      ? 'font-devanagari-heading'
+                      : isNastaliq
+                      ? 'font-nastaliq'
+                      : "font-['Playfair_Display',serif]"
+                  } text-base sm:text-lg font-black text-[#273822] mt-1`}
                   style={deepTextShadow}
                 />
                 <DynamicTextEffects
                   text={t.dressCodeDesc}
                   effect="dome-rise"
                   as="p"
-                  className="font-['Cormorant_Garamond',serif] text-xs italic text-[#3A4A33] mt-0.5 font-bold"
+                  className={`${fontBody} text-sm sm:text-base italic text-[#3A4A33] mt-1 font-bold leading-relaxed`}
                   style={deepTextShadow}
                 />
               </motion.div>
@@ -1139,7 +1467,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.rsvpTitle}
                 effect="velvet-mist"
                 as="h3"
-                className={`${fontHeading} text-2xl text-[#1E2E1B]`}
+                className={`${fontHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
                 style={deepTextShadow}
               />
               <div className="flex items-center justify-center gap-2 mt-1.5 mb-3 opacity-90">
@@ -1152,7 +1480,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 text={t.rsvpIntro}
                 effect="velvet-mist"
                 as="p"
-                className={`${fontBody} text-xs sm:text-sm italic text-[#273822] max-w-[280px] mx-auto mb-6 font-bold`}
+                className={`${fontBody} text-sm sm:text-base italic text-[#273822] max-w-[320px] mx-auto mb-6 font-bold leading-relaxed`}
                 style={deepTextShadow}
               />
 
@@ -1166,13 +1494,13 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
                   <h4
-                    className="font-['Playfair_Display',serif] text-lg font-black text-[#1E2E1B]"
+                    className="font-['Playfair_Display',serif] text-xl sm:text-2xl font-black text-[#1E2E1B]"
                     style={deepTextShadow}
                   >
                     {t.rsvpSuccessTitle}
                   </h4>
                   <p
-                    className="font-['Cormorant_Garamond',serif] text-xs italic text-[#3A4A33] mt-1 max-w-[240px] font-bold"
+                    className="font-['Cormorant_Garamond',serif] text-sm sm:text-base italic text-[#3A4A33] mt-1 max-w-[280px] font-bold"
                     style={deepTextShadow}
                   >
                     {t.rsvpSuccessDesc}
@@ -1181,13 +1509,13 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               ) : (
                 <form
                   onSubmit={handleRsvpSubmit}
-                  className={`space-y-3 text-left max-w-[320px] mx-auto ${
+                  className={`space-y-3.5 text-left max-w-[320px] mx-auto ${
                     isRTL ? 'text-right' : ''
                   }`}
                 >
                   <div>
                     <label
-                      className={`block text-[10px] ${fontSubHeading} text-[#273822] mb-1`}
+                      className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 font-bold`}
                       style={deepTextShadow}
                     >
                       {t.labelName}
@@ -1198,13 +1526,13 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       value={rsvpName}
                       onChange={(e) => setRsvpName(e.target.value)}
                       placeholder={t.placeholderName}
-                      className="w-full px-3.5 py-2 rounded-xl bg-white/90 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
                     />
                   </div>
 
                   <div>
                     <label
-                      className={`block text-[10px] ${fontSubHeading} text-[#273822] mb-1`}
+                      className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 font-bold`}
                       style={deepTextShadow}
                     >
                       {t.labelEmail}
@@ -1215,7 +1543,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       value={rsvpEmail}
                       onChange={(e) => setRsvpEmail(e.target.value)}
                       placeholder="name@example.com"
-                      className="w-full px-3.5 py-2 rounded-xl bg-white/90 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
                     />
                   </div>
 
@@ -1223,7 +1551,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   <div className="grid grid-cols-2 gap-2.5">
                     <div>
                       <label
-                        className={`block text-[10px] ${fontSubHeading} text-[#273822] mb-1 truncate`}
+                        className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 truncate font-bold`}
                         style={deepTextShadow}
                       >
                         {t.labelAttend}
@@ -1232,7 +1560,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                         required
                         value={rsvpAttending}
                         onChange={(e) => setRsvpAttending(e.target.value)}
-                        className="w-full px-2.5 py-2 rounded-xl bg-white/90 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                        className="w-full px-3 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
                       >
                         <option value="">{t.optionSelect}</option>
                         <option value="yes">{t.optionYes}</option>
@@ -1242,7 +1570,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
                     <div>
                       <label
-                        className={`block text-[10px] ${fontSubHeading} text-[#273822] mb-1 truncate`}
+                        className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 truncate font-bold`}
                         style={deepTextShadow}
                       >
                         {t.labelGuests}
@@ -1250,19 +1578,19 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       <select
                         value={rsvpGuests}
                         onChange={(e) => setRsvpGuests(e.target.value)}
-                        className="w-full px-2.5 py-2 rounded-xl bg-white/90 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
+                        className="w-full px-3 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm"
                       >
-                        <option value="1">1 {t.guestUnit}</option>
-                        <option value="2">2 {t.guestUnit}</option>
-                        <option value="3">3 {t.guestUnit}</option>
-                        <option value="4">4+ {t.guestUnit}</option>
+                        <option value="1">{toLocalizedDigits(1, currentLang)} {t.guestUnit}</option>
+                        <option value="2">{toLocalizedDigits(2, currentLang)} {t.guestUnit}</option>
+                        <option value="3">{toLocalizedDigits(3, currentLang)} {t.guestUnit}</option>
+                        <option value="4">{toLocalizedDigits(4, currentLang)}+ {t.guestUnit}</option>
                       </select>
                     </div>
                   </div>
 
                   <div>
                     <label
-                      className={`block text-[10px] ${fontSubHeading} text-[#273822] mb-1`}
+                      className={`block text-xs sm:text-sm ${fontSubHeading} text-[#273822] mb-1 font-bold`}
                       style={deepTextShadow}
                     >
                       {t.labelMessage}
@@ -1272,21 +1600,21 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       value={rsvpMessage}
                       onChange={(e) => setRsvpMessage(e.target.value)}
                       placeholder={t.placeholderMessage}
-                      className="w-full px-3.5 py-2 rounded-xl bg-white/90 border border-[#DFC07C] text-xs font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm resize-none"
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/90 border border-[#DFC07C] text-sm font-['Cormorant_Garamond',serif] text-[#1E2E1B] font-bold placeholder-[#788874] focus:outline-none focus:ring-2 focus:ring-[#273822] shadow-sm resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={rsvpLoading}
-                    className={`w-full py-3 rounded-full bg-[#273822] text-[#FAF8F5] text-xs ${fontSubHeading} shadow-lg hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 flex items-center justify-center gap-2 mt-2 cursor-pointer`}
+                    className={`w-full py-3.5 rounded-full bg-[#273822] text-[#FAF8F5] text-sm sm:text-base ${fontSubHeading} shadow-lg hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 flex items-center justify-center gap-2 mt-2 cursor-pointer font-bold`}
                     style={deepTextShadow}
                   >
                     {rsvpLoading ? (
                       <span className="animate-pulse">{t.sending}</span>
                     ) : (
                       <>
-                        <PartyPopper className="w-3.5 h-3.5 text-[#E6D197]" />
+                        <PartyPopper className="w-4 h-4 text-[#E6D197]" />
                         <span className="font-bold">{t.submitBtn}</span>
                       </>
                     )}
@@ -1302,11 +1630,11 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               text={`${t.footerBlessing}: ${effectiveGroomName} & ${effectiveBrideName}`}
               effect="velvet-mist"
               as="p"
-              className={`${fontScriptHeading} text-2xl sm:text-3xl text-[#1E2E1B]`}
+              className={`${fontScriptHeading} text-3xl sm:text-4xl text-[#1E2E1B]`}
               style={deepTextShadow}
             />
             <div className="flex items-center justify-center gap-1.5 mt-2 text-[#7C9172]">
-              <span className="text-xs">♥</span>
+              <span className="text-sm">♥</span>
             </div>
           </div>
         </div>

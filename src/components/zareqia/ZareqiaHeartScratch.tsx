@@ -278,9 +278,9 @@ END:VCALENDAR`;
       className="flex flex-col items-center justify-center py-6 px-4 text-center select-none"
     >
       {/* Welcome Blessing Intro Text (Matching Video f_0025.jpg) */}
-      <div className="max-w-[320px] mx-auto px-2 mb-4 text-center">
+      <div className="max-w-[340px] mx-auto px-2 mb-4 text-center">
         <p
-          className={`text-[15px] sm:text-[16px] leading-relaxed text-[#2C3827] ${
+          className={`text-base sm:text-lg leading-relaxed text-[#2C3827] ${
             currentLang === 'hi'
               ? 'font-devanagari tracking-normal'
               : currentLang === 'ur'
@@ -304,7 +304,7 @@ END:VCALENDAR`;
       {/* Section Title */}
       <div className="mb-4 transition-all duration-700">
         <h3
-          className={`text-3xl md:text-4xl text-[#1E2E1B] ${
+          className={`text-4xl md:text-5xl text-[#1E2E1B] ${
             currentLang === 'hi'
               ? 'font-devanagari-heading tracking-normal font-bold'
               : currentLang === 'ur'
@@ -367,7 +367,7 @@ END:VCALENDAR`;
           {/* Text Content Inside Heart (Matching exact video lines in f_0035.jpg) */}
           <div className="relative z-10 flex flex-col items-center px-4 pt-4">
             <span
-              className={`text-lg text-[#5A4C32] mb-0.5 ${
+              className={`text-xl sm:text-2xl text-[#5A4C32] mb-0.5 ${
                 currentLang === 'hi'
                   ? 'font-devanagari-heading tracking-normal font-bold'
                   : currentLang === 'ur'
@@ -384,7 +384,7 @@ END:VCALENDAR`;
                 : "You're Invited!"}
             </span>
             <span
-              className={`text-xl md:text-2xl font-bold text-[#242A20] ${
+              className={`text-2xl md:text-3xl font-black text-[#242A20] ${
                 currentLang === 'hi'
                   ? 'font-devanagari-heading tracking-normal font-black'
                   : currentLang === 'ur'
@@ -399,7 +399,7 @@ END:VCALENDAR`;
                 : weddingDate}
             </span>
             <span
-              className={`text-sm text-[#4E5C46] font-medium mt-0.5 ${
+              className={`text-base sm:text-lg font-bold text-[#4E5C46] mt-0.5 ${
                 currentLang === 'hi'
                   ? 'font-devanagari tracking-normal font-bold'
                   : currentLang === 'ur'
@@ -416,7 +416,7 @@ END:VCALENDAR`;
                 : weddingDay}
             </span>
             <span
-              className={`text-[11px] text-[#685A42] font-semibold mt-0.5 ${
+              className={`text-xs sm:text-sm text-[#685A42] font-bold mt-0.5 ${
                 currentLang === 'hi'
                   ? 'font-devanagari tracking-normal font-bold'
                   : currentLang === 'ur'
@@ -460,7 +460,7 @@ END:VCALENDAR`;
       <div className="mt-4 transition-all duration-700">
         <button
           onClick={handleSaveTheDate}
-          className="group relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#273822] text-[#FAF8F5] text-xs font-['Cinzel',serif] tracking-widest uppercase shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/30"
+          className="group relative inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#273822] text-[#FAF8F5] text-sm font-['Cinzel',serif] tracking-wider uppercase shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/30 font-bold"
         >
           {calendarSaved ? (
             <>

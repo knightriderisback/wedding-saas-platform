@@ -9,6 +9,7 @@ import confetti from 'canvas-confetti';
 interface RoyalRealisticEnvelopeProps {
   onCurtainsOpen?: () => void;
   onOpenComplete?: () => void;
+  language?: string;
   isArabic?: boolean;
   onToggleLanguage?: () => void;
   isAudioPlaying?: boolean;
@@ -18,6 +19,7 @@ interface RoyalRealisticEnvelopeProps {
 export const RoyalRealisticEnvelope: React.FC<RoyalRealisticEnvelopeProps> = ({
   onCurtainsOpen,
   onOpenComplete,
+  language = 'en',
   isArabic = false,
   onToggleLanguage,
   isAudioPlaying = false,
@@ -104,10 +106,24 @@ export const RoyalRealisticEnvelope: React.FC<RoyalRealisticEnvelopeProps> = ({
           transition={{ duration: 0.8, delay: 0.3 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
         >
-          <div className="px-5 py-2.5 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#DFC07C] shadow-[0_8px_25px_rgba(0,0,0,0.35)] flex items-center gap-2 text-[#273822] animate-bounce">
+          <div className="px-6 py-3 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#DFC07C] shadow-[0_8px_25px_rgba(0,0,0,0.35)] flex items-center gap-2.5 text-[#273822] animate-bounce">
             <Sparkles className="w-4 h-4 text-[#B59A57] animate-pulse" />
-            <span className="font-['Cinzel',serif] text-xs uppercase tracking-widest font-black">
-              {isArabic ? 'کھولنے کے لیے کہیں بھی کلک کریں' : 'Tap Anywhere to Open'}
+            <span
+              className={`text-xs sm:text-sm font-black tracking-wider ${
+                language === 'hi'
+                  ? 'font-devanagari-heading tracking-normal font-bold'
+                  : isArabic || language === 'ur'
+                  ? 'font-nastaliq tracking-normal'
+                  : "font-['Cinzel',serif] uppercase tracking-widest"
+              }`}
+            >
+              {language === 'hi'
+                ? 'खोलने के लिए कहीं भी टैप करें'
+                : language === 'ur' || isArabic
+                ? 'کھولنے کے لیے کہیں بھی کلک کریں'
+                : language === 'hinglish'
+                ? 'Kholne Ke Liye Kahin Bhi Tap Karein'
+                : 'Tap Anywhere to Open'}
             </span>
           </div>
         </motion.div>
