@@ -1007,6 +1007,10 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           }
           isAudioPlaying={isAudioPlaying}
           onToggleAudio={toggleAudio}
+          partner1={project?.partner1 || 'Gourav'}
+          partner2={project?.partner2 || 'Priya'}
+          guestName={guestName}
+          weddingDate={getFormattedWeddingDate(project?.weddingDate || '2026-12-12', currentLang)}
         />
       )}
 
