@@ -347,6 +347,7 @@ END:VCALENDAR`;
             clipPath:
               'path("M140,240 C40,160 0,110 0,60 C0,25 25,0 65,0 C95,0 125,25 140,48 C155,25 185,0 215,0 C255,0 280,25 280,60 C280,110 240,160 140,240 Z")',
             background: 'radial-gradient(circle, #FCFAF6 0%, #F5F1E8 100%)',
+            overflow: 'hidden',
           }}
         >
           {/* Delicate Thin Heart Contour Border Matching Video f_0035.jpg */}
@@ -364,15 +365,15 @@ END:VCALENDAR`;
             />
           </svg>
 
-          {/* Text Content Inside Heart (Matching exact video lines in f_0035.jpg) */}
-          <div className="relative z-10 flex flex-col items-center px-4 pt-4">
+          {/* Text Content Inside Heart (Properly wrapped and arranged completely inside the heart's wide belly) */}
+          <div className="absolute inset-x-0 top-[48px] bottom-[50px] flex flex-col items-center justify-center max-w-[190px] mx-auto px-2 text-center z-10 overflow-hidden select-none">
             <span
-              className={`text-xl sm:text-2xl text-[#5A4C32] mb-0.5 ${
+              className={`text-xs sm:text-sm text-[#785B24] font-bold leading-tight break-words [overflow-wrap:anywhere] max-w-full text-center mb-0.5 ${
                 currentLang === 'hi'
-                  ? 'font-devanagari-heading tracking-normal font-bold'
+                  ? 'font-devanagari-heading tracking-normal'
                   : currentLang === 'ur'
                   ? 'font-nastaliq tracking-normal'
-                  : "font-['Alex_Brush','Pinyon_Script',cursive]"
+                  : "font-['Alex_Brush','Pinyon_Script',cursive] text-base sm:text-lg"
               }`}
             >
               {currentLang === 'hi'
@@ -384,9 +385,9 @@ END:VCALENDAR`;
                 : "You're Invited!"}
             </span>
             <span
-              className={`text-2xl md:text-3xl font-black text-[#242A20] ${
+              className={`text-base sm:text-lg md:text-xl font-black text-[#1E2E1B] leading-tight break-words [overflow-wrap:anywhere] max-w-full text-center my-0.5 ${
                 currentLang === 'hi'
-                  ? 'font-devanagari-heading tracking-normal font-black'
+                  ? 'font-devanagari-heading tracking-normal'
                   : currentLang === 'ur'
                   ? 'font-nastaliq tracking-normal'
                   : "font-['Playfair_Display',serif] tracking-tight"
@@ -399,9 +400,9 @@ END:VCALENDAR`;
                 : weddingDate}
             </span>
             <span
-              className={`text-base sm:text-lg font-bold text-[#4E5C46] mt-0.5 ${
+              className={`text-xs font-bold text-[#4E5C46] leading-tight break-words [overflow-wrap:anywhere] max-w-full text-center ${
                 currentLang === 'hi'
-                  ? 'font-devanagari tracking-normal font-bold'
+                  ? 'font-devanagari tracking-normal'
                   : currentLang === 'ur'
                   ? 'font-nastaliq tracking-normal'
                   : "font-['Cormorant_Garamond',serif]"
@@ -416,9 +417,9 @@ END:VCALENDAR`;
                 : weddingDay}
             </span>
             <span
-              className={`text-xs sm:text-sm text-[#685A42] font-bold mt-0.5 ${
+              className={`text-[10px] sm:text-xs text-[#685A42] font-semibold leading-tight break-words [overflow-wrap:anywhere] max-w-full text-center mt-0.5 ${
                 currentLang === 'hi'
-                  ? 'font-devanagari tracking-normal font-bold'
+                  ? 'font-devanagari tracking-normal'
                   : currentLang === 'ur'
                   ? 'font-nastaliq tracking-normal'
                   : "font-['Cinzel',serif] tracking-wider"

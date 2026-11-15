@@ -39,7 +39,17 @@ import {
   Layers,
   FileSpreadsheet,
   Sliders,
+  LogOut,
+  Key,
+  Save,
+  Lock,
 } from 'lucide-react';
+import {
+  isAdminLoggedIn,
+  logoutAdmin,
+  getAdminCredentials,
+  updateAdminCredentials,
+} from '@/lib/auth';
 
 export default function SuperAdminPage() {
   const router = useRouter();
@@ -65,6 +75,17 @@ export default function SuperAdminPage() {
   const [clientPhone, setClientPhone] = useState('+919820012345');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Admin credential management state
+  const [adminEmailInput, setAdminEmailInput] = useState('');
+  const [adminPasswordInput, setAdminPasswordInput] = useState('');
+  const [adminConfirmPasswordInput, setAdminConfirmPasswordInput] = useState('');
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(null), 3000);
+  };
+
   const loadProjects = async () => {
     setLoading(true);
     const data = await getAllProjects();
@@ -73,8 +94,15 @@ export default function SuperAdminPage() {
   };
 
   useEffect(() => {
+    // Auth Guard: check if admin is logged in
+    if (!isAdminLoggedIn()) {
+      router.push('/admin/login');
+      return;
+    }
+    const currentCreds = getAdminCredentials();
+    setAdminEmailInput(currentCreds.email);
     loadProjects();
-  }, []);
+  }, [router]);
 
   const handlePartnerChange = (p1: string, p2: string) => {
     setPartner1(p1);
@@ -369,6 +397,14 @@ export default function SuperAdminPage() {
       {/* 3D Floating Glass Bubbles & Refraction Orbs */}
       <AcrylicBackgroundOrbs variant="multi" />
 
+      {/* Toast Notification */}
+      {toastMsg && (
+        <div className="fixed top-3 right-3 z-50 card-pop3d-emerald text-[#193822] px-4 py-2.5 rounded-2xl shadow-xl text-xs font-portal font-bold flex items-center gap-2 animate-in fade-in">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          <span>{toastMsg}</span>
+        </div>
+      )}
+
       {/* ULTRA-SLIM STICKY MERCHANT HEADER (Rajhara Express Pattern in Luxury Soft Gold/Alabaster) */}
       <header className="bg-white/95 backdrop-blur-md text-[#5C4303] sticky top-0 z-30 border-b border-[#E8DFC8] shadow-xs">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2">
@@ -394,7 +430,7 @@ export default function SuperAdminPage() {
             </div>
           </div>
 
-          {/* Right: Browse Suites Link, Tiny '+' Add Project & Mode Indicator */}
+          {/* Right: Browse Suites Link, Tiny '+' Add Project, Mode Indicator & Logout */}
           <div className="flex items-center gap-1.5">
             <Link
               href="/templates"
@@ -419,50 +455,62 @@ export default function SuperAdminPage() {
 
             <div className="p-1.5 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-mono font-bold flex items-center gap-1 border border-emerald-300 shadow-2xs">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span className="hidden md:inline text-[10px]">Super Admin Active</span>
+              <span className="hidden md:inline text-[10px]">Super Admin</span>
             </div>
+
+            <button
+              onClick={() => {
+                logoutAdmin();
+                router.push('/admin/login');
+              }}
+              className="btn-slim-outline text-xs font-bold text-[#6E121E] hover:bg-rose-50 flex items-center gap-1"
+              title="Logout from Admin Panel"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Logout</span>
+            </button>
           </div>
         </div>
       </header>
 
       {/* Main Content Area */}
       <main className="max-w-7xl mx-auto px-2.5 sm:px-4 py-3 space-y-3">
-        {/* Dynamic Section Heading Banner with Royal Theme (Rajhara Express pattern) */}
+        {/* Dynamic Section Heading Banner with Royal Theme (Rajhara Express pattern - multi-line wrapped) */}
         <div
-          className={`bg-gradient-to-r ${currentTab.bgGradient} text-white rounded-2xl p-3 sm:p-4 shadow-md ${currentTab.shadowGlow} border ${currentTab.border} flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all duration-300`}
+          className={`bg-gradient-to-r ${currentTab.bgGradient} text-white rounded-2xl p-4 sm:p-5 shadow-md ${currentTab.shadowGlow} border ${currentTab.border} flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all duration-300`}
         >
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
             <div
-              className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl ${currentTab.iconBg} ${currentTab.iconColor} flex items-center justify-center shrink-0 shadow-md font-black`}
+              className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl ${currentTab.iconBg} ${currentTab.iconColor} flex items-center justify-center shrink-0 shadow-md font-black mt-0.5 sm:mt-0`}
             >
               <CurrentTabIcon className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap mb-1">
                 <span
                   className={`text-[9px] sm:text-[10px] uppercase font-bold font-portal ${currentTab.breadcrumbColor} tracking-wider`}
                 >
                   Super Admin / {currentTab.shortTitle}
                 </span>
                 <span
-                  className={`text-[9px] ${currentTab.badgeBg} ${currentTab.badgeText} border ${currentTab.badgeBorder} px-2 py-0.5 rounded-full font-bold font-mono`}
+                  className={`text-[9px] ${currentTab.badgeBg} ${currentTab.badgeText} border ${currentTab.badgeBorder} px-2.5 py-0.5 rounded-full font-bold font-mono shadow-2xs`}
                 >
                   {currentTab.badge}
                 </span>
               </div>
-              <h1 className="text-sm sm:text-base font-cinzel font-black text-white tracking-tight leading-tight mt-0.5 truncate">
+              <h1 className="text-base sm:text-lg font-cinzel font-black text-white tracking-tight leading-snug break-words [overflow-wrap:anywhere] whitespace-normal">
                 {currentTab.title}
               </h1>
-              <p className={`text-[10px] sm:text-[11px] ${currentTab.subtitleColor} mt-0.5 leading-snug font-portal`}>
+              <p className={`text-xs ${currentTab.subtitleColor} mt-1 leading-relaxed font-portal break-words [overflow-wrap:anywhere] whitespace-normal`}>
                 {currentTab.subtitle}
               </p>
             </div>
           </div>
 
           <div
-            className={`flex items-center gap-2 self-start sm:self-auto shrink-0 ${currentTab.pillBg} px-3 py-1.5 rounded-xl border ${currentTab.pillBorder} text-[10px] ${currentTab.pillText}`}
+            className={`flex items-center gap-2 self-start sm:self-auto shrink-0 ${currentTab.pillBg} px-3 py-1.5 rounded-xl border ${currentTab.pillBorder} text-[10px] ${currentTab.pillText} shadow-2xs`}
           >
-            <span>Active Option:</span>
+            <span>Active Section:</span>
             <span className={`font-black ${currentTab.highlightText} bg-black/40 px-2 py-0.5 rounded-md`}>
               {currentTab.shortTitle}
             </span>
@@ -970,30 +1018,31 @@ export default function SuperAdminPage() {
               </div>
             </div>
 
-            <div className="acrylic-glass card-3d p-4 rounded-2xl space-y-3">
-              <h4 className="font-cinzel text-xs font-bold uppercase text-[#7D5F04]">
-                Recent Invoices & Retainers
+            <div className="card-pop3d-amber p-4 sm:p-5 rounded-2xl space-y-3">
+              <h4 className="font-portal text-xs font-bold uppercase text-[#5C4303] flex items-center gap-1.5">
+                <IndianRupee className="w-4 h-4 text-[#AA820A]" />
+                <span>Recent Invoices & Retainers 💼</span>
               </h4>
-              <div className="space-y-2 text-xs">
-                <div className="flex items-center justify-between p-2.5 rounded-xl bg-white/80 border border-[#E8DFC8]">
+              <div className="space-y-2.5 text-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl card-pop3d-emerald gap-2">
                   <div>
-                    <div className="font-bold text-[#2C2218]">The Oberoi Udaivilas Celebration (Rohit & Priya)</div>
-                    <div className="text-[10px] text-neutral-500">Royal Palace Bespoke Suite • Udaipur</div>
+                    <div className="font-bold text-[#193822]">The Oberoi Udaivilas Celebration (Rohit & Priya)</div>
+                    <div className="text-[10px] text-[#234E30]">Royal Palace Bespoke Suite • Udaipur</div>
                   </div>
-                  <div className="text-right">
+                  <div className="sm:text-right">
                     <div className="font-mono font-bold text-emerald-800">₹99,999 Paid</div>
-                    <span className="text-[9px] text-neutral-400">INV-2026-001</span>
+                    <span className="text-[9px] text-[#234E30] font-mono">INV-2026-001</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-2.5 rounded-xl bg-white/80 border border-[#E8DFC8]">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl card-pop3d-azure gap-2">
                   <div>
-                    <div className="font-bold text-[#2C2218]">Taj Lake Palace Union (Aditya & Ananya)</div>
-                    <div className="text-[10px] text-neutral-500">Pressed Meadow Couture • Lake Pichola</div>
+                    <div className="font-bold text-[#142F4C]">Taj Lake Palace Union (Aditya & Ananya)</div>
+                    <div className="text-[10px] text-[#1E3F66]">Pressed Meadow Couture • Lake Pichola</div>
                   </div>
-                  <div className="text-right">
+                  <div className="sm:text-right">
                     <div className="font-mono font-bold text-emerald-800">₹85,000 Paid</div>
-                    <span className="text-[9px] text-neutral-400">INV-2026-002</span>
+                    <span className="text-[9px] text-[#1E3F66] font-mono">INV-2026-002</span>
                   </div>
                 </div>
               </div>
@@ -1003,34 +1052,140 @@ export default function SuperAdminPage() {
 
         {/* TAB 6: SECURITY & SETTINGS */}
         {activeTab === 'settings' && (
-          <div className="acrylic-azure card-3d p-4 sm:p-5 rounded-2xl space-y-4">
-            <h4 className="font-cinzel text-xs font-bold uppercase text-[#242A36] flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-[#AA820A]" /> Platform Health & Infrastructure
-            </h4>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <div className="p-3.5 rounded-xl bg-white/80 border border-[#E8DFC8] space-y-1">
-                <span className="text-[10px] font-cinzel uppercase font-bold text-[#7D5F04]">Database Storage</span>
-                <p className="font-semibold text-[#2C2218]">Firebase Firestore & Local Fallback</p>
-                <p className="text-[11px] text-neutral-500">Multi-region synchronised with offline cache.</p>
+          <div className="space-y-4">
+            {/* 1. ADMIN CREDENTIAL & PASSWORD MANAGER CARD */}
+            <div className="card-pop3d-amber p-4 sm:p-6 rounded-2xl space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#AA820A] to-[#FAF4E3] flex items-center justify-center text-[#5C4303] shadow-xs">
+                    <Key className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-portal text-xs sm:text-sm font-bold uppercase text-[#5C4303]">
+                      Admin Security & Credential Manager 🔐
+                    </h4>
+                    <p className="text-[11px] text-[#785B24]">
+                      Update your administrator username, email, and master secret password.
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 px-2.5 py-1 rounded-full">
+                  Protected
+                </span>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-white/80 border border-[#E8DFC8] space-y-1">
-                <span className="text-[10px] font-cinzel uppercase font-bold text-[#7D5F04]">Audio Synthesis Engine</span>
-                <p className="font-semibold text-[#2C2218]">Web Audio API Sitar & Bansuri Synthesizer</p>
-                <p className="text-[11px] text-neutral-500">Real-time dynamic drone, chime & wax crack sound.</p>
-              </div>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!adminEmailInput.trim() || !adminPasswordInput.trim()) {
+                    showToast('Please enter both username/email and new password.');
+                    return;
+                  }
+                  if (adminPasswordInput !== adminConfirmPasswordInput) {
+                    showToast('New passwords do not match. Please re-enter.');
+                    return;
+                  }
+                  const success = updateAdminCredentials(adminEmailInput, adminPasswordInput);
+                  if (success) {
+                    showToast('Admin Credentials successfully updated! ✅');
+                    setAdminPasswordInput('');
+                    setAdminConfirmPasswordInput('');
+                  } else {
+                    showToast('Failed to update credentials.');
+                  }
+                }}
+                className="space-y-3 pt-2 text-xs"
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1">
+                      Admin Username or Email
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={adminEmailInput}
+                      onChange={(e) => setAdminEmailInput(e.target.value)}
+                      placeholder="e.g. admin@royalvivah.com"
+                      className="w-full px-3 py-2 rounded-xl border border-[#AA820A]/30 bg-white/90 text-[#5C4303] focus:outline-none focus:border-[#AA820A]"
+                    />
+                  </div>
 
-              <div className="p-3.5 rounded-xl bg-white/80 border border-[#E8DFC8] space-y-1">
-                <span className="text-[10px] font-cinzel uppercase font-bold text-[#7D5F04]">WhatsApp Cloud Gateway</span>
-                <p className="font-semibold text-emerald-700">1-Click Direct WhatsApp API (wa.me)</p>
-                <p className="text-[11px] text-neutral-500">Auto-formatted invitation cards with instant status update.</p>
-              </div>
+                  <div>
+                    <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1">
+                      New Secret Password
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      value={adminPasswordInput}
+                      onChange={(e) => setAdminPasswordInput(e.target.value)}
+                      placeholder="••••••••••••"
+                      className="w-full px-3 py-2 rounded-xl border border-[#AA820A]/30 bg-white/90 text-[#5C4303] focus:outline-none focus:border-[#AA820A]"
+                    />
+                  </div>
 
-              <div className="p-3.5 rounded-xl bg-white/80 border border-[#E8DFC8] space-y-1">
-                <span className="text-[10px] font-cinzel uppercase font-bold text-[#7D5F04]">PDF Export Module</span>
-                <p className="font-semibold text-[#2C2218]">jsPDF Royal Gold Document Engine</p>
-                <p className="text-[11px] text-neutral-500">1-Click printable DJ setlist generator with phone numbers.</p>
+                  <div>
+                    <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1">
+                      Confirm New Password
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      value={adminConfirmPasswordInput}
+                      onChange={(e) => setAdminConfirmPasswordInput(e.target.value)}
+                      placeholder="••••••••••••"
+                      className="w-full px-3 py-2 rounded-xl border border-[#AA820A]/30 bg-white/90 text-[#5C4303] focus:outline-none focus:border-[#AA820A]"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-2 flex items-center justify-between">
+                  <p className="text-[10px] text-[#785B24]">
+                    Changes will be saved securely to your session and browser store.
+                  </p>
+                  <button
+                    type="submit"
+                    className="btn-slim-gold text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>Save New Credentials</span>
+                    <span>✨</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* 2. PLATFORM HEALTH & INFRASTRUCTURE 3D CARDS */}
+            <div className="card-pop3d-azure p-4 sm:p-5 rounded-2xl space-y-4">
+              <h4 className="font-portal text-xs font-bold uppercase text-[#142F4C] flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-[#AA820A]" /> Platform Health & Infrastructure 🌐
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="card-pop3d-amber p-3.5 rounded-xl space-y-1">
+                  <span className="text-[10px] font-portal uppercase font-bold text-[#785B24]">Database Storage</span>
+                  <p className="font-semibold text-[#5C4303]">Firebase Firestore & Local Fallback</p>
+                  <p className="text-[11px] text-[#785B24]">Multi-region synchronised with offline cache.</p>
+                </div>
+
+                <div className="card-pop3d-amethyst p-3.5 rounded-xl space-y-1">
+                  <span className="text-[10px] font-portal uppercase font-bold text-[#431E54]">Audio Synthesis Engine</span>
+                  <p className="font-semibold text-[#431E54]">Web Audio API Sitar & Bansuri Synthesizer</p>
+                  <p className="text-[11px] text-[#6B3B82]">Real-time dynamic drone, chime & wax crack sound.</p>
+                </div>
+
+                <div className="card-pop3d-emerald p-3.5 rounded-xl space-y-1">
+                  <span className="text-[10px] font-portal uppercase font-bold text-[#193822]">WhatsApp Cloud Gateway</span>
+                  <p className="font-semibold text-[#193822]">1-Click Direct WhatsApp API (wa.me)</p>
+                  <p className="text-[11px] text-[#234E30]">Auto-formatted invitation cards with instant status update.</p>
+                </div>
+
+                <div className="card-pop3d-azure p-3.5 rounded-xl space-y-1">
+                  <span className="text-[10px] font-portal uppercase font-bold text-[#142F4C]">PDF Export Module</span>
+                  <p className="font-semibold text-[#142F4C]">jsPDF Royal Gold Document Engine</p>
+                  <p className="text-[11px] text-[#1E3F66]">1-Click printable DJ setlist generator with phone numbers.</p>
+                </div>
               </div>
             </div>
           </div>

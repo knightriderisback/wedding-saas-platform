@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef, Suspense } from 'react';
 import Link from 'next/link';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import {
   WeddingProject,
   GuestContact,
@@ -23,6 +23,12 @@ import { defaultWeddingProject } from '@/lib/mockData';
 import { TEMPLATE_LIST } from '@/lib/pressedLoveTemplates';
 import { AcrylicBackgroundOrbs } from '@/components/common/AcrylicBackgroundOrbs';
 import { RoyalCustomizationStudio } from '@/components/portal/RoyalCustomizationStudio';
+import {
+  getLoggedInClient,
+  logoutClient,
+  getClientCredentials,
+  updateClientCredentials,
+} from '@/lib/auth';
 import {
   Crown,
   Sparkles,
@@ -56,6 +62,10 @@ import {
   Utensils,
   Share2,
   Search,
+  LogOut,
+  Key,
+  Save,
+  Lock,
 } from 'lucide-react';
 
 function ClientPortalContent() {
@@ -97,6 +107,11 @@ function ClientPortalContent() {
     setTimeout(() => setToastMsg(null), 3000);
   };
 
+  const router = useRouter();
+  const [clientTokenInput, setClientTokenInput] = useState('');
+  const [clientPasscodeInput, setClientPasscodeInput] = useState('');
+  const [clientConfirmPasscodeInput, setClientConfirmPasscodeInput] = useState('');
+
   const loadData = async () => {
     setLoading(true);
     const data = await getWeddingProject(clientId);
@@ -109,8 +124,18 @@ function ClientPortalContent() {
   };
 
   useEffect(() => {
+    // Auth Guard: if not super admin shadow mode, verify client session
+    if (!isShadowAdmin) {
+      const activeClient = getLoggedInClient();
+      if (!activeClient) {
+        router.push('/portal/login');
+        return;
+      }
+    }
+    const creds = getClientCredentials(clientId);
+    setClientTokenInput(creds.token);
     loadData();
-  }, [clientId]);
+  }, [clientId, isShadowAdmin, router]);
 
   // Aggregated Telemetry
   const guests = useMemo(() => project?.guests || [], [project]);
@@ -509,11 +534,23 @@ function ClientPortalContent() {
               <span className="hidden sm:inline">Add Guest</span>
             </button>
 
-            {isShadowAdmin && (
+            {isShadowAdmin ? (
               <div className="p-1.5 rounded-lg bg-amber-50 text-amber-900 text-xs font-mono font-bold flex items-center gap-1 border border-amber-300 shadow-2xs">
                 <Crown className="w-3.5 h-3.5 text-amber-600" />
                 <span className="hidden md:inline text-[10px]">Shadow Mode (Super Admin)</span>
               </div>
+            ) : (
+              <button
+                onClick={() => {
+                  logoutClient();
+                  router.push('/portal/login');
+                }}
+                className="btn-slim-outline text-[11px] font-bold text-[#6E121E] hover:bg-rose-50 flex items-center gap-1"
+                title="Logout from Client Portal"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Logout</span>
+              </button>
             )}
           </div>
         </div>
@@ -521,18 +558,18 @@ function ClientPortalContent() {
 
       {/* Main Content Area */}
       <main className="max-w-7xl mx-auto px-2.5 sm:px-4 py-3 space-y-3 relative z-10">
-        {/* Dynamic Section Heading Banner with soft acrylic styling */}
+        {/* Dynamic Section Heading Banner with soft acrylic styling (multi-line wrapped, zero overflow) */}
         <div
-          className={`${currentTab.acrylicClass} rounded-2xl p-3.5 sm:p-5 shadow-md ${currentTab.shadowGlow} border ${currentTab.border} flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all duration-300 relative overflow-hidden`}
+          className={`${currentTab.acrylicClass} rounded-2xl p-4 sm:p-5 shadow-md ${currentTab.shadowGlow} border ${currentTab.border} flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all duration-300 relative overflow-hidden`}
         >
-          <div className="flex items-center gap-3 min-w-0 relative z-10">
+          <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1 relative z-10">
             <div
-              className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl ${currentTab.iconBg} ${currentTab.iconColor} flex items-center justify-center shrink-0 shadow-sm font-black`}
+              className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl ${currentTab.iconBg} ${currentTab.iconColor} flex items-center justify-center shrink-0 shadow-sm font-black mt-0.5 sm:mt-0`}
             >
               <CurrentTabIcon className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap mb-1">
                 <span
                   className={`text-[9px] sm:text-[10px] uppercase font-bold font-cinzel ${currentTab.breadcrumbColor} tracking-wider`}
                 >
@@ -544,10 +581,10 @@ function ClientPortalContent() {
                   {currentTab.badge}
                 </span>
               </div>
-              <h1 className={`text-sm sm:text-base font-cinzel font-black ${currentTab.titleColor} tracking-tight leading-tight mt-0.5 truncate`}>
+              <h1 className={`text-base sm:text-lg font-cinzel font-black ${currentTab.titleColor} tracking-tight leading-snug break-words [overflow-wrap:anywhere] whitespace-normal mt-1`}>
                 {currentTab.title}
               </h1>
-              <p className={`text-[10px] sm:text-[11px] ${currentTab.subtitleColor} mt-0.5 leading-snug font-sans`}>
+              <p className={`text-xs ${currentTab.subtitleColor} mt-1 leading-relaxed font-portal break-words [overflow-wrap:anywhere] whitespace-normal`}>
                 {currentTab.subtitle}
               </p>
             </div>
@@ -811,10 +848,10 @@ function ClientPortalContent() {
                       <th className="py-3 px-3.5 text-right">1-Click Dispatch</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E8DFC8]/60 bg-white/70">
+                  <tbody className="divide-y divide-[#E8DFC8]/60 bg-[#FAF7EE]/90">
                     {filteredGuests.map((guest) => {
                       return (
-                        <tr key={guest.id} className="hover:bg-white/90 transition-colors">
+                        <tr key={guest.id} className="hover:bg-[#F3ECE0] transition-colors">
                           <td className="py-3.5 px-3.5 font-bold text-[#5C4303]">{guest.name}</td>
                           <td className="py-3.5 px-3.5 font-mono text-[11px] text-[#785B24]">{guest.phone}</td>
                           <td className="py-3.5 px-3.5">
@@ -911,9 +948,9 @@ function ClientPortalContent() {
                       <th className="py-3 px-3.5">Timing / Notes</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E8DFC8]/60 bg-white/70">
+                  <tbody className="divide-y divide-[#E8DFC8]/60 bg-[#FAF7EE]/90">
                     {djPlaylist.map((song, idx) => (
-                      <tr key={song.id} className="hover:bg-white/90 transition-colors">
+                      <tr key={song.id} className="hover:bg-[#F3ECE0] transition-colors">
                         <td className="py-3.5 px-3.5 font-mono font-bold text-[#AA820A]">{idx + 1}</td>
                         <td className="py-3.5 px-3.5">
                           <div className="font-bold text-sm text-[#193822]">{song.songTitle}</div>
@@ -1068,6 +1105,109 @@ function ClientPortalContent() {
                   <span>✨</span>
                 </button>
               </div>
+            </div>
+
+            {/* CLIENT ACCESS PASSCODE & CREDENTIAL SETTINGS CARD */}
+            <div className="card-pop3d-emerald p-4 sm:p-6 rounded-2xl space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#2D4A36] to-[#FAF4E3] flex items-center justify-center text-white shadow-xs">
+                    <Key className="w-4 h-4 text-[#193822]" />
+                  </div>
+                  <div>
+                    <h4 className="font-portal text-xs sm:text-sm font-bold uppercase text-[#193822]">
+                      Client Security & Portal Passcode Manager 🔐
+                    </h4>
+                    <p className="text-[11px] text-[#234E30]">
+                      Change your client access token or private family passcode to protect your RSVP hub.
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-2.5 py-1 rounded-full">
+                  Private VIP
+                </span>
+              </div>
+
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!clientPasscodeInput.trim()) {
+                    showToast('Please enter a new secret passcode.');
+                    return;
+                  }
+                  if (clientPasscodeInput !== clientConfirmPasscodeInput) {
+                    showToast('New passcodes do not match. Please re-enter.');
+                    return;
+                  }
+                  const success = updateClientCredentials(clientId, clientPasscodeInput, clientTokenInput);
+                  if (success) {
+                    showToast('Client Access Passcode updated successfully! 💌');
+                    setClientPasscodeInput('');
+                    setClientConfirmPasscodeInput('');
+                  } else {
+                    showToast('Failed to update client credentials.');
+                  }
+                }}
+                className="space-y-3 pt-2 text-xs"
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[10px] font-portal uppercase font-bold text-[#234E30] mb-1">
+                      Client Access Token
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={clientTokenInput}
+                      onChange={(e) => setClientTokenInput(e.target.value)}
+                      placeholder="e.g. CLT-GOURAV"
+                      className="w-full px-3 py-2 rounded-xl border border-[#739B83]/40 bg-white/90 text-[#193822] focus:outline-none focus:border-[#2D4A36]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-portal uppercase font-bold text-[#234E30] mb-1">
+                      New Secret Passcode
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      value={clientPasscodeInput}
+                      onChange={(e) => setClientPasscodeInput(e.target.value)}
+                      placeholder="••••••••••••"
+                      className="w-full px-3 py-2 rounded-xl border border-[#739B83]/40 bg-white/90 text-[#193822] focus:outline-none focus:border-[#2D4A36]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-portal uppercase font-bold text-[#234E30] mb-1">
+                      Confirm New Passcode
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      value={clientConfirmPasscodeInput}
+                      onChange={(e) => setClientConfirmPasscodeInput(e.target.value)}
+                      placeholder="••••••••••••"
+                      className="w-full px-3 py-2 rounded-xl border border-[#739B83]/40 bg-white/90 text-[#193822] focus:outline-none focus:border-[#2D4A36]"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-2 flex items-center justify-between">
+                  <p className="text-[10px] text-[#234E30]">
+                    Only authorized family members with this passcode can manage this portal.
+                  </p>
+                  <button
+                    type="submit"
+                    className="btn-slim-emerald text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>Save New Passcode</span>
+                    <span>✨</span>
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
