@@ -63,16 +63,36 @@ function getLocalProjects(): WeddingProject[] {
 function saveLocalProject(project: WeddingProject) {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + project.slug, JSON.stringify(project));
-    localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + project.id, JSON.stringify(project));
+    const slugKey = project.slug ? project.slug.toLowerCase().trim() : '';
+    const idKey = project.id ? project.id.toLowerCase().trim() : '';
+
+    if (slugKey) {
+      localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + slugKey, JSON.stringify(project));
+      localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + 'client-' + slugKey, JSON.stringify(project));
+    }
+    if (idKey) {
+      localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + idKey, JSON.stringify(project));
+      const bareId = idKey.replace(/^client-/, '');
+      if (bareId) {
+        localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + bareId, JSON.stringify(project));
+      }
+    }
+    // Also save under primary gourav keys if applicable
+    if (slugKey.includes('gourav') || idKey.includes('gourav')) {
+      localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + 'gourav-weds-priya', JSON.stringify(project));
+      localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + 'client-gourav-priya', JSON.stringify(project));
+    }
 
     // Update list of slugs
     const slugsJson = localStorage.getItem(ALL_PROJECTS_KEY);
     const slugs: string[] = slugsJson ? JSON.parse(slugsJson) : ['gourav-weds-priya'];
-    if (!slugs.includes(project.slug)) {
-      slugs.push(project.slug);
+    if (slugKey && !slugs.includes(slugKey)) {
+      slugs.push(slugKey);
       localStorage.setItem(ALL_PROJECTS_KEY, JSON.stringify(slugs));
     }
+
+    // Dispatch update notification across all listening tabs/components
+    window.dispatchEvent(new CustomEvent('wedding_project_updated', { detail: project }));
   } catch (err) {
     console.error('Failed to save to local storage', err);
   }
@@ -194,56 +214,73 @@ export function parseProjectFromSlug(slugOrId: string): WeddingProject {
  * Fetch a wedding project by slug or client ID
  */
 export async function getWeddingProject(slugOrId: string): Promise<WeddingProject | null> {
-  const cleanKey = slugOrId.toLowerCase().replace('/', '').trim();
+  const cleanKey = decodeURIComponent(slugOrId || '').toLowerCase().replace('/', '').trim();
+  const bareSlug = cleanKey.replace(/^client-/, '');
+  const lookupKeys = Array.from(new Set([cleanKey, bareSlug, `client-${bareSlug}`]));
 
   // Try Firestore if configured
   if (isFirebaseConfigured && db) {
-    try {
-      const docRef = doc(db, 'weddings', cleanKey);
-      const snapshot = await getDoc(docRef);
-      if (snapshot.exists()) {
-        const proj = snapshot.data() as WeddingProject;
-        saveLocalProject(proj);
-        return proj;
+    for (const key of lookupKeys) {
+      try {
+        const docRef = doc(db, 'weddings', key);
+        const snapshot = await getDoc(docRef);
+        if (snapshot.exists()) {
+          const proj = snapshot.data() as WeddingProject;
+          saveLocalProject(proj);
+          return proj;
+        }
+      } catch (e) {
+        console.warn('Firestore fetch failed:', e);
       }
-    } catch (e) {
-      console.warn('Firestore fetch failed, checking local state:', e);
     }
   }
 
-  // 1. Check local store
+  // 1. Check local store across all lookup keys
   if (typeof window !== 'undefined') {
-    const local = localStorage.getItem(LOCAL_STORAGE_KEY_PREFIX + cleanKey);
-    if (local) {
+    for (const key of lookupKeys) {
+      const local = localStorage.getItem(LOCAL_STORAGE_KEY_PREFIX + key);
+      if (local) {
+        try {
+          const parsed = JSON.parse(local);
+          if (parsed && (parsed.partner1 || parsed.venue)) {
+            return parsed;
+          }
+        } catch {}
+      }
+    }
+  }
+
+  // 2. Fetch from Next.js Server API across lookup keys
+  if (typeof window !== 'undefined') {
+    for (const key of [cleanKey, bareSlug]) {
       try {
-        return JSON.parse(local);
+        const res = await fetch(`/api/projects?slug=${encodeURIComponent(key)}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.project) {
+            saveLocalProject(json.project);
+            return json.project;
+          }
+        }
       } catch {}
     }
   }
 
-  // 2. Fetch from Next.js Server API
-  if (typeof window !== 'undefined') {
-    try {
-      const res = await fetch(`/api/projects?slug=${encodeURIComponent(cleanKey)}`);
-      if (res.ok) {
-        const json = await res.json();
-        if (json.success && json.project) {
-          saveLocalProject(json.project);
-          return json.project;
-        }
-      }
-    } catch {}
-  }
+  // 3. Check in getLocalProjects() list
+  const all = getLocalProjects();
+  const match = all.find((p) => {
+    const pSlug = p.slug?.toLowerCase().trim();
+    const pId = p.id?.toLowerCase().trim();
+    return lookupKeys.includes(pSlug) || lookupKeys.includes(pId);
+  });
+  if (match) return match;
 
-  if (cleanKey === 'gourav-weds-priya' || cleanKey === 'client-gourav-priya') {
+  // 4. Default project fallback if Gourav or primary couple
+  if (cleanKey === 'gourav-weds-priya' || cleanKey === 'client-gourav-priya' || cleanKey === 'gourav') {
     return defaultWeddingProject;
   }
 
-  const all = getLocalProjects();
-  const match = all.find((p) => p.slug?.toLowerCase() === cleanKey || p.id?.toLowerCase() === cleanKey);
-  if (match) return match;
-
-  // 3. Smart reconstruction from slug (e.g. "gourav", "gourao", "gourav-weds-priya")
+  // 5. Smart reconstruction from slug (e.g. "gourav", "gourao", "gourav-weds-priya")
   const reconstructed = parseProjectFromSlug(cleanKey);
   saveLocalProject(reconstructed);
   return reconstructed;
@@ -253,6 +290,21 @@ export async function getWeddingProject(slugOrId: string): Promise<WeddingProjec
  * Save or update a wedding project
  */
 export async function saveWeddingProject(project: WeddingProject): Promise<void> {
+  // Ensure venue object has complete fields and is synchronized with customization
+  if (project.venue) {
+    if (!project.venue.googleMapsLink && project.venue.name) {
+      project.venue.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        project.venue.name + ' ' + (project.venue.fullAddress || project.venue.city || '')
+      )}`;
+    }
+    if (project.customization?.sections?.venue) {
+      project.customization.sections.venue.venueName = project.venue.name;
+      project.customization.sections.venue.venueCity = project.venue.city;
+      project.customization.sections.venue.venueAddress = project.venue.fullAddress;
+      project.customization.sections.venue.googleMapsLink = project.venue.googleMapsLink;
+    }
+  }
+
   saveLocalProject(project);
 
   // Sync to Server API

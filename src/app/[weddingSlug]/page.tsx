@@ -64,6 +64,23 @@ function LuxuryGuestMicrositeContent() {
       setLoading(false);
     };
     loadData();
+
+    // Live update listener for instant synchronization with Client Portal changes
+    const handleUpdate = (e: any) => {
+      if (e?.detail) {
+        setProject(e.detail);
+      } else {
+        loadData();
+      }
+    };
+
+    window.addEventListener('wedding_project_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+
+    return () => {
+      window.removeEventListener('wedding_project_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
   }, [slug, requestedTemplate]);
 
   // Keep activeTemplate in sync if requestedTemplate query param changes

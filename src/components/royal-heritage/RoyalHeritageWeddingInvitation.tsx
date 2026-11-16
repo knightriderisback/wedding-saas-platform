@@ -741,32 +741,37 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
   const effectiveWeddingDate = project?.weddingDate || '2026-12-12T10:00:00Z';
 
+  const rawVenueName = project?.venue?.name || customization?.sections?.venue?.venueName;
+  const rawVenueCity = project?.venue?.city || customization?.sections?.venue?.venueCity;
+  const rawFullAddress = project?.venue?.fullAddress || customization?.sections?.venue?.venueAddress;
+
   const effectiveVenueName =
     currentLang === 'hi'
-      ? (project?.venue?.name && project.venue.name !== 'The Royal Palace & Gardens'
-          ? (project.venue.name.toLowerCase().includes('oberoi') ? 'द ओबेरॉय उदयविलास पैलेस' : project.venue.name)
+      ? (rawVenueName && rawVenueName !== 'The Royal Palace & Gardens'
+          ? (rawVenueName.toLowerCase().includes('oberoi') ? 'द ओबेरॉय उदयविलास पैलेस' : rawVenueName)
           : t.palaceName)
       : currentLang === 'ur'
-      ? (project?.venue?.name && project.venue.name !== 'The Royal Palace & Gardens'
-          ? (project.venue.name.toLowerCase().includes('oberoi') ? 'دی اوبرائے ادے ولاس پیلس' : project.venue.name)
+      ? (rawVenueName && rawVenueName !== 'The Royal Palace & Gardens'
+          ? (rawVenueName.toLowerCase().includes('oberoi') ? 'دی اوبرائے ادے ولاس پیلس' : rawVenueName)
           : t.palaceName)
-      : project?.venue?.name || t.palaceName;
+      : rawVenueName || t.palaceName;
 
   const effectiveVenueCity =
     currentLang === 'hi'
-      ? (project?.venue?.city && project.venue.city !== 'Lake Pichola, Udaipur, Rajasthan'
-          ? (project.venue.city.toLowerCase().includes('udaipur') ? 'पिछोला झील, उदयपुर, राजस्थान' : project.venue.city)
+      ? (rawVenueCity && rawVenueCity !== 'Lake Pichola, Udaipur, Rajasthan'
+          ? (rawVenueCity.toLowerCase().includes('udaipur') ? 'पिछोला झील, उदयपुर, राजस्थान' : rawVenueCity)
           : t.palaceCity)
       : currentLang === 'ur'
-      ? (project?.venue?.city && project.venue.city !== 'Lake Pichola, Udaipur, Rajasthan'
-          ? (project.venue.city.toLowerCase().includes('udaipur') ? 'پچھولا جھیل، ادے پور، راجستھان' : project.venue.city)
+      ? (rawVenueCity && rawVenueCity !== 'Lake Pichola, Udaipur, Rajasthan'
+          ? (rawVenueCity.toLowerCase().includes('udaipur') ? 'پچھولا جھیل، ادے پور، راجستھان' : rawVenueCity)
           : t.palaceCity)
-      : project?.venue?.city || t.palaceCity;
+      : rawVenueCity || t.palaceCity;
 
   const effectiveMapsLink =
     project?.venue?.googleMapsLink ||
-    `https://maps.google.com/?q=${encodeURIComponent(
-      effectiveVenueName + ' ' + effectiveVenueCity
+    customization.sections.venue.googleMapsLink ||
+    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      effectiveVenueName + ' ' + (rawFullAddress || effectiveVenueCity)
     )}`;
 
   // Dynamic Events with full Language Localization
@@ -1500,6 +1505,14 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   className={`${fontSubHeading} text-sm sm:text-base text-[#6B5A3E] font-bold mt-1.5 break-words [overflow-wrap:anywhere] max-w-full px-2`}
                   style={deepTextShadow}
                 />
+                {rawFullAddress && (
+                  <p
+                    className={`${fontSubHeading} text-xs text-[#7A6129] font-medium mt-1 break-words [overflow-wrap:anywhere] max-w-full px-4`}
+                    style={deepTextShadow}
+                  >
+                    📍 {rawFullAddress}
+                  </p>
+                )}
 
                 {/* Floating Venue Pin & Google Maps Action */}
                 {customization.sections.venue.showMapButton !== false && (
@@ -1508,7 +1521,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       <MapPin className="w-6 h-6 animate-pulse" />
                     </div>
                     <a
-                      href={customization.sections.venue.googleMapsLink || effectiveMapsLink}
+                      href={effectiveMapsLink}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#FAF8F5] text-sm ${fontSubHeading} shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 cursor-pointer font-bold`}

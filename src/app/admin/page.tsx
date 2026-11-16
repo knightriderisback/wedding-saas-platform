@@ -8,6 +8,7 @@ import { getAllProjects, saveWeddingProject, deleteWeddingProject } from '@/lib/
 import { defaultWeddingProject } from '@/lib/mockData';
 import { TEMPLATE_LIST, PRESSED_LOVE_TEMPLATES } from '@/lib/pressedLoveTemplates';
 import { AcrylicBackgroundOrbs } from '@/components/common/AcrylicBackgroundOrbs';
+import { WhatsAppIcon } from '@/components/common/WhatsAppIcon';
 import {
   ShieldCheck,
   Crown,
@@ -71,6 +72,7 @@ export default function SuperAdminPage() {
   const [weddingDate, setWeddingDate] = useState('2027-11-20');
   const [venueName, setVenueName] = useState('The Oberoi Udaivilas');
   const [venueCity, setVenueCity] = useState('Udaipur, Rajasthan');
+  const [venueFullAddress, setVenueFullAddress] = useState('');
   const [selectedSuite, setSelectedSuite] = useState('royal-heritage');
   const [clientPhone, setClientPhone] = useState('+919820012345');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -136,8 +138,10 @@ export default function SuperAdminPage() {
       venue: {
         name: venueName,
         city: venueCity,
-        fullAddress: `${venueName}, ${venueCity}`,
-        googleMapsLink: `https://maps.google.com/?q=${encodeURIComponent(venueName + ' ' + venueCity)}`,
+        fullAddress: venueFullAddress.trim() || `${venueName}, ${venueCity}`,
+        googleMapsLink: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+          `${venueName} ${venueFullAddress || venueCity}`.trim()
+        )}`,
       },
       clientAccessToken: token,
       createdAt: new Date().toISOString().split('T')[0],
@@ -283,7 +287,7 @@ export default function SuperAdminPage() {
       highlightText: 'text-[#D4AF37]',
     },
     guests: {
-      title: 'Global Guest Registry & WhatsApp Dispatch Telemetry',
+      title: 'Global Guest Registry & Instant Dispatch Telemetry',
       shortTitle: 'Guest Registry',
       icon: Users,
       subtitle: 'Consolidated attendee database, contact import status, and automated wa.me delivery tags',
@@ -367,10 +371,10 @@ export default function SuperAdminPage() {
       highlightText: 'text-[#D4AF37]',
     },
     settings: {
-      title: 'Platform Security, Storage & WhatsApp Cloud Gateway',
+      title: 'Platform Security, Storage & Instant Cloud Gateway',
       shortTitle: 'System Settings',
       icon: ShieldCheck,
-      subtitle: 'Master tokens, Firebase Storage configuration, and WhatsApp Cloud API credentials',
+      subtitle: 'Master tokens, Firebase Storage configuration, and wa.me dispatch telemetry',
       badge: 'Production Online',
       bgGradient: 'from-[#242A36] via-[#353D4E] to-[#242A36]',
       border: 'border-[#7D8FA9]/60',
@@ -550,7 +554,7 @@ export default function SuperAdminPage() {
 
               <div className="card-pop3d-azure p-3 sm:p-3.5 rounded-2xl">
                 <div className="text-[10px] font-portal font-bold text-[#142F4C] uppercase flex items-center gap-1">
-                  <MessageCircle className="w-3 h-3 text-[#1E3F66]" /> WhatsApp Invites
+                  <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" /> Dispatched
                 </div>
                 <div className="text-lg sm:text-2xl font-black text-[#142F4C] mt-0.5">{totalDispatched}</div>
                 <div className="text-[9px] text-[#1E3F66] font-medium mt-1">Dispatched via wa.me</div>
@@ -815,7 +819,11 @@ export default function SuperAdminPage() {
                       <th className="py-2.5 px-3">Guest Name</th>
                       <th className="py-2.5 px-3">Phone Number</th>
                       <th className="py-2.5 px-3">Wedding Project</th>
-                      <th className="py-2.5 px-3">WhatsApp Status</th>
+                      <th className="py-2.5 px-3">
+                        <span className="inline-flex items-center gap-1">
+                          <WhatsAppIcon className="w-3 h-3 text-[#25D366]" /> Status
+                        </span>
+                      </th>
                       <th className="py-2.5 px-3">RSVP Status</th>
                       <th className="py-2.5 px-3 text-right">Quick Dispatch</th>
                     </tr>
@@ -867,7 +875,8 @@ export default function SuperAdminPage() {
                               rel="noopener noreferrer"
                               className="px-2 py-1 rounded bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-[10px] inline-flex items-center gap-1 shadow-2xs"
                             >
-                              <MessageCircle className="w-3 h-3" /> WhatsApp
+                              <WhatsAppIcon className="w-3 h-3 text-white" />
+                              <span>Send</span>
                             </a>
                           </td>
                         </tr>
@@ -913,7 +922,9 @@ export default function SuperAdminPage() {
               <div className="space-y-2 text-xs">
                 <div>
                   <div className="flex justify-between text-neutral-600 mb-1">
-                    <span>Mobile (WhatsApp & Instagram)</span>
+                    <span className="flex items-center gap-1">
+                      <WhatsAppIcon className="w-3 h-3 text-[#25D366]" /> Mobile & Social
+                    </span>
                     <span className="font-bold">89.4%</span>
                   </div>
                   <div className="w-full bg-[#FAF4E3] h-2 rounded-full overflow-hidden">
@@ -1012,7 +1023,9 @@ export default function SuperAdminPage() {
                 <span className="text-[10px] text-emerald-800 font-semibold">Custom Domain + Sitar Audio</span>
               </div>
               <div className="acrylic-azure card-3d p-4 rounded-2xl">
-                <span className="text-[10px] font-cinzel uppercase text-[#242A36] font-bold">WhatsApp Dispatch Tier</span>
+                <span className="text-[10px] font-cinzel uppercase text-[#242A36] font-bold flex items-center gap-1">
+                  <WhatsAppIcon className="w-3 h-3 text-[#25D366]" /> Dispatch Tier
+                </span>
                 <div className="text-2xl font-black text-emerald-700 mt-1">Active</div>
                 <span className="text-[10px] text-neutral-600">Unlimited Concierge Invites</span>
               </div>
@@ -1176,8 +1189,12 @@ export default function SuperAdminPage() {
                 </div>
 
                 <div className="card-pop3d-emerald p-3.5 rounded-xl space-y-1">
-                  <span className="text-[10px] font-portal uppercase font-bold text-[#193822]">WhatsApp Cloud Gateway</span>
-                  <p className="font-semibold text-[#193822]">1-Click Direct WhatsApp API (wa.me)</p>
+                  <span className="text-[10px] font-portal uppercase font-bold text-[#193822] flex items-center gap-1">
+                    <WhatsAppIcon className="w-3 h-3 text-[#25D366]" /> Cloud Gateway
+                  </span>
+                  <p className="font-semibold text-[#193822] flex items-center gap-1">
+                    1-Click Direct API (<WhatsAppIcon className="w-3 h-3 text-[#25D366]" /> wa.me)
+                  </p>
                   <p className="text-[11px] text-[#234E30]">Auto-formatted invitation cards with instant status update.</p>
                 </div>
 
@@ -1297,8 +1314,8 @@ export default function SuperAdminPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-cinzel uppercase font-bold text-[#7D5F04] mb-1">
-                    Client WhatsApp Phone
+                  <label className="block text-[10px] font-cinzel uppercase font-bold text-[#7D5F04] mb-1 flex items-center gap-1">
+                    <WhatsAppIcon className="w-3 h-3 text-[#25D366]" /> Client Mobile
                   </label>
                   <input
                     type="text"
@@ -1312,10 +1329,10 @@ export default function SuperAdminPage() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-cinzel uppercase font-bold text-[#7D5F04] mb-1">
-                  Destination Venue & City
+                <label className="block text-[10px] font-cinzel uppercase font-bold text-[#7D5F04] mb-1 flex items-center gap-1">
+                  <MapPin className="w-3 h-3 text-[#AA820A]" /> Destination Palace & City
                 </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2 mb-2">
                   <input
                     type="text"
                     required
@@ -1333,6 +1350,13 @@ export default function SuperAdminPage() {
                     className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] focus:outline-none focus:border-[#AA820A]"
                   />
                 </div>
+                <input
+                  type="text"
+                  value={venueFullAddress}
+                  onChange={(e) => setVenueFullAddress(e.target.value)}
+                  placeholder="Full Address & Landmark (e.g. Haridas Ji Ki Magri, Mulla Talai)"
+                  className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] focus:outline-none focus:border-[#AA820A]"
+                />
               </div>
 
               <div>

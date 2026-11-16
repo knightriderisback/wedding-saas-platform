@@ -138,6 +138,7 @@ export interface VenueSectionConfig extends SectionStyleConfig {
   venueTitle?: string;
   venueName?: string;
   venueCity?: string;
+  venueAddress?: string;
   googleMapsLink?: string;
   showMapButton?: boolean;
   mapButtonText?: string;

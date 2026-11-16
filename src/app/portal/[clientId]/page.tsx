@@ -23,6 +23,7 @@ import { defaultWeddingProject } from '@/lib/mockData';
 import { TEMPLATE_LIST } from '@/lib/pressedLoveTemplates';
 import { AcrylicBackgroundOrbs } from '@/components/common/AcrylicBackgroundOrbs';
 import { RoyalCustomizationStudio } from '@/components/portal/RoyalCustomizationStudio';
+import { WhatsAppIcon } from '@/components/common/WhatsAppIcon';
 import {
   getLoggedInClient,
   logoutClient,
@@ -66,6 +67,7 @@ import {
   Key,
   Save,
   Lock,
+  Navigation,
 } from 'lucide-react';
 
 function ClientPortalContent() {
@@ -330,7 +332,7 @@ function ClientPortalContent() {
       highlightText: 'text-[#7D5F04]',
     },
     guests: {
-      title: 'Guest & Invitation Hub (Phone Import & 1-Click WhatsApp)',
+      title: 'Guest & Invitation Hub (Phone Import & 1-Click Dispatch)',
       shortTitle: 'Guest Hub',
       icon: Users,
       subtitle: 'Import phone contacts, dispatch wa.me invites, and monitor live RSVPs',
@@ -617,11 +619,11 @@ function ClientPortalContent() {
 
               <div className="card-pop3d-emerald p-3.5 sm:p-4 rounded-2xl">
                 <div className="text-[10px] font-portal font-bold text-[#193822] uppercase tracking-wider flex items-center gap-1">
-                  <MessageCircle className="w-3.5 h-3.5 text-[#234E30]" /> Invites Sent
+                  <WhatsAppIcon className="w-3.5 h-3.5 text-[#193822]" /> Invites Sent
                 </div>
                 <div className="text-xl sm:text-2xl font-black text-[#193822] mt-0.5">{dispatchedCount}</div>
                 <div className="text-[10px] text-[#234E30] font-medium mt-0.5 flex items-center gap-1">
-                  <span>📱</span> {guests.length > 0 ? Math.round((dispatchedCount / guests.length) * 100) : 0}% WhatsApp coverage
+                  <WhatsAppIcon className="w-3 h-3 text-emerald-700" /> {guests.length > 0 ? Math.round((dispatchedCount / guests.length) * 100) : 0}% dispatched
                 </div>
               </div>
 
@@ -760,8 +762,9 @@ function ClientPortalContent() {
                   <h3 className="font-portal text-xs font-bold uppercase text-[#6E121E]">
                     Guest Dispatch & Live RSVP Telemetry 💌
                   </h3>
-                  <p className="text-[11px] text-[#9B1C2E] font-medium">
-                    1-Click WhatsApp invites via wa.me, mobile contacts import, and real-time attendance
+                  <p className="text-[11px] text-[#9B1C2E] font-medium flex items-center gap-1">
+                    <WhatsAppIcon className="w-3 h-3 text-[#25D366]" />
+                    <span>Instant mobile dispatch via wa.me, contact picker & real-time RSVP</span>
                   </p>
                 </div>
               </div>
@@ -813,9 +816,9 @@ function ClientPortalContent() {
             {/* Filter Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
               {[
-                { id: 'all', label: `All Guests (${guests.length})`, icon: '👥' },
-                { id: 'sent', label: `WhatsApp Dispatched (${dispatchedCount})`, icon: '✅' },
-                { id: 'pending', label: `Pending Dispatch (${guests.length - dispatchedCount})`, icon: '⏳' },
+                { id: 'all', label: `All (${guests.length})`, icon: '👥' },
+                { id: 'sent', label: `Dispatched (${dispatchedCount})`, icon: '🟢' },
+                { id: 'pending', label: `Pending (${guests.length - dispatchedCount})`, icon: '⏳' },
                 { id: 'attending', label: `Attending (${attendingCount})`, icon: '👑' },
                 { id: 'declined', label: 'Declined', icon: '❌' },
               ].map((pill) => (
@@ -840,12 +843,17 @@ function ClientPortalContent() {
                 <table className="w-full text-left text-xs">
                   <thead className="bg-[#FAF4E3]/90 text-[10px] uppercase font-portal font-bold text-[#785B24] border-b border-[#E8DFC8]">
                     <tr>
-                      <th className="py-3 px-3.5">Guest Name</th>
-                      <th className="py-3 px-3.5">Phone Number</th>
-                      <th className="py-3 px-3.5">WhatsApp Status</th>
-                      <th className="py-3 px-3.5">RSVP Status</th>
-                      <th className="py-3 px-3.5">Dietary / Notes</th>
-                      <th className="py-3 px-3.5 text-right">1-Click Dispatch</th>
+                      <th className="py-3 px-3.5">Guest</th>
+                      <th className="py-3 px-3.5">Phone</th>
+                      <th className="py-3 px-3.5">
+                        <span className="inline-flex items-center gap-1">
+                          <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Status</span>
+                        </span>
+                      </th>
+                      <th className="py-3 px-3.5">RSVP</th>
+                      <th className="py-3 px-3.5">Dietary</th>
+                      <th className="py-3 px-3.5 text-right">Dispatch</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E8DFC8]/60 bg-[#FAF7EE]/90">
@@ -885,12 +893,11 @@ function ClientPortalContent() {
                           <td className="py-3.5 px-3.5 text-right">
                             <button
                               onClick={() => handleDispatchWhatsApp(guest)}
-                              className="btn-slim-emerald text-xs font-bold inline-flex items-center gap-1"
-                              title="Open pre-filled wa.me invite with personalized link"
+                              className="btn-slim-emerald text-[11px] font-bold inline-flex items-center gap-1.5 px-2.5 py-1"
+                              title="Send WhatsApp invitation"
                             >
-                              <MessageCircle className="w-3.5 h-3.5" />
-                              <span>1-Click wa.me</span>
-                              <span>💬</span>
+                              <WhatsAppIcon className="w-3.5 h-3.5 text-white" />
+                              <span className="hidden sm:inline">Send</span>
                             </button>
                           </td>
                         </tr>
@@ -944,7 +951,12 @@ function ClientPortalContent() {
                       <th className="py-3 px-3.5">#</th>
                       <th className="py-3 px-3.5">Song Title & Artist</th>
                       <th className="py-3 px-3.5">Requested By Guest</th>
-                      <th className="py-3 px-3.5">Guest WhatsApp Phone</th>
+                      <th className="py-3 px-3.5">
+                        <span className="inline-flex items-center gap-1">
+                          <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Phone</span>
+                        </span>
+                      </th>
                       <th className="py-3 px-3.5">Timing / Notes</th>
                     </tr>
                   </thead>
@@ -1044,11 +1056,17 @@ function ClientPortalContent() {
 
         {/* TAB 5: CONTENT EDITOR */}
         {activeTab === 'content' && (
-          <div className="space-y-3">
+          <div className="space-y-4">
+            {/* CARD 1: COUPLE IDENTITY & SCHEDULE */}
             <div className="card-pop3d-amber p-4 sm:p-6 rounded-2xl space-y-4">
-              <h3 className="font-portal text-xs font-bold uppercase text-[#5C4303] flex items-center gap-1.5">
-                <Edit2 className="w-4 h-4 text-[#AA820A]" /> Wedding Details & Schedule Editor ✍️
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="font-portal text-xs font-bold uppercase text-[#5C4303] flex items-center gap-1.5">
+                  <Heart className="w-4 h-4 text-[#AA820A]" /> Couple Identity & Celebration Schedule 👑
+                </h3>
+                <span className="text-[10px] font-mono font-bold text-amber-800 bg-amber-100/80 border border-amber-300 px-2 py-0.5 rounded-full">
+                  Live Microsite Sync
+                </span>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div>
@@ -1075,33 +1093,221 @@ function ClientPortalContent() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1">
+                    Formal Invitation Title
+                  </label>
+                  <input
+                    type="text"
+                    value={project.formalTitle || `The Royal Wedding Celebrations of ${project.partner1} & ${project.partner2}`}
+                    onChange={(e) => setProject({ ...project, formalTitle: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl border border-[#AA820A]/30 bg-white/90 text-[#5C4303] focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1 flex items-center gap-1">
+                    <Calendar className="w-3 h-3 text-[#AA820A]" /> Wedding Date / Muhurat
+                  </label>
+                  <input
+                    type="text"
+                    value={project.weddingDate?.split('T')[0] || ''}
+                    onChange={(e) => setProject({ ...project, weddingDate: e.target.value })}
+                    placeholder="YYYY-MM-DD or 2026-12-12"
+                    className="w-full px-3 py-2 rounded-xl border border-[#AA820A]/30 bg-white/90 text-[#5C4303] focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* CARD 2: DEDICATED GOOGLE MAPS VENUE ACCESS & GPS NAVIGATION */}
+            <div className="card-pop3d-azure p-4 sm:p-6 rounded-2xl space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#1E3F66] to-[#FAF4E3] flex items-center justify-center text-white shadow-xs">
+                    <Navigation className="w-4 h-4 text-[#10243E]" />
+                  </div>
+                  <div>
+                    <h3 className="font-portal text-xs sm:text-sm font-bold uppercase text-[#142F4C] flex items-center gap-1.5">
+                      Palace Venue & Google Maps GPS Access 📍
+                    </h3>
+                    <p className="text-[11px] text-[#1E3F66]">
+                      Guests navigate directly to the wedding entrance when tapping the map icon on their invitation.
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono font-bold text-sky-800 bg-sky-100/80 border border-sky-300 px-2 py-0.5 rounded-full">
+                  GPS Navigation
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label className="block text-[10px] font-portal uppercase font-bold text-[#142F4C] mb-1 flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-[#1E3F66]" /> Palace / Venue Name
+                  </label>
+                  <input
+                    type="text"
+                    value={project.venue?.name || ''}
+                    onChange={(e) =>
+                      setProject({
+                        ...project,
+                        venue: { ...project.venue, name: e.target.value },
+                      })
+                    }
+                    placeholder="e.g. The Oberoi Udaivilas"
+                    className="w-full px-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white/90 text-[#142F4C] focus:bg-white focus:outline-none focus:border-[#1E3F66] transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-portal uppercase font-bold text-[#142F4C] mb-1">
+                    City / Destination State
+                  </label>
+                  <input
+                    type="text"
+                    value={project.venue?.city || ''}
+                    onChange={(e) =>
+                      setProject({
+                        ...project,
+                        venue: { ...project.venue, city: e.target.value },
+                      })
+                    }
+                    placeholder="e.g. Udaipur, Rajasthan"
+                    className="w-full px-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white/90 text-[#142F4C] focus:bg-white focus:outline-none focus:border-[#1E3F66] transition-colors"
+                  />
+                </div>
+              </div>
+
               <div>
-                <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1">
-                  Destination Venue & City
+                <label className="block text-[10px] font-portal uppercase font-bold text-[#142F4C] mb-1">
+                  Full Street Address & Landmark
                 </label>
                 <input
                   type="text"
-                  value={project.venue.name + ', ' + project.venue.city}
+                  value={project.venue?.fullAddress || ''}
                   onChange={(e) =>
                     setProject({
                       ...project,
-                      venue: { ...project.venue, name: e.target.value },
+                      venue: { ...project.venue, fullAddress: e.target.value },
                     })
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-[#AA820A]/30 bg-white/90 text-[#5C4303] focus:bg-white focus:outline-none focus:border-[#AA820A] transition-colors"
+                  placeholder="e.g. Haridas Ji Ki Magri, Mulla Talai, Udaipur, Rajasthan 313001"
+                  className="w-full px-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white/90 text-[#142F4C] focus:bg-white focus:outline-none focus:border-[#1E3F66] transition-colors"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-[10px] font-portal uppercase font-bold text-[#142F4C] flex items-center gap-1">
+                    <Navigation className="w-3 h-3 text-[#1E3F66]" /> Google Maps Navigation Pin URL
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const loc = `${project.venue?.name || ''} ${project.venue?.fullAddress || project.venue?.city || ''}`.trim();
+                        const link = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc || 'Udaipur, Rajasthan')}`;
+                        setProject({
+                          ...project,
+                          venue: { ...project.venue, googleMapsLink: link },
+                        });
+                        showToast('Google Maps navigation link auto-generated! 📍');
+                      }}
+                      className="text-[10px] font-bold text-[#1E3F66] hover:underline cursor-pointer"
+                    >
+                      ⚡ Auto-Generate Link
+                    </button>
+                    {project.venue?.googleMapsLink && (
+                      <a
+                        href={project.venue.googleMapsLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[10px] font-bold text-emerald-700 hover:underline inline-flex items-center gap-0.5"
+                      >
+                        <ExternalLink className="w-2.5 h-2.5" />
+                        <span>Test GPS Pin</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+                <input
+                  type="url"
+                  value={project.venue?.googleMapsLink || ''}
+                  onChange={(e) =>
+                    setProject({
+                      ...project,
+                      venue: { ...project.venue, googleMapsLink: e.target.value },
+                    })
+                  }
+                  placeholder="https://maps.google.com/?q=... or https://maps.app.goo.gl/..."
+                  className="w-full px-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white font-mono text-[#142F4C] text-xs focus:outline-none focus:border-[#1E3F66]"
+                />
+              </div>
+
+              {/* Interactive Live Google Maps Preview */}
+              <div className="rounded-xl overflow-hidden border border-[#1E3F66]/30 bg-stone-100 shadow-inner">
+                <div className="bg-[#FAF4E3] px-3 py-1.5 border-b border-[#1E3F66]/20 flex items-center justify-between text-[11px] text-[#142F4C] font-bold">
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-[#AA820A]" /> Live GPS Map Preview
+                  </span>
+                  <span className="text-[10px] text-stone-500 font-normal">Interactive navigation perspective</span>
+                </div>
+                <iframe
+                  title="Google Map Venue Preview"
+                  width="100%"
+                  height="180"
+                  loading="lazy"
+                  style={{ border: 0 }}
+                  src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                    `${project.venue?.name || ''} ${project.venue?.fullAddress || project.venue?.city || ''}`.trim() || 'Udaipur, Rajasthan'
+                  )}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
                 />
               </div>
 
               <div className="pt-2">
                 <button
+                  type="button"
                   onClick={async () => {
-                    await saveWeddingProject(project);
-                    showToast('Celebration changes saved successfully!');
+                    const effectiveMapsLink =
+                      project.venue?.googleMapsLink ||
+                      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        `${project.venue?.name || ''} ${project.venue?.fullAddress || project.venue?.city || ''}`.trim()
+                      )}`;
+                    const updated: WeddingProject = {
+                      ...project,
+                      venue: {
+                        ...project.venue,
+                        fullAddress: project.venue?.fullAddress || `${project.venue?.name || ''}, ${project.venue?.city || ''}`,
+                        googleMapsLink: effectiveMapsLink,
+                      },
+                      customization: project.customization
+                        ? {
+                            ...project.customization,
+                            sections: {
+                              ...project.customization.sections,
+                              venue: {
+                                ...project.customization.sections?.venue,
+                                venueName: project.venue?.name || project.customization.sections?.venue?.venueName,
+                                venueCity: project.venue?.city || project.customization.sections?.venue?.venueCity,
+                                venueAddress:
+                                  project.venue?.fullAddress ||
+                                  project.venue?.city ||
+                                  project.customization.sections?.venue?.venueAddress,
+                                googleMapsLink: effectiveMapsLink,
+                              },
+                            },
+                          }
+                        : undefined,
+                    };
+                    setProject(updated);
+                    await saveWeddingProject(updated);
+                    showToast('Celebration details & Google Maps synced to live microsite! ✨');
                   }}
-                  className="btn-slim-gold text-xs font-bold flex items-center gap-1.5"
+                  className="btn-slim-emerald text-xs font-bold flex items-center gap-1.5"
                 >
-                  <Check className="w-3.5 h-3.5 stroke-[3]" />
-                  <span>Save Celebration Content</span>
+                  <Save className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span>Save All Celebration Details & Sync Microsite</span>
                   <span>✨</span>
                 </button>
               </div>
@@ -1499,8 +1705,8 @@ function ClientPortalContent() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1">
-                  WhatsApp Mobile Number
+                <label className="block text-[10px] font-portal uppercase font-bold text-[#785B24] mb-1 flex items-center gap-1">
+                  <WhatsAppIcon className="w-3 h-3 text-[#25D366]" /> Mobile Number (wa.me)
                 </label>
                 <input
                   type="text"
@@ -1518,8 +1724,8 @@ function ClientPortalContent() {
                   className="btn-slim-gold w-full text-xs font-bold uppercase flex items-center justify-center gap-1.5"
                 >
                   <Plus className="w-3.5 h-3.5 stroke-[3]" />
-                  <span>Save & Enable 1-Click WhatsApp</span>
-                  <span>💬</span>
+                  <span>Save VIP Guest</span>
+                  <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" />
                 </button>
               </div>
             </form>

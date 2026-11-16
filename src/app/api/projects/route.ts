@@ -47,13 +47,21 @@ export async function GET(req: NextRequest) {
 
   if (slug) {
     const cleanSlug = slug.toLowerCase().replace('/', '').trim();
-    const project = memoryProjects.get(cleanSlug);
+    const bareSlug = cleanSlug.replace(/^client-/, '');
+    
+    // Exact or bareSlug match
+    const project = memoryProjects.get(cleanSlug) || memoryProjects.get(bareSlug) || memoryProjects.get(`client-${bareSlug}`);
     if (project) {
       return NextResponse.json({ success: true, project });
     }
     // Search by partial match or id
     for (const p of Array.from(memoryProjects.values())) {
-      if (p.slug?.toLowerCase() === cleanSlug || p.id?.toLowerCase() === cleanSlug) {
+      if (
+        p.slug?.toLowerCase() === cleanSlug ||
+        p.slug?.toLowerCase() === bareSlug ||
+        p.id?.toLowerCase() === cleanSlug ||
+        p.id?.toLowerCase() === `client-${bareSlug}`
+      ) {
         return NextResponse.json({ success: true, project: p });
       }
     }
@@ -77,6 +85,15 @@ export async function POST(req: NextRequest) {
 
     memoryProjects.set(cleanSlug, body);
     memoryProjects.set(cleanId, body);
+    const bareSlug = cleanSlug.replace(/^client-/, '');
+    if (bareSlug) {
+      memoryProjects.set(bareSlug, body);
+      memoryProjects.set(`client-${bareSlug}`, body);
+    }
+    if (cleanSlug.includes('gourav') || cleanId.includes('gourav')) {
+      memoryProjects.set('gourav-weds-priya', body);
+      memoryProjects.set('client-gourav-priya', body);
+    }
     saveToFile();
 
     return NextResponse.json({ success: true, project: body });
