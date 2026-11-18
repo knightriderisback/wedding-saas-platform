@@ -1149,27 +1149,53 @@ function ClientPortalContent() {
                 coordinates: project.venue?.coordinates,
               }}
               onLocationChange={(loc) => {
-                setProject({
-                  ...project,
-                  venue: {
-                    ...project.venue,
-                    name: loc.venueName,
-                    city: loc.city,
-                    fullAddress: loc.fullAddress,
-                    googleMapsLink: loc.googleMapsLink,
-                    coordinates: loc.coordinates,
-                  },
+                setProject((prev) => {
+                  if (!prev) return prev;
+                  return {
+                    ...prev,
+                    venue: {
+                      ...prev.venue,
+                      name: loc.venueName,
+                      city: loc.city,
+                      fullAddress: loc.fullAddress,
+                      googleMapsLink: loc.googleMapsLink,
+                      coordinates: loc.coordinates,
+                    },
+                    customization: prev.customization
+                      ? {
+                          ...prev.customization,
+                          sections: {
+                            ...prev.customization.sections,
+                            venue: {
+                              ...prev.customization.sections?.venue,
+                              venueName: loc.venueName,
+                              venueCity: loc.city,
+                              venueAddress: loc.fullAddress,
+                              googleMapsLink: loc.googleMapsLink,
+                              coordinates: loc.coordinates,
+                            },
+                          },
+                        }
+                      : undefined,
+                  };
                 });
               }}
               showSaveButton={true}
               onSave={async (loc) => {
                 const effectiveMapsLink =
-                  loc.googleMapsLink ||
-                  (loc.coordinates
+                  loc.coordinates && loc.coordinates.lat && loc.coordinates.lng
                     ? `https://www.google.com/maps/search/?api=1&query=${loc.coordinates.lat.toFixed(6)},${loc.coordinates.lng.toFixed(6)}`
-                    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                        `${loc.venueName} ${loc.fullAddress || loc.city}`.trim()
-                      )}`);
+                    : (loc.googleMapsLink && !loc.googleMapsLink.includes('The+Oberoi+Udaivilas')
+                        ? loc.googleMapsLink
+                        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                            `${loc.venueName} ${loc.fullAddress || loc.city}`.trim()
+                          )}`);
+
+                const updatedEvents = (project.events || []).map((ev) => ({
+                  ...ev,
+                  address: loc.fullAddress || loc.venueName || ev.address,
+                  googleMapsLink: effectiveMapsLink,
+                }));
 
                 const updated: WeddingProject = {
                   ...project,
@@ -1181,6 +1207,7 @@ function ClientPortalContent() {
                     googleMapsLink: effectiveMapsLink,
                     coordinates: loc.coordinates,
                   },
+                  events: updatedEvents,
                   customization: project.customization
                     ? {
                         ...project.customization,
@@ -1200,7 +1227,7 @@ function ClientPortalContent() {
                 };
                 setProject(updated);
                 await saveWeddingProject(updated);
-                showToast('Delivery-style pin location & address saved to microsite! 📍✨');
+                showToast(`Venue "${loc.venueName || 'New Location'}" saved & navigation linked! 📍✨`);
               }}
             />
 

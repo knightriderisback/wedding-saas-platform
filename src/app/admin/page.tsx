@@ -70,8 +70,8 @@ export default function SuperAdminPage() {
   const [partner2, setPartner2] = useState('');
   const [customSlug, setCustomSlug] = useState('');
   const [weddingDate, setWeddingDate] = useState('2026-12-12');
-  const [venueName, setVenueName] = useState('The Oberoi Udaivilas');
-  const [venueCity, setVenueCity] = useState('Udaipur, Rajasthan');
+  const [venueName, setVenueName] = useState('The Royal Palace & Gardens');
+  const [venueCity, setVenueCity] = useState('Palace Destination');
   const [venueFullAddress, setVenueFullAddress] = useState('');
   const [selectedSuite, setSelectedSuite] = useState('royal-heritage');
   const [clientPhone, setClientPhone] = useState('+919820012345');
@@ -1338,7 +1338,7 @@ export default function SuperAdminPage() {
                     required
                     value={venueName}
                     onChange={(e) => setVenueName(e.target.value)}
-                    placeholder="The Oberoi Udaivilas"
+                    placeholder="The Royal Palace & Gardens"
                     className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] focus:outline-none focus:border-[#AA820A]"
                   />
                   <input
@@ -1346,7 +1346,7 @@ export default function SuperAdminPage() {
                     required
                     value={venueCity}
                     onChange={(e) => setVenueCity(e.target.value)}
-                    placeholder="Udaipur, Rajasthan"
+                    placeholder="Palace Destination"
                     className="w-full px-3 py-2 rounded-xl border border-[#E8DFC8] bg-[#FAF8F5] focus:outline-none focus:border-[#AA820A]"
                   />
                 </div>

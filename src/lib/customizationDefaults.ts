@@ -46,9 +46,9 @@ export const FONT_FAMILY_OPTIONS: { id: TypographyFontFamily; label: string; sam
 export const getDefaultCustomization = (project?: Partial<WeddingProject>): ProjectCustomization => {
   const p1 = project?.partner1 || 'Gourav';
   const p2 = project?.partner2 || 'Priya';
-  const venueName = project?.venue?.name || 'The Oberoi Udaivilas';
-  const venueCity = project?.venue?.city || 'Udaipur, Rajasthan';
-  const mapsLink = project?.venue?.googleMapsLink || `https://maps.google.com/?q=${encodeURIComponent(venueName + ' ' + venueCity)}`;
+  const venueName = project?.venue?.name || 'The Royal Palace & Gardens';
+  const venueCity = project?.venue?.city || 'Palace Destination';
+  const mapsLink = project?.venue?.googleMapsLink || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venueName + ' ' + venueCity)}`;
 
   const rawDate = project?.weddingDate || '2026-12-12T12:00:00.000Z';
   let formattedDate = 'Saturday, December 12, 2026';

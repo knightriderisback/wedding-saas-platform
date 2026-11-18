@@ -77,11 +77,11 @@ function saveLocalProject(project: WeddingProject) {
         localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + bareId, JSON.stringify(project));
       }
     }
-    // Also save under primary gourav keys if applicable
-    if (slugKey.includes('gourav') || idKey.includes('gourav')) {
-      localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + 'gourav-weds-priya', JSON.stringify(project));
-      localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + 'client-gourav-priya', JSON.stringify(project));
-    }
+    // Also save under primary gourav and royal suite keys
+    localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + 'gourav-weds-priya', JSON.stringify(project));
+    localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + 'client-gourav-priya', JSON.stringify(project));
+    localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + 'royal-heritage', JSON.stringify(project));
+    localStorage.setItem(LOCAL_STORAGE_KEY_PREFIX + 'wedding-invitation-royal-heritage', JSON.stringify(project));
 
     // Update list of slugs
     const slugsJson = localStorage.getItem(ALL_PROJECTS_KEY);
@@ -384,9 +384,11 @@ export async function saveWeddingProject(project: WeddingProject): Promise<void>
 
   // Ensure venue object has complete fields and is synchronized with customization
   if (project.venue) {
-    if (!project.venue.googleMapsLink && project.venue.name) {
+    if (project.venue.coordinates && project.venue.coordinates.lat && project.venue.coordinates.lng) {
+      project.venue.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${project.venue.coordinates.lat.toFixed(6)},${project.venue.coordinates.lng.toFixed(6)}`;
+    } else if (!project.venue.googleMapsLink || project.venue.googleMapsLink.includes('The+Oberoi+Udaivilas')) {
       project.venue.googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        project.venue.name + ' ' + (project.venue.fullAddress || project.venue.city || '')
+        (project.venue.name || 'Royal Venue') + ' ' + (project.venue.fullAddress || project.venue.city || '')
       )}`;
     }
     if (project.customization?.sections?.venue) {
@@ -408,7 +410,7 @@ export async function saveWeddingProject(project: WeddingProject): Promise<void>
     project.customization.musicTrackUrl = project.backgroundAudioUrl;
   }
 
-  // Synchronize events relative to the wedding date
+  // Synchronize events relative to the wedding date & venue
   if (Array.isArray(project.events) && project.events.length > 0) {
     const d = new Date(normalizedDate);
     const dayMs = 24 * 60 * 60 * 1000;
@@ -426,10 +428,16 @@ export async function saveWeddingProject(project: WeddingProject): Promise<void>
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       const computedDate = `${days[evDate.getDay()]}, ${months[evDate.getMonth()]} ${evDate.getDate()}, ${evDate.getFullYear()}`;
 
+      let evAddress = ev.address;
+      if (!evAddress || evAddress.includes('Oberoi Udaivilas') || evAddress.includes('Lake Pichola Terrace')) {
+        evAddress = project.venue?.fullAddress || project.venue?.name || ev.address;
+      }
+
       return {
         ...ev,
         date: computedDate,
-        googleMapsLink: ev.googleMapsLink || project.venue?.googleMapsLink || '',
+        address: evAddress,
+        googleMapsLink: project.venue?.googleMapsLink || ev.googleMapsLink || '',
       };
     });
   }

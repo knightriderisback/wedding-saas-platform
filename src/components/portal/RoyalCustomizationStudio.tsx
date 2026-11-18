@@ -62,7 +62,7 @@ export const RoyalCustomizationStudio: React.FC<RoyalCustomizationStudioProps> =
   onUpdate,
   showToast,
 }) => {
-  // Merge project customization with full defaults
+  // Merged project customization state
   const [customization, setCustomization] = useState<ProjectCustomization>(() => {
     const defaults = getDefaultCustomization(project);
     if (!project.customization) return defaults;
@@ -79,6 +79,26 @@ export const RoyalCustomizationStudio: React.FC<RoyalCustomizationStudioProps> =
       },
     };
   });
+
+  // Keep studio venue synchronized with external venue changes
+  React.useEffect(() => {
+    if (project.venue) {
+      setCustomization((prev) => ({
+        ...prev,
+        sections: {
+          ...prev.sections,
+          venue: {
+            ...prev.sections.venue,
+            venueName: project.venue.name || prev.sections?.venue?.venueName || '',
+            venueCity: project.venue.city || prev.sections?.venue?.venueCity || '',
+            venueAddress: project.venue.fullAddress || prev.sections?.venue?.venueAddress || '',
+            googleMapsLink: project.venue.googleMapsLink || prev.sections?.venue?.googleMapsLink || '',
+            coordinates: project.venue.coordinates || prev.sections?.venue?.coordinates,
+          },
+        },
+      }));
+    }
+  }, [project.venue?.name, project.venue?.city, project.venue?.fullAddress, project.venue?.googleMapsLink, project.venue?.coordinates]);
 
   const [activeCategory, setActiveCategory] = useState<
     'sections' | 'texts' | 'typography' | 'music' | 'events' | 'photos' | 'controls'

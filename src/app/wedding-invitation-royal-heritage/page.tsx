@@ -21,13 +21,34 @@ function RoyalHeritageInvitationContent() {
 
   useEffect(() => {
     const effectiveSlug = slugQuery || 'gourav-weds-priya';
-    getWeddingProject(effectiveSlug).then((data) => {
-      const p = data || parseProjectFromSlug(effectiveSlug);
-      setProject(p);
-      if (p?.partner1 && p?.partner2) {
-        document.title = `${p.partner1} Weds ${p.partner2} | Shubh Vivah`;
+    const loadData = () => {
+      getWeddingProject(effectiveSlug).then((data) => {
+        const p = data || parseProjectFromSlug(effectiveSlug);
+        setProject(p);
+        if (p?.partner1 && p?.partner2) {
+          document.title = `${p.partner1} Weds ${p.partner2} | Shubh Vivah`;
+        }
+      });
+    };
+
+    loadData();
+
+    // Instant live sync with Client Portal edits
+    const handleUpdate = (e: any) => {
+      if (e?.detail) {
+        setProject(e.detail);
+      } else {
+        loadData();
       }
-    });
+    };
+
+    window.addEventListener('wedding_project_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+
+    return () => {
+      window.removeEventListener('wedding_project_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
+    };
   }, [slugQuery]);
 
   useEffect(() => {

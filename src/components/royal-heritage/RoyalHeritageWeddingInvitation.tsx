@@ -131,7 +131,7 @@ const TRANSLATIONS: Record<
     ],
     venueTitle: 'The Royal Venue',
     palaceName: 'The Royal Palace & Gardens',
-    palaceCity: 'Lake Pichola, Udaipur, Rajasthan',
+    palaceCity: 'Palace Destination & Royal Grounds',
     viewMap: 'View on Google Maps',
     dressCodeTitle: 'Dress Code',
     dressCodeValue: 'Royal Traditional / Formal Festive',
@@ -196,7 +196,7 @@ const TRANSLATIONS: Record<
     ],
     venueTitle: 'विवाह स्थल',
     palaceName: 'द रॉयल पैलेस एवं गार्डन्स',
-    palaceCity: 'पिछोला झील, उदयपुर, राजस्थान',
+    palaceCity: 'शाही राजमहल प्रांगण एवं गंतव्य',
     viewMap: 'गूगल मैप पर देखें',
     dressCodeTitle: 'पहनावा (Dress Code)',
     dressCodeValue: 'शाही पारंपरिक परिधान',
@@ -261,7 +261,7 @@ const TRANSLATIONS: Record<
     ],
     venueTitle: 'Shadi Ka Venue',
     palaceName: 'The Royal Palace & Gardens',
-    palaceCity: 'Pichola Lake, Udaipur, Rajasthan',
+    palaceCity: 'Palace Destination & Royal Grounds',
     viewMap: 'Google Maps Par Dekhein',
     dressCodeTitle: 'Dress Code',
     dressCodeValue: 'Royal Traditional / Festive Wear',
@@ -326,7 +326,7 @@ const TRANSLATIONS: Record<
     ],
     venueTitle: 'مقام تقریب',
     palaceName: 'دی رائل پیلس اینڈ گارڈنز',
-    palaceCity: 'پچھولا جھیل، ادے پور، راجستھان',
+    palaceCity: 'شاہی پیلس گراؤنڈز',
     viewMap: 'گوگل میپس پر دیکھیں',
     dressCodeTitle: 'لباس کی رہنمائی',
     dressCodeValue: 'شاہی روایتی لباس',
@@ -804,36 +804,49 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
   const rawVenueCity = project?.venue?.city || customization?.sections?.venue?.venueCity;
   const rawFullAddress = project?.venue?.fullAddress || customization?.sections?.venue?.venueAddress;
 
-  const effectiveVenueName =
-    currentLang === 'hi'
-      ? (rawVenueName && rawVenueName !== 'The Royal Palace & Gardens'
-          ? (rawVenueName.toLowerCase().includes('oberoi') ? 'द ओबेरॉय उदयविलास पैलेस' : rawVenueName)
-          : t.palaceName)
-      : currentLang === 'ur'
-      ? (rawVenueName && rawVenueName !== 'The Royal Palace & Gardens'
-          ? (rawVenueName.toLowerCase().includes('oberoi') ? 'دی اوبرائے ادے ولاس پیلس' : rawVenueName)
-          : t.palaceName)
-      : rawVenueName || t.palaceName;
+  const isDefaultPalaceName =
+    !rawVenueName ||
+    rawVenueName === 'The Royal Palace & Gardens' ||
+    rawVenueName === 'The Oberoi Udaivilas';
 
-  const effectiveVenueCity =
-    currentLang === 'hi'
-      ? (rawVenueCity && rawVenueCity !== 'Lake Pichola, Udaipur, Rajasthan'
-          ? (rawVenueCity.toLowerCase().includes('udaipur') ? 'पिछोला झील, उदयपुर, राजस्थान' : rawVenueCity)
-          : t.palaceCity)
-      : currentLang === 'ur'
-      ? (rawVenueCity && rawVenueCity !== 'Lake Pichola, Udaipur, Rajasthan'
-          ? (rawVenueCity.toLowerCase().includes('udaipur') ? 'پچھولا جھیل، ادے پور، راجستھان' : rawVenueCity)
-          : t.palaceCity)
-      : rawVenueCity || t.palaceCity;
+  const effectiveVenueName = isDefaultPalaceName
+    ? t.palaceName
+    : rawVenueName;
 
-  const effectiveMapsLink =
-    project?.venue?.googleMapsLink ||
-    customization.sections.venue.googleMapsLink ||
-    (project?.venue?.coordinates
-      ? `https://www.google.com/maps/search/?api=1&query=${project.venue.coordinates.lat.toFixed(6)},${project.venue.coordinates.lng.toFixed(6)}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-          effectiveVenueName + ' ' + (rawFullAddress || effectiveVenueCity)
-        )}`);
+  const isDefaultPalaceCity =
+    !rawVenueCity ||
+    rawVenueCity === 'Lake Pichola, Udaipur, Rajasthan' ||
+    rawVenueCity === 'Palace Destination' ||
+    rawVenueCity === 'Udaipur, Rajasthan' ||
+    rawVenueCity === 'Palace Destination & Royal Grounds';
+
+  const effectiveVenueCity = isDefaultPalaceCity
+    ? t.palaceCity
+    : rawVenueCity;
+
+  const effectiveCoords = project?.venue?.coordinates || customization?.sections?.venue?.coordinates;
+  const hasValidCoords =
+    effectiveCoords &&
+    typeof effectiveCoords.lat === 'number' &&
+    typeof effectiveCoords.lng === 'number' &&
+    !isNaN(effectiveCoords.lat) &&
+    !isNaN(effectiveCoords.lng) &&
+    (effectiveVenueName.toLowerCase().includes('udaivilas') ||
+      Math.abs(effectiveCoords.lat - 24.5764) > 0.0001 ||
+      Math.abs(effectiveCoords.lng - 73.6835) > 0.0001);
+
+  const effectiveMapsLink = hasValidCoords
+    ? `https://www.google.com/maps/search/?api=1&query=${effectiveCoords.lat.toFixed(6)},${effectiveCoords.lng.toFixed(6)}`
+    : (project?.venue?.googleMapsLink &&
+       !project.venue.googleMapsLink.includes('The+Oberoi+Udaivilas+Udaipur') &&
+       !project.venue.googleMapsLink.includes('The+Oberoi+Udaivilas')
+        ? project.venue.googleMapsLink
+        : customization?.sections?.venue?.googleMapsLink &&
+          !customization.sections.venue.googleMapsLink.includes('The+Oberoi+Udaivilas')
+        ? customization.sections.venue.googleMapsLink
+        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+            `${effectiveVenueName} ${rawFullAddress || effectiveVenueCity}`.trim()
+          )}`);
 
   // Dynamic Events with full Language Localization and accurate relative dates
   const effectiveEvents = getLocalizedEvents(project?.events, currentLang, t.events, effectiveWeddingDate);

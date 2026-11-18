@@ -44,7 +44,7 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
   const [fullAddress, setFullAddress] = useState(initialLocation.fullAddress || '');
   const [googleMapsLink, setGoogleMapsLink] = useState(initialLocation.googleMapsLink || '');
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number }>(
-    initialLocation.coordinates || { lat: 24.5764, lng: 73.6835 } // Default: Udaipur The Oberoi Udaivilas
+    initialLocation.coordinates || { lat: 24.5764, lng: 73.6835 }
   );
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,23 +56,21 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
+  const hasUserEditedRef = useRef<boolean>(false);
+  const prevInitialKeyRef = useRef<string>(JSON.stringify(initialLocation));
 
-  // Sync state if initialLocation updates externally
+  // Sync state if initialLocation updates externally and user hasn't actively edited
   useEffect(() => {
-    if (initialLocation.venueName && initialLocation.venueName !== venueName) {
-      setVenueName(initialLocation.venueName);
-    }
-    if (initialLocation.city && initialLocation.city !== city) {
-      setCity(initialLocation.city);
-    }
-    if (initialLocation.fullAddress && initialLocation.fullAddress !== fullAddress) {
-      setFullAddress(initialLocation.fullAddress);
-    }
-    if (initialLocation.googleMapsLink && initialLocation.googleMapsLink !== googleMapsLink) {
-      setGoogleMapsLink(initialLocation.googleMapsLink);
-    }
-    if (initialLocation.coordinates) {
-      setCoordinates(initialLocation.coordinates);
+    const currentKey = JSON.stringify(initialLocation);
+    if (currentKey !== prevInitialKeyRef.current) {
+      prevInitialKeyRef.current = currentKey;
+      if (!hasUserEditedRef.current) {
+        if (initialLocation.venueName) setVenueName(initialLocation.venueName);
+        if (initialLocation.city) setCity(initialLocation.city);
+        if (initialLocation.fullAddress) setFullAddress(initialLocation.fullAddress);
+        if (initialLocation.googleMapsLink) setGoogleMapsLink(initialLocation.googleMapsLink);
+        if (initialLocation.coordinates) setCoordinates(initialLocation.coordinates);
+      }
     }
   }, [initialLocation]);
 
@@ -201,12 +199,20 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
             data.address?.state_district ||
             data.address?.state ||
             city ||
-            'Udaipur, Rajasthan';
+            'Palace Destination';
           const detectedAddress = data.display_name;
+          const detectedVenue =
+            data.address?.hotel ||
+            data.address?.amenity ||
+            data.address?.building ||
+            parts[0] ||
+            venueName ||
+            'Royal Wedding Venue';
 
+          hasUserEditedRef.current = true;
           setFullAddress(detectedAddress);
-          if (!venueName || venueName === 'The Oberoi Udaivilas') {
-            setVenueName(data.address?.hotel || data.address?.amenity || parts[0] || venueName);
+          if (detectedVenue) {
+            setVenueName(detectedVenue);
           }
           if (detectedCity) {
             setCity(detectedCity);
@@ -216,27 +222,31 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
           setGoogleMapsLink(mapsUrl);
 
           const updated: LocationData = {
-            venueName: venueName || parts[0],
+            venueName: detectedVenue,
             city: detectedCity,
             fullAddress: detectedAddress,
             googleMapsLink: mapsUrl,
             coordinates: { lat, lng },
           };
           onLocationChange(updated);
+          onSave?.(updated);
           setStatusMessage('Exact pin location & address updated!');
         }
       }
     } catch {
       // Fallback without reverse geocode
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat.toFixed(6)},${lng.toFixed(6)}`;
+      hasUserEditedRef.current = true;
       setGoogleMapsLink(mapsUrl);
-      onLocationChange({
-        venueName,
-        city,
+      const fallbackLoc: LocationData = {
+        venueName: venueName || 'Royal Wedding Venue',
+        city: city || 'Palace Destination',
         fullAddress,
         googleMapsLink: mapsUrl,
         coordinates: { lat, lng },
-      });
+      };
+      onLocationChange(fallbackLoc);
+      onSave?.(fallbackLoc);
       setStatusMessage('Pin coordinates updated!');
     } finally {
       setIsReverseGeocoding(false);
@@ -245,7 +255,13 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
   };
 
   // Handler when marker moves
-  const handleNewPosition = (lat: number, lng: number, shouldReverseGeocode = true) => {
+  const handleNewPosition = (
+    lat: number,
+    lng: number,
+    shouldReverseGeocode = true,
+    explicitData?: { venueName?: string; city?: string; fullAddress?: string }
+  ) => {
+    hasUserEditedRef.current = true;
     setCoordinates({ lat, lng });
     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat.toFixed(6)},${lng.toFixed(6)}`;
     setGoogleMapsLink(mapsUrl);
@@ -253,13 +269,18 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
     if (shouldReverseGeocode) {
       reverseGeocode(lat, lng);
     } else {
-      onLocationChange({
-        venueName,
-        city,
-        fullAddress,
+      const nextVenue = explicitData?.venueName ?? venueName;
+      const nextCity = explicitData?.city ?? city;
+      const nextAddress = explicitData?.fullAddress ?? fullAddress;
+      const updatedLoc: LocationData = {
+        venueName: nextVenue,
+        city: nextCity,
+        fullAddress: nextAddress,
         googleMapsLink: mapsUrl,
         coordinates: { lat, lng },
-      });
+      };
+      onLocationChange(updatedLoc);
+      onSave?.(updatedLoc);
     }
   };
 
@@ -292,14 +313,32 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
             item.address?.town ||
             item.address?.state_district ||
             item.address?.state ||
-            city;
+            '';
+          const newVenue = searchQuery.trim();
+          const newAddress = item.display_name;
+          const newCity = detectedCity || city || '';
+          const newMapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat.toFixed(6)},${lng.toFixed(6)}`;
+          const newCoords = { lat, lng };
 
-          setVenueName(searchQuery.trim());
-          setFullAddress(item.display_name);
-          if (detectedCity) setCity(detectedCity);
+          hasUserEditedRef.current = true;
+          setVenueName(newVenue);
+          setFullAddress(newAddress);
+          if (newCity) setCity(newCity);
+          setGoogleMapsLink(newMapsUrl);
+          setCoordinates(newCoords);
 
           moveMarkerTo(lat, lng, 17);
-          handleNewPosition(lat, lng, false);
+
+          const updatedLoc: LocationData = {
+            venueName: newVenue,
+            city: newCity,
+            fullAddress: newAddress,
+            googleMapsLink: newMapsUrl,
+            coordinates: newCoords,
+          };
+          onLocationChange(updatedLoc);
+          onSave?.(updatedLoc);
+
           setStatusMessage(`Found: ${item.display_name.slice(0, 40)}...`);
         } else {
           setStatusMessage('Location not found. Try entering city or landmark.');
@@ -325,6 +364,7 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
       (position) => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
+        hasUserEditedRef.current = true;
         moveMarkerTo(lat, lng, 17);
         handleNewPosition(lat, lng, true);
         setIsLocating(false);
@@ -343,6 +383,7 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
     field: 'venueName' | 'city' | 'fullAddress' | 'googleMapsLink',
     value: string
   ) => {
+    hasUserEditedRef.current = true;
     let updatedName = venueName;
     let updatedCity = city;
     let updatedAddress = fullAddress;
@@ -365,13 +406,15 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
       setGoogleMapsLink(value);
     }
 
-    onLocationChange({
+    const updatedLoc: LocationData = {
       venueName: updatedName,
       city: updatedCity,
       fullAddress: updatedAddress,
       googleMapsLink: updatedLink,
       coordinates,
-    });
+    };
+    onLocationChange(updatedLoc);
+    onSave?.(updatedLoc);
   };
 
   return (
@@ -411,7 +454,7 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search venue or landmark (e.g. The Oberoi Udaivilas, Udaipur)..."
+            placeholder="Search venue or landmark (e.g. Taj Mahal Palace, Mumbai / Jai Mahal, Jaipur)..."
             className="w-full pl-9 pr-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white text-xs text-[#142F4C] placeholder-[#1E3F66]/50 focus:outline-none focus:border-[#1E3F66]"
           />
         </div>
@@ -466,7 +509,7 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
             type="text"
             value={venueName}
             onChange={(e) => handleInputChange('venueName', e.target.value)}
-            placeholder="e.g. The Oberoi Udaivilas"
+            placeholder="e.g. The Grand Palace & Resort"
             className="w-full px-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white text-[#142F4C] focus:outline-none focus:border-[#1E3F66]"
           />
         </div>
@@ -479,7 +522,7 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
             type="text"
             value={city}
             onChange={(e) => handleInputChange('city', e.target.value)}
-            placeholder="e.g. Udaipur, Rajasthan"
+            placeholder="e.g. New Delhi, Mumbai, Jaipur"
             className="w-full px-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white text-[#142F4C] focus:outline-none focus:border-[#1E3F66]"
           />
         </div>
@@ -493,7 +536,7 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
           type="text"
           value={fullAddress}
           onChange={(e) => handleInputChange('fullAddress', e.target.value)}
-          placeholder="e.g. Haridas Ji Ki Magri, Mulla Talai, Udaipur, Rajasthan 313001"
+          placeholder="e.g. Gate No. 1, Palace Boulevard, Royal Heritage Enclave"
           className="w-full px-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white text-[#142F4C] focus:outline-none focus:border-[#1E3F66]"
         />
       </div>
@@ -549,13 +592,16 @@ export const DeliveryStyleMapPicker: React.FC<DeliveryStyleMapPickerProps> = ({
             type="button"
             onClick={() => {
               const currentLoc: LocationData = {
-                venueName,
-                city,
+                venueName: venueName || 'Royal Wedding Venue',
+                city: city || 'Palace Destination',
                 fullAddress,
                 googleMapsLink,
                 coordinates,
               };
+              onLocationChange(currentLoc);
               if (onSave) onSave(currentLoc);
+              setStatusMessage('Saved to microsite!');
+              setTimeout(() => setStatusMessage(null), 3500);
             }}
             className="btn-slim-emerald text-xs font-bold py-2.5 px-5 flex items-center gap-1.5 shrink-0"
           >

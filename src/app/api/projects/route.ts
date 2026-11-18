@@ -96,9 +96,11 @@ export async function POST(req: NextRequest) {
       memoryProjects.set(bareSlug, body);
       memoryProjects.set(`client-${bareSlug}`, body);
     }
-    if (cleanSlug.includes('gourav') || cleanId.includes('gourav')) {
+    if (cleanSlug.includes('gourav') || cleanId.includes('gourav') || cleanSlug.includes('royal')) {
       memoryProjects.set('gourav-weds-priya', body);
       memoryProjects.set('client-gourav-priya', body);
+      memoryProjects.set('royal-heritage', body);
+      memoryProjects.set('wedding-invitation-royal-heritage', body);
     }
     saveToFile();
 
