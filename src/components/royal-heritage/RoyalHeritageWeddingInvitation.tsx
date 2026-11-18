@@ -16,6 +16,8 @@ import {
   PartyPopper,
   Shirt,
   Calendar,
+  Music,
+  Mic,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { RoyalRealisticEnvelope } from './RoyalRealisticEnvelope';
@@ -24,6 +26,8 @@ import { DynamicTextEffects } from './DynamicTextEffects';
 import { ZareqiaHeartScratch } from '../zareqia/ZareqiaHeartScratch';
 import { ZareqiaPhotoCarousel } from '../zareqia/ZareqiaPhotoCarousel';
 import { RoyalScrollyBackground } from './RoyalScrollyBackground';
+import { DjSongRequestBox } from '../guest/DjSongRequestBox';
+import { VoiceBlessingRecorder } from '../guest/VoiceBlessingRecorder';
 import { royalSitarAudio } from '@/lib/sitarSynth';
 import { WeddingProject } from '@/types/wedding';
 import { saveWeddingProject } from '@/lib/firebase';
@@ -84,6 +88,10 @@ const TRANSLATIONS: Record<
     submitBtn: string;
     sending: string;
     footerBlessing: string;
+    djTitle: string;
+    djSubtitle: string;
+    voiceTitle: string;
+    voiceSubtitle: string;
   }
 > = {
   en: {
@@ -146,6 +154,10 @@ const TRANSLATIONS: Record<
     submitBtn: 'Confirm RSVP',
     sending: 'Recording...',
     footerBlessing: 'With Love & Blessings',
+    djTitle: 'Sangeet DJ Playlist',
+    djSubtitle: 'Dedicate your favorite track to the royal couple',
+    voiceTitle: 'Vedic Spoken Vows & Blessings',
+    voiceSubtitle: 'Record a heartfelt 30-second audio blessing for the couple',
   },
   hi: {
     langName: 'हिंदी',
@@ -207,6 +219,10 @@ const TRANSLATIONS: Record<
     submitBtn: 'उपस्थिति दर्ज करें',
     sending: 'भेजा जा रहा है...',
     footerBlessing: 'सप्रेम एवं आदर सहित',
+    djTitle: 'संगीत संध्या एवं डीजे फरमाइश',
+    djSubtitle: 'नवयुगल के लिए अपने पसंदीदा गीत की फरमाइश दर्ज करें',
+    voiceTitle: 'वाणी आशीर्वाद एवं मंगल कामनाएं',
+    voiceSubtitle: 'नवदंपति के लिए अपना ३०-सेकंड का स्वर आशीर्वाद रिकॉर्ड करें',
   },
   hinglish: {
     langName: 'Hinglish',
@@ -268,6 +284,10 @@ const TRANSLATIONS: Record<
     submitBtn: 'Confirm Karein',
     sending: 'Save Ho Raha Hai...',
     footerBlessing: 'Sneh Aur Aadar Sahit',
+    djTitle: 'Sangeet DJ Playlist',
+    djSubtitle: 'Couple ke liye apna favorite gaana dedicate karein',
+    voiceTitle: 'Spoken Vows & Voice Blessings',
+    voiceSubtitle: 'Couple ke liye apna 30-second ka voice blessing record karein',
   },
   ur: {
     langName: 'اردو',
@@ -329,6 +349,10 @@ const TRANSLATIONS: Record<
     submitBtn: 'شرکت کی تصدیق کریں',
     sending: 'محفوظ ہو رہا ہے...',
     footerBlessing: 'خلوص و دعاؤں کے ساتھ',
+    djTitle: 'سنگیت و نغمات کی فرمائش',
+    djSubtitle: 'نئے جوڑے کے لیے اپنی پسندیدہ دھن منتخب کریں',
+    voiceTitle: 'دعائیں اور نیک تمنائیں',
+    voiceSubtitle: 'نئے جوڑے کے لیے اپنی آواز میں دعائیہ پیغام ریکارڈ کریں',
   },
 };
 
@@ -770,9 +794,11 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
   const effectiveMapsLink =
     project?.venue?.googleMapsLink ||
     customization.sections.venue.googleMapsLink ||
-    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-      effectiveVenueName + ' ' + (rawFullAddress || effectiveVenueCity)
-    )}`;
+    (project?.venue?.coordinates
+      ? `https://www.google.com/maps/search/?api=1&query=${project.venue.coordinates.lat.toFixed(6)},${project.venue.coordinates.lng.toFixed(6)}`
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+          effectiveVenueName + ' ' + (rawFullAddress || effectiveVenueCity)
+        )}`);
 
   // Dynamic Events with full Language Localization
   const effectiveEvents = getLocalizedEvents(project?.events, currentLang, t.events);
@@ -1595,7 +1621,120 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           )}
 
           {/* ========================================================
-              SECTION 6: RSVP FORM
+              SECTION 6: SANGEET DJ PLAYLIST (SONG REQUESTS)
+              ======================================================== */}
+          {customization.sections.djSongs?.enabled !== false && (
+            <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 50, filter: 'blur(5px)' }}
+                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.85, ease: 'easeOut' }}
+                className="w-full max-w-[360px] text-center"
+              >
+                <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
+                  <Music className="w-5 h-5" />
+                </div>
+
+                <DynamicTextEffects
+                  text={
+                    currentLang === 'en' && customization.sections.djSongs?.title
+                      ? customization.sections.djSongs.title
+                      : t.djTitle
+                  }
+                  effect="pop-3d"
+                  as="h3"
+                  className={`${fontScriptHeading} text-4xl sm:text-5xl text-[#1E2E1B]`}
+                  style={deepTextShadow}
+                />
+                <div className="flex items-center justify-center gap-2 mt-1.5 mb-3 opacity-90">
+                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                  <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                </div>
+
+                <DynamicTextEffects
+                  text={
+                    currentLang === 'en' && customization.sections.djSongs?.subtitle
+                      ? customization.sections.djSongs.subtitle
+                      : t.djSubtitle
+                  }
+                  effect="velvet-mist"
+                  as="p"
+                  className={`${fontBody} text-sm sm:text-base italic text-[#273822] max-w-[320px] mx-auto mb-4 font-bold leading-relaxed`}
+                  style={deepTextShadow}
+                />
+
+                <div className="rounded-2xl bg-white/95 backdrop-blur-md border border-[#DFC07C] shadow-xl p-3.5 sm:p-5 text-left">
+                  <DjSongRequestBox
+                    weddingSlug={weddingSlug}
+                    defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
+                    existingSongs={project?.djPlaylist}
+                    language={currentLang === 'hi' ? 'hi' : 'en'}
+                  />
+                </div>
+              </motion.div>
+            </section>
+          )}
+
+          {/* ========================================================
+              SECTION 7: VEDIC SPOKEN VOWS & VOICE BLESSINGS
+              ======================================================== */}
+          {customization.sections.voiceBlessings?.enabled !== false && (
+            <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 50, filter: 'blur(5px)' }}
+                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                viewport={{ once: false, amount: 0.25 }}
+                transition={{ duration: 0.85, ease: 'easeOut' }}
+                className="w-full max-w-[360px] text-center"
+              >
+                <div className="w-10 h-10 mx-auto mb-2 rounded-full border border-[#B59A57]/60 flex items-center justify-center text-[#B59A57] bg-white/90 shadow-md">
+                  <Mic className="w-5 h-5" />
+                </div>
+
+                <DynamicTextEffects
+                  text={
+                    currentLang === 'en' && customization.sections.voiceBlessings?.title
+                      ? customization.sections.voiceBlessings.title
+                      : t.voiceTitle
+                  }
+                  effect="pop-3d"
+                  as="h3"
+                  className={`${fontScriptHeading} text-4xl sm:text-5xl text-[#1E2E1B]`}
+                  style={deepTextShadow}
+                />
+                <div className="flex items-center justify-center gap-2 mt-1.5 mb-3 opacity-90">
+                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                  <div className="w-1.5 h-1.5 rotate-45 bg-[#B59A57]" />
+                  <div className="w-8 h-[1.5px] bg-[#B59A57]" />
+                </div>
+
+                <DynamicTextEffects
+                  text={
+                    currentLang === 'en' && customization.sections.voiceBlessings?.subtitle
+                      ? customization.sections.voiceBlessings.subtitle
+                      : t.voiceSubtitle
+                  }
+                  effect="velvet-mist"
+                  as="p"
+                  className={`${fontBody} text-sm sm:text-base italic text-[#273822] max-w-[320px] mx-auto mb-4 font-bold leading-relaxed`}
+                  style={deepTextShadow}
+                />
+
+                <div className="rounded-2xl bg-white/95 backdrop-blur-md border border-[#DFC07C] shadow-xl p-3.5 sm:p-5 text-left">
+                  <VoiceBlessingRecorder
+                    weddingSlug={weddingSlug}
+                    defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
+                    language={currentLang === 'hi' ? 'hi' : 'en'}
+                  />
+                </div>
+              </motion.div>
+            </section>
+          )}
+
+          {/* ========================================================
+              SECTION 8: RSVP FORM
               Floating cleanly over video, zero card frame, couple visible!
               ======================================================== */}
           {customization.sections.rsvp.enabled !== false && (

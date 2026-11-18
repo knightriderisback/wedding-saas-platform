@@ -23,6 +23,7 @@ import { defaultWeddingProject } from '@/lib/mockData';
 import { TEMPLATE_LIST } from '@/lib/pressedLoveTemplates';
 import { AcrylicBackgroundOrbs } from '@/components/common/AcrylicBackgroundOrbs';
 import { RoyalCustomizationStudio } from '@/components/portal/RoyalCustomizationStudio';
+import { DeliveryStyleMapPicker, LocationData } from '@/components/portal/DeliveryStyleMapPicker';
 import { WhatsAppIcon } from '@/components/common/WhatsAppIcon';
 import {
   getLoggedInClient,
@@ -1118,200 +1119,86 @@ function ClientPortalContent() {
                   />
                 </div>
               </div>
-            </div>
 
-            {/* CARD 2: DEDICATED GOOGLE MAPS VENUE ACCESS & GPS NAVIGATION */}
-            <div className="card-pop3d-azure p-4 sm:p-6 rounded-2xl space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#1E3F66] to-[#FAF4E3] flex items-center justify-center text-white shadow-xs">
-                    <Navigation className="w-4 h-4 text-[#10243E]" />
-                  </div>
-                  <div>
-                    <h3 className="font-portal text-xs sm:text-sm font-bold uppercase text-[#142F4C] flex items-center gap-1.5">
-                      Palace Venue & Google Maps GPS Access 📍
-                    </h3>
-                    <p className="text-[11px] text-[#1E3F66]">
-                      Guests navigate directly to the wedding entrance when tapping the map icon on their invitation.
-                    </p>
-                  </div>
-                </div>
-                <span className="text-[10px] font-mono font-bold text-sky-800 bg-sky-100/80 border border-sky-300 px-2 py-0.5 rounded-full">
-                  GPS Navigation
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div>
-                  <label className="block text-[10px] font-portal uppercase font-bold text-[#142F4C] mb-1 flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-[#1E3F66]" /> Palace / Venue Name
-                  </label>
-                  <input
-                    type="text"
-                    value={project.venue?.name || ''}
-                    onChange={(e) =>
-                      setProject({
-                        ...project,
-                        venue: { ...project.venue, name: e.target.value },
-                      })
-                    }
-                    placeholder="e.g. The Oberoi Udaivilas"
-                    className="w-full px-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white/90 text-[#142F4C] focus:bg-white focus:outline-none focus:border-[#1E3F66] transition-colors"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-portal uppercase font-bold text-[#142F4C] mb-1">
-                    City / Destination State
-                  </label>
-                  <input
-                    type="text"
-                    value={project.venue?.city || ''}
-                    onChange={(e) =>
-                      setProject({
-                        ...project,
-                        venue: { ...project.venue, city: e.target.value },
-                      })
-                    }
-                    placeholder="e.g. Udaipur, Rajasthan"
-                    className="w-full px-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white/90 text-[#142F4C] focus:bg-white focus:outline-none focus:border-[#1E3F66] transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-portal uppercase font-bold text-[#142F4C] mb-1">
-                  Full Street Address & Landmark
-                </label>
-                <input
-                  type="text"
-                  value={project.venue?.fullAddress || ''}
-                  onChange={(e) =>
-                    setProject({
-                      ...project,
-                      venue: { ...project.venue, fullAddress: e.target.value },
-                    })
-                  }
-                  placeholder="e.g. Haridas Ji Ki Magri, Mulla Talai, Udaipur, Rajasthan 313001"
-                  className="w-full px-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white/90 text-[#142F4C] focus:bg-white focus:outline-none focus:border-[#1E3F66] transition-colors"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-[10px] font-portal uppercase font-bold text-[#142F4C] flex items-center gap-1">
-                    <Navigation className="w-3 h-3 text-[#1E3F66]" /> Google Maps Navigation Pin URL
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const loc = `${project.venue?.name || ''} ${project.venue?.fullAddress || project.venue?.city || ''}`.trim();
-                        const link = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc || 'Udaipur, Rajasthan')}`;
-                        setProject({
-                          ...project,
-                          venue: { ...project.venue, googleMapsLink: link },
-                        });
-                        showToast('Google Maps navigation link auto-generated! 📍');
-                      }}
-                      className="text-[10px] font-bold text-[#1E3F66] hover:underline cursor-pointer"
-                    >
-                      ⚡ Auto-Generate Link
-                    </button>
-                    {project.venue?.googleMapsLink && (
-                      <a
-                        href={project.venue.googleMapsLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[10px] font-bold text-emerald-700 hover:underline inline-flex items-center gap-0.5"
-                      >
-                        <ExternalLink className="w-2.5 h-2.5" />
-                        <span>Test GPS Pin</span>
-                      </a>
-                    )}
-                  </div>
-                </div>
-                <input
-                  type="url"
-                  value={project.venue?.googleMapsLink || ''}
-                  onChange={(e) =>
-                    setProject({
-                      ...project,
-                      venue: { ...project.venue, googleMapsLink: e.target.value },
-                    })
-                  }
-                  placeholder="https://maps.google.com/?q=... or https://maps.app.goo.gl/..."
-                  className="w-full px-3 py-2 rounded-xl border border-[#1E3F66]/30 bg-white font-mono text-[#142F4C] text-xs focus:outline-none focus:border-[#1E3F66]"
-                />
-              </div>
-
-              {/* Interactive Live Google Maps Preview */}
-              <div className="rounded-xl overflow-hidden border border-[#1E3F66]/30 bg-stone-100 shadow-inner">
-                <div className="bg-[#FAF4E3] px-3 py-1.5 border-b border-[#1E3F66]/20 flex items-center justify-between text-[11px] text-[#142F4C] font-bold">
-                  <span className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-[#AA820A]" /> Live GPS Map Preview
-                  </span>
-                  <span className="text-[10px] text-stone-500 font-normal">Interactive navigation perspective</span>
-                </div>
-                <iframe
-                  title="Google Map Venue Preview"
-                  width="100%"
-                  height="180"
-                  loading="lazy"
-                  style={{ border: 0 }}
-                  src={`https://maps.google.com/maps?q=${encodeURIComponent(
-                    `${project.venue?.name || ''} ${project.venue?.fullAddress || project.venue?.city || ''}`.trim() || 'Udaipur, Rajasthan'
-                  )}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-                />
-              </div>
-
-              <div className="pt-2">
+              <div className="pt-2 flex justify-end">
                 <button
                   type="button"
                   onClick={async () => {
-                    const effectiveMapsLink =
-                      project.venue?.googleMapsLink ||
-                      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                        `${project.venue?.name || ''} ${project.venue?.fullAddress || project.venue?.city || ''}`.trim()
-                      )}`;
-                    const updated: WeddingProject = {
-                      ...project,
-                      venue: {
-                        ...project.venue,
-                        fullAddress: project.venue?.fullAddress || `${project.venue?.name || ''}, ${project.venue?.city || ''}`,
-                        googleMapsLink: effectiveMapsLink,
-                      },
-                      customization: project.customization
-                        ? {
-                            ...project.customization,
-                            sections: {
-                              ...project.customization.sections,
-                              venue: {
-                                ...project.customization.sections?.venue,
-                                venueName: project.venue?.name || project.customization.sections?.venue?.venueName,
-                                venueCity: project.venue?.city || project.customization.sections?.venue?.venueCity,
-                                venueAddress:
-                                  project.venue?.fullAddress ||
-                                  project.venue?.city ||
-                                  project.customization.sections?.venue?.venueAddress,
-                                googleMapsLink: effectiveMapsLink,
-                              },
-                            },
-                          }
-                        : undefined,
-                    };
-                    setProject(updated);
-                    await saveWeddingProject(updated);
-                    showToast('Celebration details & Google Maps synced to live microsite! ✨');
+                    await saveWeddingProject(project);
+                    showToast('Couple identity & celebration schedule updated! ✨');
                   }}
-                  className="btn-slim-emerald text-xs font-bold flex items-center gap-1.5"
+                  className="btn-slim-gold text-xs font-bold flex items-center gap-1.5"
                 >
-                  <Save className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>Save All Celebration Details & Sync Microsite</span>
-                  <span>✨</span>
+                  <Check className="w-3.5 h-3.5 stroke-[3]" />
+                  <span>Update Couple Identity</span>
                 </button>
               </div>
             </div>
+
+            {/* CARD 2: DELIVERY-STYLE INTERACTIVE MAP PIN & VENUE NAVIGATION */}
+            <DeliveryStyleMapPicker
+              initialLocation={{
+                venueName: project.venue?.name || '',
+                city: project.venue?.city || '',
+                fullAddress: project.venue?.fullAddress || '',
+                googleMapsLink: project.venue?.googleMapsLink || '',
+                coordinates: project.venue?.coordinates,
+              }}
+              onLocationChange={(loc) => {
+                setProject({
+                  ...project,
+                  venue: {
+                    ...project.venue,
+                    name: loc.venueName,
+                    city: loc.city,
+                    fullAddress: loc.fullAddress,
+                    googleMapsLink: loc.googleMapsLink,
+                    coordinates: loc.coordinates,
+                  },
+                });
+              }}
+              showSaveButton={true}
+              onSave={async (loc) => {
+                const effectiveMapsLink =
+                  loc.googleMapsLink ||
+                  (loc.coordinates
+                    ? `https://www.google.com/maps/search/?api=1&query=${loc.coordinates.lat.toFixed(6)},${loc.coordinates.lng.toFixed(6)}`
+                    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        `${loc.venueName} ${loc.fullAddress || loc.city}`.trim()
+                      )}`);
+
+                const updated: WeddingProject = {
+                  ...project,
+                  venue: {
+                    ...project.venue,
+                    name: loc.venueName,
+                    city: loc.city,
+                    fullAddress: loc.fullAddress,
+                    googleMapsLink: effectiveMapsLink,
+                    coordinates: loc.coordinates,
+                  },
+                  customization: project.customization
+                    ? {
+                        ...project.customization,
+                        sections: {
+                          ...project.customization.sections,
+                          venue: {
+                            ...project.customization.sections?.venue,
+                            venueName: loc.venueName,
+                            venueCity: loc.city,
+                            venueAddress: loc.fullAddress,
+                            googleMapsLink: effectiveMapsLink,
+                            coordinates: loc.coordinates,
+                          },
+                        },
+                      }
+                    : undefined,
+                };
+                setProject(updated);
+                await saveWeddingProject(updated);
+                showToast('Delivery-style pin location & address saved to microsite! 📍✨');
+              }}
+            />
 
             {/* CLIENT ACCESS PASSCODE & CREDENTIAL SETTINGS CARD */}
             <div className="card-pop3d-emerald p-4 sm:p-6 rounded-2xl space-y-4">

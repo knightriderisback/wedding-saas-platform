@@ -173,9 +173,33 @@ export const getDefaultCustomization = (project?: Partial<WeddingProject>): Proj
         dressCodeDesc: 'Ivory, Champagne & Antique Gold Silks',
       },
 
-      rsvp: {
+      djSongs: {
         enabled: true,
         order: 8,
+        fontFamily: 'Cinzel',
+        fontSize: 'normal',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+        title: 'Sangeet DJ Playlist Requests',
+        subtitle: 'Dedicate your favorite track to the royal couple',
+        submitButtonText: 'Request Song for Sangeet',
+      },
+
+      voiceBlessings: {
+        enabled: true,
+        order: 9,
+        fontFamily: 'Cinzel',
+        fontSize: 'normal',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+        title: 'Vedic Spoken Vows & Voice Blessings',
+        subtitle: 'Record a heartfelt 30-second audio blessing directly to the couple',
+        recordPromptText: 'Tap to Record Voice Blessing',
+      },
+
+      rsvp: {
+        enabled: true,
+        order: 10,
         fontFamily: 'Cinzel',
         fontSize: 'large',
         fontStyle: 'normal',
@@ -190,7 +214,7 @@ export const getDefaultCustomization = (project?: Partial<WeddingProject>): Proj
 
       footerBlessing: {
         enabled: true,
-        order: 9,
+        order: 11,
         fontFamily: 'Alex Brush',
         fontSize: 'large',
         fontStyle: 'normal',

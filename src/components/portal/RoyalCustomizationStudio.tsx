@@ -13,6 +13,7 @@ import {
   FONT_FAMILY_OPTIONS,
 } from '@/lib/customizationDefaults';
 import { saveWeddingProject } from '@/lib/firebase';
+import { DeliveryStyleMapPicker } from '@/components/portal/DeliveryStyleMapPicker';
 import {
   Crown,
   Sparkles,
@@ -604,109 +605,30 @@ export const RoyalCustomizationStudio: React.FC<RoyalCustomizationStudioProps> =
               Destination Palace & Dress Code Details
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs mb-2">
-              <div>
-                <label className="block text-[10px] font-bold text-[#142F4C] mb-0.5 uppercase tracking-wide">
-                  Palace / Venue Name
-                </label>
-                <input
-                  type="text"
-                  value={project.venue.name}
-                  onChange={(e) => onUpdate({ ...project, venue: { ...project.venue, name: e.target.value } })}
-                  placeholder="The Oberoi Udaivilas"
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-[#1E3F66]/30 bg-white font-bold text-[#142F4C] text-xs"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[10px] font-bold text-[#142F4C] mb-0.5 uppercase tracking-wide">
-                  City & State
-                </label>
-                <input
-                  type="text"
-                  value={project.venue.city}
-                  onChange={(e) => onUpdate({ ...project, venue: { ...project.venue, city: e.target.value } })}
-                  placeholder="Udaipur, Rajasthan"
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-[#1E3F66]/30 bg-white font-bold text-[#142F4C] text-xs"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2 mb-2.5">
-              <div>
-                <label className="block text-[10px] font-bold text-[#142F4C] mb-0.5 uppercase tracking-wide">
-                  Full Street Address & Landmark 📍
-                </label>
-                <input
-                  type="text"
-                  value={project.venue.fullAddress || ''}
-                  onChange={(e) => onUpdate({ ...project, venue: { ...project.venue, fullAddress: e.target.value } })}
-                  placeholder="Haridas Ji Ki Magri, Mulla Talai, Udaipur, Rajasthan 313001"
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-[#1E3F66]/30 bg-white font-bold text-[#142F4C] text-xs"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-0.5">
-                  <label className="text-[10px] font-bold text-[#142F4C] uppercase tracking-wide">
-                    Google Maps Navigation Link / Pin URL 🗺️
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const link = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                          project.venue.name + ' ' + (project.venue.fullAddress || project.venue.city)
-                        )}`;
-                        onUpdate({ ...project, venue: { ...project.venue, googleMapsLink: link } });
-                        showToast('Google Maps navigation link auto-generated! 📍');
-                      }}
-                      className="text-[9px] font-bold text-[#1E3F66] hover:underline"
-                    >
-                      ⚡ Auto-Generate Link
-                    </button>
-                    {project.venue.googleMapsLink && (
-                      <a
-                        href={project.venue.googleMapsLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[9px] font-bold text-emerald-700 hover:underline inline-flex items-center gap-0.5"
-                      >
-                        <Navigation className="w-2.5 h-2.5" />
-                        <span>Test Pin</span>
-                      </a>
-                    )}
-                  </div>
-                </div>
-                <input
-                  type="url"
-                  value={project.venue.googleMapsLink || ''}
-                  onChange={(e) => onUpdate({ ...project, venue: { ...project.venue, googleMapsLink: e.target.value } })}
-                  placeholder="https://maps.google.com/?q=... or https://maps.app.goo.gl/..."
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-[#1E3F66]/30 bg-white font-mono text-[#142F4C] text-xs"
-                />
-
-                {/* Interactive Live Google Maps Preview */}
-                <div className="mt-2 rounded-xl overflow-hidden border border-[#1E3F66]/30 bg-stone-100 shadow-inner">
-                  <div className="bg-[#FAF4E3] px-2.5 py-1 border-b border-[#1E3F66]/20 flex items-center justify-between text-[10px] text-[#142F4C] font-bold">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-[#AA820A]" /> Live GPS Map Preview
-                    </span>
-                    <span className="text-[9px] text-stone-500 font-normal">Interactive guest navigation view</span>
-                  </div>
-                  <iframe
-                    title="Google Map Live Preview"
-                    width="100%"
-                    height="160"
-                    loading="lazy"
-                    style={{ border: 0 }}
-                    src={`https://maps.google.com/maps?q=${encodeURIComponent(
-                      `${project.venue.name || ''} ${project.venue.fullAddress || project.venue.city || ''}`.trim() || 'Udaipur, Rajasthan'
-                    )}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-                  />
-                </div>
-              </div>
-            </div>
+            {/* Delivery-Style Live Map Pin Picker */}
+            <DeliveryStyleMapPicker
+              initialLocation={{
+                venueName: project.venue.name,
+                city: project.venue.city,
+                fullAddress: project.venue.fullAddress || '',
+                googleMapsLink: project.venue.googleMapsLink || '',
+                coordinates: project.venue.coordinates,
+              }}
+              onLocationChange={(loc) => {
+                onUpdate({
+                  ...project,
+                  venue: {
+                    ...project.venue,
+                    name: loc.venueName,
+                    city: loc.city,
+                    fullAddress: loc.fullAddress,
+                    googleMapsLink: loc.googleMapsLink,
+                    coordinates: loc.coordinates,
+                  },
+                });
+              }}
+              showSaveButton={false}
+            />
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs pt-2 border-t border-[#1E3F66]/20">
               <div>

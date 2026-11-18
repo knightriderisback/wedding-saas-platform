@@ -140,12 +140,28 @@ export interface VenueSectionConfig extends SectionStyleConfig {
   venueCity?: string;
   venueAddress?: string;
   googleMapsLink?: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
   showMapButton?: boolean;
   mapButtonText?: string;
   showDressCode?: boolean;
   dressCodeTitle?: string;
   dressCodeValue?: string;
   dressCodeDesc?: string;
+}
+
+export interface DjSongSectionConfig extends SectionStyleConfig {
+  title?: string;
+  subtitle?: string;
+  submitButtonText?: string;
+}
+
+export interface VoiceBlessingSectionConfig extends SectionStyleConfig {
+  title?: string;
+  subtitle?: string;
+  recordPromptText?: string;
 }
 
 export interface RsvpSectionConfig extends SectionStyleConfig {
@@ -191,6 +207,8 @@ export interface ProjectCustomization {
     photoCarousel: PhotoCarouselSectionConfig;
     timeline: TimelineSectionConfig;
     venue: VenueSectionConfig;
+    djSongs?: DjSongSectionConfig;
+    voiceBlessings?: VoiceBlessingSectionConfig;
     rsvp: RsvpSectionConfig;
     footerBlessing: FooterBlessingSectionConfig;
   };
@@ -208,6 +226,10 @@ export interface WeddingProject {
     city: string;
     fullAddress: string;
     googleMapsLink: string;
+    coordinates?: {
+      lat: number;
+      lng: number;
+    };
   };
   coverImageUrl: string;
   backgroundAudioUrl: string;

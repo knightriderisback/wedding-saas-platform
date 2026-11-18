@@ -302,6 +302,7 @@ export async function saveWeddingProject(project: WeddingProject): Promise<void>
       project.customization.sections.venue.venueCity = project.venue.city;
       project.customization.sections.venue.venueAddress = project.venue.fullAddress;
       project.customization.sections.venue.googleMapsLink = project.venue.googleMapsLink;
+      project.customization.sections.venue.coordinates = project.venue.coordinates;
     }
   }
 
