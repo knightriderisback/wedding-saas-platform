@@ -12,7 +12,7 @@ import {
   MUSIC_PRESETS,
   FONT_FAMILY_OPTIONS,
 } from '@/lib/customizationDefaults';
-import { saveWeddingProject } from '@/lib/firebase';
+import { saveWeddingProject, uploadMediaFile } from '@/lib/firebase';
 import { DeliveryStyleMapPicker } from '@/components/portal/DeliveryStyleMapPicker';
 import {
   Crown,
@@ -142,8 +142,8 @@ export const RoyalCustomizationStudio: React.FC<RoyalCustomizationStudioProps> =
     setPlayingTrackId(trackId);
   };
 
-  // Real Audio File Upload Handler (MP3 / WAV / Audio files)
-  const handleAudioFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Real Audio File Upload Handler (MP3 / WAV / Audio files to cloud storage)
+  const handleAudioFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
@@ -151,46 +151,73 @@ export const RoyalCustomizationStudio: React.FC<RoyalCustomizationStudioProps> =
     const sizeInMB = (file.size / (1024 * 1024)).toFixed(1);
     setUploadedAudioName(file.name);
     setUploadedAudioSize(`${sizeInMB} MB`);
+    showToast(`Uploading "${file.name}" to server... ⏳`);
 
-    const reader = new FileReader();
-    reader.onload = (uploadEvent) => {
-      const dataUrl = uploadEvent.target?.result as string;
-      if (dataUrl) {
+    try {
+      const uploadedUrl = await uploadMediaFile(file, `projects/${project.id}/audio/${file.name}`);
+      if (uploadedUrl) {
         setCustomization((prev) => ({
           ...prev,
-          musicTrackUrl: dataUrl,
+          musicTrackUrl: uploadedUrl,
           musicTrackTitle: file.name,
         }));
-        showToast(`Uploaded "${file.name}" (${sizeInMB} MB) successfully!`);
+        const updatedProject: WeddingProject = {
+          ...project,
+          backgroundAudioUrl: uploadedUrl,
+          customization: {
+            ...customization,
+            musicTrackUrl: uploadedUrl,
+            musicTrackTitle: file.name,
+          },
+        };
+        await saveWeddingProject(updatedProject);
+        onUpdate(updatedProject);
+        showToast(`Uploaded "${file.name}" & saved to microsite! 🎶✨`);
       }
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      showToast('Audio upload failed. Please try a smaller file.');
+    }
   };
 
   // Real Image File Upload Handler (For Photo Carousel & Cover)
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const newPhotos: string[] = [];
-    let processed = 0;
+    showToast(`Uploading ${files.length} photo(s) to server... ⏳`);
+    try {
+      const newPhotos: string[] = [];
+      for (const file of Array.from(files)) {
+        const uploadedUrl = await uploadMediaFile(file, `projects/${project.id}/photos/${file.name}`);
+        if (uploadedUrl) {
+          newPhotos.push(uploadedUrl);
+        }
+      }
 
-    Array.from(files).forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const dataUrl = ev.target?.result as string;
-        if (dataUrl) {
-          newPhotos.push(dataUrl);
-        }
-        processed++;
-        if (processed === files.length) {
-          const currentPhotos = customization.sections.photoCarousel.photos || [];
-          updateSection('photoCarousel', { photos: [...currentPhotos, ...newPhotos] });
-          showToast(`Uploaded ${files.length} photo(s) to Wedding Gallery!`);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
+      if (newPhotos.length > 0) {
+        const currentPhotos = customization.sections.photoCarousel.photos || [];
+        const mergedPhotos = [...currentPhotos, ...newPhotos];
+        updateSection('photoCarousel', { photos: mergedPhotos });
+        const updatedProject: WeddingProject = {
+          ...project,
+          customization: {
+            ...customization,
+            sections: {
+              ...customization.sections,
+              photoCarousel: {
+                ...customization.sections.photoCarousel,
+                photos: mergedPhotos,
+              },
+            },
+          },
+        };
+        await saveWeddingProject(updatedProject);
+        onUpdate(updatedProject);
+        showToast(`Uploaded ${newPhotos.length} photo(s) & saved to microsite! 🖼️✨`);
+      }
+    } catch {
+      showToast('Photo upload failed. Please try again.');
+    }
   };
 
   // Save handler

@@ -178,6 +178,9 @@ export interface FooterBlessingSectionConfig extends SectionStyleConfig {
 }
 
 export interface ProjectCustomization {
+  // Global background settings
+  backgroundImageUrl?: string;
+
   // Global music settings
   musicTrackUrl?: string;
   musicTrackTitle?: string;
@@ -233,9 +236,11 @@ export interface WeddingProject {
   };
   coverImageUrl: string;
   backgroundAudioUrl: string;
+  backgroundImageUrl?: string;
   media?: {
     coverPhoto?: string;
     backgroundMusic?: string;
+    backgroundImage?: string;
     photos?: string[];
   };
   status: 'active' | 'draft' | 'archived';

@@ -883,3 +883,174 @@
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
+/* ==========================================================================
+   MICROSITE TRENDING 3D SLIM BUTTON SUITE
+   Ultra-tactile, slim, glossy, 3D pop-out buttons with micro-doodles & icons
+   ========================================================================== */
+
+.btn-microsite-3d-emerald {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #2D4C35 0%, #1A3121 50%, #122317 100%);
+  border: 1.5px solid #D4AF37;
+  color: #FAF4E3;
+  box-shadow:
+    0 4px 0 #0A160E,
+    0 8px 18px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  user-select: none;
+}
+
+.btn-microsite-3d-emerald:hover {
+  transform: translateY(-1.5px);
+  background: linear-gradient(180deg, #375B40 0%, #203A28 50%, #162B1D 100%);
+  box-shadow:
+    0 5px 0 #0A160E,
+    0 12px 22px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55);
+}
+
+.btn-microsite-3d-emerald:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 #0A160E,
+    0 3px 6px rgba(0, 0, 0, 0.35),
+    inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn-microsite-3d-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #FFF6DD 0%, #E8CD82 35%, #C99E39 70%, #9F761A 100%);
+  border: 1.5px solid #FFE7A0;
+  color: #382403;
+  box-shadow:
+    0 4px 0 #6B4E0E,
+    0 8px 18px rgba(181, 154, 87, 0.4),
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.95);
+  cursor: pointer;
+  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  user-select: none;
+}
+
+.btn-microsite-3d-gold:hover {
+  transform: translateY(-1.5px);
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5DD98 35%, #D8AF48 70%, #B08420 100%);
+  box-shadow:
+    0 5px 0 #6B4E0E,
+    0 12px 22px rgba(181, 154, 87, 0.5),
+    inset 0 1.5px 1px rgba(255, 255, 255, 1);
+}
+
+.btn-microsite-3d-gold:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 #6B4E0E,
+    0 3px 6px rgba(181, 154, 87, 0.3),
+    inset 0 2px 3px rgba(0, 0, 0, 0.25);
+}
+
+.btn-microsite-3d-ruby {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #B92433 0%, #871420 50%, #5E0C15 100%);
+  border: 1.5px solid #EAA958;
+  color: #FFFFFF;
+  box-shadow:
+    0 4px 0 #38060B,
+    0 8px 18px rgba(135, 20, 32, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  user-select: none;
+}
+
+.btn-microsite-3d-ruby:hover {
+  transform: translateY(-1.5px);
+  background: linear-gradient(180deg, #CD2C3D 0%, #9B1A27 50%, #70101A 100%);
+  box-shadow:
+    0 5px 0 #38060B,
+    0 12px 22px rgba(135, 20, 32, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+.btn-microsite-3d-ruby:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 #38060B,
+    0 3px 6px rgba(135, 20, 32, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn-microsite-3d-glass {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 9999px;
+  background: rgba(253, 248, 237, 0.94);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(181, 154, 87, 0.7);
+  color: #273822;
+  box-shadow:
+    0 3px 0 rgba(160, 130, 60, 0.45),
+    0 6px 16px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  cursor: pointer;
+  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.btn-microsite-3d-glass:hover {
+  transform: translateY(-1.5px);
+  background: #FFFFFF;
+  border-color: #B59A57;
+  box-shadow:
+    0 4.5px 0 rgba(160, 130, 60, 0.5),
+    0 10px 20px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.btn-microsite-3d-glass:active {
+  transform: translateY(2.5px);
+  box-shadow:
+    0 0.5px 0 rgba(160, 130, 60, 0.45),
+    0 2px 5px rgba(0, 0, 0, 0.15),
+    inset 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+

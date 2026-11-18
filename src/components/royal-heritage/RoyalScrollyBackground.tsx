@@ -6,6 +6,7 @@ interface RoyalScrollyBackgroundProps {
   scrollerRef: React.RefObject<HTMLElement>;
   className?: string;
   overlayOpacity?: number; // Soft wash over video for text readability
+  customBackgroundImage?: string;
 }
 
 const TOTAL_FRAMES = 120;
@@ -14,6 +15,7 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
   scrollerRef,
   className = '',
   overlayOpacity = 0.22,
+  customBackgroundImage,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
@@ -214,17 +216,26 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
       className={`fixed inset-0 pointer-events-none overflow-hidden ${className}`}
       style={{ zIndex: 0, willChange: 'transform', backgroundColor: '#1A2218' }}
     >
-      {/* 3D Scrolly Video Canvas */}
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full object-cover block"
-        style={{
-          width: '100%',
-          height: '100%',
-          transform: 'translateZ(0)',
-          backfaceVisibility: 'hidden',
-        }}
-      />
+      {/* Custom Uploaded Royal Wallpaper Background */}
+      {customBackgroundImage ? (
+        <img
+          src={customBackgroundImage}
+          alt="Royal Background Backdrop"
+          className="w-full h-full object-cover block absolute inset-0 z-0"
+        />
+      ) : (
+        /* 3D Scrolly Video Canvas */
+        <canvas
+          ref={canvasRef}
+          className="w-full h-full object-cover block"
+          style={{
+            width: '100%',
+            height: '100%',
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
+          }}
+        />
+      )}
 
       {/* Luxury Parchment Ambient Wash for High Contrast Text Legibility */}
       <div

@@ -170,10 +170,11 @@ export const DjSongRequestBox: React.FC<DjSongRequestBoxProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3 rounded-full bg-gradient-to-r from-[#9B1C2E] to-[#7A1423] text-white font-serif text-sm uppercase tracking-wider font-bold shadow-md hover:brightness-110 flex items-center justify-center gap-2 transition-all cursor-pointer border border-[#D4AF37]"
+              className="btn-microsite-3d-ruby w-full py-3 px-6 rounded-full text-xs sm:text-sm font-['Cinzel',serif] uppercase tracking-wider font-bold shadow-md flex items-center justify-center gap-2 cursor-pointer"
             >
               <Send className="w-3.5 h-3.5" />
-              {isSubmitting ? t.djSubmittingButton : t.djSubmitButton}
+              <span>{isSubmitting ? t.djSubmittingButton : t.djSubmitButton}</span>
+              <span>🎵</span>
             </button>
           </div>
         </form>

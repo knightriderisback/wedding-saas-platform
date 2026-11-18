@@ -531,24 +531,54 @@ export async function getAllProjects(): Promise<WeddingProject[]> {
 }
 
 /**
- * Upload a media file or audio note to Firebase Storage or generate object URL
+ * Upload a media file or audio note to Next.js /api/upload, Firebase Storage, or fallback base64
  */
-export async function uploadMediaFile(file: File | Blob, storagePath: string): Promise<string> {
-  if (isFirebaseConfigured && storage) {
+export async function uploadMediaFile(file: File | Blob, storagePath?: string): Promise<string> {
+  // 1. Primary: Next.js API /api/upload (Permanent static URL served from /uploads/...)
+  if (typeof window !== 'undefined') {
+    try {
+      const formData = new FormData();
+      const fileName = (file as File).name || `media-${Date.now()}.${file.type.includes('audio') ? 'mp3' : 'jpg'}`;
+      formData.append('file', file, fileName);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.url) {
+          return result.url;
+        }
+      }
+    } catch (e) {
+      console.warn('API /api/upload failed, trying fallback:', e);
+    }
+  }
+
+  // 2. Firebase Storage if configured
+  if (isFirebaseConfigured && storage && storagePath) {
     try {
       const storageRef = ref(storage, storagePath);
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
       return url;
     } catch (e) {
-      console.warn('Firebase Storage upload failed, creating object URL:', e);
+      console.warn('Firebase Storage upload failed:', e);
     }
   }
 
-  // Offline / development blob URL
-  if (typeof window !== 'undefined') {
-    return URL.createObjectURL(file);
+  // 3. Fallback: Base64 Data URL (persists in storage, unlike temporary revoked blob URLs)
+  if (typeof window !== 'undefined' && typeof FileReader !== 'undefined') {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = () => resolve('');
+      reader.readAsDataURL(file);
+    });
   }
+
   return '';
 }
 

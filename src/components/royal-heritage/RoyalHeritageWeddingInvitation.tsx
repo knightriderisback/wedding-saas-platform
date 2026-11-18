@@ -1069,6 +1069,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
       <RoyalScrollyBackground
         scrollerRef={scrollContainerRef}
         overlayOpacity={0.16}
+        customBackgroundImage={project?.backgroundImageUrl || customization?.backgroundImageUrl}
       />
 
       {/* ========================================================
@@ -1195,13 +1196,13 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           {customization.showMusicButton !== false && (
             <button
               onClick={toggleAudio}
-              className="fixed top-4 right-4 z-40 w-10 h-10 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/60 shadow-[0_4px_15px_rgba(0,0,0,0.18)] flex items-center justify-center text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer"
+              className="fixed top-4 right-4 z-40 btn-microsite-3d-glass !p-2 !w-10 !h-10 rounded-full flex items-center justify-center text-[#273822] cursor-pointer"
               title={isAudioPlaying ? 'Mute Music' : 'Play Music'}
             >
               {isAudioPlaying ? (
-                <Volume2 className="w-5 h-5 text-[#B59A57] animate-pulse" />
+                <Volume2 className="w-4 h-4 text-[#AA820A] animate-pulse" />
               ) : (
-                <VolumeX className="w-5 h-5 text-[#6B5A3E]" />
+                <VolumeX className="w-4 h-4 text-[#6B5A3E]" />
               )}
             </button>
           )}
@@ -1224,9 +1225,9 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                           setCurrentLang(lng);
                           setLangMenuOpen(false);
                         }}
-                        className={`px-3.5 py-1.5 rounded-xl text-sm font-['Cinzel',serif] tracking-wider text-left transition-all ${
+                        className={`px-3 py-1.5 rounded-xl text-xs font-['Cinzel',serif] tracking-wider text-left transition-all cursor-pointer font-bold ${
                           currentLang === lng
-                            ? 'bg-[#273822] text-[#FAF8F5] font-bold shadow-sm'
+                            ? 'btn-microsite-3d-emerald !text-white'
                             : 'text-[#273822] hover:bg-[#DFC07C]/25'
                         }`}
                         style={deepTextShadow}
@@ -1240,11 +1241,12 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
 
               <button
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md text-xs sm:text-sm font-['Cinzel',serif] tracking-wider uppercase text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer font-bold"
+                className="btn-microsite-3d-glass inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-['Cinzel',serif] tracking-wider uppercase font-bold"
                 style={deepTextShadow}
               >
-                <Globe className="w-4 h-4 text-[#B59A57]" />
+                <Globe className="w-3.5 h-3.5 text-[#AA820A]" />
                 <span>{t.langName}</span>
+                <span className="text-[10px] opacity-75">🌐</span>
               </button>
             </div>
           )}
@@ -1690,22 +1692,23 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 {/* Floating Venue Pin & Google Maps Action */}
                 {customization.sections.venue.showMapButton !== false && (
                   <div className="mt-5 flex flex-col items-center">
-                    <div className="w-12 h-12 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#E6D197] flex items-center justify-center shadow-lg border-2 border-[#DFC07C] mb-3">
-                      <MapPin className="w-6 h-6 animate-pulse" />
+                    <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#1E3A24] to-[#2D4C35] text-[#E6D197] flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.3)] border-2 border-[#D4AF37] mb-3">
+                      <MapPin className="w-5 h-5 animate-pulse text-[#E6D197]" />
                     </div>
                     <a
                       href={effectiveMapsLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#273822]/90 backdrop-blur-md text-[#FAF8F5] text-sm ${fontSubHeading} shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 cursor-pointer font-bold`}
+                      className="btn-microsite-3d-emerald inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs sm:text-sm font-['Cinzel',serif] tracking-wider uppercase font-black"
                       style={deepTextShadow}
                     >
-                      <Navigation className="w-4 h-4 text-[#E6D197]" />
+                      <Navigation className="w-3.5 h-3.5 text-[#DFC07C]" />
                       <span>
                         {currentLang === 'en' && customization.sections.venue.mapButtonText
                           ? customization.sections.venue.mapButtonText
                           : t.viewMap}
                       </span>
+                      <span>📍</span>
                     </a>
                   </div>
                 )}
@@ -2054,19 +2057,20 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     <button
                       type="submit"
                       disabled={rsvpLoading}
-                      className={`w-full py-3.5 rounded-full bg-[#273822] text-[#FAF8F5] text-sm sm:text-base ${fontSubHeading} shadow-lg hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/50 flex items-center justify-center gap-2 mt-2 cursor-pointer font-bold`}
+                      className="btn-microsite-3d-emerald w-full py-3.5 px-6 rounded-full text-xs sm:text-sm font-['Cinzel',serif] tracking-wider uppercase font-black flex items-center justify-center gap-2 mt-3 cursor-pointer"
                       style={deepTextShadow}
                     >
                       {rsvpLoading ? (
                         <span className="animate-pulse">{t.sending}</span>
                       ) : (
                         <>
-                          <PartyPopper className="w-4 h-4 text-[#E6D197]" />
-                          <span className="font-bold">
+                          <PartyPopper className="w-4 h-4 text-[#DFC07C]" />
+                          <span>
                             {currentLang === 'en' && customization.sections.rsvp.submitButtonText
                               ? customization.sections.rsvp.submitButtonText
                               : t.submitBtn}
                           </span>
+                          <span>💌</span>
                         </>
                       )}
                     </button>

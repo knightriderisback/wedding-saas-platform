@@ -1358,7 +1358,7 @@ function ClientPortalContent() {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {/* Card 1: Cover Photo File Upload */}
               <div className="card-pop3d-amber p-4 rounded-2xl space-y-3">
                 <div className="flex items-center justify-between">
@@ -1380,23 +1380,28 @@ function ClientPortalContent() {
                     accept="image/*"
                     id="portal-cover-photo-upload"
                     className="hidden"
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (!file) return;
-                      const reader = new FileReader();
-                      reader.onload = (uploadEvent) => {
-                        const dataUrl = uploadEvent.target?.result as string;
-                        setProject({
-                          ...project,
-                          coverImageUrl: dataUrl,
-                          media: {
-                            ...(project.media || {}),
-                            coverPhoto: dataUrl,
-                          },
-                        });
-                        showToast(`Uploaded ${file.name} successfully!`);
-                      };
-                      reader.readAsDataURL(file);
+                      showToast(`Uploading ${file.name} to server... ⏳`);
+                      try {
+                        const uploadedUrl = await uploadMediaFile(file, `projects/${project.id}/photos/${file.name}`);
+                        if (uploadedUrl) {
+                          const updated = {
+                            ...project,
+                            coverImageUrl: uploadedUrl,
+                            media: {
+                              ...(project.media || {}),
+                              coverPhoto: uploadedUrl,
+                            },
+                          };
+                          setProject(updated);
+                          await saveWeddingProject(updated);
+                          showToast(`Uploaded & saved ${file.name} to microsite! 🖼️✨`);
+                        }
+                      } catch {
+                        showToast('Image upload failed. Please try again.');
+                      }
                     }}
                   />
                   <label
@@ -1407,7 +1412,7 @@ function ClientPortalContent() {
                     <span>Upload Image File</span>
                     <span>📷</span>
                   </label>
-                  <span className="text-[10px] text-[#785B24]">Supported formats: JPG, PNG, WEBP</span>
+                  <span className="text-[10px] text-[#785B24]">Saved directly to cloud storage (JPG, PNG, WEBP)</span>
                 </div>
 
                 {project.media?.coverPhoto && (
@@ -1417,8 +1422,8 @@ function ClientPortalContent() {
                       alt="Cover Preview"
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
-                      Live Preview
+                    <div className="absolute top-2 right-2 bg-emerald-800 text-white text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                      <Check className="w-2.5 h-2.5" /> Saved & Active
                     </div>
                   </div>
                 )}
@@ -1445,19 +1450,35 @@ function ClientPortalContent() {
                     accept="audio/*"
                     id="portal-audio-track-upload"
                     className="hidden"
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (!file) return;
-                      const audioUrl = URL.createObjectURL(file);
-                      setProject({
-                        ...project,
-                        backgroundAudioUrl: audioUrl,
-                        media: {
-                          ...(project.media || {}),
-                          backgroundMusic: audioUrl,
-                        },
-                      });
-                      showToast(`Uploaded ${file.name} audio file!`);
+                      showToast(`Uploading ${file.name} to server... ⏳`);
+                      try {
+                        const uploadedUrl = await uploadMediaFile(file, `projects/${project.id}/audio/${file.name}`);
+                        if (uploadedUrl) {
+                          const updated = {
+                            ...project,
+                            backgroundAudioUrl: uploadedUrl,
+                            media: {
+                              ...(project.media || {}),
+                              backgroundMusic: uploadedUrl,
+                            },
+                            customization: project.customization
+                              ? {
+                                  ...project.customization,
+                                  musicTrackUrl: uploadedUrl,
+                                  musicTrackTitle: file.name,
+                                }
+                              : undefined,
+                          };
+                          setProject(updated);
+                          await saveWeddingProject(updated);
+                          showToast(`Uploaded & saved ${file.name} to microsite! 🎶✨`);
+                        }
+                      } catch {
+                        showToast('Audio upload failed. Please try a smaller audio file.');
+                      }
                     }}
                   />
                   <label
@@ -1468,22 +1489,103 @@ function ClientPortalContent() {
                     <span>Upload Audio File</span>
                     <span>🎵</span>
                   </label>
-                  <span className="text-[10px] text-[#234E30]">Supported formats: MP3, WAV, AAC, M4A</span>
+                  <span className="text-[10px] text-[#234E30]">Saved directly to cloud storage (MP3, WAV, AAC)</span>
                 </div>
 
-                {project.media?.backgroundMusic && (
-                  <div className="p-2.5 rounded-xl bg-white/90 border border-emerald-300 shadow-xs flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 truncate">
-                      <Music className="w-4 h-4 text-emerald-700 shrink-0" />
-                      <span className="text-xs text-[#193822] font-mono truncate">
-                        Audio Track Loaded
+                {project.backgroundAudioUrl && (
+                  <div className="p-2.5 rounded-xl bg-white/90 border border-emerald-300 shadow-xs flex flex-col gap-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <Music className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                        <span className="text-[11px] text-[#193822] font-mono font-bold truncate">
+                          Active Shehnai Music
+                        </span>
+                      </div>
+                      <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full border border-emerald-300">
+                        Saved
                       </span>
                     </div>
                     <audio
-                      src={project.media.backgroundMusic}
+                      src={project.backgroundAudioUrl}
                       controls
-                      className="h-8 max-w-[200px]"
+                      className="h-8 w-full"
                     />
+                  </div>
+                )}
+              </div>
+
+              {/* Card 3: Royal Background Wallpaper / Canvas Theme */}
+              <div className="card-pop3d-azure p-4 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Palette className="w-4 h-4 text-[#142F4C]" />
+                    <span className="font-portal text-xs font-bold text-[#142F4C] uppercase">
+                      Royal Background Wallpaper
+                    </span>
+                  </div>
+                  <span className="text-xs">🎨</span>
+                </div>
+                <p className="text-[11px] text-[#1E3F66]">
+                  Upload custom background wallpaper or palatial canvas for the wedding invitation backdrop.
+                </p>
+
+                <div className="p-3 bg-white/80 rounded-xl border border-[#1E3F66]/20 flex flex-col items-center justify-center gap-2 text-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="portal-background-image-upload"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      showToast(`Uploading ${file.name} to server... ⏳`);
+                      try {
+                        const uploadedUrl = await uploadMediaFile(file, `projects/${project.id}/background/${file.name}`);
+                        if (uploadedUrl) {
+                          const updated = {
+                            ...project,
+                            backgroundImageUrl: uploadedUrl,
+                            media: {
+                              ...(project.media || {}),
+                              backgroundImage: uploadedUrl,
+                            },
+                            customization: project.customization
+                              ? {
+                                  ...project.customization,
+                                  backgroundImageUrl: uploadedUrl,
+                                }
+                              : undefined,
+                          };
+                          setProject(updated);
+                          await saveWeddingProject(updated);
+                          showToast(`Uploaded & saved ${file.name} backdrop! 🎨✨`);
+                        }
+                      } catch {
+                        showToast('Background upload failed. Please try again.');
+                      }
+                    }}
+                  />
+                  <label
+                    htmlFor="portal-background-image-upload"
+                    className="btn-slim-azure text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Upload Background</span>
+                    <span>🖼️</span>
+                  </label>
+                  <span className="text-[10px] text-[#1E3F66]">Custom royal canvas texture (JPG, PNG)</span>
+                </div>
+
+                {project.backgroundImageUrl && (
+                  <div className="relative rounded-xl overflow-hidden border border-[#1E3F66]/30 aspect-video bg-neutral-100 shadow-xs">
+                    <img
+                      src={project.backgroundImageUrl}
+                      alt="Background Preview"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-2 right-2 bg-[#142F4C] text-white text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                      <Check className="w-2.5 h-2.5" /> Active Wallpaper
+                    </div>
                   </div>
                 )}
               </div>

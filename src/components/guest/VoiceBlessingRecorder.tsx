@@ -224,18 +224,20 @@ export const VoiceBlessingRecorder: React.FC<VoiceBlessingRecorderProps> = ({
                       setAudioUrl(null);
                       setRecordSeconds(0);
                     }}
-                    className="flex-1 py-2.5 rounded-full border border-[#D4AF37]/60 text-[#543F02] font-serif text-xs uppercase tracking-wider hover:bg-[#FAF4E3] transition-all cursor-pointer"
+                    className="btn-microsite-3d-glass flex-1 py-2 px-3 text-xs uppercase tracking-wider cursor-pointer font-bold"
                   >
-                    {t.voiceReRecord}
+                    <span>🔄</span>
+                    <span>{t.voiceReRecord}</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleUploadBlessing}
                     disabled={isUploading}
-                    className="flex-1 py-2.5 rounded-full bg-gradient-to-r from-[#9B1C2E] to-[#7A1423] text-white font-serif text-xs uppercase font-bold tracking-wider hover:brightness-110 flex items-center justify-center gap-1.5 border border-[#D4AF37] cursor-pointer"
+                    className="btn-microsite-3d-ruby flex-1 py-2 px-3 text-xs uppercase font-bold tracking-wider flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    {isUploading ? t.voiceSubmittingButton : t.voiceSubmitButton}
+                    <span>{isUploading ? t.voiceSubmittingButton : t.voiceSubmitButton}</span>
+                    <span>✨</span>
                   </button>
                 </div>
               </div>
