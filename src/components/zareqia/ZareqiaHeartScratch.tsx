@@ -457,11 +457,11 @@ END:VCALENDAR`;
         />
       </div>
 
-      {/* Save The Date Pill Button (Matching exact video f_0035.jpg) */}
+      {/* Save The Date Pill Button (Tactile 3D Slim Gold Button) */}
       <div className="mt-4 transition-all duration-700">
         <button
           onClick={handleSaveTheDate}
-          className="group relative inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#273822] text-[#FAF8F5] text-sm font-['Cinzel',serif] tracking-wider uppercase shadow-md hover:bg-[#1D2B19] active:scale-95 transition-all border border-[#B59A57]/30 font-bold"
+          className="btn-microsite-3d-gold inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs sm:text-sm font-['Cinzel',serif] tracking-wider uppercase font-black cursor-pointer"
         >
           {calendarSaved ? (
             <>

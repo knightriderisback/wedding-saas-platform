@@ -1461,10 +1461,23 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 transition={{ duration: 0.9, ease: 'easeOut' }}
                 className="w-full max-w-[360px]"
               >
-                {/* Photo Carousel floating directly */}
+                {/* Photo Carousel with Custom Uploaded Couple Photos */}
                 {customization.sections.photoCarousel.enabled !== false && (
-                  <div className="rounded-3xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.25)] border-2 border-white/70">
-                    <ZareqiaPhotoCarousel />
+                  <div className="rounded-3xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.25)] border-2 border-[#D4AF37]/50 bg-black/10">
+                    <ZareqiaPhotoCarousel
+                      photos={
+                        customization.sections.photoCarousel.photos && customization.sections.photoCarousel.photos.length > 0
+                          ? [
+                              ...(project?.coverImageUrl && !customization.sections.photoCarousel.photos.includes(project.coverImageUrl)
+                                ? [project.coverImageUrl]
+                                : []),
+                              ...customization.sections.photoCarousel.photos,
+                            ]
+                          : project?.coverImageUrl
+                          ? [project.coverImageUrl]
+                          : undefined
+                      }
+                    />
                   </div>
                 )}
 

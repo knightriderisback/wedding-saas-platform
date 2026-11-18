@@ -27,7 +27,19 @@ const CAROUSEL_IMAGES = [
   },
 ];
 
-export const ZareqiaPhotoCarousel: React.FC = () => {
+interface ZareqiaPhotoCarouselProps {
+  photos?: string[];
+}
+
+export const ZareqiaPhotoCarousel: React.FC<ZareqiaPhotoCarouselProps> = ({ photos }) => {
+  const effectiveImages = photos && photos.length > 0
+    ? photos.map((url, i) => ({
+        src: url,
+        alt: `Royal Wedding Celebration Photo ${i + 1}`,
+        caption: `Royal Memory #${i + 1}`,
+      }))
+    : CAROUSEL_IMAGES;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const touchStartX = useRef<number | null>(null);
@@ -36,17 +48,17 @@ export const ZareqiaPhotoCarousel: React.FC = () => {
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+      setCurrentIndex((prev) => (prev + 1) % effectiveImages.length);
     }, 4500);
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [isPaused, effectiveImages.length]);
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+    setCurrentIndex((prev) => (prev + 1) % effectiveImages.length);
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + CAROUSEL_IMAGES.length) % CAROUSEL_IMAGES.length);
+    setCurrentIndex((prev) => (prev - 1 + effectiveImages.length) % effectiveImages.length);
   };
 
   const onTouchStart = (e: React.TouchEvent) => {
@@ -76,7 +88,7 @@ export const ZareqiaPhotoCarousel: React.FC = () => {
     >
       {/* Photo Frame Container with rounded corners and drop shadow (frameless like video) */}
       <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden shadow-lg bg-[#EDE7DB]">
-        {CAROUSEL_IMAGES.map((img, idx) => (
+        {effectiveImages.map((img, idx) => (
           <div
             key={idx}
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
@@ -97,27 +109,27 @@ export const ZareqiaPhotoCarousel: React.FC = () => {
           </div>
         ))}
 
-        {/* Left Arrow */}
+        {/* Left Arrow (Tactile 3D Slim Glass) */}
         <button
           onClick={handlePrev}
           aria-label="Previous slide"
-          className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/20 backdrop-blur-sm text-white/90 flex items-center justify-center hover:bg-black/35 transition-colors"
+          className="btn-microsite-3d-glass !p-1.5 !w-8 !h-8 absolute left-2.5 top-1/2 -translate-y-1/2 z-20 rounded-full flex items-center justify-center cursor-pointer"
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronLeft className="w-4 h-4 text-[#273822]" />
         </button>
 
-        {/* Right Arrow */}
+        {/* Right Arrow (Tactile 3D Slim Glass) */}
         <button
           onClick={handleNext}
           aria-label="Next slide"
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/20 backdrop-blur-sm text-white/90 flex items-center justify-center hover:bg-black/35 transition-colors"
+          className="btn-microsite-3d-glass !p-1.5 !w-8 !h-8 absolute right-2.5 top-1/2 -translate-y-1/2 z-20 rounded-full flex items-center justify-center cursor-pointer"
         >
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-4 h-4 text-[#273822]" />
         </button>
 
-        {/* PAGINATION DOTS (FLOATING INSIDE BOTTOM OF PHOTO like video f_0038.jpg) */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-full bg-black/25 backdrop-blur-sm">
-          {CAROUSEL_IMAGES.map((_, idx) => (
+        {/* PAGINATION DOTS */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm border border-white/20">
+          {effectiveImages.map((_, idx) => (
             <button
               key={idx}
               onClick={() => setCurrentIndex(idx)}

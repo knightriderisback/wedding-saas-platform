@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { Mic, Square, Play, Pause, Send, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { addVoiceBlessing } from '@/lib/firebase';
+import { addVoiceBlessing, uploadMediaFile } from '@/lib/firebase';
 import { INVITATION_TRANSLATIONS, InvitationLanguage } from '@/lib/invitationI18n';
 
 interface VoiceBlessingRecorderProps {
@@ -88,10 +88,21 @@ export const VoiceBlessingRecorder: React.FC<VoiceBlessingRecorderProps> = ({
     setIsUploading(true);
 
     try {
+      let persistentUrl = audioUrl || '';
+      if (audioBlob) {
+        const uploaded = await uploadMediaFile(
+          audioBlob,
+          `blessings/${weddingSlug}/blessing-${Date.now()}.webm`
+        );
+        if (uploaded) {
+          persistentUrl = uploaded;
+        }
+      }
+
       await addVoiceBlessing(weddingSlug, {
         id: `v-${Date.now()}`,
         guestName: guestName.trim() || (language === 'en' ? 'Honored Elder & Family' : 'आदरणीय परिजन'),
-        audioBlobUrl: audioUrl || '',
+        audioBlobUrl: persistentUrl,
         durationSec: recordSeconds,
         timestamp: 'Just now',
       });
@@ -171,13 +182,12 @@ export const VoiceBlessingRecorder: React.FC<VoiceBlessingRecorderProps> = ({
                 <button
                   type="button"
                   onClick={isRecording ? stopRecording : startRecording}
-                  className={`w-16 h-16 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-                    isRecording
-                      ? 'bg-[#9B1C2E] text-white animate-pulse shadow-md border-2 border-[#D4AF37]'
-                      : 'bg-[#7A1423] text-white hover:brightness-110 border-2 border-[#D4AF37]'
+                  className={`btn-microsite-3d-ruby !w-16 !h-16 rounded-full flex items-center justify-center cursor-pointer transition-transform ${
+                    isRecording ? 'animate-pulse scale-105' : ''
                   }`}
+                  aria-label={isRecording ? 'Stop Recording' : 'Start Recording'}
                 >
-                  {isRecording ? <Square className="w-6 h-6 text-white" /> : <Mic className="w-7 h-7 text-[#F3E5AB]" />}
+                  {isRecording ? <Square className="w-6 h-6 text-white" /> : <Mic className="w-7 h-7 text-[#FFEAA7]" />}
                 </button>
 
                 <div className="text-xs font-serif italic text-[#543F02]">
@@ -205,9 +215,10 @@ export const VoiceBlessingRecorder: React.FC<VoiceBlessingRecorderProps> = ({
                   <button
                     type="button"
                     onClick={togglePlayback}
-                    className="w-12 h-12 rounded-full border border-[#D4AF37] text-[#7A1423] flex items-center justify-center hover:bg-[#FAF4E3] transition-all cursor-pointer"
+                    className="btn-microsite-3d-glass !w-12 !h-12 !p-0 rounded-full flex items-center justify-center cursor-pointer"
+                    aria-label={isPlaying ? 'Pause' : 'Play'}
                   >
-                    {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
+                    {isPlaying ? <Pause className="w-5 h-5 text-[#273822]" /> : <Play className="w-5 h-5 ml-0.5 text-[#273822]" />}
                   </button>
 
                   <div className="text-left text-xs font-serif text-[#2C1810]">

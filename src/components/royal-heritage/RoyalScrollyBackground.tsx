@@ -102,8 +102,10 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
     rafIdRef.current = requestAnimationFrame(tick);
   };
 
-  // Eager preloader - loads all 120 frames in fast parallel batches
+  // Eager preloader - loads all 120 frames only if custom background image is not active
   useEffect(() => {
+    if (customBackgroundImage) return;
+
     const images: HTMLImageElement[] = new Array(TOTAL_FRAMES);
     imagesRef.current = images;
 
@@ -136,10 +138,11 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
       }
       isLoopRunningRef.current = false;
     };
-  }, []);
+  }, [customBackgroundImage]);
 
   // Canvas size and DPR handling
   const updateCanvasSize = () => {
+    if (customBackgroundImage) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const parent = canvas.parentElement;
@@ -167,6 +170,7 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
 
   // Resize listener
   useEffect(() => {
+    if (customBackgroundImage) return;
     updateCanvasSize();
     window.addEventListener('resize', updateCanvasSize, { passive: true });
     window.addEventListener('orientationchange', updateCanvasSize, { passive: true });
@@ -181,10 +185,11 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
         vv.removeEventListener('resize', updateCanvasSize);
       }
     };
-  }, []);
+  }, [customBackgroundImage]);
 
   // Scroll listener on the scrollable container
   useEffect(() => {
+    if (customBackgroundImage) return;
     const scroller = scrollerRef.current;
     if (!scroller) return;
 
@@ -209,7 +214,7 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
       }
       isLoopRunningRef.current = false;
     };
-  }, [scrollerRef]);
+  }, [scrollerRef, customBackgroundImage]);
 
   return (
     <div
