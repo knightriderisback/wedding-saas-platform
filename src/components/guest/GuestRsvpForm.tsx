@@ -11,6 +11,7 @@ interface GuestRsvpFormProps {
   defaultGuestName?: string;
   coupleNames?: string;
   venueName?: string;
+  weddingDate?: string;
   onSuccess?: () => void;
   language?: InvitationLanguage;
 }
@@ -20,6 +21,7 @@ export const GuestRsvpForm: React.FC<GuestRsvpFormProps> = ({
   defaultGuestName = '',
   coupleNames = 'The Royal Wedding Celebrations',
   venueName = 'The Royal Palace',
+  weddingDate = 'December 12, 2026',
   onSuccess,
   language = 'en',
 }) => {
@@ -128,7 +130,7 @@ export const GuestRsvpForm: React.FC<GuestRsvpFormProps> = ({
                 </div>
                 <div>
                   <span className="text-[10px] font-serif uppercase tracking-wider text-[#7D5F04] block">{language === 'en' ? 'Auspicious Date' : 'शुभ तिथि'}</span>
-                  <span className="font-serif font-bold text-[#2C1810] text-sm">Nov 20, 2027</span>
+                  <span className="font-serif font-bold text-[#2C1810] text-sm">{weddingDate}</span>
                 </div>
                 <div>
                   <span className="text-[10px] font-serif uppercase tracking-wider text-[#7D5F04] block">{language === 'en' ? 'Dietary Choice' : 'खान-पान'}</span>

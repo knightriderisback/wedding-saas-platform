@@ -7,6 +7,7 @@ import {
   VolumeX,
   Globe,
   Sparkles,
+  Crown,
   MapPin,
   Clock,
   Building2,
@@ -30,7 +31,7 @@ import { DjSongRequestBox } from '../guest/DjSongRequestBox';
 import { VoiceBlessingRecorder } from '../guest/VoiceBlessingRecorder';
 import { royalSitarAudio } from '@/lib/sitarSynth';
 import { WeddingProject } from '@/types/wedding';
-import { saveWeddingProject } from '@/lib/firebase';
+import { saveWeddingProject, parseFlexibleWeddingDate } from '@/lib/firebase';
 import { getDefaultCustomization, getFontFamilyClass } from '@/lib/customizationDefaults';
 
 export type SupportedLanguage = 'en' | 'hi' | 'hinglish' | 'ur';
@@ -537,7 +538,8 @@ const EVENT_DICTIONARY: Record<
 const getLocalizedEvents = (
   rawEvents: Array<any> | undefined,
   lang: SupportedLanguage,
-  defaultEvents: Array<{ title: string; time: string; desc: string }>
+  defaultEvents: Array<{ title: string; time: string; desc: string }>,
+  effectiveWeddingDate?: string
 ): Array<{ title: string; time: string; desc: string }> => {
   if (!rawEvents || rawEvents.length === 0) {
     return defaultEvents;
@@ -570,9 +572,30 @@ const getLocalizedEvents = (
       resolvedDesc = defaultEvents[index].desc;
     }
 
+    let evDateStr = ev.date || '';
+    if (effectiveWeddingDate) {
+      const d = new Date(effectiveWeddingDate);
+      if (!isNaN(d.getTime())) {
+        const dayMs = 24 * 60 * 60 * 1000;
+        let offsetDays = 0;
+        if (matchedKey === 'haldi') offsetDays = -2;
+        else if (matchedKey === 'sangeet') offsetDays = -1;
+        else if (matchedKey === 'phera') offsetDays = 0;
+        else if (matchedKey === 'reception') offsetDays = 1;
+        else offsetDays = index === 0 ? -2 : index === 1 ? -1 : index === 2 ? 0 : 1;
+
+        if (!evDateStr || evDateStr.includes('2027') || evDateStr.includes('November')) {
+          const evDate = new Date(d.getTime() + offsetDays * dayMs);
+          const daysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+          const monthsEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+          evDateStr = `${daysEn[evDate.getDay()]}, ${monthsEn[evDate.getMonth()]} ${evDate.getDate()}, ${evDate.getFullYear()}`;
+        }
+      }
+    }
+
     let resolvedTime = ev.time || '';
-    if (ev.date) {
-      resolvedTime = `${ev.date} • ${ev.time}`;
+    if (evDateStr) {
+      resolvedTime = `${evDateStr} • ${ev.time || '5:30 PM IST'}`;
     }
 
     if (lang === 'hi') {
@@ -728,14 +751,26 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
     };
   }, [project]);
 
+  type ExperienceStage = 'envelope' | 'welcome' | 'card';
+  const [stage, setStage] = useState<ExperienceStage>(
+    autoOpen || customization.sections.envelope.enabled === false ? 'card' : 'envelope'
+  );
+
   const [currentLang, setCurrentLang] = useState<SupportedLanguage>(
     customization.defaultLanguage || 'en'
   );
   const [langMenuOpen, setLangMenuOpen] = useState<boolean>(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
-  const [isEnvelopeOpen, setIsEnvelopeOpen] = useState<boolean>(
-    autoOpen || customization.sections.envelope.enabled === false
-  );
+
+  // Auto-advance from welcome animation to wedding card after ~1.8 seconds
+  useEffect(() => {
+    if (stage === 'welcome') {
+      const timer = setTimeout(() => {
+        setStage('card');
+      }, 1800);
+      return () => clearTimeout(timer);
+    }
+  }, [stage]);
 
   // RSVP Form States
   const [rsvpName, setRsvpName] = useState<string>(
@@ -763,7 +798,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
   const effectiveBrideName = localizeName(rawBrideName, currentLang);
   const localizedGuestName = localizeName(guestName, currentLang);
 
-  const effectiveWeddingDate = project?.weddingDate || '2026-12-12T10:00:00Z';
+  const effectiveWeddingDate = parseFlexibleWeddingDate(project?.weddingDate);
 
   const rawVenueName = project?.venue?.name || customization?.sections?.venue?.venueName;
   const rawVenueCity = project?.venue?.city || customization?.sections?.venue?.venueCity;
@@ -800,8 +835,8 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           effectiveVenueName + ' ' + (rawFullAddress || effectiveVenueCity)
         )}`);
 
-  // Dynamic Events with full Language Localization
-  const effectiveEvents = getLocalizedEvents(project?.events, currentLang, t.events);
+  // Dynamic Events with full Language Localization and accurate relative dates
+  const effectiveEvents = getLocalizedEvents(project?.events, currentLang, t.events, effectiveWeddingDate);
 
   // Dynamic Browser Tab Title Customization
   useEffect(() => {
@@ -963,7 +998,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
   };
 
   const handleEnvelopeComplete = () => {
-    setIsEnvelopeOpen(true);
+    setStage('welcome');
   };
 
   const handleRsvpSubmit = async (e: React.FormEvent) => {
@@ -1024,10 +1059,11 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
       />
 
       {/* ========================================================
-          STAGE 1 & 2: REALISTIC ROYAL ENVELOPE (From User Drive)
-          Magically dissolves on click anywhere + launches music
+          STAGE 1: REALISTIC ROYAL ENVELOPE (Edge-to-Edge Stretched)
+          Pristine custom envelope image. Touching anywhere dissolves it smoothly!
+          Floating buttons are completely hidden during this stage.
           ======================================================== */}
-      {!isEnvelopeOpen && customization.sections.envelope.enabled !== false && (
+      {stage === 'envelope' && customization.sections.envelope.enabled !== false && (
         <RoyalRealisticEnvelope
           onCurtainsOpen={handleCurtainsOpen}
           onOpenComplete={handleEnvelopeComplete}
@@ -1041,70 +1077,165 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           partner1={project?.partner1 || 'Gourav'}
           partner2={project?.partner2 || 'Priya'}
           guestName={guestName}
-          weddingDate={getFormattedWeddingDate(project?.weddingDate || '2026-12-12', currentLang)}
+          weddingDate={getFormattedWeddingDate(effectiveWeddingDate, currentLang)}
         />
       )}
 
       {/* ========================================================
-          FLOATING CONTROLS (Top-Right Sound, Bottom-Left Language)
-          Clean, minimal floating pills. NO header strip, NO footer strip!
+          STAGE 2: WELCOME GUEST ANIMATED SCREEN
+          Displays guest's name with majestic golden sparkle animation,
+          then smoothly dissolves directly into the invitation card!
           ======================================================== */}
-      {/* Audio Mute/Unmute Button (Top Right) */}
-      {customization.showMusicButton !== false && (
-        <button
-          onClick={toggleAudio}
-          className="fixed top-4 right-4 z-40 w-10 h-10 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/60 shadow-[0_4px_15px_rgba(0,0,0,0.18)] flex items-center justify-center text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer"
-          title={isAudioPlaying ? 'Mute Music' : 'Play Music'}
-        >
-          {isAudioPlaying ? (
-            <Volume2 className="w-5 h-5 text-[#B59A57] animate-pulse" />
-          ) : (
-            <VolumeX className="w-5 h-5 text-[#6B5A3E]" />
-          )}
-        </button>
-      )}
-
-      {/* 4-Language Switcher (Bottom Left) */}
-      {customization.showLanguageSwitcher !== false && (
-        <div className="fixed bottom-4 left-4 z-40 flex flex-col items-start gap-1">
-          <AnimatePresence>
-            {langMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                className="bg-[#FAF8F5]/95 backdrop-blur-md border border-[#B59A57]/50 shadow-xl rounded-2xl p-1.5 flex flex-col gap-1 mb-1"
-              >
-                {(['en', 'hi', 'hinglish', 'ur'] as SupportedLanguage[]).map((lng) => (
-                  <button
-                    key={lng}
-                    onClick={() => {
-                      setCurrentLang(lng);
-                      setLangMenuOpen(false);
-                    }}
-                    className={`px-3.5 py-1.5 rounded-xl text-sm font-['Cinzel',serif] tracking-wider text-left transition-all ${
-                      currentLang === lng
-                        ? 'bg-[#273822] text-[#FAF8F5] font-bold shadow-sm'
-                        : 'text-[#273822] hover:bg-[#DFC07C]/25'
-                    }`}
-                    style={deepTextShadow}
-                  >
-                    {TRANSLATIONS[lng].langName}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <button
-            onClick={() => setLangMenuOpen(!langMenuOpen)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md text-xs sm:text-sm font-['Cinzel',serif] tracking-wider uppercase text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer font-bold"
-            style={deepTextShadow}
+      <AnimatePresence>
+        {stage === 'welcome' && (
+          <motion.div
+            key="royal-welcome-screen"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05, filter: 'blur(8px)' }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            onClick={() => setStage('card')}
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center p-6 bg-gradient-to-b from-[#2B0202] via-[#4A0808] to-[#1A0101] text-center select-none cursor-pointer overflow-hidden"
+            title="Touch anywhere to proceed to wedding suite"
           >
-            <Globe className="w-4 h-4 text-[#B59A57]" />
-            <span>{t.langName}</span>
-          </button>
-        </div>
+            {/* Ambient Velvet Gradient & Floating Golden Sparkles */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(223,192,124,0.22)_0%,transparent_70%)] pointer-events-none" />
+
+            {/* Auspicious Emblem */}
+            <motion.div
+              initial={{ scale: 0.6, opacity: 0, y: -20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.6 }}
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-[#DFC07C]/70 bg-[#1A0101]/85 backdrop-blur-md shadow-[0_0_30px_rgba(223,192,124,0.45)] flex items-center justify-center mb-5 text-[#DFC07C]"
+            >
+              <Crown className="w-8 h-8 sm:w-10 sm:h-10 text-[#DFC07C] animate-pulse" />
+            </motion.div>
+
+            {/* Welcome Greeting Eyebrow */}
+            <motion.p
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="text-xs sm:text-sm font-['Cinzel',serif] tracking-[0.28em] text-[#DFC07C] uppercase mb-2 font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+            >
+              {currentLang === 'hi'
+                ? '॥ सादर सप्रेम स्वागतम् ॥'
+                : currentLang === 'ur'
+                ? 'خوش آمدید'
+                : 'AUSPICIOUS ROYAL WELCOME'}
+            </motion.p>
+
+            {/* Guest Name in Radiant Golden Calligraphy */}
+            <motion.h1
+              initial={{ y: 25, opacity: 0, scale: 0.9 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="text-3xl sm:text-5xl md:text-6xl font-['Cinzel',serif] font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FFE066] via-[#DFC07C] to-[#B59A57] tracking-wider mb-4 px-4 py-1"
+              style={{
+                filter:
+                  'drop-shadow(0 4px 18px rgba(223,192,124,0.55)) drop-shadow(0 8px 32px rgba(0,0,0,0.9))',
+              }}
+            >
+              {localizedGuestName || guestName || 'Distinguished Guest'}
+            </motion.h1>
+
+            {/* Couple Blessing Note */}
+            <motion.p
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.45, duration: 0.6 }}
+              className="text-xs sm:text-base font-['Cormorant_Garamond',serif] italic text-[#FAF8F5]/95 max-w-md px-4 leading-relaxed font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+            >
+              {currentLang === 'hi'
+                ? `${effectiveGroomName} एवं ${effectiveBrideName} के शुभ विवाह उत्सव में आपका हार्दिक अभिनंदन`
+                : currentLang === 'ur'
+                ? `تقریبِ عقدِ مسنون ${effectiveGroomName} اور ${effectiveBrideName}`
+                : `Cordially welcoming you to celebrate the royal union of ${effectiveGroomName} & ${effectiveBrideName}`}
+            </motion.p>
+
+            {/* Subtle tap prompt */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.85 }}
+              transition={{ delay: 0.9, duration: 0.5 }}
+              className="mt-8 flex items-center gap-1.5 text-[11px] font-['Cinzel',serif] tracking-widest text-[#DFC07C] uppercase font-bold"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#DFC07C] animate-spin" />
+              <span>
+                {currentLang === 'hi'
+                  ? 'निमंत्रण पत्र खुल रहा है...'
+                  : 'Opening Wedding Invitation...'}
+              </span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================================
+          FLOATING CONTROLS (Top-Right Sound, Bottom-Left Language)
+          Rendered ONLY when stage === 'card' so the envelope & welcome
+          remain completely clean with zero floating clutter!
+          ======================================================== */}
+      {stage === 'card' && (
+        <>
+          {/* Audio Mute/Unmute Button (Top Right) */}
+          {customization.showMusicButton !== false && (
+            <button
+              onClick={toggleAudio}
+              className="fixed top-4 right-4 z-40 w-10 h-10 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/60 shadow-[0_4px_15px_rgba(0,0,0,0.18)] flex items-center justify-center text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer"
+              title={isAudioPlaying ? 'Mute Music' : 'Play Music'}
+            >
+              {isAudioPlaying ? (
+                <Volume2 className="w-5 h-5 text-[#B59A57] animate-pulse" />
+              ) : (
+                <VolumeX className="w-5 h-5 text-[#6B5A3E]" />
+              )}
+            </button>
+          )}
+
+          {/* 4-Language Switcher (Bottom Left) */}
+          {customization.showLanguageSwitcher !== false && (
+            <div className="fixed bottom-4 left-4 z-40 flex flex-col items-start gap-1">
+              <AnimatePresence>
+                {langMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                    className="bg-[#FAF8F5]/95 backdrop-blur-md border border-[#B59A57]/50 shadow-xl rounded-2xl p-1.5 flex flex-col gap-1 mb-1"
+                  >
+                    {(['en', 'hi', 'hinglish', 'ur'] as SupportedLanguage[]).map((lng) => (
+                      <button
+                        key={lng}
+                        onClick={() => {
+                          setCurrentLang(lng);
+                          setLangMenuOpen(false);
+                        }}
+                        className={`px-3.5 py-1.5 rounded-xl text-sm font-['Cinzel',serif] tracking-wider text-left transition-all ${
+                          currentLang === lng
+                            ? 'bg-[#273822] text-[#FAF8F5] font-bold shadow-sm'
+                            : 'text-[#273822] hover:bg-[#DFC07C]/25'
+                        }`}
+                        style={deepTextShadow}
+                      >
+                        {TRANSLATIONS[lng].langName}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <button
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FAF8F5]/90 backdrop-blur-md border border-[#B59A57]/50 shadow-md text-xs sm:text-sm font-['Cinzel',serif] tracking-wider uppercase text-[#273822] hover:bg-[#FAF8F5] active:scale-95 transition-all cursor-pointer font-bold"
+                style={deepTextShadow}
+              >
+                <Globe className="w-4 h-4 text-[#B59A57]" />
+                <span>{t.langName}</span>
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {/* ========================================================
@@ -1279,7 +1410,10 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 <ZareqiaHeartScratch
                   coupleNames={`${effectiveGroomName} & ${effectiveBrideName}`}
                   weddingDate={
-                    currentLang === 'en' && customization.sections.scratchCard.secretDateText
+                    currentLang === 'en' &&
+                    customization.sections.scratchCard.secretDateText &&
+                    !customization.sections.scratchCard.secretDateText.includes('2027') &&
+                    !customization.sections.scratchCard.secretDateText.includes('November 20')
                       ? customization.sections.scratchCard.secretDateText
                       : getFormattedWeddingDate(effectiveWeddingDate, currentLang)
                   }

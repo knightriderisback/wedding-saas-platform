@@ -869,6 +869,7 @@ export const PressedLoveInvitation: React.FC<PressedLoveInvitationProps> = ({
               defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
               coupleNames={`${effectivePartner1} & ${effectivePartner2}`}
               venueName={effectiveVenue}
+              weddingDate={template.ceremony?.displayDate || 'December 12, 2026'}
               language={language}
             />
           </section>

@@ -69,7 +69,7 @@ export default function SuperAdminPage() {
   const [partner1, setPartner1] = useState('');
   const [partner2, setPartner2] = useState('');
   const [customSlug, setCustomSlug] = useState('');
-  const [weddingDate, setWeddingDate] = useState('2027-11-20');
+  const [weddingDate, setWeddingDate] = useState('2026-12-12');
   const [venueName, setVenueName] = useState('The Oberoi Udaivilas');
   const [venueCity, setVenueCity] = useState('Udaipur, Rajasthan');
   const [venueFullAddress, setVenueFullAddress] = useState('');

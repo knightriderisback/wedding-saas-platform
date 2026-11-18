@@ -177,26 +177,33 @@ export const RoyalCustomizationStudio: React.FC<RoyalCustomizationStudioProps> =
   const handleSave = async () => {
     setIsSaving(true);
     try {
+      const updatedVenue = {
+        ...project.venue,
+        name: customization.sections.venue.venueName || project.venue.name,
+        city: customization.sections.venue.venueCity || project.venue.city,
+        fullAddress: customization.sections.venue.venueAddress || project.venue.fullAddress,
+        googleMapsLink: customization.sections.venue.googleMapsLink || project.venue.googleMapsLink,
+        coordinates: customization.sections.venue.coordinates || project.venue.coordinates,
+      };
+
+      const effectiveAudioUrl = customization.musicTrackUrl || project.backgroundAudioUrl || '/audio/royal-heritage-music.mp3';
+
       const updatedProject: WeddingProject = {
         ...project,
-        backgroundAudioUrl: customization.musicTrackUrl || project.backgroundAudioUrl,
-        venue: {
-          ...project.venue,
-          name: project.venue.name,
-          city: project.venue.city,
-          fullAddress: project.venue.fullAddress,
-          googleMapsLink: project.venue.googleMapsLink,
-        },
+        backgroundAudioUrl: effectiveAudioUrl,
+        venue: updatedVenue,
         customization: {
           ...customization,
+          musicTrackUrl: effectiveAudioUrl,
           sections: {
             ...customization.sections,
             venue: {
               ...customization.sections.venue,
-              venueName: project.venue.name,
-              venueCity: project.venue.city,
-              venueAddress: project.venue.fullAddress,
-              googleMapsLink: project.venue.googleMapsLink,
+              venueName: updatedVenue.name,
+              venueCity: updatedVenue.city,
+              venueAddress: updatedVenue.fullAddress,
+              googleMapsLink: updatedVenue.googleMapsLink,
+              coordinates: updatedVenue.coordinates,
             },
           },
         },
@@ -615,6 +622,20 @@ export const RoyalCustomizationStudio: React.FC<RoyalCustomizationStudioProps> =
                 coordinates: project.venue.coordinates,
               }}
               onLocationChange={(loc) => {
+                setCustomization((prev) => ({
+                  ...prev,
+                  sections: {
+                    ...prev.sections,
+                    venue: {
+                      ...prev.sections.venue,
+                      venueName: loc.venueName,
+                      venueCity: loc.city,
+                      venueAddress: loc.fullAddress,
+                      googleMapsLink: loc.googleMapsLink,
+                      coordinates: loc.coordinates,
+                    },
+                  },
+                }));
                 onUpdate({
                   ...project,
                   venue: {

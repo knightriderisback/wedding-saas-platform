@@ -109,6 +109,66 @@ function capitalizeName(str: string): string {
 }
 
 /**
+ * Flexible wedding date parser that handles any user input:
+ * "12 december", "12-12-2026", "2026-12-12", "12/12/2026", "12 Dec", "December 12, 2026"
+ */
+export function parseFlexibleWeddingDate(str?: string): string {
+  if (!str) return '2026-12-12T12:00:00.000Z';
+  const trimmed = str.trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(trimmed)) {
+    const parts = trimmed.split('T')[0].split('-');
+    const y = parseInt(parts[0], 10);
+    const m = parts[1].padStart(2, '0');
+    const d = parts[2].padStart(2, '0');
+    return `${y}-${m}-${d}T12:00:00.000Z`;
+  }
+
+  const dmyMatch = trimmed.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
+  if (dmyMatch) {
+    const day = dmyMatch[1].padStart(2, '0');
+    const month = dmyMatch[2].padStart(2, '0');
+    const year = dmyMatch[3];
+    return `${year}-${month}-${day}T12:00:00.000Z`;
+  }
+
+  const monthNames = [
+    'january', 'february', 'march', 'april', 'may', 'june',
+    'july', 'august', 'september', 'october', 'november', 'december',
+  ];
+  const cleanStr = trimmed.toLowerCase().replace(/(st|nd|rd|th),?/g, '').replace(/,/g, ' ');
+  const parts = cleanStr.split(/\s+/).filter(Boolean);
+  let day = 12, month = 12, year = 2026;
+
+  for (const part of parts) {
+    const mIdx = monthNames.findIndex((m) => m === part || m.startsWith(part));
+    if (mIdx >= 0) {
+      month = mIdx + 1;
+      continue;
+    }
+    const num = parseInt(part, 10);
+    if (!isNaN(num)) {
+      if (num > 1000) year = num;
+      else if (num >= 1 && num <= 31) day = num;
+    }
+  }
+  const sDay = String(day).padStart(2, '0');
+  const sMonth = String(month).padStart(2, '0');
+  return `${year}-${sMonth}-${sDay}T12:00:00.000Z`;
+}
+
+export function formatWeddingDateString(isoDate: string): string {
+  try {
+    const d = new Date(isoDate);
+    if (!isNaN(d.getTime())) {
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      return `${days[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    }
+  } catch {}
+  return 'Saturday, December 12, 2026';
+}
+
+/**
  * Dynamically parse client couple names from URL slug if not found in database.
  * Guarantees that client names like "Gourav" or "gourav-weds-priya" or "gourao" are ALWAYS respected!
  */
@@ -243,6 +303,12 @@ export async function getWeddingProject(slugOrId: string): Promise<WeddingProjec
         try {
           const parsed = JSON.parse(local);
           if (parsed && (parsed.partner1 || parsed.venue)) {
+            if (parsed.weddingDate && parsed.weddingDate.includes('2027-11-20')) {
+              parsed.weddingDate = '2026-12-12T12:00:00.000Z';
+            }
+            if (!parsed.backgroundAudioUrl) {
+              parsed.backgroundAudioUrl = '/audio/royal-heritage-music.mp3';
+            }
             return parsed;
           }
         } catch {}
@@ -258,6 +324,12 @@ export async function getWeddingProject(slugOrId: string): Promise<WeddingProjec
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.project) {
+            if (json.project.weddingDate && json.project.weddingDate.includes('2027-11-20')) {
+              json.project.weddingDate = '2026-12-12T12:00:00.000Z';
+            }
+            if (!json.project.backgroundAudioUrl) {
+              json.project.backgroundAudioUrl = '/audio/royal-heritage-music.mp3';
+            }
             saveLocalProject(json.project);
             return json.project;
           }
@@ -273,7 +345,15 @@ export async function getWeddingProject(slugOrId: string): Promise<WeddingProjec
     const pId = p.id?.toLowerCase().trim();
     return lookupKeys.includes(pSlug) || lookupKeys.includes(pId);
   });
-  if (match) return match;
+  if (match) {
+    if (match.weddingDate && match.weddingDate.includes('2027-11-20')) {
+      match.weddingDate = '2026-12-12T12:00:00.000Z';
+    }
+    if (!match.backgroundAudioUrl) {
+      match.backgroundAudioUrl = '/audio/royal-heritage-music.mp3';
+    }
+    return match;
+  }
 
   // 4. Default project fallback if Gourav or primary couple
   if (cleanKey === 'gourav-weds-priya' || cleanKey === 'client-gourav-priya' || cleanKey === 'gourav') {
@@ -290,6 +370,18 @@ export async function getWeddingProject(slugOrId: string): Promise<WeddingProjec
  * Save or update a wedding project
  */
 export async function saveWeddingProject(project: WeddingProject): Promise<void> {
+  // Normalize wedding date
+  const normalizedDate = parseFlexibleWeddingDate(project.weddingDate);
+  project.weddingDate = normalizedDate;
+  const formattedDateStr = formatWeddingDateString(normalizedDate);
+
+  // Audio track synchronization
+  if (!project.backgroundAudioUrl && project.customization?.musicTrackUrl) {
+    project.backgroundAudioUrl = project.customization.musicTrackUrl;
+  } else if (!project.backgroundAudioUrl) {
+    project.backgroundAudioUrl = '/audio/royal-heritage-music.mp3';
+  }
+
   // Ensure venue object has complete fields and is synchronized with customization
   if (project.venue) {
     if (!project.venue.googleMapsLink && project.venue.name) {
@@ -304,6 +396,42 @@ export async function saveWeddingProject(project: WeddingProject): Promise<void>
       project.customization.sections.venue.googleMapsLink = project.venue.googleMapsLink;
       project.customization.sections.venue.coordinates = project.venue.coordinates;
     }
+  }
+
+  // Ensure scratch card reflects the normalized wedding date
+  if (project.customization?.sections?.scratchCard) {
+    project.customization.sections.scratchCard.secretDateText = formattedDateStr;
+  }
+
+  // Ensure musicTrackUrl matches
+  if (project.customization) {
+    project.customization.musicTrackUrl = project.backgroundAudioUrl;
+  }
+
+  // Synchronize events relative to the wedding date
+  if (Array.isArray(project.events) && project.events.length > 0) {
+    const d = new Date(normalizedDate);
+    const dayMs = 24 * 60 * 60 * 1000;
+    project.events = project.events.map((ev, idx) => {
+      let offsetDays = 0;
+      const titleLower = (ev.title || '').toLowerCase();
+      if (titleLower.includes('haldi')) offsetDays = -2;
+      else if (titleLower.includes('sangeet') || titleLower.includes('mehendi')) offsetDays = -1;
+      else if (titleLower.includes('phera') || titleLower.includes('wedding')) offsetDays = 0;
+      else if (titleLower.includes('reception') || titleLower.includes('gala')) offsetDays = 1;
+      else offsetDays = idx === 0 ? -2 : idx === 1 ? -1 : idx === 2 ? 0 : 1;
+
+      const evDate = new Date(d.getTime() + offsetDays * dayMs);
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const computedDate = `${days[evDate.getDay()]}, ${months[evDate.getMonth()]} ${evDate.getDate()}, ${evDate.getFullYear()}`;
+
+      return {
+        ...ev,
+        date: computedDate,
+        googleMapsLink: ev.googleMapsLink || project.venue?.googleMapsLink || '',
+      };
+    });
   }
 
   saveLocalProject(project);

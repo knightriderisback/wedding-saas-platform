@@ -905,9 +905,9 @@ export const PRESSED_LOVE_TEMPLATES: Record<string, PressedLoveTemplate> = {
       initials: 'R & P',
     },
     ceremony: {
-      date: '2027-11-20',
+      date: '2026-12-12',
       time: '18:00',
-      displayDate: 'Saturday, November 20, 2027',
+      displayDate: 'Saturday, December 12, 2026',
       displayTime: '6:00 PM IST',
       timeZone: 'Asia/Kolkata',
     },

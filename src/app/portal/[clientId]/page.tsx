@@ -17,6 +17,7 @@ import {
   uploadMediaFile,
   markWhatsAppSent,
   parseProjectFromSlug,
+  parseFlexibleWeddingDate,
 } from '@/lib/firebase';
 import { exportDjPlaylistPdf } from '@/lib/djPdfGenerator';
 import { defaultWeddingProject } from '@/lib/mockData';
@@ -1124,7 +1125,10 @@ function ClientPortalContent() {
                 <button
                   type="button"
                   onClick={async () => {
-                    await saveWeddingProject(project);
+                    const normalizedDate = parseFlexibleWeddingDate(project.weddingDate);
+                    const updatedProj = { ...project, weddingDate: normalizedDate };
+                    await saveWeddingProject(updatedProj);
+                    setProject(updatedProj);
                     showToast('Couple identity & celebration schedule updated! ✨');
                   }}
                   className="btn-slim-gold text-xs font-bold flex items-center gap-1.5"

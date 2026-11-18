@@ -19,6 +19,12 @@ function loadFromFile() {
       const data = fs.readFileSync(TMP_FILE, 'utf-8');
       const parsed: WeddingProject[] = JSON.parse(data);
       for (const p of parsed) {
+        if (p.weddingDate && p.weddingDate.includes('2027-11-20')) {
+          p.weddingDate = '2026-12-12T12:00:00.000Z';
+        }
+        if (!p.backgroundAudioUrl) {
+          p.backgroundAudioUrl = '/audio/royal-heritage-music.mp3';
+        }
         if (p.slug) memoryProjects.set(p.slug.toLowerCase(), p);
         if (p.id) memoryProjects.set(p.id.toLowerCase(), p);
       }

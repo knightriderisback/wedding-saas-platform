@@ -50,6 +50,17 @@ export const getDefaultCustomization = (project?: Partial<WeddingProject>): Proj
   const venueCity = project?.venue?.city || 'Udaipur, Rajasthan';
   const mapsLink = project?.venue?.googleMapsLink || `https://maps.google.com/?q=${encodeURIComponent(venueName + ' ' + venueCity)}`;
 
+  const rawDate = project?.weddingDate || '2026-12-12T12:00:00.000Z';
+  let formattedDate = 'Saturday, December 12, 2026';
+  try {
+    const d = new Date(rawDate);
+    if (!isNaN(d.getTime())) {
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      formattedDate = `${days[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    }
+  } catch {}
+
   return {
     musicTrackUrl: project?.backgroundAudioUrl || '/audio/royal-heritage-music.mp3',
     musicTrackTitle: 'Royal Heritage Shehnai & Nagada',
@@ -106,7 +117,7 @@ export const getDefaultCustomization = (project?: Partial<WeddingProject>): Proj
         fontWeight: 'bold',
         blessingIntro: 'With the blessings of our revered ancestors & beloved families',
         revealedInvitation: "You're Invited!",
-        secretDateText: 'Saturday, November 20, 2027',
+        secretDateText: formattedDate,
         secretDayText: 'Auspicious Muhurat Under Stars',
         secretTimeText: '5:30 PM IST Onwards',
         saveTheDateButtonText: 'SAVE THE DATE TO CALENDAR',
