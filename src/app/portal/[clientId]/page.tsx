@@ -1577,7 +1577,7 @@ function ClientPortalContent() {
                   <span className="text-[10px] text-[#1E3F66]">Custom royal canvas texture (JPG, PNG)</span>
                 </div>
 
-                {project.backgroundImageUrl && (
+                {project.backgroundImageUrl ? (
                   <div className="space-y-2">
                     <div className="relative rounded-xl overflow-hidden border border-[#1E3F66]/30 aspect-video bg-neutral-100 shadow-xs">
                       <img
@@ -1608,13 +1608,28 @@ function ClientPortalContent() {
                         };
                         setProject(updated);
                         await saveWeddingProject(updated);
-                        showToast('Reset to 3D Scrolly Video Canvas! 🎬✨');
+                        showToast('Reset to 3D Royal Video Canvas! 🎬✨');
                       }}
                       className="btn-slim-outline text-xs w-full py-1.5 flex items-center justify-center gap-1.5 text-red-700 hover:bg-red-50 cursor-pointer"
                     >
                       <RotateCcw className="w-3 h-3 text-red-600" />
-                      <span>Remove Wallpaper (Restore 3D Scrolly Video)</span>
+                      <span>Remove Wallpaper (Restore 3D Royal Video)</span>
                     </button>
+                  </div>
+                ) : (
+                  <div className="relative rounded-xl overflow-hidden border border-[#1E3F66]/30 aspect-video bg-black/90 shadow-xs">
+                    <video
+                      src="/templates/royal-heritage/royal_couple_video.mp4"
+                      poster="/templates/royal-heritage/frames/frame_0001.webp"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-2 right-2 bg-[#142F4C]/90 text-white text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1 backdrop-blur-xs">
+                      <Sparkles className="w-2.5 h-2.5 text-[#DFC07C]" /> Active Royal Couple Video
+                    </div>
                   </div>
                 )}
               </div>

@@ -1167,9 +1167,11 @@ export const PRESSED_LOVE_TEMPLATES: Record<string, PressedLoveTemplate> = {
       description: 'Regal lakeside palace heritage, intricate jharokha arches, and fairytale courtyard gardens.',
     },
     assets: {
-      introVideo: '',
+      introVideo: '/templates/royal-heritage/royal_couple_video.mp4',
       introVideoPoster: '/templates/royal-heritage/frames/frame_0001.webp',
       backgroundMusic: '/audio/royal-heritage-music.mp3',
+      heroVideo: '/templates/royal-heritage/royal_couple_video.mp4',
+      heroVideoPoster: '/templates/royal-heritage/frames/frame_0001.webp',
       heroImage: '/templates/royal-heritage/frames/frame_0001.webp',
       venueImage: '/templates/royal-heritage/frames/frame_0001.webp',
       rsvpConfirmation: '',
