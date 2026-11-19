@@ -156,11 +156,11 @@ export const DynamicTextEffects: React.FC<DynamicTextEffectsProps> = ({
         }}
       >
         {words.map((word, wIdx) => {
-          const wordDelay = (delay + wIdx * 80) / 1000;
+          const wordDelay = (delay + wIdx * 35) / 1000;
 
           let wordStyle: React.CSSProperties = {
             display: 'inline-block',
-            transition: `all 0.6s cubic-bezier(0.22, 1, 0.36, 1) ${wordDelay}s`,
+            transition: `transform 0.32s cubic-bezier(0.16, 1, 0.3, 1) ${wordDelay}s, opacity 0.32s ease-out ${wordDelay}s`,
             willChange: 'transform, opacity',
             marginRight: wIdx < words.length - 1 ? '0.32em' : '0',
             letterSpacing: '0',
@@ -173,19 +173,19 @@ export const DynamicTextEffects: React.FC<DynamicTextEffectsProps> = ({
               opacity: isInView ? 1 : 0,
               transform: isInView
                 ? 'translateY(0) scale(1) rotateX(0deg)'
-                : 'translateY(-22px) scale(1.15) rotateX(45deg)',
+                : 'translateY(-16px) scale(1.1) rotateX(30deg)',
             };
           } else if (effect === 'shimmer-wave') {
             wordStyle = {
               ...wordStyle,
               opacity: isInView ? 1 : 0,
-              transform: isInView ? 'scale(1) translateY(0)' : 'scale(0.8) translateY(14px)',
+              transform: isInView ? 'scale(1) translateY(0)' : 'scale(0.85) translateY(10px)',
             };
           } else if (effect === 'scepter-slide') {
             wordStyle = {
               ...wordStyle,
               opacity: isInView ? 1 : 0,
-              transform: isInView ? 'translateX(0) skewX(0deg)' : 'translateX(-20px) skewX(-12deg)',
+              transform: isInView ? 'translateX(0) skewX(0deg)' : 'translateX(-16px) skewX(-8deg)',
             };
           } else if (effect === 'dome-rise') {
             wordStyle = {
@@ -193,14 +193,13 @@ export const DynamicTextEffects: React.FC<DynamicTextEffectsProps> = ({
               opacity: isInView ? 1 : 0,
               transform: isInView
                 ? 'rotateY(0deg) translateY(0) scale(1)'
-                : 'rotateY(55deg) translateY(16px) scale(0.85)',
+                : 'rotateY(40deg) translateY(12px) scale(0.9)',
             };
           } else if (effect === 'velvet-mist') {
             wordStyle = {
               ...wordStyle,
               opacity: isInView ? 1 : 0,
-              transform: isInView ? 'translateY(0)' : 'translateY(16px)',
-              filter: isInView ? 'blur(0px)' : 'blur(6px)',
+              transform: isInView ? 'translateY(0)' : 'translateY(12px)',
             };
           }
 
@@ -235,11 +234,11 @@ export const DynamicTextEffects: React.FC<DynamicTextEffectsProps> = ({
         >
           {Array.from(word).map((char, cIdx) => {
             const charTotalIdx = wIdx * 5 + cIdx;
-            const charDelay = (delay + charTotalIdx * 25) / 1000;
+            const charDelay = (delay + charTotalIdx * 12) / 1000;
 
             let charStyle: React.CSSProperties = {
               display: 'inline-block',
-              transition: `all 0.55s cubic-bezier(0.22, 1, 0.36, 1) ${charDelay}s`,
+              transition: `transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) ${charDelay}s, opacity 0.3s ease-out ${charDelay}s`,
               willChange: 'transform, opacity',
             };
 
@@ -249,19 +248,19 @@ export const DynamicTextEffects: React.FC<DynamicTextEffectsProps> = ({
                 opacity: isInView ? 1 : 0,
                 transform: isInView
                   ? 'translateY(0) scale(1) rotateX(0deg)'
-                  : 'translateY(-26px) scale(1.3) rotateX(60deg)',
+                  : 'translateY(-18px) scale(1.15) rotateX(40deg)',
               };
             } else if (effect === 'shimmer-wave') {
               charStyle = {
                 ...charStyle,
                 opacity: isInView ? 1 : 0,
-                transform: isInView ? 'scale(1) translateY(0)' : 'scale(0.5) translateY(16px)',
+                transform: isInView ? 'scale(1) translateY(0)' : 'scale(0.7) translateY(12px)',
               };
             } else if (effect === 'scepter-slide') {
               charStyle = {
                 ...charStyle,
                 opacity: isInView ? 1 : 0,
-                transform: isInView ? 'translateX(0) skewX(0deg)' : 'translateX(-24px) skewX(-18deg)',
+                transform: isInView ? 'translateX(0) skewX(0deg)' : 'translateX(-18px) skewX(-12deg)',
               };
             } else if (effect === 'dome-rise') {
               charStyle = {
@@ -269,14 +268,13 @@ export const DynamicTextEffects: React.FC<DynamicTextEffectsProps> = ({
                 opacity: isInView ? 1 : 0,
                 transform: isInView
                   ? 'rotateY(0deg) translateY(0) scale(1)'
-                  : 'rotateY(90deg) translateY(18px) scale(0.75)',
+                  : 'rotateY(60deg) translateY(14px) scale(0.85)',
               };
             } else if (effect === 'velvet-mist') {
               charStyle = {
                 ...charStyle,
                 opacity: isInView ? 1 : 0,
-                transform: isInView ? 'translateY(0)' : 'translateY(18px)',
-                filter: isInView ? 'blur(0px)' : 'blur(6px)',
+                transform: isInView ? 'translateY(0)' : 'translateY(12px)',
               };
             }
 

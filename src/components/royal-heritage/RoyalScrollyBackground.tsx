@@ -9,7 +9,7 @@ interface RoyalScrollyBackgroundProps {
   customBackgroundImage?: string;
 }
 
-const TOTAL_FRAMES = 120;
+const TOTAL_FRAMES = 177;
 
 export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
   scrollerRef,

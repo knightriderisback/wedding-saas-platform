@@ -19,7 +19,7 @@ export const Royal3DNames: React.FC<Royal3DNamesProps> = ({
   const [isRevealed, setIsRevealed] = useState<boolean>(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsRevealed(true), 150);
+    const timer = setTimeout(() => setIsRevealed(true), 50);
     return () => clearTimeout(timer);
   }, [groomName, brideName]);
 
@@ -33,19 +33,16 @@ export const Royal3DNames: React.FC<Royal3DNamesProps> = ({
     ? "font-['Noto_Nastaliq_Urdu','Playfair_Display',serif] text-4xl sm:text-5xl md:text-6xl leading-loose font-bold"
     : "font-['Alex_Brush','Pinyon_Script',cursive] text-5xl sm:text-7xl md:text-8xl font-normal";
 
-  // Deep 3D Extrusion Multi-layer Shadow (Creates real 3D Pop Out effect)
+  // Crisp, GPU-friendly 3D Beveled Text Shadow (Zero expensive drop-shadow filters)
   const extrusion3DStyle: React.CSSProperties = {
     textShadow: `
       0 1px 0 #D4AF37,
       0 2px 0 #C4A265,
       0 3px 0 #B59A57,
       0 4px 0 #8C764E,
-      0 5px 0 #634812,
-      0 6px 1px rgba(0, 0, 0, 0.25),
-      0 0 12px rgba(255, 235, 160, 0.5),
-      0 10px 22px rgba(0, 0, 0, 0.6)
+      0 5px 2px rgba(0, 0, 0, 0.35),
+      0 8px 16px rgba(0, 0, 0, 0.5)
     `,
-    filter: 'drop-shadow(0 8px 16px rgba(0, 0, 0, 0.45))',
   };
 
   // Render a word with individual 3D popping letters or intact ligature word for Devanagari/Urdu
@@ -54,32 +51,29 @@ export const Royal3DNames: React.FC<Royal3DNamesProps> = ({
       return (
         <span className="inline-block whitespace-nowrap" style={{ perspective: '800px' }}>
           <motion.span
-            initial={{ opacity: 0, scale: 0.3, y: 35, rotateX: 50, z: -80 }}
+            initial={{ opacity: 0, scale: 0.6, y: 20 }}
             animate={
               isRevealed
                 ? {
                     opacity: 1,
-                    scale: [0.3, 1.15, 1],
-                    y: [35, -6, 0],
-                    rotateX: [50, -8, 0],
-                    z: 0,
+                    scale: 1,
+                    y: 0,
                   }
-                : { opacity: 0, scale: 0.3, y: 35 }
+                : { opacity: 0, scale: 0.6, y: 20 }
             }
             transition={{
-              duration: 0.8,
+              duration: 0.4,
               delay: baseDelay,
-              ease: [0.22, 1, 0.36, 1],
+              ease: [0.16, 1, 0.3, 1],
             }}
             whileHover={{
-              scale: 1.1,
-              y: -6,
-              transition: { duration: 0.2 },
+              scale: 1.05,
+              y: -4,
+              transition: { duration: 0.15 },
             }}
             className="inline-block text-[#1E2E1B] font-bold cursor-default select-none transition-transform"
             style={{
               ...extrusion3DStyle,
-              transformStyle: 'preserve-3d',
               willChange: 'transform, opacity',
             }}
           >
@@ -95,32 +89,29 @@ export const Royal3DNames: React.FC<Royal3DNamesProps> = ({
         {chars.map((char, index) => (
           <motion.span
             key={`char-${index}`}
-            initial={{ opacity: 0, scale: 0.2, y: 35, rotateX: 60, z: -80 }}
+            initial={{ opacity: 0, scale: 0.5, y: 20 }}
             animate={
               isRevealed
                 ? {
                     opacity: 1,
-                    scale: [0.2, 1.25, 1],
-                    y: [35, -8, 0],
-                    rotateX: [60, -10, 0],
-                    z: 0,
+                    scale: 1,
+                    y: 0,
                   }
-                : { opacity: 0, scale: 0.2, y: 35 }
+                : { opacity: 0, scale: 0.5, y: 20 }
             }
             transition={{
-              duration: 0.7,
-              delay: baseDelay + index * 0.05,
-              ease: [0.22, 1, 0.36, 1],
+              duration: 0.35,
+              delay: baseDelay + index * 0.02,
+              ease: [0.16, 1, 0.3, 1],
             }}
             whileHover={{
-              scale: 1.2,
-              y: -8,
-              transition: { duration: 0.2 },
+              scale: 1.15,
+              y: -4,
+              transition: { duration: 0.15 },
             }}
             className="inline-block text-[#1E2E1B] font-bold cursor-default select-none transition-transform"
             style={{
               ...extrusion3DStyle,
-              transformStyle: 'preserve-3d',
               willChange: 'transform, opacity',
             }}
           >

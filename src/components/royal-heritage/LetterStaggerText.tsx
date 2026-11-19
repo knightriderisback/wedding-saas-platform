@@ -34,26 +34,26 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
   // Split text into words to prevent unnatural line breaks mid-word
   const words = text.split(' ');
 
-  // Container variants with stagger
+  // Container variants with snappy luxury stagger
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: type === 'hero' ? 0.035 : 0.022,
+        staggerChildren: type === 'hero' ? 0.016 : 0.012,
         delayChildren: delay,
       },
     },
     exit: {
       opacity: 0,
       transition: {
-        staggerChildren: 0.015,
+        staggerChildren: 0.008,
         staggerDirection: -1,
       },
     },
   };
 
-  // Character variants for each dramatic type
+  // Character variants for each dramatic type (100% GPU-composited, zero CPU blur bottlenecks)
   const getCharVariants = (): Variants => {
     switch (type) {
       case 'hero':
@@ -61,28 +61,25 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
         return {
           hidden: {
             opacity: 0,
-            y: 22,
-            rotateX: 85,
-            filter: 'blur(5px)',
+            y: 14,
+            rotateX: 45,
             color: '#B59A57',
           },
           visible: {
             opacity: 1,
             y: 0,
             rotateX: 0,
-            filter: 'blur(0px)',
             color: 'inherit',
             transition: {
-              duration: 0.65,
-              ease: [0.22, 1, 0.36, 1],
+              duration: 0.35,
+              ease: [0.16, 1, 0.3, 1],
             },
           },
           exit: {
             opacity: 0,
-            y: -18,
-            rotateX: -75,
-            filter: 'blur(4px)',
-            transition: { duration: 0.4 },
+            y: -12,
+            rotateX: -45,
+            transition: { duration: 0.2 },
           },
         };
 
@@ -91,9 +88,9 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
         return {
           hidden: {
             opacity: 0,
-            scale: 0.45,
-            rotate: -12,
-            y: 16,
+            scale: 0.6,
+            rotate: -8,
+            y: 12,
           },
           visible: {
             opacity: 1,
@@ -102,15 +99,15 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
             y: 0,
             transition: {
               type: 'spring',
-              damping: 12,
-              stiffness: 140,
+              damping: 15,
+              stiffness: 220,
             },
           },
           exit: {
             opacity: 0,
-            x: 18,
-            scale: 0.8,
-            transition: { duration: 0.35 },
+            x: 12,
+            scale: 0.85,
+            transition: { duration: 0.2 },
           },
         };
 
@@ -119,8 +116,8 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
         return {
           hidden: {
             opacity: 0,
-            y: -32,
-            scale: 1.25,
+            y: -18,
+            scale: 1.15,
           },
           visible: {
             opacity: 1,
@@ -128,15 +125,15 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
             scale: 1,
             transition: {
               type: 'spring',
-              damping: 10,
-              stiffness: 180,
+              damping: 14,
+              stiffness: 240,
             },
           },
           exit: {
             opacity: 0,
-            y: 24,
-            scale: 0.7,
-            transition: { duration: 0.3 },
+            y: 14,
+            scale: 0.8,
+            transition: { duration: 0.2 },
           },
         };
 
@@ -145,25 +142,23 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
         return {
           hidden: {
             opacity: 0,
-            x: -28,
-            skewX: -20,
-            filter: 'blur(3px)',
+            x: -16,
+            skewX: -12,
           },
           visible: {
             opacity: 1,
             x: 0,
             skewX: 0,
-            filter: 'blur(0px)',
             transition: {
-              duration: 0.55,
+              duration: 0.3,
               ease: [0.16, 1, 0.3, 1],
             },
           },
           exit: {
             opacity: 0,
-            x: 28,
-            skewX: 15,
-            transition: { duration: 0.3 },
+            x: 16,
+            skewX: 8,
+            transition: { duration: 0.2 },
           },
         };
 
@@ -172,9 +167,9 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
         return {
           hidden: {
             opacity: 0,
-            rotateY: 90,
-            scale: 0.75,
-            y: 12,
+            rotateY: 60,
+            scale: 0.85,
+            y: 10,
           },
           visible: {
             opacity: 1,
@@ -182,15 +177,15 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
             scale: 1,
             y: 0,
             transition: {
-              duration: 0.6,
-              ease: [0.34, 1.56, 0.64, 1],
+              duration: 0.32,
+              ease: [0.16, 1, 0.3, 1],
             },
           },
           exit: {
             opacity: 0,
-            rotateY: -90,
-            scale: 0.75,
-            transition: { duration: 0.35 },
+            rotateY: -60,
+            scale: 0.85,
+            transition: { duration: 0.2 },
           },
         };
 
@@ -199,23 +194,20 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
         return {
           hidden: {
             opacity: 0,
-            y: 22,
-            filter: 'blur(8px)',
+            y: 14,
           },
           visible: {
             opacity: 1,
             y: 0,
-            filter: 'blur(0px)',
             transition: {
-              duration: 0.7,
-              ease: 'easeOut',
+              duration: 0.32,
+              ease: [0.16, 1, 0.3, 1],
             },
           },
           exit: {
             opacity: 0,
-            y: -20,
-            filter: 'blur(6px)',
-            transition: { duration: 0.35 },
+            y: -12,
+            transition: { duration: 0.2 },
           },
         };
     }
