@@ -21,7 +21,6 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
   const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
   const currentFrameRef = useRef<number>(1);
   const targetFrameRef = useRef<number>(1);
-  const lastDrawnIndexRef = useRef<number>(-1);
   const rafIdRef = useRef<number | null>(null);
   const isLoopRunningRef = useRef<boolean>(false);
   const canvasSizeRef = useRef<{ width: number; height: number }>({ width: 0, height: 0 });
@@ -31,36 +30,42 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
     return `/templates/royal-heritage/frames/frame_${pad}.webp`;
   };
 
-  // Ultra-fast GPU-accelerated canvas draw with dynamic cover fit
+  const lastDrawnPosRef = useRef<number>(-1);
+
+  // Ultra-fast GPU-accelerated canvas draw with dynamic cover fit and sub-frame optical cross-fading
   const drawFrame = (frameNum: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const idx = Math.min(TOTAL_FRAMES - 1, Math.max(0, Math.round(frameNum) - 1));
-    if (idx === lastDrawnIndexRef.current) return;
+    if (Math.abs(frameNum - lastDrawnPosRef.current) < 0.01) return;
 
-    // Locate requested frame or closest available neighbor
-    let img = imagesRef.current[idx];
-    if (!img || !img.complete || img.naturalWidth === 0) {
-      for (let i = idx - 1; i >= 0; i--) {
+    const clamped = Math.min(TOTAL_FRAMES - 1, Math.max(0, frameNum - 1));
+    const floorIdx = Math.floor(clamped);
+    const ceilIdx = Math.min(TOTAL_FRAMES - 1, floorIdx + 1);
+    const frac = clamped - floorIdx;
+
+    // Locate primary frame
+    let img1 = imagesRef.current[floorIdx];
+    if (!img1 || !img1.complete || img1.naturalWidth === 0) {
+      for (let i = floorIdx - 1; i >= 0; i--) {
         const candidate = imagesRef.current[i];
         if (candidate && candidate.complete && candidate.naturalWidth > 0) {
-          img = candidate;
+          img1 = candidate;
           break;
         }
       }
-      if (!img || !img.complete || img.naturalWidth === 0) {
-        img = imagesRef.current[0];
+      if (!img1 || !img1.complete || img1.naturalWidth === 0) {
+        img1 = imagesRef.current[0];
       }
     }
 
-    if (img && img.complete && img.naturalWidth > 0) {
+    if (img1 && img1.complete && img1.naturalWidth > 0) {
       const cw = canvasSizeRef.current.width || canvas.width;
       const ch = canvasSizeRef.current.height || canvas.height;
-      const iw = img.naturalWidth;
-      const ih = img.naturalHeight;
+      const iw = img1.naturalWidth;
+      const ih = img1.naturalHeight;
 
       const scale = Math.max(cw / iw, ch / ih);
       const nw = iw * scale;
@@ -68,8 +73,19 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
       const cx = (cw - nw) * 0.5;
       const cy = (ch - nh) * 0.5;
 
-      ctx.drawImage(img, cx, cy, nw, nh);
-      lastDrawnIndexRef.current = idx;
+      // Draw primary base frame
+      ctx.globalAlpha = 1.0;
+      ctx.drawImage(img1, cx, cy, nw, nh);
+
+      // Sub-frame optical blend: cross-fade smoothly into next frame if fractional progress exists
+      const img2 = imagesRef.current[ceilIdx];
+      if (frac > 0.02 && img2 && img2.complete && img2.naturalWidth > 0 && img2 !== img1) {
+        ctx.globalAlpha = frac;
+        ctx.drawImage(img2, cx, cy, nw, nh);
+        ctx.globalAlpha = 1.0;
+      }
+
+      lastDrawnPosRef.current = frameNum;
     }
   };
 
@@ -117,7 +133,7 @@ export const RoyalScrollyBackground: React.FC<RoyalScrollyBackgroundProps> = ({
       canvasSizeRef.current = { width: w, height: h };
     }
 
-    lastDrawnIndexRef.current = -1;
+    lastDrawnPosRef.current = -1;
     drawFrame(currentFrameRef.current);
   };
 
