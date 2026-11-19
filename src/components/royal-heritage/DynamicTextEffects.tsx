@@ -64,13 +64,13 @@ export const DynamicTextEffects: React.FC<DynamicTextEffectsProps> = ({
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setIsInView(true);
-          } else {
-            setIsInView(false);
-            setDisplayedLength(0);
+            if (entry.target) {
+              observer.unobserve(entry.target);
+            }
           }
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.1 }
     );
 
     observer.observe(el);

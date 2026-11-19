@@ -1271,9 +1271,9 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
             <section className="relative min-h-[92vh] flex flex-col items-center justify-between pt-6 sm:pt-8 pb-8 px-4 sm:px-6 text-center z-10">
               {/* Top Announcement */}
               <motion.div
-                initial={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: false, amount: 0.3 }}
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
                 className="space-y-1"
               >
@@ -1312,7 +1312,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               <motion.div
                 initial={{ opacity: 0, scale: 0.85 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.9, delay: 0.15 }}
                 className="my-auto py-2 w-full flex flex-col items-center"
               >
@@ -1327,7 +1327,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false, amount: 0.3 }}
+                  viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.7, delay: 0.6 }}
                   className="mt-3 flex items-center justify-center gap-2 sm:gap-4 text-xs font-['Cormorant_Garamond',serif] text-[#273822] w-full max-w-full px-2 min-w-0"
                   style={deepTextShadow}
@@ -1388,7 +1388,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.9 }}
-                viewport={{ once: false }}
+                viewport={{ once: true }}
                 className="relative z-10 flex flex-col items-center gap-1 animate-bounce pb-2"
               >
                 <DynamicTextEffects
@@ -1415,7 +1415,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               <motion.div
                 initial={{ opacity: 0, scale: 0.72, y: 40 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
+                viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
                 className="w-full flex flex-col items-center"
                 style={{
@@ -1457,7 +1457,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               <motion.div
                 initial={{ opacity: 0, x: -60, rotateY: 12 }}
                 whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
+                viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.9, ease: 'easeOut' }}
                 className="w-full max-w-[360px]"
               >
@@ -1487,7 +1487,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: false, amount: 0.3 }}
+                      viewport={{ once: true, amount: 0.3 }}
                       transition={{ duration: 0.7, delay: 0.2 }}
                       className="mt-8 text-center"
                     >
@@ -1513,7 +1513,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                     <motion.div
                       initial={{ opacity: 0, scale: 0.85 }}
                       whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: false, amount: 0.3 }}
+                      viewport={{ once: true, amount: 0.3 }}
                       transition={{ duration: 0.8, delay: 0.3 }}
                       className="grid grid-cols-4 gap-1.5 sm:gap-2.5 w-full max-w-[340px] mx-auto mt-6 px-1"
                     >
@@ -1527,7 +1527,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                         .map((item, idx) => (
                           <div
                             key={idx}
-                            className="flex flex-col items-center justify-center p-1.5 sm:p-2.5 rounded-2xl bg-white/90 backdrop-blur-[3px] border border-[#DFC07C] shadow-md min-w-0 break-words"
+                            className="flex flex-col items-center justify-center p-1.5 sm:p-2.5 rounded-2xl bg-white/98 border border-[#DFC07C] shadow-md min-w-0 break-words"
                           >
                             <span
                               className="font-['Playfair_Display',serif] text-xl sm:text-2xl md:text-3xl font-black text-[#273822] truncate max-w-full"
@@ -1558,9 +1558,9 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           {customization.sections.timeline.enabled !== false && (
             <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
               <motion.div
-                initial={{ opacity: 0, y: 50, filter: 'blur(6px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: false, amount: 0.25 }}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.85, ease: 'easeOut' }}
                 className="w-full max-w-[340px] text-center"
               >
@@ -1596,7 +1596,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                       key={index}
                       initial={{ opacity: 0, x: isRTL ? 30 : -30 }}
                       whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: false, amount: 0.3 }}
+                      viewport={{ once: true, amount: 0.3 }}
                       transition={{ duration: 0.6, delay: index * 0.15 }}
                       className="relative min-w-0 max-w-full break-words"
                     >
@@ -1648,7 +1648,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               <motion.div
                 initial={{ opacity: 0, scale: 0.85 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: false, amount: 0.25 }}
+                viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.85, ease: 'easeOut' }}
                 className="w-full max-w-[340px] text-center"
               >
@@ -1731,7 +1731,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false, amount: 0.3 }}
+                    viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="mt-6 pt-4 border-t border-[#DFC07C]/50"
                   >
@@ -1789,9 +1789,9 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           {customization.sections.djSongs?.enabled !== false && (
             <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
               <motion.div
-                initial={{ opacity: 0, y: 50, filter: 'blur(5px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: false, amount: 0.25 }}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.85, ease: 'easeOut' }}
                 className="w-full max-w-[360px] text-center"
               >
@@ -1828,7 +1828,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   style={deepTextShadow}
                 />
 
-                <div className="rounded-2xl bg-white/95 backdrop-blur-md border border-[#DFC07C] shadow-xl p-3.5 sm:p-5 text-left">
+                <div className="rounded-2xl bg-white/98 border border-[#DFC07C] shadow-xl p-3.5 sm:p-5 text-left">
                   <DjSongRequestBox
                     weddingSlug={weddingSlug}
                     defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
@@ -1846,9 +1846,9 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
           {customization.sections.voiceBlessings?.enabled !== false && (
             <section className="relative z-10 py-16 px-6 min-h-[85vh] flex flex-col justify-center items-center">
               <motion.div
-                initial={{ opacity: 0, y: 50, filter: 'blur(5px)' }}
-                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                viewport={{ once: false, amount: 0.25 }}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.85, ease: 'easeOut' }}
                 className="w-full max-w-[360px] text-center"
               >
@@ -1885,7 +1885,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
                   style={deepTextShadow}
                 />
 
-                <div className="rounded-2xl bg-white/95 backdrop-blur-md border border-[#DFC07C] shadow-xl p-3.5 sm:p-5 text-left">
+                <div className="rounded-2xl bg-white/98 border border-[#DFC07C] shadow-xl p-3.5 sm:p-5 text-left">
                   <VoiceBlessingRecorder
                     weddingSlug={weddingSlug}
                     defaultGuestName={guestName !== 'Special Guest' ? guestName : ''}
@@ -1905,7 +1905,7 @@ export const RoyalHeritageWeddingInvitation: React.FC<RoyalHeritageWeddingInvita
               <motion.div
                 initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.25 }}
+                viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.85, ease: 'easeOut' }}
                 className="w-full max-w-[340px] text-center"
               >

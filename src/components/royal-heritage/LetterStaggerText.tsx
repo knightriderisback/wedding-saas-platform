@@ -231,7 +231,7 @@ export const LetterStaggerText: React.FC<LetterStaggerTextProps> = ({
       initial="hidden"
       whileInView="visible"
       exit="exit"
-      viewport={{ once: false, amount: 0.15 }}
+      viewport={{ once: true, amount: 0.15 }}
       className={`select-none ${as === 'span' ? 'inline-block' : 'block'} ${className}`}
       style={{
         perspective: '1000px',

@@ -172,9 +172,9 @@
 
 /* Soft Acrylic Glass Base */
 .acrylic-glass {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.8);
   box-shadow: 
     0 8px 32px 0 rgba(160, 120, 50, 0.07),
@@ -183,8 +183,8 @@
 
 /* Soft Honey Amber Acrylic */
 .acrylic-amber {
-  background: linear-gradient(135deg, rgba(255, 248, 230, 0.88) 0%, rgba(253, 243, 215, 0.82) 100%);
-  backdrop-filter: blur(14px);
+  background: linear-gradient(135deg, rgba(255, 248, 230, 0.94) 0%, rgba(253, 243, 215, 0.90) 100%);
+  backdrop-filter: blur(6px);
   border: 1px solid rgba(230, 195, 115, 0.45);
   box-shadow: 
     0 10px 30px -5px rgba(212, 175, 55, 0.12),
@@ -193,8 +193,8 @@
 
 /* Soft Rose Quartz Acrylic */
 .acrylic-rose {
-  background: linear-gradient(135deg, rgba(254, 242, 244, 0.88) 0%, rgba(252, 230, 234, 0.82) 100%);
-  backdrop-filter: blur(14px);
+  background: linear-gradient(135deg, rgba(254, 242, 244, 0.94) 0%, rgba(252, 230, 234, 0.90) 100%);
+  backdrop-filter: blur(6px);
   border: 1px solid rgba(235, 175, 185, 0.45);
   box-shadow: 
     0 10px 30px -5px rgba(184, 40, 61, 0.10),
@@ -203,8 +203,8 @@
 
 /* Soft Sage Celadon Acrylic */
 .acrylic-sage {
-  background: linear-gradient(135deg, rgba(240, 246, 242, 0.88) 0%, rgba(228, 238, 231, 0.82) 100%);
-  backdrop-filter: blur(14px);
+  background: linear-gradient(135deg, rgba(240, 246, 242, 0.94) 0%, rgba(228, 238, 231, 0.90) 100%);
+  backdrop-filter: blur(6px);
   border: 1px solid rgba(145, 180, 155, 0.45);
   box-shadow: 
     0 10px 30px -5px rgba(85, 122, 101, 0.10),
@@ -213,8 +213,8 @@
 
 /* Soft Royal Lilac Acrylic */
 .acrylic-lilac {
-  background: linear-gradient(135deg, rgba(247, 243, 250, 0.88) 0%, rgba(238, 230, 245, 0.82) 100%);
-  backdrop-filter: blur(14px);
+  background: linear-gradient(135deg, rgba(247, 243, 250, 0.94) 0%, rgba(238, 230, 245, 0.90) 100%);
+  backdrop-filter: blur(6px);
   border: 1px solid rgba(195, 175, 215, 0.45);
   box-shadow: 
     0 10px 30px -5px rgba(140, 100, 180, 0.10),
@@ -223,8 +223,8 @@
 
 /* Soft Sky Azure Acrylic */
 .acrylic-azure {
-  background: linear-gradient(135deg, rgba(240, 246, 252, 0.88) 0%, rgba(225, 238, 248, 0.82) 100%);
-  backdrop-filter: blur(14px);
+  background: linear-gradient(135deg, rgba(240, 246, 252, 0.94) 0%, rgba(225, 238, 248, 0.90) 100%);
+  backdrop-filter: blur(6px);
   border: 1px solid rgba(160, 195, 225, 0.45);
   box-shadow: 
     0 10px 30px -5px rgba(70, 120, 180, 0.10),
@@ -300,7 +300,8 @@
     0 12px 30px rgba(180, 140, 50, 0.12),
     inset 0 -6px 12px rgba(160, 120, 20, 0.15),
     inset 0 4px 8px rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(4px);
+  will-change: transform;
+  transform: translateZ(0);
   animation: floatOrbSlow 12s ease-in-out infinite;
 }
 
